@@ -5,7 +5,6 @@ import gutil from 'gulp-util';
 import webpackConfig from './webpack.config';
 
 gulp.task('webpack-dev-server', (callback) => {
-
   webpackConfig.devtool = 'source-map';
 
   // Start a webpack-dev-server
