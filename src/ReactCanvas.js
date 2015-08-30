@@ -556,10 +556,18 @@ class ReactCanvas {
         childrenMarkup: [markup],
         parentMarkup: null,
         object3D: container,
+        toJSON: () => {
+          return '---USERDATA---';
+        },
       },
       getBoundingClientRect: this.getBoundingClientRect,
       threeObject: container,
+      toJSON: () => {
+        return '---MARKUP---';
+      },
     };
+
+    rootMarkup.userData.markup = rootMarkup;
 
     container.userData = rootMarkup.userData;
 
