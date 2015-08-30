@@ -1,12 +1,9 @@
 import ReactElement from 'react/lib/ReactElement';
-import * as DOMProperty from 'react/lib/DOMProperty.js';
-import * as ReactMarkupChecksum from 'react/lib/ReactMarkupChecksum.js';
+import DOMProperty from 'react/lib/DOMProperty.js';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
 import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
 import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
-import setInnerHTML from 'react/lib/setInnerHTML';
 import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
-import ReactBrowserEventEmitter from 'react/lib/ReactBrowserEventEmitter';
 import ReactReconciler from 'react/lib/ReactReconciler';
 import ReactUpdates from 'react/lib/ReactUpdates';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
@@ -14,10 +11,15 @@ import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
 import emptyObject from 'react/lib/emptyObject';
 import invariant from 'react/lib/invariant';
 import warning from 'react/lib/warning';
+import flattenChildren from 'react/lib/flattenChildren';
+import InternalComponent from './ReactCanvas/InternalComponent';
+import THREE from 'three';
 
 const ELEMENT_NODE_TYPE = 1;
 const DOC_NODE_TYPE = 9;
 const DOCUMENT_FRAGMENT_NODE_TYPE = 11;
+
+const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
 
 /**
@@ -47,32 +49,28 @@ function unmountComponentFromNode(instance, container) {
   }
 }
 
-const ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
+const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
-function internalGetID(node) {
-  return node[ATTR_NAME] || '';
-  // If node is something like a window, document, or text node, none of
+function internalGetID(userData) {
+  return userData && userData[ID_ATTR_NAME] || '';
+  // If userData is something like a window, document, or text userData, none of
   // which support attributes or a .getAttribute method, gracefully return
   // the empty string, as if the attribute were missing.
-  //return node && node.getAttribute && node.getAttribute(ATTR_NAME) || '';
+  // return userData && userData.getAttribute && userData.getAttribute(ID_ATTR_NAME) || '';
 }
 
 
 /**
- * @param {DOMElement|DOMDocument} container DOM element that may contain
+ * @param {THREE.Object3D} threeObject Object3D that may contain
  * a React component
- * @return {?*} DOM element that may have the reactRoot ID, or null.
+ * @return {?*} Userdata that may have the reactRoot ID, or null.
  */
-function getReactRootElementInContainer(container) {
-  if (!container) {
+function getReactRootUserDataInObject3D(threeObject) {
+  if (!threeObject) {
     return null;
   }
 
-  if (container.nodeType === DOC_NODE_TYPE) {
-    return container.documentElement;
-  }
-
-  return container.firstChild;
+  return threeObject.userData && threeObject.userData.childrenMarkup && threeObject.userData.childrenMarkup[0] || null;
 }
 
 /**
@@ -83,14 +81,13 @@ function getReactRootElementInContainer(container) {
  * @return {boolean} Returns true if this is a valid internal type.
  */
 function isInternalComponentType(type) {
-  return typeof type === 'function' && typeof type.prototype !== 'undefined' && typeof type.prototype.mountComponent === 'function' && typeof type.prototype.receiveComponent === 'function';
+  return typeof type === 'function' && typeof type.prototype !== 'undefined' && typeof type.prototype['mountComponent'] === 'function' && typeof type.prototype['receiveComponent'] === 'function';
 }
 
 function ReactCompositeComponentWrapper(ReactCanvasInstance) {
   this._reactCanvasInstance = ReactCanvasInstance;
 }
 
-let nextMountID = 1;
 
 ReactCompositeComponentWrapper.prototype = {
   ...ReactCompositeComponent.Mixin,
@@ -99,22 +96,26 @@ ReactCompositeComponentWrapper.prototype = {
   },
 
   mountComponent(rootID, transaction, context) {
+    console.log('mounting composite component');
+
     this._context = context;
-    this._mountOrder = nextMountID++;
+    this._mountOrder = this._reactCanvasInstance.nextMountID++;
     this._rootNodeID = rootID;
 
-    var publicProps = this._processProps(this._currentElement.props);
-    var publicContext = this._processContext(context);
+    const publicProps = this._processProps(this._currentElement.props);
+    const publicContext = this._processContext(context);
 
-    var Component = this._currentElement.type;
+    const Component = this._currentElement.type;
 
     // Initialize the public class
-    var inst = new Component(publicProps, publicContext, ReactUpdateQueue);
+    const inst = new Component(publicProps, publicContext, ReactUpdateQueue);
 
     if (process.env.NODE_ENV !== 'production') {
       // This will throw later in _renderValidatedComponent, but add an early
       // warning now to help debugging
-      process.env.NODE_ENV !== 'production' ? warning(inst.render != null, '%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render` in your ' + 'component or you may have accidentally tried to render an element ' + 'whose type is a function that isn\'t a React component.', Component.displayName || Component.name || 'Component') : undefined;
+      if (process.env.NODE_ENV !== 'production') {
+        warning(inst.render !== null, '%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render` in your ' + 'component or you may have accidentally tried to render an element ' + 'whose type is a function that isn\'t a React component.', Component.displayName || Component.name || 'Component');
+      }
     }
 
     // These should be set up in the constructor, but as a convenience for
@@ -139,7 +140,7 @@ ReactCompositeComponentWrapper.prototype = {
       process.env.NODE_ENV !== 'production' ? warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component') : undefined;
       process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentShouldUpdate !== 'function', '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', this.getName() || 'A component') : undefined;
       process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentDidUnmount !== 'function', '%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', this.getName() || 'A component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentWillRecieveProps !== 'function', '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component') : undefined;
+      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentWillReceiveProps !== 'function', '%s has a method called ' + 'componentWillReceiveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component') : undefined;
     }
 
     let initialState = inst.state;
@@ -173,6 +174,7 @@ ReactCompositeComponentWrapper.prototype = {
 
     const markup = ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, this._processChildContext(context));
     if (inst.componentDidMount) {
+      console.log('calling component did mount for markup', markup);
       transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
     }
 
@@ -180,145 +182,99 @@ ReactCompositeComponentWrapper.prototype = {
   },
 };
 
-
-function legacyGetDOMNode() {
-  if ('production' !== process.env.NODE_ENV) {
-    var component = this._reactInternalComponent;
-    'production' !== process.env.NODE_ENV ? warning(false, 'ReactDOMComponent: Do not access .getDOMNode() of a DOM node; ' + 'instead, use the node directly.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-  return this;
-}
-
-function legacyIsMounted() {
-  var component = this._reactInternalComponent;
-  if ('production' !== process.env.NODE_ENV) {
-    'production' !== process.env.NODE_ENV ? warning(false, 'ReactDOMComponent: Do not access .isMounted() of a DOM node.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-  return !!component;
-}
-
-function legacySetStateEtc() {
-  if ('production' !== process.env.NODE_ENV) {
-    var component = this._reactInternalComponent;
-    'production' !== process.env.NODE_ENV ? warning(false, 'ReactDOMComponent: Do not access .setState(), .replaceState(), or ' + '.forceUpdate() of a DOM node. This is a no-op.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-}
-
-function legacySetProps(partialProps, callback) {
-  var component = this._reactInternalComponent;
-  if ('production' !== process.env.NODE_ENV) {
-    'production' !== process.env.NODE_ENV ? warning(false, 'ReactDOMComponent: Do not access .setProps() of a DOM node. ' + 'Instead, call React.render again at the top level.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-  if (!component) {
-    return;
-  }
-  ReactUpdateQueue.enqueueSetPropsInternal(component, partialProps);
-  if (callback) {
-    ReactUpdateQueue.enqueueCallbackInternal(component, callback);
-  }
-}
-
-function legacyReplaceProps(partialProps, callback) {
-  var component = this._reactInternalComponent;
-  if ('production' !== process.env.NODE_ENV) {
-    'production' !== process.env.NODE_ENV ? warning(false, 'ReactDOMComponent: Do not access .replaceProps() of a DOM node. ' + 'Instead, call React.render again at the top level.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-  if (!component) {
-    return;
-  }
-  ReactUpdateQueue.enqueueReplacePropsInternal(component, partialProps);
-  if (callback) {
-    ReactUpdateQueue.enqueueCallbackInternal(component, callback);
-  }
-}
-
-class InternalComponent {
-  constructor(element, reactCanvasInstance) {
-    this._currentElement = element;
-    this._reactCanvasInstance = reactCanvasInstance;
-
-    console.log(element);
-
-    this._rootNodeID = null;
-    this._topLevelWrapper = null;
-    this._nodeWithLegacyProperties = null;
-  }
-
-  construct(node) {
-    console.log('constructing', node);
-  }
-
-  mountComponent(rootID, transaction, context) {
-    this._rootNodeID = rootID;
-
-    return {
-      _reactId: rootID,
-      content: 'HEBELE',
-      children: [],
-    };
-  }
-
-  receiveComponent(nextElement, transaction, context) {
-    var prevElement = this._currentElement;
-    this._currentElement = nextElement;
-    this.updateComponent(transaction, prevElement, nextElement, context);
-  }
-
-  updateComponent(transaction, prevElement, nextElement, context) {
-    console.log('ahh updating');
-  }
-
-  unmountComponent() {
-    console.log('unmounting component!');
-  }
-
-
-  getPublicInstance() {
-    if (!this._nodeWithLegacyProperties) {
-      const node = this._reactCanvasInstance.getNode(this._rootNodeID);
-
-      node._reactInternalComponent = this;
-      node.getDOMNode = legacyGetDOMNode;
-      node.isMounted = legacyIsMounted;
-      node.setState = legacySetStateEtc;
-      node.replaceState = legacySetStateEtc;
-      node.forceUpdate = legacySetStateEtc;
-      node.setProps = legacySetProps;
-      node.replaceProps = legacyReplaceProps;
-
-      if (process.env.NODE_ENV !== 'production') {
-        if (canDefineProperty) {
-          Object.defineProperties(node, legacyPropsDescriptor);
-        } else {
-          // updateComponent will update this property on subsequent renders
-          node.props = this._currentElement.props;
-        }
-      } else {
-        // updateComponent will update this property on subsequent renders
-        node.props = this._currentElement.props;
-      }
-
-      this._nodeWithLegacyProperties = node;
-    }
-    return this._nodeWithLegacyProperties;
-  }
-}
-
+/**
+ * @global
+ * @var __REACT_DEVTOOLS_GLOBAL_HOOK__
+ */
 
 class ReactCanvas {
+  /**
+   * Returns the DOM node rendered by this element.
+   *
+   * @param {React.Component|THREE.Object3D} componentOrElement
+   * @return {?THREE.Object3D} The root node of this element.
+   */
+  static findTHREEObject(componentOrElement) {
+    if (process.env.NODE_ENV !== 'production') {
+      const owner = ReactCurrentOwner.current;
+      if (owner !== null) {
+        if (process.env.NODE_ENV !== 'production') {
+          warning(owner._warnedAboutRefsInRender, '%s is accessing getDOMNode or findDOMNode inside its render(). ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as refs. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', owner.getName() || 'A component');
+        }
+        owner._warnedAboutRefsInRender = true;
+      }
+    }
+
+    if (componentOrElement === null) {
+      return null;
+    }
+
+    if (componentOrElement instanceof THREE.Object3D) {
+      return componentOrElement;
+    }
+
+    if (ReactInstanceMap.has(componentOrElement)) {
+      const instance = ReactInstanceMap.get(componentOrElement);
+
+      return instance._reactCanvasInstance.getUserDataFromInstance(componentOrElement).object3D;
+    }
+
+    if (!(componentOrElement.render === null || typeof componentOrElement.render !== 'function')) {
+      if (process.env.NODE_ENV !== 'production') {
+        invariant(false, 'Component (with keys: %s) contains `render` method ' + 'but is not mounted in the DOM', Object.keys(componentOrElement));
+      } else {
+        invariant(false);
+      }
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(false, 'Element appears to be neither ReactComponent nor DOMNode (keys: %s)', Object.keys(componentOrElement));
+    } else {
+      invariant(false);
+    }
+  }
+
+  getUserDataFromInstance(instance) {
+    const id = ReactInstanceMap.get(instance)._rootNodeID;
+
+    if (ReactEmptyComponent.isNullComponentID(id)) {
+      return null;
+    }
+
+    if (!this.userDataCache.hasOwnProperty(id) || !this.isValid(this.userDataCache[id], id)) {
+      this.userDataCache[id] = this.findReactNodeByID(id);
+    }
+
+    return this.userDataCache[id];
+  }
+
   constructor() {
-    this.instancesByReactRootID = {};
-    this.containersByReactRootID = {};
-    this.rootElementsByReactRootID = {};
+    this._instancesByReactRootID = {};
+    this.object3DsByReactRootID = {};
+    this.rootUserDatasByReactRootID = {};
     this.findComponentRootReusableArray = [];
-    this.nodeCache = {};
-    this.deepestNodeSoFar = null;
+    this.userDataCache = {};
+    this.deepestUserDataSoFar = null;
+    this.nextMountID = 1;
+    this.nextReactRootIndex = 0;
+
+    // Inject the runtime into a devtools global hook regardless of browser.
+    // Allows for debugging when the hook is injected on the page.
+    if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
+      __REACT_DEVTOOLS_GLOBAL_HOOK__.inject({
+        CurrentOwner: ReactCurrentOwner,
+        InstanceHandles: ReactInstanceHandles,
+        Mount: this,
+        Reconciler: ReactReconciler,
+        TextComponent: InternalComponent,
+      });
+    }
   }
 
   findDeepestCachedAncestorImpl = (ancestorID) => {
-    var ancestor = this.nodeCache[ancestorID];
+    const ancestor = this.userDataCache[ancestorID];
     if (ancestor && this.isValid(ancestor, ancestorID)) {
-      this.deepestNodeSoFar = ancestor;
+      this.deepestUserDataSoFar = ancestor;
     } else {
       // This node isn't populated in the cache, so presumably none of its
       // descendants are. Break out of the loop.
@@ -330,26 +286,56 @@ class ReactCanvas {
    * Return the deepest cached node whose ID is a prefix of `targetID`.
    */
   findDeepestCachedAncestor(targetID) {
-    this.deepestNodeSoFar = null;
+    this.deepestUserDataSoFar = null;
+
     ReactInstanceHandles.traverseAncestors(targetID, this.findDeepestCachedAncestorImpl);
 
-    const foundNode = this.deepestNodeSoFar;
-    this.deepestNodeSoFar = null;
-    return foundNode;
+    const foundUserData = this.deepestUserDataSoFar;
+    this.deepestUserDataSoFar = null;
+    return foundUserData;
   }
 
-  isValid(node, id) {
-    if (node) {
-      if (!(internalGetID(node) === id)) {
+  instantiateChildren(nestedChildNodes, transaction, context) {
+    const children = flattenChildren(nestedChildNodes);
+    for (const name in children) {
+      if (children.hasOwnProperty(name)) {
+        const child = children[name];
+        // The rendered children must be turned into instances as they're
+        // mounted.
+        children[name] = this.instantiateReactComponent(child, null);
+      }
+    }
+    return children;
+  }
+
+  containsChild(container, userData) {
+    const childrenMarkup = container.userData.childrenMarkup;
+    for (var i = 0; i < childrenMarkup.length; i++) {
+      if (childrenMarkup[i].userData === userData) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  isValid(userData, id) {
+    if (userData) {
+      if (internalGetID(userData) !== id) {
         if (process.env.NODE_ENV !== 'production') {
-          invariant(false, 'ReactCanvas: Unexpected modification of `%s`', ATTR_NAME);
+          invariant(false, 'ReactCanvas: Unexpected modification of `%s`', ID_ATTR_NAME);
         } else {
           invariant(false);
         }
       }
 
       const container = this.findReactContainerForID(id);
-      if (container && containsNode(container, node)) {
+
+      // if (container && container.userData === userData) {
+      //  return true;
+      // }
+
+      if (container && this.containsChild(container, userData)) {
         return true;
       }
     }
@@ -359,7 +345,7 @@ class ReactCanvas {
 
 
   /**
-   * Finds the container DOM element that contains React component to which the
+   * Finds the object3D DOM element that contains React component to which the
    * supplied DOM `id` belongs.
    *
    * @param {string} id The ID of an element rendered by a React component.
@@ -367,11 +353,11 @@ class ReactCanvas {
    */
   findReactContainerForID(id) {
     const reactRootID = ReactInstanceHandles.getReactRootIDFromNodeID(id);
-    const container = this.containersByReactRootID[reactRootID];
+    const object3D = this.object3DsByReactRootID[reactRootID];
 
     if (process.env.NODE_ENV !== 'production') {
-      const rootElement = this.rootElementsByReactRootID[reactRootID];
-      if (rootElement && rootElement.parentNode !== container) {
+      const rootElement = this.rootUserDatasByReactRootID[reactRootID];
+      if (rootElement && rootElement.userData.parentMarkup.threeObject !== object3D) {
         if (process.env.NODE_ENV !== 'production') {
           warning(
             // Call internalGetID here because getID calls isValid which calls
@@ -379,29 +365,29 @@ class ReactCanvas {
             internalGetID(rootElement) === reactRootID, 'ReactCanvas: Root element ID differed from reactRootID.');
         }
 
-        const containerChild = container.firstChild;
+        const containerChild = object3D.userData.childrenMarkup[0];// firstChild;
         if (containerChild && reactRootID === internalGetID(containerChild)) {
-          // If the container has a new child with the same ID as the old
-          // root element, then rootElementsByReactRootID[reactRootID] is
+          // If the object3D has a new child with the same ID as the old
+          // root element, then rootUserDatasByReactRootID[reactRootID] is
           // just stale and needs to be updated. The case that deserves a
-          // warning is when the container is empty.
-          this.rootElementsByReactRootID[reactRootID] = containerChild;
+          // warning is when the object3D is empty.
+          this.rootUserDatasByReactRootID[reactRootID] = containerChild;
         } else {
           if (process.env.NODE_ENV !== 'production') {
-            warning(false, 'ReactCanvas: Root element has been removed from its original ' + 'container. New container: %s', rootElement.parentNode);
+            warning(false, 'ReactCanvas: Root element has been removed from its original ' + 'object3D. New object3D: %s', rootElement.parentNode);
           }
         }
       }
     }
 
-    return container;
+    return object3D;
   }
 
   getNode(id) {
-    if (!this.nodeCache.hasOwnProperty(id) || !this.isValid(nodeCache[id], id)) {
-      this.nodeCache[id] = this.findReactNodeByID(id);
+    if (!this.userDataCache.hasOwnProperty(id) || !this.isValid(this.userDataCache[id], id)) {
+      this.userDataCache[id] = this.findReactNodeByID(id);
     }
-    return nodeCache[id];
+    return this.userDataCache[id];
   }
 
 
@@ -417,16 +403,16 @@ class ReactCanvas {
   }
 
   findComponentRoot(ancestorNode, targetID) {
-    const firstChildren = this.findComponentRootReusableArray;
+    const firstUserDataList = this.findComponentRootReusableArray;
     let childIndex = 0;
 
     const deepestAncestor = this.findDeepestCachedAncestor(targetID) || ancestorNode;
 
-    firstChildren[0] = deepestAncestor.firstChild;
-    firstChildren.length = 1;
+    firstUserDataList[0] = deepestAncestor.userData.childrenMarkup[0].userData;
+    firstUserDataList.length = 1;
 
-    while (childIndex < firstChildren.length) {
-      let child = firstChildren[childIndex++];
+    while (childIndex < firstUserDataList.length) {
+      let child = firstUserDataList[childIndex++];
       let targetChild;
 
       while (child) {
@@ -444,8 +430,8 @@ class ReactCanvas {
             // then we can be sure that we only want to search the subtree
             // rooted at this child, so we can throw out the rest of the
             // search state.
-            firstChildren.length = childIndex = 0;
-            firstChildren.push(child.firstChild);
+            firstUserDataList.length = childIndex = 0;
+            firstUserDataList.push(child.childrenMarkup[0].userData);
           }
         } else {
           // If this child had no ID, then there's a chance that it was
@@ -453,25 +439,37 @@ class ReactCanvas {
           // element sprouts an extra `<tbody>` child as a side effect of
           // `.innerHTML` parsing. Optimistically continue down this
           // branch, but not before examining the other siblings.
-          firstChildren.push(child.firstChild);
+          firstUserDataList.push(child.childrenMarkup[0].userData);
         }
 
-        child = child.nextSibling;
+        const ownerChildren = child.parentMarkup.userData.childrenMarkup;
+
+        child = null;
+
+        // child = child.nextSibling;
+        for (let i = 0; i < ownerChildren.length - 1; i++) {
+          const ownerChildId = this.getID(ownerChildren[i].userData);
+
+          if (ownerChildId === childID) {
+            child = ownerChildren[i + 1].userData;
+            break;
+          }
+        }
       }
 
       if (targetChild) {
-        // Emptying firstChildren/findComponentRootReusableArray is
+        // Emptying firstUserDataList/findComponentRootReusableArray is
         // not necessary for correctness, but it helps the GC reclaim
         // any nodes that were left at the end of the search.
-        firstChildren.length = 0;
+        firstUserDataList.length = 0;
 
         return targetChild;
       }
     }
 
-    firstChildren.length = 0;
+    firstUserDataList.length = 0;
 
-    if ('production' !== process.env.NODE_ENV) {
+    if (process.env.NODE_ENV !== 'production') {
       invariant(false, 'findComponentRoot(..., %s): Unable to find element. This probably ' + 'means the DOM was unexpectedly mutated (e.g., by the browser), ' + 'usually due to forgetting a <tbody> when using tables, nesting tags ' + 'like <form>, <p>, or <a>, or using non-SVG elements in an <svg> ' + 'parent. ' + 'Try inspecting the child nodes of the element with React ID `%s`.', targetID, this.getID(ancestorNode));
     } else {
       invariant(false);
@@ -497,10 +495,6 @@ class ReactCanvas {
       // context[validateDOMNesting.ancestorInfoContextKey] = validateDOMNesting.updatedAncestorInfo(null, tag, null);
     }
 
-    console.log('creating markup!');
-
-    debugger;
-
     const markup = ReactReconciler.mountComponent(componentInstance, rootID, transaction, context);
     componentInstance._renderedComponent._topLevelWrapper = componentInstance;
     this._mountImageIntoNode(markup, container, shouldReuseMarkup);
@@ -517,7 +511,7 @@ class ReactCanvas {
 
     // TODO try to do serverside rendering for THREE ( can write a scene into json or something :D )
     //if (shouldReuseMarkup) {
-    //  const rootElement = getReactRootElementInContainer(container);
+    //  const rootElement = getReactRootUserDataInObject3D(container);
     //  if (ReactMarkupChecksum.canReuseMarkup(markup, rootElement)) {
     //    return;
     //  }
@@ -546,10 +540,23 @@ class ReactCanvas {
     //  }
     //}
 
-    console.log('setting inner html!?');
-    debugger;
+    console.log('setting inner html!?', markup);
 
-    setInnerHTML(container, markup);
+    const rootMarkup = {
+      userData: {
+        childrenMarkup: [markup],
+        parentMarkup: null,
+        object3D: container,
+      },
+      getBoundingClientRect: this.getBoundingClientRect,
+      threeObject: container,
+    };
+
+    container.userData = rootMarkup.userData;
+
+    markup.userData.parentMarkup = rootMarkup;
+
+    container.add(markup.threeObject);
   }
 
   /**
@@ -567,11 +574,11 @@ class ReactCanvas {
   };
 
 
-  render(nextElement, container, callback) {
-    return this._renderSubtreeIntoContainer(null, nextElement, container, callback);
+  render(nextElement, object3D, callback) {
+    return this._renderSubtreeIntoContainer(null, nextElement, object3D, callback);
   }
 
-  _renderSubtreeIntoContainer(parentComponent, nextElement, container, callback) {
+  _renderSubtreeIntoContainer(parentComponent, nextElement, object3D, callback) {
     if (!ReactElement.isValidElement(nextElement)) {
       if (process.env.NODE_ENV !== 'production') {
         if (typeof nextElement === 'string') {
@@ -590,24 +597,24 @@ class ReactCanvas {
 
     const nextWrappedElement = new ReactElement(TopLevelWrapper, null, null, null, nextElement);
 
-    const prevComponent = this.instancesByReactRootID[this.getReactRootID(container)];
+    const prevComponent = this._instancesByReactRootID[this.getReactRootID(object3D)];
 
     if (prevComponent) {
       const prevWrappedElement = prevComponent._currentElement;
       const prevElement = prevWrappedElement.props;
       if (shouldUpdateReactComponent(prevElement, nextElement)) {
-        return this._updateRootComponent(prevComponent, nextWrappedElement, container, callback)._renderedComponent.getPublicInstance();
+        return this._updateRootComponent(prevComponent, nextWrappedElement, object3D, callback)._renderedComponent.getPublicInstance();
       }
 
-      this.unmountComponentAtNode(container);
+      this.unmountComponentAtNode(object3D);
     }
 
-    const reactRootElement = getReactRootElementInContainer(container);
-    const containerHasReactMarkup = reactRootElement && this.isRenderedByReact(reactRootElement);
+    const reactRootUserData = getReactRootUserDataInObject3D(object3D);
+    const containerHasReactMarkup = reactRootUserData && this.isRenderedByReact(reactRootUserData);
 
     //if (process.env.NODE_ENV !== 'production') {
-    //  if (!containerHasReactMarkup || reactRootElement.nextSibling) {
-    //    let rootElementSibling = reactRootElement;
+    //  if (!containerHasReactMarkup || reactRootUserData.nextSibling) {
+    //    let rootElementSibling = reactRootUserData;
     //    while (rootElementSibling) {
     //      if (this.isRenderedByReact(rootElementSibling)) {
     //        if (process.env.NODE_ENV !== 'production') {
@@ -626,9 +633,9 @@ class ReactCanvas {
     let component;
     if (parentComponent === null) {
       // root !
-      component = this._renderNewRootComponent(nextWrappedElement, container, shouldReuseMarkup, emptyObject)._renderedComponent.getPublicInstance();
+      component = this._renderNewRootComponent(nextWrappedElement, object3D, shouldReuseMarkup, emptyObject)._renderedComponent.getPublicInstance();
     } else {
-      component = this._renderNewRootComponent(nextWrappedElement, container, shouldReuseMarkup, parentComponent._reactInternalInstance._processChildContext(parentComponent._reactInternalInstance._context))._renderedComponent.getPublicInstance();
+      component = this._renderNewRootComponent(nextWrappedElement, object3D, shouldReuseMarkup, parentComponent._reactInternalInstance._processChildContext(parentComponent._reactInternalInstance._context))._renderedComponent.getPublicInstance();
     }
 
     if (callback) {
@@ -648,7 +655,7 @@ class ReactCanvas {
 
     if (process.env.NODE_ENV !== 'production') {
       // Record the root element in case it later gets transplanted.
-      this.rootElementsByReactRootID[this.getReactRootID(container)] = getReactRootElementInContainer(container);
+      this.rootUserDatasByReactRootID[this.getReactRootID(container)] = getReactRootUserDataInObject3D(container);
     }
 
     return prevComponent;
@@ -673,37 +680,32 @@ class ReactCanvas {
     }
 
     const reactRootID = this.getReactRootID(container);
-    const component = this.instancesByReactRootID[reactRootID];
+    const component = this._instancesByReactRootID[reactRootID];
     if (!component) {
       return false;
     }
     ReactUpdates.batchedUpdates(unmountComponentFromNode, component, container);
-    delete this.instancesByReactRootID[reactRootID];
-    delete this.containersByReactRootID[reactRootID];
+    delete this._instancesByReactRootID[reactRootID];
+    delete this.object3DsByReactRootID[reactRootID];
 
     if (process.env.NODE_ENV !== 'production') {
-      delete this.rootElementsByReactRootID[reactRootID];
+      delete this.rootUserDatasByReactRootID[reactRootID];
     }
 
     return true;
   }
 
   /**
-   * @param {DOMElement} container DOM element that may contain a React component.
+   * @param {DOMElement} scene DOM element that may contain a React component.
    * @return {?string} A "reactRoot" ID, if a React component is rendered.
    */
-  getReactRootID(container) {
-    const rootElement = getReactRootElementInContainer(container);
+  getReactRootID(scene) {
+    const rootElement = getReactRootUserDataInObject3D(scene);
     return rootElement && this.getID(rootElement);
   }
 
-  isRenderedByReact(node) {
-    if (node.nodeType !== 1) {
-      // Not a DOMElement, therefore not a React component
-      return false;
-    }
-
-    const id = this.getID(node);
+  isRenderedByReact(userData) {
+    const id = this.getID(userData);
 
     if (id) {
       return id.charAt(0) === SEPARATOR;
@@ -712,17 +714,18 @@ class ReactCanvas {
     return false;
   }
 
-  instantiateReactComponent(nodeInput) {
+  instantiateReactComponent(elementToInstantiate) {
+    console.log('instantiating react component', elementToInstantiate);
     let instance;
 
-    let node = nodeInput;
+    let virtualNode = elementToInstantiate;
 
-    if (node === null || node === false) {
-      node = ReactEmptyComponent.emptyElement;
+    if (virtualNode === null || virtualNode === false) {
+      virtualNode = ReactEmptyComponent.emptyElement;
     }
 
-    if (typeof node === 'object') {
-      const element = node;
+    if (typeof virtualNode === 'object') {
+      const element = virtualNode;
       if (!(element && (typeof element.type === 'function' || typeof element.type === 'string'))) {
         if (process.env.NODE_ENV !== 'production') {
           invariant(false, 'Element type is invalid: expected a string (for built-in components) ' + 'or a class/function (for composite components) but got: %s.%s', element.type == null ? element.type : typeof element.type, getDeclarationErrorAddendum(element._owner));
@@ -733,10 +736,9 @@ class ReactCanvas {
 
       // Special case string values
       if (typeof element.type === 'string') {
-        console.log('string value string value');
+        console.log('string value string value', element);
 
         instance = new InternalComponent(element, this);
-        //debugger;
 
         //instance = ReactNativeComponent.createInternalComponent(element);
       } else if (isInternalComponentType(element.type)) {
@@ -749,12 +751,12 @@ class ReactCanvas {
       } else {
         instance = new ReactCompositeComponentWrapper(this);
       }
-    } else if (typeof node === 'string' || typeof node === 'number') {
+    } else if (typeof virtualNode === 'string' || typeof virtualNode === 'number') {
       console.log('string or number?!');
       // instance = ReactNativeComponent.createInstanceForText(node);
     } else {
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Encountered invalid React node of type %s', typeof node);
+        invariant(false, 'Encountered invalid React node of type %s', typeof virtualNode);
       } else {
         invariant(false);
       }
@@ -765,7 +767,7 @@ class ReactCanvas {
     }
 
     // Sets up the instance. This can probably just move into the constructor now.
-    instance.construct(node);
+    instance.construct(virtualNode);
 
     // These two fields are used by the DOM and ART diffing algorithms
     // respectively. Instead of using expandos on components, we should be
@@ -792,13 +794,13 @@ class ReactCanvas {
   /**
    *
    * @param nextElement
-   * @param container
+   * @param object3D
    * @param shouldReuseMarkup
    * @param context
    * @returns {*}
    * @private
    */
-  _renderNewRootComponent(nextElement, container, shouldReuseMarkup, context) {
+  _renderNewRootComponent(nextElement, object3D, shouldReuseMarkup, context) {
     // Various parts of our code (such as ReactCompositeComponent's
     // _renderValidatedComponent) assume that calls to render aren't nested;
     // verify that that's the case.
@@ -807,26 +809,26 @@ class ReactCanvas {
     }
 
     const componentInstance = this.instantiateReactComponent(nextElement);
-    const reactRootID = this._registerComponent(componentInstance, container);
+    const reactRootID = this._registerComponent(componentInstance, object3D);
 
     // The initial render is synchronous but any updates that happen during
     // rendering, in componentWillMount or componentDidMount, will be batched
     // according to the current batching strategy.
 
-    ReactUpdates.batchedUpdates(this.batchedMountComponentIntoNode, componentInstance, reactRootID, container, shouldReuseMarkup, context);
+    ReactUpdates.batchedUpdates(this.batchedMountComponentIntoNode, componentInstance, reactRootID, object3D, shouldReuseMarkup, context);
 
     if (process.env.NODE_ENV !== 'production') {
       // Record the root element in case it later gets transplanted.
-      this.rootElementsByReactRootID[reactRootID] = getReactRootElementInContainer(container);
+      this.rootUserDatasByReactRootID[reactRootID] = getReactRootUserDataInObject3D(object3D);
     }
 
     return componentInstance;
   }
 
-  _registerComponent(nextComponent, container) {
-    //if (!(container && (container.nodeType === ELEMENT_NODE_TYPE || container.nodeType === DOC_NODE_TYPE || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
+  _registerComponent(nextComponent, object3D) {
+    //if (!(object3D && (object3D.nodeType === ELEMENT_NODE_TYPE || object3D.nodeType === DOC_NODE_TYPE || object3D.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
     //  if (process.env.NODE_ENV !== 'production') {
-    //    invariant(false, '_registerComponent(...): Target container is not a DOM element.');
+    //    invariant(false, '_registerComponent(...): Target object3D is not a DOM element.');
     //  } else {
     //    invariant(false);
     //  }
@@ -834,56 +836,61 @@ class ReactCanvas {
 
     //ReactBrowserEventEmitter.ensureScrollValueMonitoring();
 
-    const reactRootID = this.registerContainer(container);
-    this.instancesByReactRootID[reactRootID] = nextComponent;
+    const reactRootID = this.registerContainer(object3D);
+    this._instancesByReactRootID[reactRootID] = nextComponent;
     return reactRootID;
   }
 
   /**
-   * Registers a container node into which React components will be rendered.
+   * Registers a object3D node into which React components will be rendered.
    * This also creates the "reactRoot" ID that will be assigned to the element
    * rendered within.
    *
-   * @param {DOMElement} container DOM element to register as a container.
+   * @param {DOMElement} object3D DOM element to register as a object3D.
    * @return {string} The "reactRoot" ID of elements rendered within.
    */
-  registerContainer(container) {
-    let reactRootID = this.getReactRootID(container);
+  registerContainer(object3D) {
+    let reactRootID = this.getReactRootID(object3D);
     if (reactRootID) {
       // If one exists, make sure it is a valid "reactRoot" ID.
       reactRootID = ReactInstanceHandles.getReactRootIDFromNodeID(reactRootID);
     }
     if (!reactRootID) {
       // No valid "reactRoot" ID found, create one.
-      reactRootID = ReactInstanceHandles.createReactRootID();
+      reactRootID = `${SEPARATOR}${this.createReactRootID()}`;
     }
-    this.containersByReactRootID[reactRootID] = container;
+    this.object3DsByReactRootID[reactRootID] = object3D;
     return reactRootID;
   }
 
-  getID(node) {
-    const id = internalGetID(node);
+  createReactRootID() {
+    return this.nextReactRootIndex++;
+  }
+
+  getID(userData) {
+    const id = internalGetID(userData);
     if (id) {
-      if (this.nodeCache.hasOwnProperty(id)) {
-        const cached = this.nodeCache[id];
-        if (cached !== node) {
+      if (this.userDataCache.hasOwnProperty(id)) {
+        const cached = this.userDataCache[id];
+        if (cached !== userData) {
           if (!!this.isValid(cached, id)) {
             if (process.env.NODE_ENV !== 'production') {
-              invariant(false, 'ReactCanvas: Two valid but unequal nodes with the same `%s`: %s', ATTR_NAME, id);
+              invariant(false, 'ReactCanvas: Two valid but unequal nodes with the same `%s`: %s', ID_ATTR_NAME, id);
             } else {
               invariant(false);
             }
           }
 
-          this.nodeCache[id] = node;
+          this.userDataCache[id] = userData;
         }
       } else {
-        this.nodeCache[id] = node;
+        this.userDataCache[id] = userData;
       }
     }
 
     return id;
   }
 }
+
 
 export default ReactCanvas;
