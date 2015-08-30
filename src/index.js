@@ -38,9 +38,7 @@ class Scene extends React.Component {
 
     const canvas = this.refs.canvas;
 
-    this.reactCanvas = new ReactCanvas();
-
-    this.reactCanvas.getBoundingClientRect = canvas.getBoundingClientRect.bind(canvas);
+    this.reactCanvas = new ReactCanvas(canvas);
 
     this._scene = new THREE.Scene();
     this._aspectRatio = window.innerWidth / window.innerHeight;

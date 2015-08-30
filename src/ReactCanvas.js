@@ -248,7 +248,8 @@ class ReactCanvas {
     return this.userDataCache[id];
   }
 
-  constructor() {
+  constructor(canvas) {
+    this._canvas = canvas;
     this._instancesByReactRootID = {};
     this.object3DsByReactRootID = {};
     this.rootUserDatasByReactRootID = {};
@@ -383,13 +384,21 @@ class ReactCanvas {
     return object3D;
   }
 
-  getNode(id) {
+  getUserData(id) {
     if (!this.userDataCache.hasOwnProperty(id) || !this.isValid(this.userDataCache[id], id)) {
       this.userDataCache[id] = this.findReactNodeByID(id);
     }
     return this.userDataCache[id];
   }
 
+  findNodeHandle = (instance) => {
+    return this._canvas;
+    // getUserData(instance._rootNodeID);
+  };
+
+  nativeTagToRootNodeID = () => {
+    console.log('wat');
+  };
 
   /**
    * Finds an element rendered by React with the supplied ID.

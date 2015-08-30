@@ -271,7 +271,7 @@ class InternalComponent {
 
   getPublicInstance() {
     if (!this._nodeWithLegacyProperties) {
-      const node = this._reactCanvasInstance.getNode(this._rootNodeID);
+      const node = this._reactCanvasInstance.getUserData(this._rootNodeID);
 
       node._reactInternalComponent = this;
       node.getDOMNode = function() {
