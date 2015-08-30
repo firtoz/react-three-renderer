@@ -8,44 +8,42 @@ class Cube extends React.Component {
     super(props, context);
 
     this.state = {
-      boxColor: 0xff0000,
+      position: props.position,
+      scale: new THREE.Vector3(1, 1, 1),
+      boxColor: 'ff0000',
     };
   }
 
   componentDidMount() {
     console.log("cube mounted!", ReactCanvas.findTHREEObject(this));
 
-    this.setState({
-      boxColor: 0x00ff00,
-    });
+    setTimeout(() => {
+      this.setState({
+        boxColor: '00ff00',
+      });
+    }, Math.random() * 500 + 200);
   }
 
   render() {
-    return (<mesh>
+    return (<mesh position={this.state.position.clone()} scale={this.state.scale.clone()}>
       <boxGeometry width={1} height={1} depth={1}/>
-      <meshBasicMaterial color={this.state.boxColor}/>
+      <meshBasicMaterial color={Number.parseInt(this.state.boxColor, 16)}/>
     </mesh>);
   }
 }
 
 class MyComponent extends React.Component {
+  componentDidMount() {
+    window.addEventListener('resize', () => {
+      this.forceUpdate();
+    });
+  }
+
   render() {
-    return (<div>
-      Hello World
-      <div>
-        <Scene context="3d" width={800} height={600}>
-          {
-            //  <perspectiveCamera fov={75}
-            //                   aspectRatio={800 / 600}
-            //                   near={0.1}
-            //                   far={1000}
-            //                   position={new THREE.Vector3(0, 0, 5)}
-            ///>
-          }
-          <Cube/>
-        </Scene>
-      </div>
-    </div>);
+    return (<Scene context="3d" width={window.innerWidth - 50} height={window.innerHeight - 50}>
+      <Cube position={new THREE.Vector3(0, 0, 0)}/>
+      <Cube position={new THREE.Vector3(2, 0, 0)}/>
+    </Scene>);
   }
 }
 
@@ -57,8 +55,8 @@ class Scene extends React.Component {
   };
 
   componentDidMount() {
-    //console.log("Scene mounted!", this);
-    //console.log(ReactDOM.findDOMNode(this));
+    // console.log("Scene mounted!", this);
+    // console.log(ReactDOM.findDOMNode(this));
     //
     const canvas = this.refs.canvas;
     //
@@ -89,8 +87,6 @@ class Scene extends React.Component {
 
     threeO.add(cube);
 
-    //this._scene.add(threeO);
-
     const render = () => {
       requestAnimationFrame(render);
 
@@ -101,20 +97,15 @@ class Scene extends React.Component {
     };
 
     render();
+  }
 
-    //var scene = new THREE.Scene();
-    //var camera = new THREE.PerspectiveCamera(75, this.props.width / this.props.height, 0.1, 1000);
-    //
-    //console.log(canvas);
-    //
-    //var renderer = new THREE.WebGLRenderer({canvas});
-    ////document.body.appendChild(renderer.domElement);
-    //
-    //renderer.setSize(this.props.width, this.props.height);
-    //
-    //
-    //camera.position.z = 5;
-    //
+  componentDidUpdate() {
+    const newProps = this.props;
+
+    this._aspectRatio = newProps.width / newProps.height;
+    this._renderer.setSize(newProps.width, newProps.height);
+    this._camera.aspect = this._aspectRatio;
+    this._camera.updateProjectionMatrix();
   }
 
   render() {

@@ -255,7 +255,7 @@ class ReactCanvas {
     this.rootUserDatasByReactRootID = {};
     this.findComponentRootReusableArray = [];
     this.userDataCache = {};
-    this.deepestUserDataSoFar = null;
+    this.deepestObject3DSoFar = null;
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
 
@@ -273,9 +273,9 @@ class ReactCanvas {
   }
 
   findDeepestCachedAncestorImpl = (ancestorID) => {
-    const ancestor = this.userDataCache[ancestorID];
-    if (ancestor && this.isValid(ancestor, ancestorID)) {
-      this.deepestUserDataSoFar = ancestor;
+    const ancestorUserData = this.userDataCache[ancestorID];
+    if (ancestorUserData && this.isValid(ancestorUserData, ancestorID)) {
+      this.deepestObject3DSoFar = ancestorUserData.object3D;
     } else {
       // This node isn't populated in the cache, so presumably none of its
       // descendants are. Break out of the loop.
@@ -287,12 +287,12 @@ class ReactCanvas {
    * Return the deepest cached node whose ID is a prefix of `targetID`.
    */
   findDeepestCachedAncestor(targetID) {
-    this.deepestUserDataSoFar = null;
+    this.deepestObject3DSoFar = null;
 
     ReactInstanceHandles.traverseAncestors(targetID, this.findDeepestCachedAncestorImpl);
 
-    const foundUserData = this.deepestUserDataSoFar;
-    this.deepestUserDataSoFar = null;
+    const foundUserData = this.deepestObject3DSoFar;
+    this.deepestObject3DSoFar = null;
     return foundUserData;
   }
 

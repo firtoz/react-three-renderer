@@ -2,8 +2,9 @@ import ReactReconciler from 'react/lib/ReactReconciler';
 import warning from 'react/lib/warning.js';
 import DOMProperty from 'react/lib/DOMProperty';
 import invariant from 'react/lib/invariant';
-import THREE from 'three';
 import ReactMultiChild from 'react/lib/ReactMultiChild';
+
+import threeElementDescriptors from './ElementDescriptors';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
@@ -99,145 +100,6 @@ function processChildContext(context) {
   return context;
 }
 
-/**
- * @abstract
- */
-class THREEElementDescriptor {
-  construct() {
-    invariant(false, 'Missing constructor!');
-  }
-
-  addChildren() {
-    invariant(false, 'Cannot add children to this type!');
-  }
-
-  moveChild() {
-    invariant(false, 'Cannot add children to this type!');
-  }
-
-  setParent() {
-    // do nothing by default
-  }
-
-  deleteProperty(threeObject, propKey) {
-    console.log('deleteProperty', threeObject, propKey);
-  }
-
-  updateProperty(threeObject, propKey, nextProp) {
-    console.log('updateProperty', threeObject, propKey, nextProp);
-  }
-}
-
-class Object3DDescriptor extends THREEElementDescriptor {
-  construct() {
-    return new THREE.Object3D();
-  }
-
-  /**
-   * @param self
-   * @param {Array} children
-   */
-  addChildren(self, children) {
-    children.forEach(child => {
-      self.add(child);
-    });
-  }
-
-  moveChild(self, childObject, toIndex, lastIndex) {
-
-  }
-}
-
-class PerspectiveCameraDescriptor extends THREEElementDescriptor {
-  construct(props) {
-    return new THREE.PerspectiveCamera(props.fov, props.aspectRatio, props.near, props.far);
-  }
-}
-
-class MeshDescriptor extends THREEElementDescriptor {
-  construct() {
-    return new THREE.Mesh();
-  }
-
-  addChildren() {
-    // i'll allow it
-  }
-
-  moveChild(self, childObject, toIndex, lastIndex) {
-    // ignore!
-
-    return toIndex;
-  }
-}
-
-class MaterialDescriptor extends THREEElementDescriptor {
-  constructor() {
-    super();
-
-    this.propUpdates = {
-      'color': this._updateColor,
-    };
-  }
-
-  _updateColor = (threeObject, nextColor) => {
-    threeObject.color.set(nextColor);
-  };
-
-  construct() {
-    return new THREE.Material({});
-  }
-
-  setParent(material, parentObject3D) {
-    parentObject3D.material = material;
-  }
-
-  updateProperty(threeObject, propKey, nextProp) {
-    if (this.propUpdates.hasOwnProperty(propKey)) {
-      this.propUpdates[propKey](threeObject, nextProp);
-    } else {
-      console.error('updating material prop', propKey, nextProp, 'for', threeObject);
-    }
-  }
-}
-
-class GeometryDescriptor extends THREEElementDescriptor {
-  construct() {
-    return new THREE.Geometry({});
-  }
-
-  setParent(material, parentObject3D) {
-    parentObject3D.geometry = material;
-  }
-}
-
-class MeshBasicMaterialDescriptor extends MaterialDescriptor {
-  construct(props) {
-    const materialDescription = {};
-
-    if (props.hasOwnProperty('color')) {
-      materialDescription.color = props.color;
-    }
-
-    return new THREE.MeshBasicMaterial(materialDescription);
-  }
-}
-
-class BoxGeometryDescriptor extends GeometryDescriptor {
-  construct(props) {
-    return new THREE.BoxGeometry(props.width, props.height, props.depth);
-  }
-}
-
-/**
- * @type {Object.<string, THREEElementDescriptor>}
- */
-const threeElementDescriptors = {
-  object3D: new Object3DDescriptor(),
-  perspectiveCamera: new PerspectiveCameraDescriptor(),
-  mesh: new MeshDescriptor(),
-  meshBasicMaterial: new MeshBasicMaterialDescriptor(),
-  boxGeometry: new BoxGeometryDescriptor(),
-};
 
 const registrationNameModules = {};
 
