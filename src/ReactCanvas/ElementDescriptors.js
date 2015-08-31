@@ -27,18 +27,21 @@ class THREEElementDescriptor {
     invariant(false, 'Cannot add children to this type!');
   }
 
+  removeChild() {
+    invariant(false, 'Cannot add children to this type!');
+  }
+
   setParent() {
-    // do nothing by default
+    invariant(false, 'Cannot add parent to this type!');
+  }
+
+  unmount() {
+    invariant(false, 'Cannot unmount this type!');
   }
 
   deleteProperty(threeObject, propKey) {
-    console.log('deleteProperty', threeObject, propKey);
+    invariant(false, 'Cannot delete property!');
   }
-
-  updateProperty(threeObject, propKey, nextProp) {
-    console.log('updateProperty', threeObject, propKey, nextProp);
-  }
-
 
   updateProperty(threeObject, propKey, nextProp) {
     if (this.propUpdates.hasOwnProperty(propKey)) {
@@ -48,6 +51,10 @@ class THREEElementDescriptor {
       debugger;
     }
   }
+}
+
+function _arrayMove(array, oldIndex, newIndex) {
+  array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
 }
 
 class Object3DDescriptor extends THREEElementDescriptor {
@@ -93,9 +100,27 @@ class Object3DDescriptor extends THREEElementDescriptor {
     });
   }
 
+  /**
+   *
+   * @param {THREE.Object3D} self
+   * @param child
+   */
+  removeChild(self, child) {
+    self.remove(child);
+  }
+
   moveChild(self, childObject, toIndex, lastIndex) {
     console.log('OBJECT3D MOVE CHILD?!');
-    debugger;
+
+    _arrayMove(self.children, lastIndex, toIndex);
+  }
+
+  setParent() {
+    // yep that's allowed
+  }
+
+  unmount(self) {
+    // i'll allow it too
   }
 }
 
@@ -107,7 +132,15 @@ class PerspectiveCameraDescriptor extends THREEElementDescriptor {
 
 class MeshDescriptor extends Object3DDescriptor {
   construct(props) {
-    return this.applyInitialProps(new THREE.Mesh(), props);
+    const mesh = new THREE.Mesh();
+
+    mesh.geometry.dispose();
+    mesh.material.dispose();
+
+    mesh.geometry = undefined;
+    mesh.material = undefined;
+
+    return this.applyInitialProps(mesh, props);
   }
 
   addChildren() {
@@ -139,7 +172,20 @@ class MaterialDescriptor extends THREEElementDescriptor {
   }
 
   setParent(material, parentObject3D) {
+    invariant(parentObject3D instanceof THREE.Mesh, 'Parent is not a mesh');
+    invariant(parentObject3D.material === undefined, 'Parent already has a material');
+
     parentObject3D.material = material;
+  }
+
+  unmount(material) {
+    const parent = material.userData.parentMarkup.threeObject;
+
+    if (parent.material === material) {
+      parent.material = undefined;
+    }
+
+    material.dispose();
   }
 }
 
@@ -148,8 +194,21 @@ class GeometryDescriptor extends THREEElementDescriptor {
     return new THREE.Geometry({});
   }
 
-  setParent(material, parentObject3D) {
-    parentObject3D.geometry = material;
+  setParent(geometry, parentObject3D) {
+    invariant(parentObject3D instanceof THREE.Mesh, 'Parent is not a mesh');
+    invariant(parentObject3D.geometry === undefined, 'Parent already has a geometry');
+
+    parentObject3D.geometry = geometry;
+  }
+
+  unmount(geometry) {
+    const parent = geometry.userData.parentMarkup.threeObject;
+
+    if (parent.geometry === geometry) {
+      parent.geometry = undefined;
+    }
+
+    geometry.dispose();
   }
 }
 

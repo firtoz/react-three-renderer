@@ -8,17 +8,6 @@ import threeElementDescriptors from './ElementDescriptors';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
-function legacyGetDOMNode() {
-  if (process.env.NODE_ENV !== 'production') {
-    const component = this._reactInternalComponent;
-    if (process.env.NODE_ENV !== 'production') {
-      warning(false, 'ReactDOMComponent: Do not access .getDOMNode() of a DOM node; ' + 'instead, use the node directly.%s', getDeclarationErrorAddendum(component));
-    }
-  }
-
-  return this;
-}
-
 function legacyIsMounted() {
   const component = this._reactInternalComponent;
   if (process.env.NODE_ENV !== 'production') {
@@ -34,32 +23,12 @@ function legacySetStateEtc() {
   }
 }
 
-function legacySetProps(partialProps, callback) {
-  const component = this._reactInternalComponent;
-  if (process.env.NODE_ENV !== 'production') {
-    process.env.NODE_ENV !== 'production' ? warning(false, 'ReactDOMComponent: Do not access .setProps() of a DOM node. ' + 'Instead, call React.render again at the top level.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-  //if (!component) {
-  //  return;
-  //}
-  //ReactUpdateQueue.enqueueSetPropsInternal(component, partialProps);
-  //if (callback) {
-  //  ReactUpdateQueue.enqueueCallbackInternal(component, callback);
-  //}
+function legacySetProps() {
+  invariant(false, "can't set props!");
 }
 
-function legacyReplaceProps(partialProps, callback) {
-  const component = this._reactInternalComponent;
-  if (process.env.NODE_ENV !== 'production') {
-    process.env.NODE_ENV !== 'production' ? warning(false, 'ReactDOMComponent: Do not access .replaceProps() of a DOM node. ' + 'Instead, call React.render again at the top level.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-  if (!component) {
-    return;
-  }
-  ReactUpdateQueue.enqueueReplacePropsInternal(component, partialProps);
-  if (callback) {
-    ReactUpdateQueue.enqueueCallbackInternal(component, callback);
-  }
+function legacyReplaceProps() {
+  invariant(false, "can't replace props!");
 }
 
 let canDefineProperty = false;
@@ -105,10 +74,12 @@ const registrationNameModules = {};
 
 function deleteListener(rootNodeID, propKey) {
   console.log('deleteListener', rootNodeID, propKey);
+  debugger;
 }
 
 function enqueuePutListener(rootNodeID, propKey, nextProp, transaction) {
   console.log('enqueuePutListener', rootNodeID, propKey, nextProp, transaction);
+  debugger;
 }
 
 function _arrayMove(array, oldIndex, newIndex) {
@@ -141,8 +112,9 @@ class InternalComponent {
     }
   }
 
-  construct(node) {
-    console.log('constructing', node);
+  construct(element) {
+    console.log('constructing', element);
+    this._currentElement = element;
   }
 
   mountChildren(nestedChildren, transaction, context) {
@@ -226,18 +198,25 @@ class InternalComponent {
     return markup;
   }
 
+
   receiveComponent(nextElement, transaction, context) {
     console.log('receive component');
 
     const prevElement = this._currentElement;
     this._currentElement = nextElement;
+
     this.updateComponent(transaction, prevElement, nextElement, context);
   }
 
   updateComponent(transaction, prevElement, nextElement, context) {
     console.log('ahh updating', transaction, prevElement, nextElement, context);
+
     const lastProps = prevElement.props;
     const nextProps = this._currentElement.props;
+
+    if (prevElement.type !== nextElement.type) {
+      debugger;
+    }
 
     this._updateObjectProperties(lastProps, nextProps, transaction);
     this._updateChildrenObjects(lastProps, nextProps, transaction, processChildContext(context, this));
@@ -306,8 +285,24 @@ class InternalComponent {
     }
   }
 
+  /**
+   * @see ReactDOMComponent.Mixin.unmountComponent
+   * node_modules/react/lib/ReactDOMComponent.js:732
+   */
   unmountComponent() {
-    console.log('unmounting component!');
+    console.log('unmounting component!', this);
+
+    this.threeElementDescriptor.unmount(this._threeObject);
+    this.unmountChildren();
+
+    this._rootNodeID = null;
+    if (this._nodeWithLegacyProperties) {
+      const node = this._nodeWithLegacyProperties;
+      node._reactInternalComponent = null;
+      this._nodeWithLegacyProperties = null;
+    }
+
+    // debugger;
   }
 
   getPublicInstance() {
@@ -315,7 +310,7 @@ class InternalComponent {
       const node = this._reactCanvasInstance.getUserData(this._rootNodeID);
 
       node._reactInternalComponent = this;
-      node.getDOMNode =  () => {
+      node.getDOMNode = () => {
         console.log(`can't get dom node silly! this isn't dom!`);
       };
       node.getBoundingClientRect = () => {
@@ -345,15 +340,100 @@ class InternalComponent {
     return this._nodeWithLegacyProperties;
   }
 
-  createChild(child, mountImage) {
-    console.log("create child", child, mountImage);
-    debugger;
+
+  /**
+   * @see ReactMultiChildMixin._updateChildren
+   *
+   * Improve performance by isolating this hot code path from the try/catch
+   * block in `updateChildren`.
+   *
+   * @param {?object} nextNestedChildren Nested child maps.
+   * @param {ReactReconcileTransaction} transaction
+   * @final
+   * @protected
+   */
+  _updateChildren(nextNestedChildren, transaction, context) {
+    const prevChildren = this._renderedChildren;
+    const nextChildren = this._reactCanvasInstance.updateChildren(prevChildren, nextNestedChildren, transaction, context);
+
+    this._renderedChildren = nextChildren;
+
+    if (!nextChildren && !prevChildren) {
+      return;
+    }
+
+    // `nextIndex` will increment for each child in `nextChildren`, but
+    // `lastIndex` will be the last index visited in `prevChildren`.
+    let lastIndex = 0;
+    let nextIndex = 0;
+    for (const childName in nextChildren) {
+      if (!nextChildren.hasOwnProperty(childName)) {
+        continue;
+      }
+
+      const prevChild = prevChildren && prevChildren[childName];
+      const nextChild = nextChildren[childName];
+
+      if (prevChild === nextChild) {
+        this.moveChild(prevChild, nextIndex, lastIndex);
+        lastIndex = Math.max(prevChild._mountIndex, lastIndex);
+        prevChild._mountIndex = nextIndex;
+      } else {
+        if (prevChild) {
+          // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
+          lastIndex = Math.max(prevChild._mountIndex, lastIndex);
+          this._unmountChildByName(prevChild, childName);
+        }
+        // The child must be instantiated before it's mounted.
+        this._mountChildByNameAtIndex(nextChild, childName, nextIndex, transaction, context);
+      }
+      nextIndex++;
+    }
+    // Remove children that are no longer present.
+    for (const childName in prevChildren) {
+      if (prevChildren.hasOwnProperty(childName) && !(nextChildren && nextChildren.hasOwnProperty(childName))) {
+        this._unmountChildByName(prevChildren[childName], childName);
+      }
+    }
   }
 
-  updateChildren = ReactMultiChildMixin.updateChildren;
-  _updateChildren = ReactMultiChildMixin._updateChildren;
-  _unmountChildByName = ReactMultiChildMixin._unmountChildByName;
-  _mountChildByNameAtIndex = ReactMultiChildMixin._mountChildByNameAtIndex;
+  createChild(child, mountImage) {
+    this._markup.userData.childrenMarkup.push(mountImage);
+    this.threeElementDescriptor.addChildren(this._threeObject, [mountImage.threeObject]);
+
+    const descriptorForChild = threeElementDescriptors[mountImage.elementType];
+    descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
+
+    mountImage.userData.parentMarkup = this._markup;
+  }
+
+  /**
+   * Removes a child component.
+   *
+   * @param {ReactComponent} child Child to remove.
+   * @protected
+   */
+  removeChild(child) {
+    this.threeElementDescriptor.removeChild(this._threeObject, child._threeObject);
+
+    const childrenMarkup = this._markup.userData.childrenMarkup;
+
+    for (let i = 0; i < childrenMarkup.length; i++) {
+      const childMarkup = childrenMarkup[i];
+
+      if (childMarkup.threeObject === child._threeObject) {
+        childrenMarkup.splice(i, 1);
+        return;
+      }
+    }
+
+    invariant(false, `The child is not mounted here!`);
+  }
+
+  updateChildren = ReactMultiChildMixin.updateChildren.bind(this);
+  _mountChildByNameAtIndex = ReactMultiChildMixin._mountChildByNameAtIndex.bind(this);
+  _unmountChildByName = ReactMultiChildMixin._unmountChildByName.bind(this);
+  unmountChildren = ReactMultiChildMixin.unmountChildren.bind(this);
 }
 
 export default InternalComponent;

@@ -12,7 +12,11 @@ import emptyObject from 'react/lib/emptyObject';
 import invariant from 'react/lib/invariant';
 import warning from 'react/lib/warning';
 import flattenChildren from 'react/lib/flattenChildren';
+import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
+
 import InternalComponent from './ReactCanvas/InternalComponent';
+import React3CompositeComponentWrapper from './ReactCanvas/React3CompositeComponentWrapper';
+
 import THREE from 'three';
 
 const ELEMENT_NODE_TYPE = 1;
@@ -20,7 +24,6 @@ const DOC_NODE_TYPE = 9;
 const DOCUMENT_FRAGMENT_NODE_TYPE = 11;
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
-
 
 /**
  * @namespace process.env
@@ -84,104 +87,6 @@ function isInternalComponentType(type) {
   return typeof type === 'function' && typeof type.prototype !== 'undefined' && typeof type.prototype['mountComponent'] === 'function' && typeof type.prototype['receiveComponent'] === 'function';
 }
 
-function ReactCompositeComponentWrapper(ReactCanvasInstance) {
-  this._reactCanvasInstance = ReactCanvasInstance;
-}
-
-
-ReactCompositeComponentWrapper.prototype = {
-  ...ReactCompositeComponent.Mixin,
-  _instantiateReactComponent(element) {
-    return this._reactCanvasInstance.instantiateReactComponent(element);
-  },
-
-  mountComponent(rootID, transaction, context) {
-    console.log('mounting composite component');
-
-    this._context = context;
-    this._mountOrder = this._reactCanvasInstance.nextMountID++;
-    this._rootNodeID = rootID;
-
-    const publicProps = this._processProps(this._currentElement.props);
-    const publicContext = this._processContext(context);
-
-    const Component = this._currentElement.type;
-
-    // Initialize the public class
-    const inst = new Component(publicProps, publicContext, ReactUpdateQueue);
-
-    if (process.env.NODE_ENV !== 'production') {
-      // This will throw later in _renderValidatedComponent, but add an early
-      // warning now to help debugging
-      if (process.env.NODE_ENV !== 'production') {
-        warning(inst.render !== null, '%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render` in your ' + 'component or you may have accidentally tried to render an element ' + 'whose type is a function that isn\'t a React component.', Component.displayName || Component.name || 'Component');
-      }
-    }
-
-    // These should be set up in the constructor, but as a convenience for
-    // simpler class abstractions, we set them up after the fact.
-    inst.props = publicProps;
-    inst.context = publicContext;
-    inst.refs = emptyObject;
-    inst.updater = ReactUpdateQueue;
-
-    this._instance = inst;
-
-    // Store a reference from the instance back to the internal representation
-    ReactInstanceMap.set(inst, this);
-
-    if (process.env.NODE_ENV !== 'production') {
-      // Since plain JS classes are defined without any special initialization
-      // logic, we can not catch common errors early. Therefore, we have to
-      // catch them here, at initialization time, instead.
-      process.env.NODE_ENV !== 'production' ? warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(!inst.propTypes, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentShouldUpdate !== 'function', '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', this.getName() || 'A component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentDidUnmount !== 'function', '%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', this.getName() || 'A component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentWillReceiveProps !== 'function', '%s has a method called ' + 'componentWillReceiveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component') : undefined;
-    }
-
-    let initialState = inst.state;
-    if (initialState === undefined) {
-      inst.state = initialState = null;
-    }
-    if (!(typeof initialState === 'object' && !Array.isArray(initialState))) {
-      if (process.env.NODE_ENV !== 'production') {
-        invariant(false, '%s.state: must be set to an object or null', this.getName() || 'ReactCompositeComponent');
-      } else {
-        invariant(false);
-      }
-    }
-
-    this._pendingStateQueue = null;
-    this._pendingReplaceState = false;
-    this._pendingForceUpdate = false;
-
-    if (inst.componentWillMount) {
-      inst.componentWillMount();
-      // When mounting, calls to `setState` by `componentWillMount` will set
-      // `this._pendingStateQueue` without triggering a re-render.
-      if (this._pendingStateQueue) {
-        inst.state = this._processPendingState(inst.props, inst.context);
-      }
-    }
-
-    const renderedElement = this._renderValidatedComponent();
-
-    this._renderedComponent = this._instantiateReactComponent(renderedElement);
-
-    const markup = ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, this._processChildContext(context));
-    if (inst.componentDidMount) {
-      console.log('calling component did mount for markup', markup);
-      transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
-    }
-
-    return markup;
-  },
-};
-
 /**
  * @global
  * @var __REACT_DEVTOOLS_GLOBAL_HOOK__
@@ -232,6 +137,57 @@ class ReactCanvas {
     } else {
       invariant(false);
     }
+  }
+
+
+  /**
+   * @see ReactChildReconciler.updateChildren
+   *
+   * Updates the rendered children and returns a new set of children.
+   *
+   * @param {?object} prevChildren Previously initialized set of children.
+   * @param {?object} nextNestedChildNodes Nested child maps.
+   * @param {ReactReconcileTransaction} transaction
+   * @param {object} context
+   * @return {?object} A new set of child instances.
+   * @internal
+   */
+  updateChildren(prevChildren, nextNestedChildNodes, transaction, context) {
+    // We currently don't have a way to track moves here but if we use iterators
+    // instead of for..in we can zip the iterators and check if an item has
+    // moved.
+    // TODO: If nothing has changed, return the prevChildren object so that we
+    // can quickly bailout if nothing has changed.
+    var nextChildren = flattenChildren(nextNestedChildNodes);
+    if (!nextChildren && !prevChildren) {
+      return null;
+    }
+    var name;
+    for (name in nextChildren) {
+      if (!nextChildren.hasOwnProperty(name)) {
+        continue;
+      }
+      var prevChild = prevChildren && prevChildren[name];
+      var prevElement = prevChild && prevChild._currentElement;
+      var nextElement = nextChildren[name];
+      if (shouldUpdateReactComponent(prevElement, nextElement)) {
+        ReactReconciler.receiveComponent(prevChild, nextElement, transaction, context);
+        nextChildren[name] = prevChild;
+      } else {
+        if (prevChild) {
+          ReactReconciler.unmountComponent(prevChild, name);
+        }
+        // The child must be instantiated before it's mounted.
+        nextChildren[name] = this.instantiateReactComponent(nextElement, null);
+      }
+    }
+    // Unmount children that are no longer present.
+    for (name in prevChildren) {
+      if (prevChildren.hasOwnProperty(name) && !(nextChildren && nextChildren.hasOwnProperty(name))) {
+        ReactReconciler.unmountComponent(prevChildren[name]);
+      }
+    }
+    return nextChildren;
   }
 
   getUserDataFromInstance(instance) {
@@ -718,7 +674,7 @@ class ReactCanvas {
    */
   getReactRootID(scene) {
     const rootElement = getReactRootUserDataInObject3D(scene);
-    return rootElement && this.getID(rootElement);
+    return rootElement && this.getID(rootElement.userData);
   }
 
   isRenderedByReact(userData) {
@@ -766,7 +722,7 @@ class ReactCanvas {
 
         console.log('internal component type herp derp');
       } else {
-        instance = new ReactCompositeComponentWrapper(this);
+        instance = new React3CompositeComponentWrapper(this);
       }
     } else if (typeof virtualNode === 'string' || typeof virtualNode === 'number') {
       console.log('string or number?!');
