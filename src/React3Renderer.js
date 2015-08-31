@@ -25,6 +25,8 @@ const DOCUMENT_FRAGMENT_NODE_TYPE = 11;
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
+import React from 'react';
+
 /**
  * @namespace process.env
  * @type string
@@ -214,6 +216,10 @@ class React3Renderer {
     this.deepestObject3DSoFar = null;
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
+
+    this._root = {};
+
+    //this._scene = new THREE.Scene();
 
     // Inject the runtime into a devtools global hook regardless of browser.
     // Allows for debugging when the hook is injected on the page.
@@ -512,6 +518,7 @@ class React3Renderer {
 
     const rootMarkup = {
       userData: {
+        ...container.userData,
         childrenMarkup: [markup],
         parentMarkup: null,
         object3D: container,
@@ -532,7 +539,7 @@ class React3Renderer {
 
     markup.userData.parentMarkup = rootMarkup;
 
-    container.add(markup.threeObject);
+    container.instance = markup.threeObject;
   }
 
   /**
@@ -550,11 +557,14 @@ class React3Renderer {
   };
 
 
-  render(nextElement, object3D, callback) {
-    return this._renderSubtreeIntoContainer(null, nextElement, object3D, callback);
+  render(nextElement, callback) {
+    return this._renderSubtree(null, nextElement, callback);
   }
 
-  _renderSubtreeIntoContainer(parentComponent, nextElement, object3D, callback) {
+  _renderSubtree(parentComponent, nextElement, callback) {
+    //const root = this._scene;
+    const root = this._root;
+
     if (!ReactElement.isValidElement(nextElement)) {
       if (process.env.NODE_ENV !== 'production') {
         if (typeof nextElement === 'string') {
@@ -573,19 +583,19 @@ class React3Renderer {
 
     const nextWrappedElement = new ReactElement(TopLevelWrapper, null, null, null, nextElement);
 
-    const prevComponent = this._instancesByReactRootID[this.getReactRootID(object3D)];
+    const prevComponent = this._instancesByReactRootID[this.getReactRootID(root)];
 
     if (prevComponent) {
       const prevWrappedElement = prevComponent._currentElement;
       const prevElement = prevWrappedElement.props;
       if (shouldUpdateReactComponent(prevElement, nextElement)) {
-        return this._updateRootComponent(prevComponent, nextWrappedElement, object3D, callback)._renderedComponent.getPublicInstance();
+        return this._updateRootComponent(prevComponent, nextWrappedElement, root, callback)._renderedComponent.getPublicInstance();
       }
 
-      this.unmountComponentAtNode(object3D);
+      this.unmountComponentAtNode(root);
     }
 
-    const reactRootUserData = getReactRootUserDataInObject3D(object3D);
+    const reactRootUserData = getReactRootUserDataInObject3D(root);
     const containerHasReactMarkup = reactRootUserData && this.isRenderedByReact(reactRootUserData);
 
     //if (process.env.NODE_ENV !== 'production') {
@@ -609,9 +619,9 @@ class React3Renderer {
     let component;
     if (parentComponent === null) {
       // root !
-      component = this._renderNewRootComponent(nextWrappedElement, object3D, shouldReuseMarkup, emptyObject)._renderedComponent.getPublicInstance();
+      component = this._renderNewRootComponent(nextWrappedElement, root, shouldReuseMarkup, emptyObject)._renderedComponent.getPublicInstance();
     } else {
-      component = this._renderNewRootComponent(nextWrappedElement, object3D, shouldReuseMarkup, parentComponent._reactInternalInstance._processChildContext(parentComponent._reactInternalInstance._context))._renderedComponent.getPublicInstance();
+      component = this._renderNewRootComponent(nextWrappedElement, root, shouldReuseMarkup, parentComponent._reactInternalInstance._processChildContext(parentComponent._reactInternalInstance._context))._renderedComponent.getPublicInstance();
     }
 
     if (callback) {

@@ -15,11 +15,16 @@ class THREEElementDescriptor {
     this.propUpdates = {};
   }
 
+  applyInitialProps(self, props) { // eslint-disable-line no-unused-vars
+    // do nothing for now
+  }
+
   construct() {
     invariant(false, 'Missing constructor!');
   }
 
-  addChildren() {
+  // noinspection JSUnusedLocalSymbols
+  addChildren(self, children) { // eslint-disable-line no-unused-vars
     invariant(false, 'Cannot add children to this type!');
   }
 
@@ -39,7 +44,8 @@ class THREEElementDescriptor {
     invariant(false, 'Cannot unmount this type!');
   }
 
-  deleteProperty(threeObject, propKey) {
+  // noinspection JSUnusedLocalSymbols
+  deleteProperty(threeObject, propKey) { // eslint-disable-line no-unused-vars
     invariant(false, 'Cannot delete property!');
   }
 
@@ -47,8 +53,7 @@ class THREEElementDescriptor {
     if (this.propUpdates.hasOwnProperty(propKey)) {
       this.propUpdates[propKey](threeObject, nextProp);
     } else {
-      console.error('updating prop', propKey, nextProp, 'for', threeObject);
-      debugger;
+      invariant(false, `updating prop ${propKey} ${nextProp} for ${threeObject}`);
     }
   }
 }
@@ -64,6 +69,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     this.propUpdates = {
       'position': this._updatePosition,
       'scale': this._updateScale,
+      'name': this._updateName,
     };
   }
 
@@ -72,14 +78,19 @@ class Object3DDescriptor extends THREEElementDescriptor {
   }
 
   applyInitialProps(self, props) {
+    super.applyInitialProps(self, props);
+
     if (props.position) {
       self.position.copy(props.position);
     }
+
     if (props.scale) {
       self.scale.copy(props.scale);
     }
 
-    return self;
+    if (props.name) {
+      self.name = props.name;
+    }
   }
 
   _updatePosition = (threeObject, nextPosition) => {
@@ -88,6 +99,10 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
   _updateScale = (threeObject, nextScale) => {
     threeObject.scale.copy(nextScale);
+  };
+
+  _updateName = (threeObject, nextName) => {
+    threeObject.name = nextName;
   };
 
   /**
@@ -110,8 +125,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
   }
 
   moveChild(self, childObject, toIndex, lastIndex) {
-    //console.log('OBJECT3D MOVE CHILD?!');
-
     _arrayMove(self.children, lastIndex, toIndex);
   }
 
@@ -119,14 +132,45 @@ class Object3DDescriptor extends THREEElementDescriptor {
     // yep that's allowed
   }
 
-  unmount(self) {
+  unmount(self) { // eslint-disable-line no-unused-vars
     // i'll allow it too
   }
 }
 
-class PerspectiveCameraDescriptor extends THREEElementDescriptor {
+class CameraDescriptor extends Object3DDescriptor {
+}
+
+class PerspectiveCameraDescriptor extends CameraDescriptor {
+  constructor() {
+    super();
+
+    this.propUpdates = {
+      ...this.propUpdates,
+      aspect: this._updateAspect,
+    };
+  }
+
   construct(props) {
-    return new THREE.PerspectiveCamera(props.fov, props.aspectRatio, props.near, props.far);
+    return new THREE.PerspectiveCamera(props.fov, props.aspect, props.near, props.far);
+  }
+
+  setParent(camera, parentObject3D) {
+    super.setParent(camera, parentObject3D);
+  }
+
+  /**
+   * @param {THREE.PerspectiveCamera} self
+   * @param newAspect
+   * @private
+   */
+  _updateAspect(self, newAspect) {
+    self.aspect = newAspect;
+
+    self.updateProjectionMatrix();
+  }
+
+  unmount() {
+    // return super.unmount();
   }
 }
 
@@ -140,17 +184,15 @@ class MeshDescriptor extends Object3DDescriptor {
     mesh.geometry = undefined;
     mesh.material = undefined;
 
-    return this.applyInitialProps(mesh, props);
+    return mesh;
   }
 
-  addChildren() {
-    // i'll allow it
-
+  addChildren(self, children) {
+    invariant(children.filter(child => !(child instanceof THREE.Material || child instanceof THREE.Geometry)).length === 0, 'Mesh children can only be materials ore geometries!');
   }
 
   moveChild(self, childObject, toIndex, lastIndex) {
-    // ignore!
-
+    // doesn't matter
   }
 }
 
@@ -253,10 +295,118 @@ class BoxGeometryDescriptor extends GeometryDescriptor {
   };
 }
 
+/*
+
+
+ this._aspectRatio = this.props.width / this.props.height;
+ this._camera = new THREE.PerspectiveCamera(75, this._aspectRatio, 0.1, 1000);
+
+ this._camera.position.z = 5;
+
+ this._renderer = new THREE.WebGLRenderer({canvas});
+
+ this._renderer.setSize(this.props.width, this.props.height);
+ const render = () => {
+ requestAnimationFrame(render);
+
+ // cube.rotation.x += 0.1;
+ // cube.rotation.y += 0.1;
+
+ this._renderer.render(this._scene, this._camera);
+ };
+
+ render();
+
+ */
+class React3DInstance {
+  constructor(props) {
+    this._scene = null;
+    this._mainCameraName = props.mainCamera;
+    this._renderer = new THREE.WebGLRenderer({canvas: props.canvas});
+    this._width = props.width;
+    this._height = props.height;
+    this._renderer.setSize(this._width, this._height);
+  }
+
+  setScene(scene) {
+    this._scene = scene;
+
+    const mainCamera = scene.getObjectByName(this._mainCameraName);
+
+    invariant(!!mainCamera, 'Scene has no main camera!');
+
+    this._mainCamera = mainCamera;
+
+    this._startRender();
+  }
+
+  _startRender() {
+    console.log('starting to render!');
+    const render = () => {
+      requestAnimationFrame(render);
+
+      this._renderer.render(this._scene, this._mainCamera);
+    };
+
+    render();
+  }
+
+  updateWidth(newWidth) {
+    this._width = newWidth;
+    this._renderer.setSize(this._width, this._height);
+  }
+
+  updateHeight(newHeight) {
+    this._height = newHeight;
+    this._renderer.setSize(this._width, this._height);
+  }
+}
+
+class React3Descriptor extends THREEElementDescriptor {
+  constructor() {
+    super();
+
+    this.propUpdates = {
+      width: this._updateWidth,
+      height: this._updateHeight,
+    };
+  }
+
+  construct(props) {
+    return new React3DInstance(props);
+  }
+
+  addChildren(self, children) {
+    invariant(children.length === 1 && children[0] instanceof THREE.Scene, "The react3 component should only have one scene as a child!");
+
+    self.setScene(children[0]);
+  }
+
+  _updateWidth(self, newWidth) {
+    self.updateWidth(newWidth);
+  }
+
+;
+
+  _updateHeight(self, newHeight) {
+    self.updateHeight(newHeight);
+  }
+
+;
+}
+
+class SceneDescriptor extends Object3DDescriptor {
+  construct() {
+    return new THREE.Scene();
+  }
+}
+
 /**
  * @type {Object.<string, THREEElementDescriptor>}
  */
 const threeElementDescriptors = {
+  react3: new React3Descriptor(),
+  scene: new SceneDescriptor(),
   object3D: new Object3DDescriptor(),
   perspectiveCamera: new PerspectiveCameraDescriptor(),
   mesh: new MeshDescriptor(),

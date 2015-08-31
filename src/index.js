@@ -54,63 +54,47 @@ class MyComponent extends React.Component {
       cubes.push(<Cube key={i} position={new THREE.Vector3(i, 0, 0)}/>);
     }
 
-    //console.log("cubes!", cubes);
-
-    return (<Scene context="3d" width={window.innerWidth - 50} height={window.innerHeight - 50}>
-      {cubes}
-    </Scene>);
+    return (
+      <React3 context="3d" width={window.innerWidth - 50} height={window.innerHeight - 50} mainCamera={'mainCamera'}>
+        <perspectiveCamera fov={75}
+                           aspect={(window.innerWidth - 50) / (window.innerHeight - 50)}
+                           near={0.1}
+                           far={1000}
+                           name={'mainCamera'}
+                           position={new THREE.Vector3(0, 0, 5)}/>
+        {cubes}
+      </React3>);
   }
 }
 
-class Scene extends React.Component {
+class React3 extends React.Component {
   static propTypes = {
+    context: React.PropTypes.string,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     children: React.PropTypes.any,
   };
 
+  static defaultProps = {
+    context: '3d',
+  };
+
   componentDidMount() {
-    // console.log("Scene mounted!", this);
-    // console.log(ReactDOM.findDOMNode(this));
-    //
     const canvas = this.refs.canvas;
-    //
+
     this.react3Renderer = new React3Renderer(canvas);
 
-    this._aspectRatio = this.props.width / this.props.height;
-    this._camera = new THREE.PerspectiveCamera(75, this._aspectRatio, 0.1, 1000);
-
-    this._camera.position.z = 5;
-
-    this._renderer = new THREE.WebGLRenderer({canvas});
-
-    this._renderer.setSize(this.props.width, this.props.height);
-
-    this._scene = new THREE.Scene();
-
-    this.react3Renderer.render(<object3D>{React.Children.map(this.props.children, child => child)}</object3D>, this._scene);
-
-    const render = () => {
-      requestAnimationFrame(render);
-
-      // cube.rotation.x += 0.1;
-      // cube.rotation.y += 0.1;
-
-      this._renderer.render(this._scene, this._camera);
-    };
-
-    render();
+    this.react3Renderer.render(<react3 {...this.props} canvas={canvas}>
+      <scene>{this.props.children}</scene>
+    </react3>);
   }
 
   componentDidUpdate() {
-    const newProps = this.props;
+    const canvas = this.refs.canvas;
 
-    this._aspectRatio = newProps.width / newProps.height;
-    this._renderer.setSize(newProps.width, newProps.height);
-    this._camera.aspect = this._aspectRatio;
-    this._camera.updateProjectionMatrix();
-
-    this.react3Renderer.render(<object3D>{this.props.children}</object3D>, this._scene);
+    this.react3Renderer.render(<react3 {...this.props} canvas={canvas}>
+      <scene>{this.props.children}</scene>
+    </react3>);
   }
 
   render() {

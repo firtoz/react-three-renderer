@@ -113,7 +113,7 @@ class InternalComponent {
   }
 
   construct(element) {
-    //console.log('constructing', element);
+    // console.log('constructing', element);
     this._currentElement = element;
   }
 
@@ -149,12 +149,13 @@ class InternalComponent {
   }
 
   mountComponent(rootID, transaction, context) {
-    //console.log("mount component", rootID);
+    // console.log("mount component", rootID);
 
     const element = this._currentElement;
     this._rootNodeID = rootID;
 
     this._threeObject = this.threeElementDescriptor.construct(element.props);
+    this.threeElementDescriptor.applyInitialProps(this._threeObject, element.props);
 
     const childrenToUse = element.props.children;
 
@@ -162,6 +163,7 @@ class InternalComponent {
 
     const markup = {
       userData: {
+        ...this._threeObject.userData,
         [ID_ATTR_NAME]: rootID,
         childrenMarkup: mountImages,
         object3D: this._threeObject,
@@ -183,9 +185,10 @@ class InternalComponent {
 
       mountImages.forEach(mountImage => {
         const descriptorForChild = threeElementDescriptors[mountImage.elementType];
-        descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
 
         mountImage.userData.parentMarkup = markup;
+
+        descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
       });
     }
 
@@ -402,9 +405,10 @@ class InternalComponent {
     this.threeElementDescriptor.addChildren(this._threeObject, [mountImage.threeObject]);
 
     const descriptorForChild = threeElementDescriptors[mountImage.elementType];
-    descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
 
     mountImage.userData.parentMarkup = this._markup;
+
+    descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
   }
 
   /**
