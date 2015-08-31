@@ -89,12 +89,12 @@ function _arrayMove(array, oldIndex, newIndex) {
 const ReactMultiChildMixin = ReactMultiChild.Mixin;
 
 class InternalComponent {
-  constructor(element, reactCanvasInstance) {
+  constructor(element, react3RendererInstance) {
     this._currentElement = element;
     /**
-     * @type ReactCanvas
+     * @type React3Renderer
      */
-    this._reactCanvasInstance = reactCanvasInstance;
+    this._react3RendererInstance = react3RendererInstance;
 
     // console.log("internal: ", element);
 
@@ -118,7 +118,7 @@ class InternalComponent {
   }
 
   mountChildren(nestedChildren, transaction, context) {
-    const children = this._reactCanvasInstance.instantiateChildren(nestedChildren, transaction, context);
+    const children = this._react3RendererInstance.instantiateChildren(nestedChildren, transaction, context);
     this._renderedChildren = children;
     const mountImages = [];
     let index = 0;
@@ -307,7 +307,7 @@ class InternalComponent {
 
   getPublicInstance() {
     if (!this._nodeWithLegacyProperties) {
-      const node = this._reactCanvasInstance.getUserData(this._rootNodeID);
+      const node = this._react3RendererInstance.getUserData(this._rootNodeID);
 
       node._reactInternalComponent = this;
       node.getDOMNode = () => {
@@ -354,7 +354,7 @@ class InternalComponent {
    */
   _updateChildren(nextNestedChildren, transaction, context) {
     const prevChildren = this._renderedChildren;
-    const nextChildren = this._reactCanvasInstance.updateChildren(prevChildren, nextNestedChildren, transaction, context);
+    const nextChildren = this._react3RendererInstance.updateChildren(prevChildren, nextNestedChildren, transaction, context);
 
     this._renderedChildren = nextChildren;
 

@@ -14,9 +14,9 @@ ReactCompositeComponentMixinImpl.prototype = {
 };
 
 class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
-  constructor(ReactCanvasInstance) {
+  constructor(react3RendererInstance) {
     super();
-    this._reactCanvasInstance = ReactCanvasInstance;
+    this._react3RendererInstance = react3RendererInstance;
   }
 
   construct(element) {
@@ -41,14 +41,14 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   _instantiateReactComponent(element) {
-    return this._reactCanvasInstance.instantiateReactComponent(element);
+    return this._react3RendererInstance.instantiateReactComponent(element);
   }
 
   mountComponent(rootID, transaction, context) {
     //console.log('mounting composite component');
 
     this._context = context;
-    this._mountOrder = this._reactCanvasInstance.nextMountID++;
+    this._mountOrder = this._react3RendererInstance.nextMountID++;
     this._rootNodeID = rootID;
 
     const publicProps = this._processProps(this._currentElement.props);
@@ -135,14 +135,14 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 //React3CompositeComponentWrapper.prototype = {
 //  ...ReactCompositeComponent.Mixin,
 //  _instantiateReactComponent(element) {
-//    return this._reactCanvasInstance.instantiateReactComponent(element);
+//    return this._react3RendererInstance.instantiateReactComponent(element);
 //  },
 //
 //  mountComponent(rootID, transaction, context) {
 //    console.log('mounting composite component');
 //
 //    this._context = context;
-//    this._mountOrder = this._reactCanvasInstance.nextMountID++;
+//    this._mountOrder = this._react3RendererInstance.nextMountID++;
 //    this._rootNodeID = rootID;
 //
 //    const publicProps = this._processProps(this._currentElement.props);

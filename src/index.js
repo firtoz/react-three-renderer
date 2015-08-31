@@ -1,4 +1,4 @@
-import ReactCanvas from './ReactCanvas';
+import React3Renderer from './React3Renderer';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import THREE from 'three';
@@ -15,7 +15,7 @@ class Cube extends React.Component {
   }
 
   componentDidMount() {
-    //console.log("cube mounted!", ReactCanvas.findTHREEObject(this));
+    //console.log("cube mounted!", React3Renderer.findTHREEObject(this));
 
     setTimeout(() => {
       this.setState({
@@ -75,9 +75,8 @@ class Scene extends React.Component {
     //
     const canvas = this.refs.canvas;
     //
-    this.reactCanvas = new ReactCanvas(canvas);
+    this.react3Renderer = new React3Renderer(canvas);
 
-    this._scene = new THREE.Scene();
     this._aspectRatio = this.props.width / this.props.height;
     this._camera = new THREE.PerspectiveCamera(75, this._aspectRatio, 0.1, 1000);
 
@@ -87,20 +86,9 @@ class Scene extends React.Component {
 
     this._renderer.setSize(this.props.width, this.props.height);
 
-    this.reactCanvas.render(<object3D>{React.Children.map(this.props.children, child => child)}</object3D>, this._scene);
+    this._scene = new THREE.Scene();
 
-    //console.log('ready to render?!');
-
-    var geometry = new THREE.BoxGeometry(1, 1, 1);
-    var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-    var cube = new THREE.Mesh();
-
-    cube.geometry = geometry;
-    cube.material = material;
-
-    const threeO = new THREE.Object3D();
-
-    threeO.add(cube);
+    this.react3Renderer.render(<object3D>{React.Children.map(this.props.children, child => child)}</object3D>, this._scene);
 
     const render = () => {
       requestAnimationFrame(render);
@@ -122,7 +110,7 @@ class Scene extends React.Component {
     this._camera.aspect = this._aspectRatio;
     this._camera.updateProjectionMatrix();
 
-    this.reactCanvas.render(<object3D>{this.props.children}</object3D>, this._scene);
+    this.react3Renderer.render(<object3D>{this.props.children}</object3D>, this._scene);
   }
 
   render() {

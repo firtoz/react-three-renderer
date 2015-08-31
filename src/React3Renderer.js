@@ -14,8 +14,8 @@ import warning from 'react/lib/warning';
 import flattenChildren from 'react/lib/flattenChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 
-import InternalComponent from './ReactCanvas/InternalComponent';
-import React3CompositeComponentWrapper from './ReactCanvas/React3CompositeComponentWrapper';
+import InternalComponent from './React3/InternalComponent';
+import React3CompositeComponentWrapper from './React3/React3CompositeComponentWrapper';
 
 import THREE from 'three';
 
@@ -92,7 +92,7 @@ function isInternalComponentType(type) {
  * @var __REACT_DEVTOOLS_GLOBAL_HOOK__
  */
 
-class ReactCanvas {
+class React3Renderer {
   /**
    * Returns the DOM node rendered by this element.
    *
@@ -121,7 +121,7 @@ class ReactCanvas {
     if (ReactInstanceMap.has(componentOrElement)) {
       const instance = ReactInstanceMap.get(componentOrElement);
 
-      return instance._reactCanvasInstance.getUserDataFromInstance(componentOrElement).object3D;
+      return instance._react3RendererInstance.getUserDataFromInstance(componentOrElement).object3D;
     }
 
     if (!(componentOrElement.render === null || typeof componentOrElement.render !== 'function')) {
@@ -280,7 +280,7 @@ class ReactCanvas {
     if (userData) {
       if (internalGetID(userData) !== id) {
         if (process.env.NODE_ENV !== 'production') {
-          invariant(false, 'ReactCanvas: Unexpected modification of `%s`', ID_ATTR_NAME);
+          invariant(false, 'React3Renderer: Unexpected modification of `%s`', ID_ATTR_NAME);
         } else {
           invariant(false);
         }
@@ -319,7 +319,7 @@ class ReactCanvas {
           warning(
             // Call internalGetID here because getID calls isValid which calls
             // findReactContainerForID (this function).
-            internalGetID(rootElement) === reactRootID, 'ReactCanvas: Root element ID differed from reactRootID.');
+            internalGetID(rootElement) === reactRootID, 'React3Renderer: Root element ID differed from reactRootID.');
         }
 
         const containerChild = object3D.userData.childrenMarkup[0];// firstChild;
@@ -331,7 +331,7 @@ class ReactCanvas {
           this.rootUserDatasByReactRootID[reactRootID] = containerChild;
         } else {
           if (process.env.NODE_ENV !== 'production') {
-            warning(false, 'ReactCanvas: Root element has been removed from its original ' + 'object3D. New object3D: %s', rootElement.parentNode);
+            warning(false, 'React3Renderer: Root element has been removed from its original ' + 'object3D. New object3D: %s', rootElement.parentNode);
           }
         }
       }
@@ -856,7 +856,7 @@ class ReactCanvas {
         if (cached !== userData) {
           if (!!this.isValid(cached, id)) {
             if (process.env.NODE_ENV !== 'production') {
-              invariant(false, 'ReactCanvas: Two valid but unequal nodes with the same `%s`: %s', ID_ATTR_NAME, id);
+              invariant(false, 'React3Renderer: Two valid but unequal nodes with the same `%s`: %s', ID_ATTR_NAME, id);
             } else {
               invariant(false);
             }
@@ -874,4 +874,4 @@ class ReactCanvas {
 }
 
 
-export default ReactCanvas;
+export default React3Renderer;
