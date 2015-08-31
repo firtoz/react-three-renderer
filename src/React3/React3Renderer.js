@@ -1,7 +1,6 @@
-import ReactElement from 'react/lib/ReactElement';
 import DOMProperty from 'react/lib/DOMProperty.js';
+import ReactElement from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
 import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
 import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
 import ReactReconciler from 'react/lib/ReactReconciler';
@@ -14,8 +13,9 @@ import warning from 'react/lib/warning';
 import flattenChildren from 'react/lib/flattenChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 
-import InternalComponent from './React3/InternalComponent';
-import React3CompositeComponentWrapper from './React3/React3CompositeComponentWrapper';
+import InternalComponent from './InternalComponent';
+
+import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
 import THREE from 'three';
 
@@ -24,8 +24,6 @@ const DOC_NODE_TYPE = 9;
 const DOCUMENT_FRAGMENT_NODE_TYPE = 11;
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
-
-import React from 'react';
 
 /**
  * @namespace process.env
