@@ -14,6 +14,7 @@ import flattenChildren from 'react/lib/flattenChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 
 import InternalComponent from './InternalComponent';
+import ElementDescriptorContainer from './ElementDescriptorContainer';
 
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
@@ -214,6 +215,8 @@ class React3Renderer {
     this.deepestObject3DSoFar = null;
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
+
+    this.threeElementDescriptors = new ElementDescriptorContainer(this).descriptors;
 
     this._root = {};
 

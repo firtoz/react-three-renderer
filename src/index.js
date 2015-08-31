@@ -17,11 +17,20 @@ class Cube extends React.Component {
   componentDidMount() {
     // console.log("cube mounted!", React3Renderer.findTHREEObject(this));
 
-    setTimeout(() => {
+    this.boxTimeout = setTimeout(() => {
+      delete this.boxTimeout;
+
       this.setState({
         boxColor: '00ff00',
       });
-    }, Math.random() * 500 + 200);
+    }, Math.random() * 5000 + 200);
+  }
+
+  componentWillUnmount() {
+    if (this.boxTimeout) {
+      clearTimeout(this.boxTimeout);
+      delete this.boxTimeout;
+    }
   }
 
   render() {
@@ -38,6 +47,7 @@ class MyComponent extends React.Component {
 
     this.state = {
       numCubes: 2,
+      hasCamera: true,
     };
   }
 
@@ -47,6 +57,24 @@ class MyComponent extends React.Component {
     });
   }
 
+  _toggleCamera = () => {
+    this.setState({
+      hasCamera: !this.state.hasCamera,
+    });
+  };
+
+  _addBox = () => {
+    this.setState({
+      numCubes: this.state.numCubes + 1,
+    });
+  };
+
+  _removeBox = () => {
+    this.setState({
+      numCubes: this.state.numCubes - 1,
+    });
+  };
+
   render() {
     const cubes = [];
 
@@ -55,15 +83,20 @@ class MyComponent extends React.Component {
     }
 
     return (
-      <React3 context="3d" width={window.innerWidth - 50} height={window.innerHeight - 50} mainCamera={'mainCamera'}>
-        <perspectiveCamera fov={75}
-                           aspect={(window.innerWidth - 50) / (window.innerHeight - 50)}
-                           near={0.1}
-                           far={1000}
-                           name={'mainCamera'}
-                           position={new THREE.Vector3(0, 0, 5)}/>
-        {cubes}
-      </React3>);
+      <div>
+        <button onClick={this._toggleCamera}>Toggle Camera</button>
+        <button onClick={this._addBox}>Add Box</button>
+        <button onClick={this._removeBox}>Remove Box</button>
+        <React3 width={window.innerWidth} height={window.innerHeight} mainCamera={'mainCamera'}>
+          {this.state.hasCamera ? <perspectiveCamera fov={75}
+                                                     aspect={(window.innerWidth) / (window.innerHeight)}
+                                                     near={0.1}
+                                                     far={1000}
+                                                     name={'mainCamera'}
+                                                     position={new THREE.Vector3(0, 0, 5)}/> : null}
+          {cubes}
+        </React3>
+      </div>);
   }
 }
 

@@ -1,17 +1,87 @@
-import ReactReconciler from 'react/lib/ReactReconciler';
-import warning from 'react/lib/warning.js';
-import DOMProperty from 'react/lib/DOMProperty';
 import invariant from 'react/lib/invariant';
 import THREE from 'three';
-import ReactMultiChild from 'react/lib/ReactMultiChild';
 
-const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
+import events from 'events';
+
+const {EventEmitter} = events;
+
+class React3DInstance {
+  constructor(props) {
+    this._scene = null;
+    this._mainCameraName = props.mainCamera;
+    this._renderer = new THREE.WebGLRenderer({canvas: props.canvas});
+    this._width = props.width;
+    this._height = props.height;
+    this._renderer.setSize(this._width, this._height);
+  }
+
+  setScene(scene) {
+    this._scene = scene;
+
+    const mainCamera = scene.getObjectByName(this._mainCameraName);
+
+    if (!!mainCamera) {
+      this.setCamera(mainCamera);
+    }
+  }
+
+  setCamera(mainCamera) {
+    if (this._mainCamera === mainCamera) {
+      return;
+    }
+
+    mainCamera.userData.events.on('dispose', this._cameraDisposed);
+
+    this._mainCamera = mainCamera;
+
+    this._startRender();
+  }
+
+  _cameraDisposed = () => {
+    this._mainCamera.userData.events.removeListener('dispose', this._cameraDisposed);
+
+    this._mainCamera = null;
+
+    this._renderer.clear();
+
+    cancelAnimationFrame(this._renderRequest);
+  };
+
+  getMainCameraName() {
+    return this._mainCameraName;
+  }
+
+  _startRender() {
+    const render = () => {
+      this._renderRequest = requestAnimationFrame(render);
+
+      this._renderer.render(this._scene, this._mainCamera);
+    };
+
+    render();
+  }
+
+  updateWidth(newWidth) {
+    this._width = newWidth;
+    this._renderer.setSize(this._width, this._height);
+  }
+
+  updateHeight(newHeight) {
+    this._height = newHeight;
+    this._renderer.setSize(this._width, this._height);
+  }
+}
+
 
 /**
  * @abstract
  */
 class THREEElementDescriptor {
-  constructor() {
+  constructor(react3Instance) {
+    /**
+     * @protected
+     */
+    this._react3Instance = react3Instance;
     this.propUpdates = {};
   }
 
@@ -58,13 +128,42 @@ class THREEElementDescriptor {
   }
 }
 
+class React3Descriptor extends THREEElementDescriptor {
+  constructor(react3Instance) {
+    super(react3Instance);
+
+    this.propUpdates = {
+      width: this._updateWidth,
+      height: this._updateHeight,
+    };
+  }
+
+  construct(props) {
+    return new React3DInstance(props);
+  }
+
+  addChildren(self, children) {
+    invariant(children.length === 1 && children[0] instanceof THREE.Scene, "The react3 component should only have one scene as a child!");
+
+    self.setScene(children[0]);
+  }
+
+  _updateWidth(self, newWidth) {
+    self.updateWidth(newWidth);
+  }
+
+  _updateHeight(self, newHeight) {
+    self.updateHeight(newHeight);
+  }
+}
+
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
 }
 
 class Object3DDescriptor extends THREEElementDescriptor {
-  constructor() {
-    super();
+  constructor(react3Instance) {
+    super(react3Instance);
 
     this.propUpdates = {
       'position': this._updatePosition,
@@ -137,12 +236,47 @@ class Object3DDescriptor extends THREEElementDescriptor {
   }
 }
 
+function getRoot(object) {
+  if (object.userData.parentMarkup) {
+    return getRoot(object.userData.parentMarkup.threeObject);
+  } else {
+    return object;
+  }
+}
+
 class CameraDescriptor extends Object3DDescriptor {
+  constructor(react3Instance) {
+    super(react3Instance);
+  }
+
+  applyInitialProps(self, props) {
+    super.applyInitialProps(self, props);
+
+    self.userData.events = new EventEmitter();
+  }
+
+  setParent(camera, parentObject3D) {
+    super.setParent(camera, parentObject3D);
+
+    const root = getRoot(parentObject3D);
+
+    const rootInstance = root && root.instance;
+
+    if (rootInstance && rootInstance instanceof React3DInstance && rootInstance.getMainCameraName() === camera.name) {
+      rootInstance.setCamera(camera);
+    }
+  }
+
+  unmount(self) {
+    self.userData.events.emit('dispose');
+    self.userData.events.removeAllListeners();
+    delete self.userData.events;
+  }
 }
 
 class PerspectiveCameraDescriptor extends CameraDescriptor {
-  constructor() {
-    super();
+  constructor(react3Instance) {
+    super(react3Instance);
 
     this.propUpdates = {
       ...this.propUpdates,
@@ -152,10 +286,6 @@ class PerspectiveCameraDescriptor extends CameraDescriptor {
 
   construct(props) {
     return new THREE.PerspectiveCamera(props.fov, props.aspect, props.near, props.far);
-  }
-
-  setParent(camera, parentObject3D) {
-    super.setParent(camera, parentObject3D);
   }
 
   /**
@@ -169,13 +299,10 @@ class PerspectiveCameraDescriptor extends CameraDescriptor {
     self.updateProjectionMatrix();
   }
 
-  unmount() {
-    // return super.unmount();
-  }
 }
 
 class MeshDescriptor extends Object3DDescriptor {
-  construct(props) {
+  construct() {
     const mesh = new THREE.Mesh();
 
     mesh.geometry.dispose();
@@ -191,14 +318,14 @@ class MeshDescriptor extends Object3DDescriptor {
     invariant(children.filter(child => !(child instanceof THREE.Material || child instanceof THREE.Geometry)).length === 0, 'Mesh children can only be materials ore geometries!');
   }
 
-  moveChild(self, childObject, toIndex, lastIndex) {
+  moveChild() {
     // doesn't matter
   }
 }
 
 class MaterialDescriptor extends THREEElementDescriptor {
-  constructor() {
-    super();
+  constructor(react3Instance) {
+    super(react3Instance);
 
     this.propUpdates = {
       'color': this._updateColor,
@@ -267,8 +394,8 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptor {
 }
 
 class BoxGeometryDescriptor extends GeometryDescriptor {
-  constructor() {
-    super();
+  constructor(react3Instance) {
+    super(react3Instance);
 
     this.propUpdates = {
       ...this.propUpdates,
@@ -282,16 +409,16 @@ class BoxGeometryDescriptor extends GeometryDescriptor {
     return new THREE.BoxGeometry(props.width, props.height, props.depth);
   }
 
-  _updateWidth = (threeObject, newWidth) => {
-    invariant(false, "Please do not modify the width property of the boxGeometry component.");
+  _updateWidth = () => {
+    invariant(false, 'Please do not modify the width property of the boxGeometry component.');
   };
 
-  _updateHeight = (threeObject, newHeight) => {
-    invariant(false, "Please do not modify the height property of the boxGeometry component.");
+  _updateHeight = () => {
+    invariant(false, 'Please do not modify the height property of the boxGeometry component.');
   };
 
-  _updateDepth = (threeObject, newDepth) => {
-    invariant(false, "Please do not modify the depth property of the boxGeometry component.");
+  _updateDepth = () => {
+    invariant(false, 'Please do not modify the depth property of the boxGeometry component.');
   };
 }
 
@@ -318,100 +445,35 @@ class BoxGeometryDescriptor extends GeometryDescriptor {
  render();
 
  */
-class React3DInstance {
-  constructor(props) {
-    this._scene = null;
-    this._mainCameraName = props.mainCamera;
-    this._renderer = new THREE.WebGLRenderer({canvas: props.canvas});
-    this._width = props.width;
-    this._height = props.height;
-    this._renderer.setSize(this._width, this._height);
-  }
 
-  setScene(scene) {
-    this._scene = scene;
-
-    const mainCamera = scene.getObjectByName(this._mainCameraName);
-
-    invariant(!!mainCamera, 'Scene has no main camera!');
-
-    this._mainCamera = mainCamera;
-
-    this._startRender();
-  }
-
-  _startRender() {
-    console.log('starting to render!');
-    const render = () => {
-      requestAnimationFrame(render);
-
-      this._renderer.render(this._scene, this._mainCamera);
-    };
-
-    render();
-  }
-
-  updateWidth(newWidth) {
-    this._width = newWidth;
-    this._renderer.setSize(this._width, this._height);
-  }
-
-  updateHeight(newHeight) {
-    this._height = newHeight;
-    this._renderer.setSize(this._width, this._height);
-  }
-}
-
-class React3Descriptor extends THREEElementDescriptor {
-  constructor() {
-    super();
-
-    this.propUpdates = {
-      width: this._updateWidth,
-      height: this._updateHeight,
-    };
-  }
-
-  construct(props) {
-    return new React3DInstance(props);
-  }
-
-  addChildren(self, children) {
-    invariant(children.length === 1 && children[0] instanceof THREE.Scene, "The react3 component should only have one scene as a child!");
-
-    self.setScene(children[0]);
-  }
-
-  _updateWidth(self, newWidth) {
-    self.updateWidth(newWidth);
-  }
-
-;
-
-  _updateHeight(self, newHeight) {
-    self.updateHeight(newHeight);
-  }
-
-;
-}
 
 class SceneDescriptor extends Object3DDescriptor {
+  constructor(react3Instance) {
+    super(react3Instance);
+  }
+
   construct() {
     return new THREE.Scene();
   }
 }
 
-/**
- * @type {Object.<string, THREEElementDescriptor>}
- */
-const threeElementDescriptors = {
-  react3: new React3Descriptor(),
-  scene: new SceneDescriptor(),
-  object3D: new Object3DDescriptor(),
-  perspectiveCamera: new PerspectiveCameraDescriptor(),
-  mesh: new MeshDescriptor(),
-  meshBasicMaterial: new MeshBasicMaterialDescriptor(),
-  boxGeometry: new BoxGeometryDescriptor(),
-};
+class ElementDescriptorContainer {
+  constructor(react3Instance) {
+    this.react3Instance = react3Instance;
 
-export default threeElementDescriptors;
+    /**
+     * @type {Object.<string, THREEElementDescriptor>}
+     */
+    this.descriptors = {
+      react3: new React3Descriptor(react3Instance),
+      scene: new SceneDescriptor(react3Instance),
+      object3D: new Object3DDescriptor(react3Instance),
+      perspectiveCamera: new PerspectiveCameraDescriptor(react3Instance),
+      mesh: new MeshDescriptor(react3Instance),
+      meshBasicMaterial: new MeshBasicMaterialDescriptor(react3Instance),
+      boxGeometry: new BoxGeometryDescriptor(react3Instance),
+    };
+  }
+}
+
+export default ElementDescriptorContainer;

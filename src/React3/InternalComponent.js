@@ -4,8 +4,6 @@ import DOMProperty from 'react/lib/DOMProperty';
 import invariant from 'react/lib/invariant';
 import ReactMultiChild from 'react/lib/ReactMultiChild';
 
-import threeElementDescriptors from './ElementDescriptors';
-
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
 function legacyIsMounted() {
@@ -106,7 +104,7 @@ class InternalComponent {
     this._markup = null;
     this._nodeWithLegacyProperties = null;
 
-    this.threeElementDescriptor = threeElementDescriptors[element.type];
+    this.threeElementDescriptor = react3RendererInstance.threeElementDescriptors[element.type];
     if (!this.threeElementDescriptor) {
       invariant(false, 'No constructor for ' + element.type);
     }
@@ -184,7 +182,7 @@ class InternalComponent {
       this.threeElementDescriptor.addChildren(this._threeObject, mountImages.map(img => img.threeObject));
 
       mountImages.forEach(mountImage => {
-        const descriptorForChild = threeElementDescriptors[mountImage.elementType];
+        const descriptorForChild = this._react3RendererInstance.threeElementDescriptors[mountImage.elementType];
 
         mountImage.userData.parentMarkup = markup;
 
@@ -404,7 +402,7 @@ class InternalComponent {
     this._markup.userData.childrenMarkup.push(mountImage);
     this.threeElementDescriptor.addChildren(this._threeObject, [mountImage.threeObject]);
 
-    const descriptorForChild = threeElementDescriptors[mountImage.elementType];
+    const descriptorForChild = this._react3RendererInstance.threeElementDescriptors[mountImage.elementType];
 
     mountImage.userData.parentMarkup = this._markup;
 
