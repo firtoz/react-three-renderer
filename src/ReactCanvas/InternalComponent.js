@@ -113,7 +113,7 @@ class InternalComponent {
   }
 
   construct(element) {
-    console.log('constructing', element);
+    //console.log('constructing', element);
     this._currentElement = element;
   }
 
@@ -149,7 +149,7 @@ class InternalComponent {
   }
 
   mountComponent(rootID, transaction, context) {
-    console.log("mount component", rootID);
+    //console.log("mount component", rootID);
 
     const element = this._currentElement;
     this._rootNodeID = rootID;
@@ -200,7 +200,7 @@ class InternalComponent {
 
 
   receiveComponent(nextElement, transaction, context) {
-    console.log('receive component');
+    //console.log('receive component');
 
     const prevElement = this._currentElement;
     this._currentElement = nextElement;
@@ -209,7 +209,7 @@ class InternalComponent {
   }
 
   updateComponent(transaction, prevElement, nextElement, context) {
-    console.log('ahh updating', transaction, prevElement, nextElement, context);
+    //console.log('ahh updating', transaction, prevElement, nextElement, context);
 
     const lastProps = prevElement.props;
     const nextProps = this._currentElement.props;
@@ -290,7 +290,7 @@ class InternalComponent {
    * node_modules/react/lib/ReactDOMComponent.js:732
    */
   unmountComponent() {
-    console.log('unmounting component!', this);
+    //console.log('unmounting component!', this);
 
     this.threeElementDescriptor.unmount(this._threeObject);
     this.unmountChildren();
@@ -311,7 +311,7 @@ class InternalComponent {
 
       node._reactInternalComponent = this;
       node.getDOMNode = () => {
-        console.log(`can't get dom node silly! this isn't dom!`);
+        invariant(false, `can't get dom node silly! this isn't dom!`);
       };
       node.getBoundingClientRect = () => {
         return node.parentMarkup.getBoundingClientRect();

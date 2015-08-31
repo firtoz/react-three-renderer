@@ -15,7 +15,7 @@ class Cube extends React.Component {
   }
 
   componentDidMount() {
-    console.log("cube mounted!", ReactCanvas.findTHREEObject(this));
+    //console.log("cube mounted!", ReactCanvas.findTHREEObject(this));
 
     setTimeout(() => {
       this.setState({
@@ -54,7 +54,7 @@ class MyComponent extends React.Component {
       cubes.push(<Cube key={i} position={new THREE.Vector3(i, 0, 0)}/>);
     }
 
-    console.log("cubes!", cubes);
+    //console.log("cubes!", cubes);
 
     return (<Scene context="3d" width={window.innerWidth - 50} height={window.innerHeight - 50}>
       {cubes}
@@ -89,7 +89,7 @@ class Scene extends React.Component {
 
     this.reactCanvas.render(<object3D>{React.Children.map(this.props.children, child => child)}</object3D>, this._scene);
 
-    console.log('ready to render?!');
+    //console.log('ready to render?!');
 
     var geometry = new THREE.BoxGeometry(1, 1, 1);
     var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
@@ -105,8 +105,8 @@ class Scene extends React.Component {
     const render = () => {
       requestAnimationFrame(render);
 
-      //cube.rotation.x += 0.1;
-      //cube.rotation.y += 0.1;
+      // cube.rotation.x += 0.1;
+      // cube.rotation.y += 0.1;
 
       this._renderer.render(this._scene, this._camera);
     };
@@ -122,7 +122,7 @@ class Scene extends React.Component {
     this._camera.aspect = this._aspectRatio;
     this._camera.updateProjectionMatrix();
 
-    this.reactCanvas.render(<object3D>{React.Children.map(this.props.children, child => child)}</object3D>, this._scene);
+    this.reactCanvas.render(<object3D>{this.props.children}</object3D>, this._scene);
   }
 
   render() {

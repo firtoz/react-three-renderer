@@ -354,6 +354,9 @@ class ReactCanvas {
 
   nativeTagToRootNodeID = () => {
     console.log('wat');
+    debugger;
+
+    invariant(false, "Wat!");
   };
 
   /**
@@ -505,7 +508,7 @@ class ReactCanvas {
     //  }
     //}
 
-    console.log('setting inner html!?', markup);
+    //console.log('setting inner html!?', markup);
 
     const rootMarkup = {
       userData: {
@@ -688,7 +691,7 @@ class ReactCanvas {
   }
 
   instantiateReactComponent(elementToInstantiate) {
-    console.log('instantiating react component', elementToInstantiate);
+    //console.log('instantiating react component', elementToInstantiate);
     let instance;
 
     let virtualNode = elementToInstantiate;
@@ -709,7 +712,7 @@ class ReactCanvas {
 
       // Special case string values
       if (typeof element.type === 'string') {
-        console.log('string value string value', element);
+        //console.log('string value string value', element);
 
         instance = new InternalComponent(element, this);
 
@@ -725,7 +728,12 @@ class ReactCanvas {
         instance = new React3CompositeComponentWrapper(this);
       }
     } else if (typeof virtualNode === 'string' || typeof virtualNode === 'number') {
+
       console.log('string or number?!');
+
+      debugger;
+      invariant(false, 'Encountered invalid React node of type %s', typeof virtualNode);
+
       // instance = ReactNativeComponent.createInstanceForText(node);
     } else {
       if (process.env.NODE_ENV !== 'production') {

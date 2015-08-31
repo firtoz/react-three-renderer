@@ -110,7 +110,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
   }
 
   moveChild(self, childObject, toIndex, lastIndex) {
-    console.log('OBJECT3D MOVE CHILD?!');
+    //console.log('OBJECT3D MOVE CHILD?!');
 
     _arrayMove(self.children, lastIndex, toIndex);
   }

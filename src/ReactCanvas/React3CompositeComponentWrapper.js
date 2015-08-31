@@ -34,7 +34,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   _updateRenderedComponent(transaction, context) {
     super._updateRenderedComponent(transaction, context);
 
-    console.log('ahh updated');
+    //console.log('ahh updated');
 
     // this._threeObject =
     this._threeObject = this._renderedComponent._threeObject;
@@ -45,7 +45,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   mountComponent(rootID, transaction, context) {
-    console.log('mounting composite component');
+    //console.log('mounting composite component');
 
     this._context = context;
     this._mountOrder = this._reactCanvasInstance.nextMountID++;
@@ -124,7 +124,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const markup = ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, this._processChildContext(context));
     this._threeObject = this._renderedComponent._threeObject;
     if (inst.componentDidMount) {
-      console.log('calling component did mount for markup', markup);
+      //console.log('calling component did mount for markup', markup);
       transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
     }
 
