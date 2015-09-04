@@ -31,6 +31,11 @@ class React3 extends React.Component {
     </react3>);
   }
 
+  componentWillUnmount() {
+    this.react3Renderer.dispose();
+    delete this.react3Renderer;
+  }
+
   render() {
     return (<canvas
       ref="canvas"

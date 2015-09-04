@@ -20,10 +20,6 @@ import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
 import THREE from 'three';
 
-const ELEMENT_NODE_TYPE = 1;
-const DOC_NODE_TYPE = 9;
-const DOCUMENT_FRAGMENT_NODE_TYPE = 11;
-
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
 /**
@@ -38,19 +34,14 @@ class TopLevelWrapper {
   }
 }
 
-function unmountComponentFromNode(instance, container) {
+function unmountComponentInternal(instance, container) {
   ReactReconciler.unmountComponent(instance);
 
-  let currentContainer = container;
-
-  if (currentContainer.nodeType === DOC_NODE_TYPE) {
-    currentContainer = container.documentElement;
+  while (container.instance._scene.children.length > 0) {
+    container.instance._scene.remove(container.instance._scene.children[0]);
   }
 
-  // http://jsperf.com/emptying-a-node
-  while (currentContainer.lastChild) {
-    currentContainer.removeChild(currentContainer.lastChild);
-  }
+  delete container.instance._scene;
 }
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
@@ -85,7 +76,10 @@ function getReactRootUserDataInObject3D(threeObject) {
  * @return {boolean} Returns true if this is a valid internal type.
  */
 function isInternalComponentType(type) {
-  return typeof type === 'function' && typeof type.prototype !== 'undefined' && typeof type.prototype['mountComponent'] === 'function' && typeof type.prototype['receiveComponent'] === 'function';
+  return typeof type === 'function'
+    && typeof type.prototype !== 'undefined'
+    && typeof type.prototype.mountComponent === 'function'
+    && typeof type.prototype.receiveComponent === 'function';
 }
 
 /**
@@ -159,33 +153,32 @@ class React3Renderer {
     // moved.
     // TODO: If nothing has changed, return the prevChildren object so that we
     // can quickly bailout if nothing has changed.
-    var nextChildren = flattenChildren(nextNestedChildNodes);
+    const nextChildren = flattenChildren(nextNestedChildNodes);
     if (!nextChildren && !prevChildren) {
       return null;
     }
-    var name;
-    for (name in nextChildren) {
-      if (!nextChildren.hasOwnProperty(name)) {
+    for (const childName in nextChildren) {
+      if (!nextChildren.hasOwnProperty(childName)) {
         continue;
       }
-      var prevChild = prevChildren && prevChildren[name];
-      var prevElement = prevChild && prevChild._currentElement;
-      var nextElement = nextChildren[name];
+      const prevChild = prevChildren && prevChildren[childName];
+      const prevElement = prevChild && prevChild._currentElement;
+      const nextElement = nextChildren[childName];
       if (shouldUpdateReactComponent(prevElement, nextElement)) {
         ReactReconciler.receiveComponent(prevChild, nextElement, transaction, context);
-        nextChildren[name] = prevChild;
+        nextChildren[childName] = prevChild;
       } else {
         if (prevChild) {
-          ReactReconciler.unmountComponent(prevChild, name);
+          ReactReconciler.unmountComponent(prevChild, childName);
         }
         // The child must be instantiated before it's mounted.
-        nextChildren[name] = this.instantiateReactComponent(nextElement, null);
+        nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
       }
     }
     // Unmount children that are no longer present.
-    for (name in prevChildren) {
-      if (prevChildren.hasOwnProperty(name) && !(nextChildren && nextChildren.hasOwnProperty(name))) {
-        ReactReconciler.unmountComponent(prevChildren[name]);
+    for (const childName in prevChildren) {
+      if (prevChildren.hasOwnProperty(childName) && !(nextChildren && nextChildren.hasOwnProperty(childName))) {
+        ReactReconciler.unmountComponent(prevChildren[childName]);
       }
     }
     return nextChildren;
@@ -220,18 +213,20 @@ class React3Renderer {
 
     this._root = {};
 
-    //this._scene = new THREE.Scene();
+    // this._scene = new THREE.Scene();
 
     // Inject the runtime into a devtools global hook regardless of browser.
     // Allows for debugging when the hook is injected on the page.
     if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
-      __REACT_DEVTOOLS_GLOBAL_HOOK__.inject({
+      this.rendererDefinition = {
         CurrentOwner: ReactCurrentOwner,
         InstanceHandles: ReactInstanceHandles,
         Mount: this,
         Reconciler: ReactReconciler,
         TextComponent: InternalComponent,
-      });
+      };
+
+      __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this.rendererDefinition);
     }
   }
 
@@ -259,7 +254,7 @@ class React3Renderer {
     return foundUserData;
   }
 
-  instantiateChildren(nestedChildNodes, transaction, context) {
+  instantiateChildren(nestedChildNodes) {
     const children = flattenChildren(nestedChildNodes);
     for (const name in children) {
       if (children.hasOwnProperty(name)) {
@@ -274,7 +269,7 @@ class React3Renderer {
 
   containsChild(container, userData) {
     const childrenMarkup = container.userData.childrenMarkup;
-    for (var i = 0; i < childrenMarkup.length; i++) {
+    for (let i = 0; i < childrenMarkup.length; i++) {
       if (childrenMarkup[i].userData === userData) {
         return true;
       }
@@ -313,7 +308,7 @@ class React3Renderer {
    * supplied DOM `id` belongs.
    *
    * @param {string} id The ID of an element rendered by a React component.
-   * @return {?DOMElement} DOM element that contains the `id`.
+   * @return {?THREE.Object3D} The 3d object that contains the `id`.
    */
   findReactContainerForID(id) {
     const reactRootID = ReactInstanceHandles.getReactRootIDFromNodeID(id);
@@ -354,7 +349,9 @@ class React3Renderer {
     return this.userDataCache[id];
   }
 
-  findNodeHandle = (instance) => {
+  findNodeHandle = () => {
+    // used by react developer tools
+    // TODO create a temporary handle?
     return this._canvas;
     // getUserData(instance._rootNodeID);
   };
@@ -363,14 +360,14 @@ class React3Renderer {
     console.log('wat');
     debugger;
 
-    invariant(false, "Wat!");
+    invariant(false, 'Wat!');
   };
 
   /**
    * Finds an element rendered by React with the supplied ID.
    *
    * @param {string} id ID of a DOM node in the React component.
-   * @return {DOMElement} Root DOM node of the React component.
+   * @return {THREE.Object3D} Root THREE.Object3D of the React component.
    */
   findReactNodeByID(id) {
     const reactRoot = this.findReactContainerForID(id);
@@ -409,6 +406,7 @@ class React3Renderer {
             firstUserDataList.push(child.childrenMarkup[0].userData);
           }
         } else {
+          debugger;
           // If this child had no ID, then there's a chance that it was
           // injected automatically by the browser, as when a `<table>`
           // element sprouts an extra `<tbody>` child as a side effect of
@@ -457,65 +455,65 @@ class React3Renderer {
    *
    * @param {ReactComponent} componentInstance The instance to mount.
    * @param {string} rootID DOM ID of the root node.
-   * @param {DOMElement} container DOM element to mount into.
+   * @param {THREE.Object3D} container DOM element to mount into.
    * @param {ReactReconcileTransaction} transaction
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
    */
-  mountComponentIntoNode = (componentInstance, rootID, container, transaction, shouldReuseMarkup, context) => {
-    if (process.env.NODE_ENV !== 'production') {
-      // if (context === emptyObject) {
-      //   context = {};
-      // }
-      // const tag = container.nodeName.toLowerCase();
-      // context[validateDOMNesting.ancestorInfoContextKey] = validateDOMNesting.updatedAncestorInfo(null, tag, null);
-    }
+  mountComponentIntoNode = (componentInstance, rootID, container, transaction, shouldReuseMarkup) => {
+    // if (process.env.NODE_ENV !== 'production') {
+    // if (context === emptyObject) {
+    //   context = {};
+    // }
+    // const tag = container.nodeName.toLowerCase();
+    // context[validateDOMNesting.ancestorInfoContextKey] = validateDOMNesting.updatedAncestorInfo(null, tag, null);
+    // }
 
     const markup = ReactReconciler.mountComponent(componentInstance, rootID, transaction, context);
     componentInstance._renderedComponent._topLevelWrapper = componentInstance;
     this._mountImageIntoNode(markup, container, shouldReuseMarkup);
   };
 
-  _mountImageIntoNode(markup, container, shouldReuseMarkup) {
-    //if (!(container && (container.nodeType === ELEMENT_NODE_TYPE || container.nodeType === DOC_NODE_TYPE || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
-    //  if (process.env.NODE_ENV !== 'production') {
-    //    invariant(false, 'mountComponentIntoNode(...): Target container is not valid.');
-    //  } else {
-    //    invariant(false);
-    //  }
-    //}
+  _mountImageIntoNode(markup, container) {
+    // if (!(container && (container.nodeType === ELEMENT_NODE_TYPE || container.nodeType === DOC_NODE_TYPE || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
+    //   if (process.env.NODE_ENV !== 'production') {
+    //     invariant(false, 'mountComponentIntoNode(...): Target container is not valid.');
+    //   } else {
+    //     invariant(false);
+    //   }
+    // }
 
-    // TODO try to do serverside rendering for THREE ( can write a scene into json or something :D )
-    //if (shouldReuseMarkup) {
-    //  const rootElement = getReactRootUserDataInObject3D(container);
-    //  if (ReactMarkupChecksum.canReuseMarkup(markup, rootElement)) {
-    //    return;
-    //  }
+    // TODO try to do server-side rendering for THREE ( can write a scene into json or something :D )
+    // if (shouldReuseMarkup) {
+    //   const rootElement = getReactRootUserDataInObject3D(container);
+    //   if (ReactMarkupChecksum.canReuseMarkup(markup, rootElement)) {
+    //     return;
+    //   }
     //
-    //  const checksum = rootElement.getAttribute(ReactMarkupChecksum.CHECKSUM_ATTR_NAME);
-    //  rootElement.removeAttribute(ReactMarkupChecksum.CHECKSUM_ATTR_NAME);
+    //   const checksum = rootElement.getAttribute(ReactMarkupChecksum.CHECKSUM_ATTR_NAME);
+    //   rootElement.removeAttribute(ReactMarkupChecksum.CHECKSUM_ATTR_NAME);
     //
-    //  const rootMarkup = rootElement.outerHTML;
-    //  rootElement.setAttribute(ReactMarkupChecksum.CHECKSUM_ATTR_NAME, checksum);
+    //   const rootMarkup = rootElement.outerHTML;
+    //   rootElement.setAttribute(ReactMarkupChecksum.CHECKSUM_ATTR_NAME, checksum);
     //
-    //  const diffIndex = firstDifferenceIndex(markup, rootMarkup);
-    //  const difference = ' (client) ' + markup.substring(diffIndex - 20, diffIndex + 20) + '\n (server) ' + rootMarkup.substring(diffIndex - 20, diffIndex + 20);
+    //   const diffIndex = firstDifferenceIndex(markup, rootMarkup);
+    //   const difference = ' (client) ' + markup.substring(diffIndex - 20, diffIndex + 20) + '\n (server) ' + rootMarkup.substring(diffIndex - 20, diffIndex + 20);
     //
-    //  !(container.nodeType !== DOC_NODE_TYPE) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'You\'re trying to render a component to the document using ' + 'server rendering but the checksum was invalid. This usually ' + 'means you rendered a different component type or props on ' + 'the client from the one on the server, or your render() ' + 'methods are impure. React cannot handle this case due to ' + 'cross-browser quirks by rendering at the document root. You ' + 'should look for environment dependent code in your components ' + 'and ensure the props are the same client and server side:\n%s', difference) : invariant(false) : undefined;
+    //   !(container.nodeType !== DOC_NODE_TYPE) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'You\'re trying to render a component to the document using ' + 'server rendering but the checksum was invalid. This usually ' + 'means you rendered a different component type or props on ' + 'the client from the one on the server, or your render() ' + 'methods are impure. React cannot handle this case due to ' + 'cross-browser quirks by rendering at the document root. You ' + 'should look for environment dependent code in your components ' + 'and ensure the props are the same client and server side:\n%s', difference) : invariant(false) : undefined;
     //
-    //  if (process.env.NODE_ENV !== 'production') {
-    //    process.env.NODE_ENV !== 'production' ? warning(false, 'React attempted to reuse markup in a container but the ' + 'checksum was invalid. This generally means that you are ' + 'using server rendering and the markup generated on the ' + 'server was not what the client was expecting. React injected ' + 'new markup to compensate which works but you have lost many ' + 'of the benefits of server rendering. Instead, figure out ' + 'why the markup being generated is different on the client ' + 'or server:\n%s', difference) : undefined;
-    //  }
-    //}
+    //   if (process.env.NODE_ENV !== 'production') {
+    //     process.env.NODE_ENV !== 'production' ? warning(false, 'React attempted to reuse markup in a container but the ' + 'checksum was invalid. This generally means that you are ' + 'using server rendering and the markup generated on the ' + 'server was not what the client was expecting. React injected ' + 'new markup to compensate which works but you have lost many ' + 'of the benefits of server rendering. Instead, figure out ' + 'why the markup being generated is different on the client ' + 'or server:\n%s', difference) : undefined;
+    //   }
+    // }
 
-    //if (!(container.nodeType !== DOC_NODE_TYPE)) {
-    //  if (process.env.NODE_ENV !== 'production') {
-    //    invariant(false, 'You\'re trying to render a component to the document but ' + 'you didn\'t use server rendering. We can\'t do this ' + 'without using server rendering due to cross-browser quirks. ' + 'See React.renderToString() for server rendering.');
-    //  } else {
-    //    invariant(false);
-    //  }
-    //}
+    // if (!(container.nodeType !== DOC_NODE_TYPE)) {
+    //   if (process.env.NODE_ENV !== 'production') {
+    //     invariant(false, 'You\'re trying to render a component to the document but ' + 'you didn\'t use server rendering. We can\'t do this ' + 'without using server rendering due to cross-browser quirks. ' + 'See React.renderToString() for server rendering.');
+    //   } else {
+    //     invariant(false);
+    //   }
+    // }
 
-    //console.log('setting inner html!?', markup);
+    // console.log('setting inner html!?', markup);
 
     const rootMarkup = {
       userData: {
@@ -548,10 +546,10 @@ class React3Renderer {
    *
    * @param {ReactComponent} componentInstance The instance to mount.
    * @param {string} rootID DOM ID of the root node.
-   * @param {DOMElement} container DOM element to mount into.
+   * @param {THREE.Object3D} container DOM element to mount into.
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
    */
-  batchedMountComponentIntoNode = (componentInstance, rootID, container, shouldReuseMarkup, context) => {
+  batchedMountComponentIntoNode = (componentInstance, rootID, container, shouldReuseMarkup) => {
     const transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
     transaction.perform(this.mountComponentIntoNode, null, componentInstance, rootID, container, transaction, shouldReuseMarkup, context);
     ReactUpdates.ReactReconcileTransaction.release(transaction);
@@ -563,7 +561,6 @@ class React3Renderer {
   }
 
   _renderSubtree(parentComponent, nextElement, callback) {
-    //const root = this._scene;
     const root = this._root;
 
     if (!ReactElement.isValidElement(nextElement)) {
@@ -599,21 +596,21 @@ class React3Renderer {
     const reactRootUserData = getReactRootUserDataInObject3D(root);
     const containerHasReactMarkup = reactRootUserData && this.isRenderedByReact(reactRootUserData);
 
-    //if (process.env.NODE_ENV !== 'production') {
-    //  if (!containerHasReactMarkup || reactRootUserData.nextSibling) {
-    //    let rootElementSibling = reactRootUserData;
-    //    while (rootElementSibling) {
-    //      if (this.isRenderedByReact(rootElementSibling)) {
-    //        if (process.env.NODE_ENV !== 'production') {
-    //          warning(false, 'render(): Target node has markup rendered by React, but there ' + 'are unrelated nodes as well. This is most commonly caused by ' + 'white-space inserted around server-rendered markup.');
-    //        }
-    //        break;
-    //      }
+    // if (process.env.NODE_ENV !== 'production') {
+    //   if (!containerHasReactMarkup || reactRootUserData.nextSibling) {
+    //     let rootElementSibling = reactRootUserData;
+    //     while (rootElementSibling) {
+    //       if (this.isRenderedByReact(rootElementSibling)) {
+    //         if (process.env.NODE_ENV !== 'production') {
+    //           warning(false, 'render(): Target node has markup rendered by React, but there ' + 'are unrelated nodes as well. This is most commonly caused by ' + 'white-space inserted around server-rendered markup.');
+    //         }
+    //         break;
+    //       }
     //
-    //      rootElementSibling = rootElementSibling.nextSibling;
-    //    }
-    //  }
-    //}
+    //       rootElementSibling = rootElementSibling.nextSibling;
+    //     }
+    //   }
+    // }
 
     const shouldReuseMarkup = containerHasReactMarkup && !prevComponent;
 
@@ -630,6 +627,29 @@ class React3Renderer {
     }
 
     return component;
+  }
+
+  dispose() {
+    this.unmountComponentAtNode(this._root);
+
+    delete this._root.instance;
+    delete this._root;
+
+    delete this._canvas;
+    delete this._instancesByReactRootID;
+    delete this.object3DsByReactRootID;
+    delete this.rootUserDatasByReactRootID;
+    delete this.findComponentRootReusableArray;
+    delete this.userDataCache;
+    delete this.deepestObject3DSoFar;
+    this.nextMountID = 1;
+    this.nextReactRootIndex = 0;
+
+    if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent) {
+      debugger;
+
+      __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent.onUnmounted(this.rendererDefinition);
+    }
   }
 
   _updateRootComponent(prevComponent, nextElement, container, callback) {
@@ -658,20 +678,13 @@ class React3Renderer {
       warning(ReactCurrentOwner.current === null, 'unmountComponentAtNode(): Render methods should be a pure function ' + 'of props and state; triggering nested component updates from render ' + 'is not allowed. If necessary, trigger nested updates in ' + 'componentDidUpdate. Check the render method of %s.', ReactCurrentOwner.current && ReactCurrentOwner.current.getName() || 'ReactCompositeComponent');
     }
 
-    if (!(container && (container.nodeType === ELEMENT_NODE_TYPE || container.nodeType === DOC_NODE_TYPE || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
-      if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'unmountComponentAtNode(...): Target container is not a DOM element.');
-      } else {
-        invariant(false);
-      }
-    }
-
     const reactRootID = this.getReactRootID(container);
     const component = this._instancesByReactRootID[reactRootID];
     if (!component) {
       return false;
     }
-    ReactUpdates.batchedUpdates(unmountComponentFromNode, component, container);
+
+    ReactUpdates.batchedUpdates(unmountComponentInternal, component, container);
     delete this._instancesByReactRootID[reactRootID];
     delete this.object3DsByReactRootID[reactRootID];
 
@@ -683,7 +696,7 @@ class React3Renderer {
   }
 
   /**
-   * @param {DOMElement} scene DOM element that may contain a React component.
+   * @param {THREE.Object3D} scene DOM element that may contain a React component.
    * @return {?string} A "reactRoot" ID, if a React component is rendered.
    */
   getReactRootID(scene) {
@@ -702,7 +715,7 @@ class React3Renderer {
   }
 
   instantiateReactComponent(elementToInstantiate) {
-    //console.log('instantiating react component', elementToInstantiate);
+    // console.log('instantiating react component', elementToInstantiate);
     let instance;
 
     let virtualNode = elementToInstantiate;
@@ -715,7 +728,13 @@ class React3Renderer {
       const element = virtualNode;
       if (!(element && (typeof element.type === 'function' || typeof element.type === 'string'))) {
         if (process.env.NODE_ENV !== 'production') {
-          invariant(false, 'Element type is invalid: expected a string (for built-in components) ' + 'or a class/function (for composite components) but got: %s.%s', element.type == null ? element.type : typeof element.type, getDeclarationErrorAddendum(element._owner));
+          if (element.type === null) {
+            invariant(false, 'Element type is invalid: expected a string (for built-in components) ' + 'or a class/function (for composite components) but got: %s.%s',
+              element.type, getDeclarationErrorAddendum(element._owner));
+          } else {
+            invariant(false, 'Element type is invalid: expected a string (for built-in components) ' + 'or a class/function (for composite components) but got: %s.%s',
+              typeof element.type, getDeclarationErrorAddendum(element._owner));
+          }
         } else {
           invariant(false);
         }
@@ -723,11 +742,11 @@ class React3Renderer {
 
       // Special case string values
       if (typeof element.type === 'string') {
-        //console.log('string value string value', element);
+        // console.log('string value string value', element);
 
         instance = new InternalComponent(element, this);
 
-        //instance = ReactNativeComponent.createInternalComponent(element);
+        // instance = ReactNativeComponent.createInternalComponent(element);
       } else if (isInternalComponentType(element.type)) {
         // This is temporarily available for custom components that are not string
         // representations. I.e. ART. Once those are updated to use the string
@@ -739,7 +758,6 @@ class React3Renderer {
         instance = new React3CompositeComponentWrapper(this);
       }
     } else if (typeof virtualNode === 'string' || typeof virtualNode === 'number') {
-
       console.log('string or number?!');
 
       debugger;
@@ -818,15 +836,15 @@ class React3Renderer {
   }
 
   _registerComponent(nextComponent, object3D) {
-    //if (!(object3D && (object3D.nodeType === ELEMENT_NODE_TYPE || object3D.nodeType === DOC_NODE_TYPE || object3D.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
-    //  if (process.env.NODE_ENV !== 'production') {
-    //    invariant(false, '_registerComponent(...): Target object3D is not a DOM element.');
-    //  } else {
-    //    invariant(false);
-    //  }
-    //}
+    // if (!(object3D && (object3D.nodeType === ELEMENT_NODE_TYPE || object3D.nodeType === DOC_NODE_TYPE || object3D.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
+    //   if (process.env.NODE_ENV !== 'production') {
+    //     invariant(false, '_registerComponent(...): Target object3D is not a DOM element.');
+    //   } else {
+    //     invariant(false);
+    //   }
+    // }
 
-    //ReactBrowserEventEmitter.ensureScrollValueMonitoring();
+    // ReactBrowserEventEmitter.ensureScrollValueMonitoring();
 
     const reactRootID = this.registerContainer(object3D);
     this._instancesByReactRootID[reactRootID] = nextComponent;
@@ -838,7 +856,7 @@ class React3Renderer {
    * This also creates the "reactRoot" ID that will be assigned to the element
    * rendered within.
    *
-   * @param {DOMElement} object3D DOM element to register as a object3D.
+   * @param {THREE.Object3D} object3D DOM element to register as a object3D.
    * @return {string} The "reactRoot" ID of elements rendered within.
    */
   registerContainer(object3D) {

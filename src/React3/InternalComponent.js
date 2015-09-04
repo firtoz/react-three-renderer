@@ -291,7 +291,7 @@ class InternalComponent {
    * node_modules/react/lib/ReactDOMComponent.js:732
    */
   unmountComponent() {
-    //console.log('unmounting component!', this);
+    // console.log('unmounting component!', this);
 
     this.threeElementDescriptor.unmount(this._threeObject);
     this.unmountChildren();
@@ -302,8 +302,6 @@ class InternalComponent {
       node._reactInternalComponent = null;
       this._nodeWithLegacyProperties = null;
     }
-
-    // debugger;
   }
 
   getPublicInstance() {

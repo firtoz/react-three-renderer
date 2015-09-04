@@ -87,15 +87,16 @@ class MyComponent extends React.Component {
         <button onClick={this._toggleCamera}>Toggle Camera</button>
         <button onClick={this._addBox}>Add Box</button>
         <button onClick={this._removeBox}>Remove Box</button>
-        <React3 width={window.innerWidth} height={window.innerHeight} mainCamera={'mainCamera'}>
-          {this.state.hasCamera ? <perspectiveCamera fov={75}
-                                                     aspect={(window.innerWidth) / (window.innerHeight)}
-                                                     near={0.1}
-                                                     far={1000}
-                                                     name={'mainCamera'}
-                                                     position={new THREE.Vector3(0, 0, 5)}/> : null}
-          {cubes}
-        </React3>
+        { this.state.hasCamera ?
+          <React3 width={window.innerWidth} height={window.innerHeight} mainCamera={'mainCamera'}>
+            {this.state.hasCamera ? <perspectiveCamera fov={75}
+                                                       aspect={(window.innerWidth) / (window.innerHeight)}
+                                                       near={0.1}
+                                                       far={1000}
+                                                       name={'mainCamera'}
+                                                       position={new THREE.Vector3(0, 0, 5)}/> : null}
+            {cubes}
+          </React3> : null}
       </div>);
   }
 }

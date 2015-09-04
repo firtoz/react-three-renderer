@@ -9,6 +9,7 @@ class React3DInstance {
   constructor(props) {
     this._scene = null;
     this._mainCameraName = props.mainCamera;
+    this._canvas = props.canvas;
     this._renderer = new THREE.WebGLRenderer({canvas: props.canvas});
     this._width = props.width;
     this._height = props.height;
@@ -69,6 +70,24 @@ class React3DInstance {
   updateHeight(newHeight) {
     this._height = newHeight;
     this._renderer.setSize(this._width, this._height);
+  }
+
+  unmount() {
+    cancelAnimationFrame(this._renderRequest);
+
+    if (this._mainCamera) {
+      this._mainCamera.userData.events.removeListener('dispose', this._cameraDisposed);
+    }
+
+    try {
+      this._renderer.forceContextLoss();
+    } finally {
+      delete this._renderer;
+    }
+
+    delete this._mainCamera;
+    delete this._canvas;
+    delete this._canvasDisposed;
   }
 }
 
@@ -143,7 +162,7 @@ class React3Descriptor extends THREEElementDescriptor {
   }
 
   addChildren(self, children) {
-    invariant(children.length === 1 && children[0] instanceof THREE.Scene, "The react3 component should only have one scene as a child!");
+    invariant(children.length === 1 && children[0] instanceof THREE.Scene, 'The react3 component should only have one scene as a child!');
 
     self.setScene(children[0]);
   }
@@ -154,6 +173,10 @@ class React3Descriptor extends THREEElementDescriptor {
 
   _updateHeight(self, newHeight) {
     self.updateHeight(newHeight);
+  }
+
+  unmount(self) {
+    self.unmount();
   }
 }
 
@@ -237,11 +260,12 @@ class Object3DDescriptor extends THREEElementDescriptor {
 }
 
 function getRoot(object) {
-  if (object.userData.parentMarkup) {
-    return getRoot(object.userData.parentMarkup.threeObject);
-  } else {
-    return object;
+  const parentMarkup = object.userData.parentMarkup;
+  if (parentMarkup) {
+    return getRoot(parentMarkup.threeObject);
   }
+
+  return object;
 }
 
 class CameraDescriptor extends Object3DDescriptor {
