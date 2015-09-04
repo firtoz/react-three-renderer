@@ -190,6 +190,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
     this.propUpdates = {
       'position': this._updatePosition,
+      'rotation': this._updateRotation,
       'scale': this._updateScale,
       'name': this._updateName,
     };
@@ -199,24 +200,36 @@ class Object3DDescriptor extends THREEElementDescriptor {
     return new THREE.Object3D();
   }
 
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  /**
+   * @param {THREE.Object3D} threeObject
+   * @param props
+   */
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
     if (props.position) {
-      self.position.copy(props.position);
+      threeObject.position.copy(props.position);
     }
 
     if (props.scale) {
-      self.scale.copy(props.scale);
+      threeObject.scale.copy(props.scale);
+    }
+
+    if (props.rotation) {
+      threeObject.rotation.copy(props.rotation);
     }
 
     if (props.name) {
-      self.name = props.name;
+      threeObject.name = props.name;
     }
   }
 
   _updatePosition = (threeObject, nextPosition) => {
     threeObject.position.copy(nextPosition);
+  };
+
+  _updateRotation = (threeObject, nextRotation) => {
+    threeObject.rotation.copy(nextRotation);
   };
 
   _updateScale = (threeObject, nextScale) => {
@@ -271,6 +284,11 @@ function getRoot(object) {
 class CameraDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
+
+    this.propUpdates = {
+      ...this.propUpdates,
+      aspect: this._updateAspect,
+    };
   }
 
   applyInitialProps(self, props) {
@@ -291,27 +309,6 @@ class CameraDescriptor extends Object3DDescriptor {
     }
   }
 
-  unmount(self) {
-    self.userData.events.emit('dispose');
-    self.userData.events.removeAllListeners();
-    delete self.userData.events;
-  }
-}
-
-class PerspectiveCameraDescriptor extends CameraDescriptor {
-  constructor(react3Instance) {
-    super(react3Instance);
-
-    this.propUpdates = {
-      ...this.propUpdates,
-      aspect: this._updateAspect,
-    };
-  }
-
-  construct(props) {
-    return new THREE.PerspectiveCamera(props.fov, props.aspect, props.near, props.far);
-  }
-
   /**
    * @param {THREE.PerspectiveCamera} self
    * @param newAspect
@@ -323,6 +320,31 @@ class PerspectiveCameraDescriptor extends CameraDescriptor {
     self.updateProjectionMatrix();
   }
 
+  unmount(self) {
+    self.userData.events.emit('dispose');
+    self.userData.events.removeAllListeners();
+    delete self.userData.events;
+  }
+}
+
+class PerspectiveCameraDescriptor extends CameraDescriptor {
+  constructor(react3Instance) {
+    super(react3Instance);
+  }
+
+  construct(props) {
+    return new THREE.PerspectiveCamera(props.fov, props.aspect, props.near, props.far);
+  }
+}
+
+class OrthographicCameraDescriptor extends CameraDescriptor {
+  constructor(react3Instance) {
+    super(react3Instance);
+  }
+
+  construct(props) {
+    return new THREE.OrthographicCamera(props.left, props.right, props.top, props.bottom, props.near, props.far);
+  }
 }
 
 class MeshDescriptor extends Object3DDescriptor {
@@ -492,6 +514,7 @@ class ElementDescriptorContainer {
       react3: new React3Descriptor(react3Instance),
       scene: new SceneDescriptor(react3Instance),
       object3D: new Object3DDescriptor(react3Instance),
+      orthographicCamera: new OrthographicCameraDescriptor(react3Instance),
       perspectiveCamera: new PerspectiveCameraDescriptor(react3Instance),
       mesh: new MeshDescriptor(react3Instance),
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3Instance),

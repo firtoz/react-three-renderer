@@ -124,7 +124,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const markup = ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, this._processChildContext(context));
     this._threeObject = this._renderedComponent._threeObject;
     if (inst.componentDidMount) {
-      //console.log('calling component did mount for markup', markup);
+      // console.log('calling component did mount for markup', markup);
       transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
     }
 

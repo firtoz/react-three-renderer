@@ -458,8 +458,9 @@ class React3Renderer {
    * @param {THREE.Object3D} container DOM element to mount into.
    * @param {ReactReconcileTransaction} transaction
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
+   * @param {any} context
    */
-  mountComponentIntoNode = (componentInstance, rootID, container, transaction, shouldReuseMarkup) => {
+  mountComponentIntoNode = (componentInstance, rootID, container, transaction, shouldReuseMarkup, context) => {
     // if (process.env.NODE_ENV !== 'production') {
     // if (context === emptyObject) {
     //   context = {};
@@ -548,8 +549,9 @@ class React3Renderer {
    * @param {string} rootID DOM ID of the root node.
    * @param {THREE.Object3D} container DOM element to mount into.
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
+   * @param {any} context
    */
-  batchedMountComponentIntoNode = (componentInstance, rootID, container, shouldReuseMarkup) => {
+  batchedMountComponentIntoNode = (componentInstance, rootID, container, shouldReuseMarkup, context) => {
     const transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
     transaction.perform(this.mountComponentIntoNode, null, componentInstance, rootID, container, transaction, shouldReuseMarkup, context);
     ReactUpdates.ReactReconcileTransaction.release(transaction);
