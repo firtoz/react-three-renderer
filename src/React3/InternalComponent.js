@@ -170,23 +170,18 @@ class InternalComponent {
     }
 
     this._updateObjectProperties(lastProps, nextProps, transaction);
-    this._updateChildrenObjects(lastProps, nextProps, transaction, processChildContext(context, this));
+    this._updateChildrenObjects(nextProps, transaction, processChildContext(context, this));
   }
 
-  _updateChildrenObjects(lastProps, nextProps, transaction, context) {
-    //const lastChildren = lastProps.children || null;
+  _updateChildrenObjects(nextProps, transaction, context) {
     const nextChildren = nextProps.children || null;
 
-    //if (lastChildren !== null && nextChildren === null) {
-    //  this.updateChildren(null, transaction, context);
-    //}
-
-    //if (nextChildren !== null) {
     this.updateChildren(nextChildren, transaction, context);
-    //}
   }
 
   _updateObjectProperties(lastProps, nextProps, transaction) {
+    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
+
     for (const propKey in lastProps) {
       if (!lastProps.hasOwnProperty(propKey) || nextProps.hasOwnProperty(propKey)) {
         continue;
@@ -207,6 +202,7 @@ class InternalComponent {
         this.threeElementDescriptor.deleteProperty(this._threeObject, propKey);
       }
     }
+
 
     for (const propKey in nextProps) {
       if (!nextProps.hasOwnProperty(propKey)) {
@@ -234,6 +230,8 @@ class InternalComponent {
         this.threeElementDescriptor.updateProperty(this._threeObject, propKey, nextProp);
       }
     }
+
+    this.threeElementDescriptor.completePropertyUpdates(this._threeObject);
   }
 
   /**

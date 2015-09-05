@@ -1,7 +1,5 @@
 import Object3DDescriptor from './Object3DDescriptor';
-
-import events from 'events';
-const {EventEmitter} = events;
+import THREE from 'three';
 
 function getRoot(object) {
   const parentMarkup = object.userData.parentMarkup;
@@ -18,7 +16,6 @@ class CameraDescriptorBase extends Object3DDescriptor {
 
     this.propUpdates = {
       ...this.propUpdates,
-      aspect: this._updateAspect,
       fov: this._updateFov,
       far: this._updateFar,
     };
@@ -26,8 +23,6 @@ class CameraDescriptorBase extends Object3DDescriptor {
 
   applyInitialProps(self, props) {
     super.applyInitialProps(self, props);
-
-    self.userData.events = new EventEmitter();
   }
 
   setParent(camera, parentObject3D) {
@@ -42,36 +37,44 @@ class CameraDescriptorBase extends Object3DDescriptor {
     }
   }
 
-  /**
-   * @param {THREE.PerspectiveCamera} self
-   * @param newAspect
-   * @private
-   */
-  _updateAspect(self, newAspect) {
-    self.aspect = newAspect;
 
-    self.updateProjectionMatrix();
-    self.userData.events.emit('updateProjectionMatrix');
+  _updateFov(threeObject, fov) {
+    threeObject.fov = fov;
+
+    threeObject.userData._needsProjectionMatrixUpdate = true;
   }
 
-  _updateFov(self, fov) {
-    self.fov = fov;
+  _updateFar(threeObject, far) {
+    threeObject.far = far;
 
-    self.updateProjectionMatrix();
-    self.userData.events.emit('updateProjectionMatrix');
-  }
-
-  _updateFar(self, far) {
-    self.far = far;
-
-    self.updateProjectionMatrix();
-    self.userData.events.emit('updateProjectionMatrix');
+    threeObject.userData._needsProjectionMatrixUpdate = true;
   }
 
   unmount(self) {
     self.userData.events.emit('dispose');
-    self.userData.events.removeAllListeners();
     delete self.userData.events;
+
+    super.unmount(self);
+  }
+
+  beginPropertyUpdates(threeObject:THREE.Object3D) {
+    super.beginPropertyUpdates(threeObject);
+
+    threeObject.userData._needsProjectionMatrixUpdate = false;
+  }
+
+  /**
+   * @param {THREE.PerspectiveCamera | THREE.OrthographicCamera} threeObject
+   */
+  completePropertyUpdates(threeObject) {
+    super.completePropertyUpdates(threeObject);
+
+    if (threeObject.userData._needsProjectionMatrixUpdate) {
+      threeObject.userData._needsProjectionMatrixUpdate = false;
+
+      threeObject.updateProjectionMatrix();
+      threeObject.userData.events.emit('updateProjectionMatrix');
+    }
   }
 }
 

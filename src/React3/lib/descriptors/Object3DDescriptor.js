@@ -2,6 +2,9 @@ import THREE from 'three';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 
+import events from 'events';
+const {EventEmitter} = events;
+
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
 }
@@ -49,6 +52,8 @@ class Object3DDescriptor extends THREEElementDescriptor {
     if (props.lookAt) {
       threeObject.lookAt(props.lookAt);
     }
+
+    threeObject.userData.events = new EventEmitter();
   }
 
   _updatePosition = (threeObject, nextPosition) => {
@@ -104,8 +109,11 @@ class Object3DDescriptor extends THREEElementDescriptor {
     // yep that's allowed
   }
 
-  unmount(self) { // eslint-disable-line no-unused-vars
+  unmount(self) {
     // i'll allow it too
+
+    self.userData.events.removeAllListeners();
+    delete self.userData.events;
   }
 }
 

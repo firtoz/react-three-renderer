@@ -53,6 +53,20 @@ class THREEElementDescriptor {
       invariant(false, `updating prop ${propKey} ${nextProp} for ${threeObject}`);
     }
   }
+
+  /**
+   * @param {THREE.Object3D} threeObject
+   */
+  beginPropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
+
+  }
+
+  /**
+   * @param {THREE.Object3D} threeObject
+   */
+  completePropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
+
+  }
 }
 
 export default THREEElementDescriptor;
