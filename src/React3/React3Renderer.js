@@ -1,4 +1,4 @@
-import DOMProperty from 'react/lib/DOMProperty.js';
+import DOMProperty from 'react/lib/DOMProperty';
 import ReactElement from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
 import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
@@ -7,9 +7,9 @@ import ReactReconciler from 'react/lib/ReactReconciler';
 import ReactUpdates from 'react/lib/ReactUpdates';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
-import emptyObject from 'react/lib/emptyObject';
-import invariant from 'react/lib/invariant';
-import warning from 'react/lib/warning';
+import emptyObject from 'fbjs/lib/emptyObject';
+import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 import flattenChildren from 'react/lib/flattenChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 

@@ -1,4 +1,4 @@
-import invariant from 'react/lib/invariant';
+import invariant from 'fbjs/lib/invariant';
 import THREE from 'three';
 
 import events from 'events';
@@ -229,7 +229,11 @@ class Object3DDescriptor extends THREEElementDescriptor {
   };
 
   _updateRotation = (threeObject, nextRotation) => {
-    threeObject.rotation.copy(nextRotation);
+    const {x, y, z} = threeObject.rotation;
+
+    if (x !== nextRotation.x || y !== nextRotation.y || z !== nextRotation.z) {
+      threeObject.rotation.copy(nextRotation);
+    }
   };
 
   _updateScale = (threeObject, nextScale) => {
@@ -347,6 +351,42 @@ class OrthographicCameraDescriptor extends CameraDescriptor {
   }
 }
 
+class CameraHelperDescriptor extends Object3DDescriptor {
+  constructor(react3Instance) {
+    super(react3Instance);
+  }
+
+  construct(props) {
+    return new THREE.CameraHelper(props.camera);
+  }
+}
+
+class PointCloudDescriptor extends Object3DDescriptor {
+  constructor(react3Instance) {
+    super(react3Instance);
+  }
+
+  construct(props) {
+    const pointCloud = new THREE.PointCloud();
+
+    pointCloud.geometry.dispose();
+    pointCloud.material.dispose();
+
+    pointCloud.geometry = undefined;
+    pointCloud.material = undefined;
+
+    return pointCloud;
+  }
+
+  addChildren(self, children) {
+    invariant(children.filter(child => !(child instanceof THREE.Material || child instanceof THREE.Geometry)).length === 0, 'Mesh children can only be materials ore geometries!');
+  }
+
+  moveChild() {
+    // doesn't matter
+  }
+}
+
 class MeshDescriptor extends Object3DDescriptor {
   construct() {
     const mesh = new THREE.Mesh();
@@ -369,7 +409,7 @@ class MeshDescriptor extends Object3DDescriptor {
   }
 }
 
-class MaterialDescriptor extends THREEElementDescriptor {
+class MaterialDescriptorBase extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
@@ -387,7 +427,7 @@ class MaterialDescriptor extends THREEElementDescriptor {
   }
 
   setParent(material, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Mesh, 'Parent is not a mesh');
+    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
     invariant(parentObject3D.material === undefined, 'Parent already has a material');
 
     parentObject3D.material = material;
@@ -404,13 +444,9 @@ class MaterialDescriptor extends THREEElementDescriptor {
   }
 }
 
-class GeometryDescriptor extends THREEElementDescriptor {
-  construct() {
-    return new THREE.Geometry({});
-  }
-
+class GeometryDescriptorBase extends THREEElementDescriptor {
   setParent(geometry, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Mesh, 'Parent is not a mesh');
+    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
     invariant(parentObject3D.geometry === undefined, 'Parent already has a geometry');
 
     parentObject3D.geometry = geometry;
@@ -427,7 +463,7 @@ class GeometryDescriptor extends THREEElementDescriptor {
   }
 }
 
-class MeshBasicMaterialDescriptor extends MaterialDescriptor {
+class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
   construct(props) {
     const materialDescription = {};
 
@@ -439,7 +475,40 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptor {
   }
 }
 
-class BoxGeometryDescriptor extends GeometryDescriptor {
+class PointCloudMaterialDescriptor extends MaterialDescriptorBase {
+  construct(props) {
+    const materialDescription = {};
+
+    if (props.hasOwnProperty('color')) {
+      materialDescription.color = props.color;
+    }
+
+    return new THREE.PointCloudMaterial(materialDescription);
+  }
+}
+
+class GeometryDescriptor extends GeometryDescriptorBase {
+  construct(props) {
+    return new THREE.Geometry();
+  }
+
+  /**
+   *
+   * @param {THREE.Geometry} self
+   * @param props
+   */
+  applyInitialProps(self, props) {
+    super.applyInitialProps(self, props);
+
+    if (props.vertices !== self.vertices) {
+      self.vertices = props.vertices;
+
+      self.verticesNeedUpdate = true;
+    }
+  }
+}
+
+class BoxGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
 
@@ -466,6 +535,33 @@ class BoxGeometryDescriptor extends GeometryDescriptor {
   _updateDepth = () => {
     invariant(false, 'Please do not modify the depth property of the boxGeometry component.');
   };
+}
+
+class SphereGeometryDescriptor extends GeometryDescriptorBase {
+  constructor(react3Instance) {
+    super(react3Instance);
+
+    this.propUpdates = {
+      ...this.propUpdates,
+      'width': this._updateWidth,
+      'height': this._updateHeight,
+      'depth': this._updateDepth,
+    };
+  }
+
+  construct(props) {
+    const {
+      radius,
+      widthSegments,
+      heightSegments,
+      phiStart,
+      phiLength,
+      thetaStart,
+      thetaLength,
+      } = props;
+
+    return new THREE.SphereGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength);
+  }
 }
 
 /*
@@ -513,12 +609,22 @@ class ElementDescriptorContainer {
     this.descriptors = {
       react3: new React3Descriptor(react3Instance),
       scene: new SceneDescriptor(react3Instance),
+
       object3D: new Object3DDescriptor(react3Instance),
+
       orthographicCamera: new OrthographicCameraDescriptor(react3Instance),
       perspectiveCamera: new PerspectiveCameraDescriptor(react3Instance),
+      cameraHelper: new CameraHelperDescriptor(react3Instance),
+
       mesh: new MeshDescriptor(react3Instance),
+      pointCloud: new PointCloudDescriptor(react3Instance),
+
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3Instance),
+      pointCloudMaterial: new PointCloudMaterialDescriptor(react3Instance),
+
+      geometry: new GeometryDescriptor(react3Instance),
       boxGeometry: new BoxGeometryDescriptor(react3Instance),
+      sphereGeometry: new SphereGeometryDescriptor(react3Instance),
     };
   }
 }

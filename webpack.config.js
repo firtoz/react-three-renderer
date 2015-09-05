@@ -2,6 +2,8 @@ import path from 'path';
 
 const outPath = path.join(__dirname, 'build');
 
+import rewruteModules from 'fbjs/'
+
 export default {
   entry: {
     app: ['./src/index.js'],
@@ -19,6 +21,7 @@ export default {
         query: {
           optional: ['runtime'],
           stage: 0,
+          plugins: rewruteModules,
         },
       },
     ],

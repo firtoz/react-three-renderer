@@ -1,12 +1,13 @@
 import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
-import ReactReconciler from 'react/lib/ReactReconciler.js';
-import invariant from 'react/lib/invariant.js';
-import ReactInstanceMap from 'react/lib/ReactInstanceMap.js';
-import emptyObject from 'react/lib/emptyObject.js';
-import warning from 'react/lib/warning.js';
-import ReactUpdateQueue from 'react/lib/ReactUpdateQueue.js';
+import ReactReconciler from 'react/lib/ReactReconciler';
+import invariant from 'fbjs/lib/invariant';
+import ReactInstanceMap from 'react/lib/ReactInstanceMap';
+import emptyObject from 'fbjs/lib/emptyObject';
+import warning from 'fbjs/lib/warning';
+import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
 
-class ReactCompositeComponentMixinImpl {}
+class ReactCompositeComponentMixinImpl {
+}
 
 ReactCompositeComponentMixinImpl.prototype = {
   ...ReactCompositeComponentMixinImpl.prototype,
@@ -129,6 +130,22 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     }
 
     return markup;
+  }
+
+  /**
+   * Needs to be overwritten because emptyObject points to another...
+   *
+   * Lazily allocates the refs object and stores `component` as `ref`.
+   *
+   * @param {string} ref Reference name.
+   * @param {component} component Component to store as `ref`.
+   * @final
+   * @private
+   */
+  attachRef(ref, component) {
+    const inst = this.getPublicInstance();
+    const refs = inst.refs === emptyObject ? inst.refs = {} : inst.refs;
+    refs[ref] = component.getPublicInstance();
   }
 }
 //

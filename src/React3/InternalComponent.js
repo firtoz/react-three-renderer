@@ -1,8 +1,9 @@
 import ReactReconciler from 'react/lib/ReactReconciler';
-import warning from 'react/lib/warning.js';
 import DOMProperty from 'react/lib/DOMProperty';
-import invariant from 'react/lib/invariant';
 import ReactMultiChild from 'react/lib/ReactMultiChild';
+
+import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning.js';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
@@ -305,40 +306,14 @@ class InternalComponent {
   }
 
   getPublicInstance() {
-    if (!this._nodeWithLegacyProperties) {
-      const node = this._react3RendererInstance.getUserData(this._rootNodeID);
+    const node = this._react3RendererInstance.getUserData(this._rootNodeID);
 
-      node._reactInternalComponent = this;
-      node.getDOMNode = () => {
-        invariant(false, `can't get dom node silly! this isn't dom!`);
-      };
-      node.getBoundingClientRect = () => {
-        return node.parentMarkup.getBoundingClientRect();
-      };
-      node.isMounted = legacyIsMounted;
-      node.setState = legacySetStateEtc;
-      node.replaceState = legacySetStateEtc;
-      node.forceUpdate = legacySetStateEtc;
-      node.setProps = legacySetProps;
-      node.replaceProps = legacyReplaceProps;
-
-      if (process.env.NODE_ENV !== 'production') {
-        if (canDefineProperty) {
-          Object.defineProperties(node, legacyPropsDescriptor);
-        } else {
-          // updateComponent will update this property on subsequent renders
-          node.props = this._currentElement.props;
-        }
-      } else {
-        // updateComponent will update this property on subsequent renders
-        node.props = this._currentElement.props;
-      }
-
-      this._nodeWithLegacyProperties = node;
+    if (node.object3D) {
+      return node.object3D;
     }
-    return this._nodeWithLegacyProperties;
-  }
 
+    invariant(false, 'Node has no object3d?');
+  }
 
   /**
    * @see ReactMultiChildMixin._updateChildren
@@ -348,6 +323,7 @@ class InternalComponent {
    *
    * @param {?object} nextNestedChildren Nested child maps.
    * @param {ReactReconcileTransaction} transaction
+   * @param {any} context
    * @final
    * @protected
    */
@@ -356,7 +332,6 @@ class InternalComponent {
     const nextChildren = this._react3RendererInstance.updateChildren(prevChildren, nextNestedChildren, transaction, context);
 
     this._renderedChildren = nextChildren;
-
     if (!nextChildren && !prevChildren) {
       return;
     }
@@ -381,7 +356,7 @@ class InternalComponent {
         if (prevChild) {
           // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
           lastIndex = Math.max(prevChild._mountIndex, lastIndex);
-          this._unmountChildByName(prevChild, childName);
+          this._unmountChild(prevChild);
         }
         // The child must be instantiated before it's mounted.
         this._mountChildByNameAtIndex(nextChild, childName, nextIndex, transaction, context);
@@ -391,7 +366,7 @@ class InternalComponent {
     // Remove children that are no longer present.
     for (const childName in prevChildren) {
       if (prevChildren.hasOwnProperty(childName) && !(nextChildren && nextChildren.hasOwnProperty(childName))) {
-        this._unmountChildByName(prevChildren[childName], childName);
+        this._unmountChild(prevChildren[childName]);
       }
     }
   }
@@ -432,7 +407,7 @@ class InternalComponent {
 
   updateChildren = ReactMultiChildMixin.updateChildren.bind(this);
   _mountChildByNameAtIndex = ReactMultiChildMixin._mountChildByNameAtIndex.bind(this);
-  _unmountChildByName = ReactMultiChildMixin._unmountChildByName.bind(this);
+  _unmountChild = ReactMultiChildMixin._unmountChild.bind(this);
   unmountChildren = ReactMultiChildMixin.unmountChildren.bind(this);
 }
 

@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import THREE from 'three';
 import React3 from './React3/React3';
+import WebGLCameraExample from './examples/WebGLCameraExample';
+import Perf from 'react-addons-perf';
+
+window.Perf = Perf;
 
 class Cube extends React.Component {
   constructor(props, context) {
@@ -76,6 +80,7 @@ class MyComponent extends React.Component {
   };
 
   render() {
+    /*
     const cubes = [];
 
     for (let i = 0; i < this.state.numCubes; i++) {
@@ -98,6 +103,11 @@ class MyComponent extends React.Component {
             {cubes}
           </React3> : null}
       </div>);
+      */
+
+    return (<React3 width={window.innerWidth} height={window.innerHeight} mainCamera={'mainCamera'}>
+      <WebGLCameraExample/>
+    </React3>);
   }
 }
 
