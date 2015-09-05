@@ -68,17 +68,12 @@ class WebGLCameraExample extends React.Component {
 
     this.setState({
       camera,
-      activeCamera: cameraPerspective,
+      activeCamera: 'perspective',
       cameraPerspective,
       cameraOrthographic,
     }, () => {
-      const {
-        cameraPerspectiveHelper,
-        } = this.refs;
-
       // helpers will be mounted now!
       this.setState({
-        activeHelper: cameraPerspectiveHelper,
         viewports: [
           {
             x: 0,
@@ -88,7 +83,7 @@ class WebGLCameraExample extends React.Component {
             camera: cameraPerspective,
             onBeforeRender: () => {
               this.setState({
-                currentCamera: cameraPerspective,
+                currentCamera: 'perspective',
               });
             },
           },
@@ -100,7 +95,7 @@ class WebGLCameraExample extends React.Component {
             camera: camera,
             onBeforeRender: () => {
               this.setState({
-                currentCamera: camera,
+                currentCamera: 'main',
               });
             },
           },
@@ -128,7 +123,7 @@ class WebGLCameraExample extends React.Component {
       break;
     case 79: // O
       this.setState({
-        activeCamera: cameraOrthographic,
+        activeCamera: 'orthographic',
         viewports: [
           {
             x: 0,
@@ -138,7 +133,7 @@ class WebGLCameraExample extends React.Component {
             camera: cameraOrthographic,
             onBeforeRender: () => {
               this.setState({
-                currentCamera: cameraOrthographic,
+                currentCamera: 'orthographic',
               });
             },
           },
@@ -150,7 +145,7 @@ class WebGLCameraExample extends React.Component {
             camera: camera,
             onBeforeRender: () => {
               this.setState({
-                currentCamera: camera,
+                currentCamera: 'main',
               });
             },
           },
@@ -159,7 +154,7 @@ class WebGLCameraExample extends React.Component {
       break;
     case 80: // P
       this.setState({
-        activeCamera: cameraPerspective,
+        activeCamera: 'perspective',
         viewports: [
           {
             x: 0,
@@ -169,7 +164,7 @@ class WebGLCameraExample extends React.Component {
             camera: cameraPerspective,
             onBeforeRender: () => {
               this.setState({
-                currentCamera: cameraPerspective,
+                currentCamera: 'perspective',
               });
             },
           },
@@ -181,7 +176,7 @@ class WebGLCameraExample extends React.Component {
             camera: camera,
             onBeforeRender: () => {
               this.setState({
-                currentCamera: camera,
+                currentCamera: 'main',
               });
             },
           },
@@ -239,7 +234,7 @@ class WebGLCameraExample extends React.Component {
     />);
 
     if (cameraPerspective) {
-      const visible = activeCamera !== cameraOrthographic && currentCamera !== cameraPerspective;
+      const visible = activeCamera !== 'orthographic' && currentCamera !== 'perspective';
 
       cameraHelpers.push(<cameraHelper
         key="perspective"
@@ -262,7 +257,7 @@ class WebGLCameraExample extends React.Component {
     />);
 
     if (cameraOrthographic) {
-      const visible = activeCamera !== cameraPerspective && currentCamera !== cameraOrthographic;
+      const visible = activeCamera !== 'perspective' && currentCamera !== 'orthographic';
 
       cameraHelpers.push(<cameraHelper
         key="orthographic"
