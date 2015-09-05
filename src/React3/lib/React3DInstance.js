@@ -42,10 +42,11 @@ class React3DInstance {
       const objectsWithMainCameraName = this._objectsByName[this._mainCameraName];
 
       if (objectsWithMainCameraName) {
-        invariant(objectsWithMainCameraName.length < 2, 'There are multiple objects with name ' + this._mainCameraName);
+        invariant(objectsWithMainCameraName.count < 2, 'There are multiple objects with name ' + this._mainCameraName);
 
-        if (objectsWithMainCameraName.length > 0) {
-          mainCamera = objectsWithMainCameraName[0];
+        if (objectsWithMainCameraName.count > 0) {
+          const values = objectsWithMainCameraName.values;
+          mainCamera = values[Object.keys(values)[0]];
         }
       }
     }
@@ -64,10 +65,11 @@ class React3DInstance {
           const objectsWithViewportCameraName = this._objectsByName[viewport.cameraName];
 
           if (objectsWithViewportCameraName) {
-            invariant(objectsWithViewportCameraName.length < 2, 'There are multiple objects with name ' + viewport.cameraName);
+            invariant(objectsWithViewportCameraName.count < 2, 'There are multiple objects with name ' + viewport.cameraName);
 
-            if (objectsWithViewportCameraName.length > 0) {
-              viewportCamera = objectsWithViewportCameraName[0];
+            if (objectsWithViewportCameraName.count > 0) {
+              const values = objectsWithViewportCameraName.values;
+              viewportCamera = values[Object.keys(values)[0]];
             }
           }
         }
@@ -138,19 +140,23 @@ class React3DInstance {
 
   _addObjectWithName(objectName, object) {
     if (!this._objectsByName[objectName]) {
-      this._objectsByName[objectName] = [];
+      this._objectsByName[objectName] = {
+        count: 0,
+        values: {},
+      };
     }
 
-    this._objectsByName[objectName].push(object);
+    this._objectsByName[objectName].values[object.uuid] = object;
+    this._objectsByName[objectName].count++;
   }
 
   _removeObjectWithName(objectName, object) {
-    const oldIndex = this._objectsByName[objectName].indexOf(object);
+    invariant(this._objectsByName[objectName] && this._objectsByName[objectName].values[object.uuid] === object, 'The object\'s name changed somehow?\'');
 
-    invariant(oldIndex !== -1, 'The object\'s name changed somehow?\'');
+    delete this._objectsByName[objectName].values[object.uuid];
+    this._objectsByName[objectName].count--;
 
-    this._objectsByName[objectName].splice(oldIndex, 1);
-    if (this._objectsByName[objectName].length === 0) {
+    if (this._objectsByName[objectName].count === 0) {
       delete this._objectsByName[objectName];
     }
   }
