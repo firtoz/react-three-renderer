@@ -26,7 +26,10 @@ class React3 extends React.Component {
   componentDidUpdate() {
     const canvas = this.refs.canvas;
 
-    this.react3Renderer.render(<react3 {...this.props} canvas={canvas}>
+    this.react3Renderer.render(<react3
+      {...this.props}
+      canvasStyle={null}
+      canvas={canvas}>
       <scene>{this.props.children}</scene>
     </react3>);
   }
@@ -42,6 +45,7 @@ class React3 extends React.Component {
       width={this.props.width}
       height={this.props.height}
       style={{
+        ...this.props.canvasStyle,
         width: this.props.width,
         height: this.props.height,
       }}

@@ -7,57 +7,6 @@ import warning from 'fbjs/lib/warning.js';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
-function legacyIsMounted() {
-  const component = this._reactInternalComponent;
-  if (process.env.NODE_ENV !== 'production') {
-    process.env.NODE_ENV !== 'production' ? warning(false, 'ReactDOMComponent: Do not access .isMounted() of a DOM node.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-  return !!component;
-}
-
-function legacySetStateEtc() {
-  if (process.env.NODE_ENV !== 'production') {
-    const component = this._reactInternalComponent;
-    process.env.NODE_ENV !== 'production' ? warning(false, 'ReactDOMComponent: Do not access .setState(), .replaceState(), or ' + '.forceUpdate() of a DOM node. This is a no-op.%s', getDeclarationErrorAddendum(component)) : undefined;
-  }
-}
-
-function legacySetProps() {
-  invariant(false, "can't set props!");
-}
-
-function legacyReplaceProps() {
-  invariant(false, "can't replace props!");
-}
-
-let canDefineProperty = false;
-try {
-  Object.defineProperty({}, 'test', {
-    get() {
-    },
-  });
-  canDefineProperty = true;
-} catch (e) {
-  // do nothing
-}
-
-let legacyPropsDescriptor;
-if (process.env.NODE_ENV !== 'production') {
-  legacyPropsDescriptor = {
-    props: {
-      enumerable: false,
-      get() {
-        const component = this._reactInternalComponent;
-        if (process.env.NODE_ENV !== 'production') {
-          warning(false, 'ReactDOMComponent: Do not access .props of a DOM node; instead, ' + 'recreate the props as `render` did originally or read the DOM ' + 'properties/attributes directly from this node (e.g., ' + 'this.refs.box.className).%s', getDeclarationErrorAddendum(component));
-        }
-        return component._currentElement.props;
-      },
-    },
-  };
-}
-
-
 function processChildContext(context) {
   // if (process.env.NODE_ENV !== 'production') {
   //   // // Pass down our tag name to child components for validation purposes
@@ -305,10 +254,16 @@ class InternalComponent {
     }
   }
 
+  emptyJson() {
+    debugger;
+    return '...';
+  }
+
   getPublicInstance() {
     const node = this._react3RendererInstance.getUserData(this._rootNodeID);
 
     if (node.object3D) {
+      node.object3D.toJSON = this.emptyJson;
       return node.object3D;
     }
 

@@ -1,27 +1,75 @@
 import invariant from 'fbjs/lib/invariant';
+import ReactUpdates from 'react/lib/ReactUpdates';
 import THREE from 'three';
 
 import events from 'events';
 
 const {EventEmitter} = events;
 
+function noop() {
+}
+
 class React3DInstance {
   constructor(props) {
+    const {
+      mainCamera,
+      viewports,
+      canvas,
+      width,
+      height,
+      onAnimate,
+      antialias,
+      } = props;
+
     this._scene = null;
-    this._mainCameraName = props.mainCamera;
-    this._canvas = props.canvas;
-    this._renderer = new THREE.WebGLRenderer({canvas: props.canvas});
-    this._width = props.width;
-    this._height = props.height;
+    this._mainCameraName = mainCamera;
+    this._mainCamera = null;
+    this._viewports = viewports || [];
+    this._canvas = canvas;
+    this._renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: antialias});
+    this._width = width;
+    this._height = height;
     this._renderer.setSize(this._width, this._height);
+    this._onAnimate = onAnimate;
+
+    const render = () => {
+      this._renderRequest = requestAnimationFrame(render);
+
+      if (this._onAnimate) {
+        ReactUpdates.batchedUpdates(this._onAnimate);
+      }
+
+      if (this._mainCamera) {
+        this._renderer.autoClear = true;
+        this._renderer.setViewport(0, 0, this._width, this._height);
+        this._renderer.render(this._scene, this._mainCamera);
+      } else if (this._viewports.length > 0) {
+        this._renderer.autoClear = false;
+        this._renderer.clear();
+        this._viewports.forEach(viewport => {
+          if (!viewport.camera) {
+            return;
+          }
+
+          if (viewport.onBeforeRender) {
+            ReactUpdates.batchedUpdates(viewport.onBeforeRender);
+          }
+
+          this._renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+          this._renderer.render(this._scene, viewport.camera);
+        });
+      }
+    };
+
+    this._renderRequest = requestAnimationFrame(render);
   }
 
   setScene(scene) {
     this._scene = scene;
 
-    const mainCamera = scene.getObjectByName(this._mainCameraName);
+    if (this._mainCameraName) {
+      const mainCamera = scene.getObjectByName(this._mainCameraName);
 
-    if (!!mainCamera) {
       this.setCamera(mainCamera);
     }
   }
@@ -31,35 +79,26 @@ class React3DInstance {
       return;
     }
 
-    mainCamera.userData.events.on('dispose', this._cameraDisposed);
+    if (mainCamera) {
+      mainCamera.userData.events.on('dispose', this._cameraDisposed);
+    }
+
+    if (!!this._mainCamera) {
+      // already have a main camera, remove the dispose listener
+      this._mainCamera.userData.events.removeListener('dispose', this._cameraDisposed);
+    }
 
     this._mainCamera = mainCamera;
-
-    this._startRender();
   }
 
   _cameraDisposed = () => {
     this._mainCamera.userData.events.removeListener('dispose', this._cameraDisposed);
 
     this._mainCamera = null;
-
-    this._renderer.clear();
-
-    cancelAnimationFrame(this._renderRequest);
   };
 
   getMainCameraName() {
     return this._mainCameraName;
-  }
-
-  _startRender() {
-    const render = () => {
-      this._renderRequest = requestAnimationFrame(render);
-
-      this._renderer.render(this._scene, this._mainCamera);
-    };
-
-    render();
   }
 
   updateWidth(newWidth) {
@@ -70,6 +109,10 @@ class React3DInstance {
   updateHeight(newHeight) {
     this._height = newHeight;
     this._renderer.setSize(this._width, this._height);
+  }
+
+  updateViewports(newViewports) {
+    this._viewports = newViewports || [];
   }
 
   unmount() {
@@ -139,7 +182,7 @@ class THREEElementDescriptor {
   }
 
   updateProperty(threeObject, propKey, nextProp) {
-    if (this.propUpdates.hasOwnProperty(propKey)) {
+    if (this.propUpdates[propKey]) {
       this.propUpdates[propKey](threeObject, nextProp);
     } else {
       invariant(false, `updating prop ${propKey} ${nextProp} for ${threeObject}`);
@@ -154,6 +197,8 @@ class React3Descriptor extends THREEElementDescriptor {
     this.propUpdates = {
       width: this._updateWidth,
       height: this._updateHeight,
+      viewports: this._updateViewports,
+      canvasStyle: noop,
     };
   }
 
@@ -175,6 +220,10 @@ class React3Descriptor extends THREEElementDescriptor {
     self.updateHeight(newHeight);
   }
 
+  _updateViewports(self, newViewports) {
+    self.updateViewports(newViewports);
+  }
+
   unmount(self) {
     self.unmount();
   }
@@ -191,6 +240,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     this.propUpdates = {
       'position': this._updatePosition,
       'rotation': this._updateRotation,
+      'lookAt': this._updateLookAt,
       'scale': this._updateScale,
       'name': this._updateName,
     };
@@ -222,6 +272,10 @@ class Object3DDescriptor extends THREEElementDescriptor {
     if (props.name) {
       threeObject.name = props.name;
     }
+
+    if (props.lookAt) {
+      threeObject.lookAt(props.lookAt);
+    }
   }
 
   _updatePosition = (threeObject, nextPosition) => {
@@ -242,6 +296,12 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
   _updateName = (threeObject, nextName) => {
     threeObject.name = nextName;
+  };
+
+  _updateLookAt = (threeObject, lookAt) => {
+    if (!!lookAt) {
+      threeObject.lookAt(lookAt);
+    }
   };
 
   /**
@@ -285,13 +345,15 @@ function getRoot(object) {
   return object;
 }
 
-class CameraDescriptor extends Object3DDescriptor {
+class CameraDescriptorBase extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
     this.propUpdates = {
       ...this.propUpdates,
       aspect: this._updateAspect,
+      fov: this._updateFov,
+      far: this._updateFar,
     };
   }
 
@@ -322,6 +384,21 @@ class CameraDescriptor extends Object3DDescriptor {
     self.aspect = newAspect;
 
     self.updateProjectionMatrix();
+    self.userData.events.emit('updateProjectionMatrix');
+  }
+
+  _updateFov(self, fov) {
+    self.fov = fov;
+
+    self.updateProjectionMatrix();
+    self.userData.events.emit('updateProjectionMatrix');
+  }
+
+  _updateFar(self, far) {
+    self.far = far;
+
+    self.updateProjectionMatrix();
+    self.userData.events.emit('updateProjectionMatrix');
   }
 
   unmount(self) {
@@ -331,7 +408,7 @@ class CameraDescriptor extends Object3DDescriptor {
   }
 }
 
-class PerspectiveCameraDescriptor extends CameraDescriptor {
+class PerspectiveCameraDescriptor extends CameraDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
   }
@@ -341,7 +418,7 @@ class PerspectiveCameraDescriptor extends CameraDescriptor {
   }
 }
 
-class OrthographicCameraDescriptor extends CameraDescriptor {
+class OrthographicCameraDescriptor extends CameraDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
   }
@@ -354,10 +431,40 @@ class OrthographicCameraDescriptor extends CameraDescriptor {
 class CameraHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
+
+    this.propUpdates = {
+      ...this.propUpdates,
+      visible: this._updateVisible,
+    };
   }
 
   construct(props) {
     return new THREE.CameraHelper(props.camera);
+  }
+
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
+
+    if (props.autoUpdate && props.camera) {
+      const userData = threeObject.userData;
+
+      userData._onCameraProjectionUpdate = () => {
+        threeObject.update();
+      };
+
+      userData._onCameraDispose = () => {
+        props.camera.userData.events.off('updateProjectionMatrix', threeObject.userData._onCameraProjectionUpdate);
+      };
+
+      props.camera.userData.events.on('updateProjectionMatrix', userData._onCameraProjectionUpdate);
+      props.camera.userData.events.once('dispose', userData._onCameraDispose);
+    }
+
+    threeObject.visible = props.visible;
+  }
+
+  _updateVisible(threeObject, visible) {
+    threeObject.visible = visible;
   }
 }
 
@@ -469,6 +576,10 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
 
     if (props.hasOwnProperty('color')) {
       materialDescription.color = props.color;
+    }
+
+    if (props.hasOwnProperty('wireframe')) {
+      materialDescription.wireframe = props.wireframe;
     }
 
     return new THREE.MeshBasicMaterial(materialDescription);
