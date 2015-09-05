@@ -51,22 +51,18 @@ class WebGLCameraExample extends React.Component {
       currentCamera: null,
       meshPosition: new THREE.Vector3(Math.cos(r), Math.sin(r), Math.sin(r)).multiplyScalar(700),
       childPosition: new THREE.Vector3(70 * Math.cos(2 * r), 150, 70 * Math.sin(r)),
+      testObjects: [],
+      active: true,
     };
   }
 
   componentDidMount() {
-    const {
-      camera,
-      cameraPerspective,
-      } = this.refs;
-
     const {
       width,
       height,
       } = this.state;
 
     this.setState({
-      camera,
       activeCamera: 'perspective',
     }, () => {
       // helpers will be mounted now!
@@ -77,7 +73,7 @@ class WebGLCameraExample extends React.Component {
             y: 0,
             width: width / 2,
             height: height,
-            camera: cameraPerspective,
+            cameraName: 'perspectiveCamera',
             onBeforeRender: () => {
               this.setState({
                 currentCamera: 'perspective',
@@ -89,7 +85,7 @@ class WebGLCameraExample extends React.Component {
             y: 0,
             width: width / 2,
             height: height,
-            camera: camera,
+            cameraName: 'mainCamera',
             onBeforeRender: () => {
               this.setState({
                 currentCamera: 'main',
@@ -105,18 +101,27 @@ class WebGLCameraExample extends React.Component {
 
   _onKeyDown = (event) => {
     const {
-      cameraOrthographic,
-      cameraPerspective,
-      } = this.refs;
-
-    const {
-      camera,
       width,
       height,
       } = this.state;
 
     switch (event.keyCode) {
     default:
+      break;
+    case 76: // l?
+      this.setState({
+        active: !this.state.active,
+      });
+      break;
+    case 77: // m?
+      this.setState({
+        testObjects: this.state.testObjects.slice(0, -1),
+      });
+      break;
+    case 78: // n?
+      this.setState({
+        testObjects: this.state.testObjects.concat({}),
+      });
       break;
     case 79: // O
       this.setState({
@@ -127,7 +132,7 @@ class WebGLCameraExample extends React.Component {
             y: 0,
             width: width / 2,
             height: height,
-            camera: cameraOrthographic,
+            cameraName: 'orthographicCamera',
             onBeforeRender: () => {
               this.setState({
                 currentCamera: 'orthographic',
@@ -139,7 +144,7 @@ class WebGLCameraExample extends React.Component {
             y: 0,
             width: width / 2,
             height: height,
-            camera: camera,
+            cameraName: 'mainCamera',
             onBeforeRender: () => {
               this.setState({
                 currentCamera: 'main',
@@ -158,7 +163,7 @@ class WebGLCameraExample extends React.Component {
             y: 0,
             width: width / 2,
             height: height,
-            camera: cameraPerspective,
+            cameraName: 'perspectiveCamera',
             onBeforeRender: () => {
               this.setState({
                 currentCamera: 'perspective',
@@ -170,7 +175,7 @@ class WebGLCameraExample extends React.Component {
             y: 0,
             width: width / 2,
             height: height,
-            camera: camera,
+            cameraName: 'mainCamera',
             onBeforeRender: () => {
               this.setState({
                 currentCamera: 'main',
@@ -209,7 +214,7 @@ class WebGLCameraExample extends React.Component {
     const aspectRatio = 0.5 * width / height;
 
     const cameraComponent = (<perspectiveCamera
-      ref="camera"
+      name="mainCamera"
       fov={50}
       aspect={aspectRatio}
       near={1}
@@ -218,7 +223,7 @@ class WebGLCameraExample extends React.Component {
     />);
 
     const cameraPerspectiveComponent = (<perspectiveCamera
-      ref="cameraPerspective"
+      name="perspectiveCamera"
       fov={35 + 30 * Math.sin( 0.5 * r )}
       aspect={aspectRatio}
       near={150}
@@ -239,7 +244,7 @@ class WebGLCameraExample extends React.Component {
     //}
 
     const cameraOrthographicComponent = (<orthographicCamera
-      ref="cameraOrthographic"
+      name="orthographicCamera"
       left={0.5 * width / -2}
       right={0.5 * width / 2}
       top={height / 2}
@@ -262,7 +267,6 @@ class WebGLCameraExample extends React.Component {
     //}
 
     const cameraRig = (<object3D
-      ref="cameraRig"
       lookAt={meshPosition}>
       {cameraPerspectiveComponent}
       {cameraOrthographicComponent}
@@ -282,20 +286,16 @@ class WebGLCameraExample extends React.Component {
 
     return (<div>
       <Info/>
-      <React3 width={width}
-              height={height}
-              viewports={viewports}
-              antialias={true}
-              onAnimate={this._onAnimate}
-              canvasStyle={{
-
-              }}>
+      {this.state.active ? <React3 width={width}
+                                   height={height}
+                                   viewports={viewports}
+                                   antialias={true}
+                                   onAnimate={this._onAnimate}>
         <object3D>
           {cameraComponent}
           {cameraHelpers}
           {cameraRig}
           <object3D
-            ref="meshContainer"
             position={meshPosition}
           >
             <mesh>
@@ -325,7 +325,10 @@ class WebGLCameraExample extends React.Component {
             <pointCloudMaterial color={0x888888}/>
           </pointCloud>
         </object3D>
-      </React3>
+        {this.state.testObjects.map((testObject, i) => {
+          return <object3D key={i}/>;
+        })}
+      </React3> : null }
     </div>);
   }
 }

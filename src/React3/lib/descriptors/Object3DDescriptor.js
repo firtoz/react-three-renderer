@@ -73,7 +73,15 @@ class Object3DDescriptor extends THREEElementDescriptor {
   };
 
   _updateName = (threeObject, nextName) => {
+    const oldName = threeObject.name;
+
     threeObject.name = nextName;
+
+    const markup = threeObject.userData.markup;
+
+    if (markup._rootInstance) {
+      markup._rootInstance.objectRenamed(self, oldName, nextName);
+    }
   };
 
   _updateLookAt = (threeObject, lookAt) => {
@@ -104,8 +112,14 @@ class Object3DDescriptor extends THREEElementDescriptor {
     _arrayMove(self.children, lastIndex, toIndex);
   }
 
-  setParent() {
+  setParent(self, parentObject3D) {
     // yep that's allowed
+
+    const parentMarkup = parentObject3D.userData.markup;
+
+    if (parentMarkup && parentMarkup._rootInstance) {
+      parentMarkup._rootInstance.objectMounted(self);
+    }
   }
 
   unmount(self) {
@@ -113,6 +127,12 @@ class Object3DDescriptor extends THREEElementDescriptor {
     self.userData.events.removeAllListeners();
 
     delete self.userData.events;
+
+    const markup = self.userData.markup;
+
+    if (markup._rootInstance) {
+      markup._rootInstance.objectRemoved(self);
+    }
   }
 }
 

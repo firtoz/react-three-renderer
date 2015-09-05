@@ -46,7 +46,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   mountComponent(rootID, transaction, context) {
-    //console.log('mounting composite component');
+    // console.log('mounting composite component');
 
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;

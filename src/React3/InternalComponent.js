@@ -119,6 +119,7 @@ class InternalComponent {
           return '---USERDATA---';
         },
       },
+      _rootInstance: null,
       elementType: element.type,
       threeObject: this._threeObject,
       toJSON: () => {
@@ -127,6 +128,7 @@ class InternalComponent {
     };
 
     markup.userData.markup = markup;
+    this._threeObject.userData = markup.userData;
 
     if (mountImages && mountImages.length > 0) {
       this.threeElementDescriptor.addChildren(this._threeObject, mountImages.map(img => img.threeObject));
@@ -142,7 +144,6 @@ class InternalComponent {
 
     // console.log('mountComponent', this, 'childrenmarkup', mountImages);
 
-    this._threeObject.userData = markup.userData;
 
     this._markup = markup;
 
@@ -239,10 +240,8 @@ class InternalComponent {
    * node_modules/react/lib/ReactDOMComponent.js:732
    */
   unmountComponent() {
-    // console.log('unmounting component!', this);
-
-    this.threeElementDescriptor.unmount(this._threeObject);
     this.unmountChildren();
+    this.threeElementDescriptor.unmount(this._threeObject);
 
     this._rootNodeID = null;
     if (this._nodeWithLegacyProperties) {

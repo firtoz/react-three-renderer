@@ -12,6 +12,7 @@ import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
 import flattenChildren from 'react/lib/flattenChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
+import React3DInstance from './lib/React3DInstance';
 
 import InternalComponent from './InternalComponent';
 import ElementDescriptorContainer from './ElementDescriptorContainer';
@@ -460,7 +461,7 @@ class React3Renderer {
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
    * @param {any} context
    */
-  mountComponentIntoNode = (componentInstance, rootID, container, transaction, shouldReuseMarkup, context) => {
+  mountRootComponent = (componentInstance, rootID, container, transaction, shouldReuseMarkup, context) => {
     // if (process.env.NODE_ENV !== 'production') {
     // if (context === emptyObject) {
     //   context = {};
@@ -471,13 +472,13 @@ class React3Renderer {
 
     const markup = ReactReconciler.mountComponent(componentInstance, rootID, transaction, context);
     componentInstance._renderedComponent._topLevelWrapper = componentInstance;
-    this._mountImageIntoNode(markup, container, shouldReuseMarkup);
+    this._mountRootImage(markup, container, shouldReuseMarkup);
   };
 
-  _mountImageIntoNode(markup, container) {
+  _mountRootImage(markup, container) {
     // if (!(container && (container.nodeType === ELEMENT_NODE_TYPE || container.nodeType === DOC_NODE_TYPE || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
     //   if (process.env.NODE_ENV !== 'production') {
-    //     invariant(false, 'mountComponentIntoNode(...): Target container is not valid.');
+    //     invariant(false, 'mountRootComponent(...): Target container is not valid.');
     //   } else {
     //     invariant(false);
     //   }
@@ -539,7 +540,15 @@ class React3Renderer {
 
     markup.userData.parentMarkup = rootMarkup;
 
-    container.instance = markup.threeObject;
+    // all objects now added can be marked as added to scene now!
+
+    const instance:React3DInstance = markup.threeObject;
+
+    invariant(instance instanceof React3DInstance, 'Invalid root component type found');
+
+    instance.mountedIntoRoot();
+
+    container.instance = instance;
   }
 
   /**
@@ -551,9 +560,9 @@ class React3Renderer {
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
    * @param {any} context
    */
-  batchedMountComponentIntoNode = (componentInstance, rootID, container, shouldReuseMarkup, context) => {
+  batchedMountRootComponent = (componentInstance, rootID, container, shouldReuseMarkup, context) => {
     const transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
-    transaction.perform(this.mountComponentIntoNode, null, componentInstance, rootID, container, transaction, shouldReuseMarkup, context);
+    transaction.perform(this.mountRootComponent, null, componentInstance, rootID, container, transaction, shouldReuseMarkup, context);
     ReactUpdates.ReactReconcileTransaction.release(transaction);
   };
 
@@ -827,7 +836,7 @@ class React3Renderer {
     // rendering, in componentWillMount or componentDidMount, will be batched
     // according to the current batching strategy.
 
-    ReactUpdates.batchedUpdates(this.batchedMountComponentIntoNode, componentInstance, reactRootID, object3D, shouldReuseMarkup, context);
+    ReactUpdates.batchedUpdates(this.batchedMountRootComponent, componentInstance, reactRootID, object3D, shouldReuseMarkup, context);
 
     if (process.env.NODE_ENV !== 'production') {
       // Record the root element in case it later gets transplanted.

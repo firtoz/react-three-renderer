@@ -1,14 +1,7 @@
 import Object3DDescriptor from './Object3DDescriptor';
 import THREE from 'three';
 
-function getRoot(object) {
-  const parentMarkup = object.userData.parentMarkup;
-  if (parentMarkup) {
-    return getRoot(parentMarkup.threeObject);
-  }
-
-  return object;
-}
+import getRoot from '../getRoot';
 
 class CameraDescriptorBase extends Object3DDescriptor {
   constructor(react3Instance) {
@@ -27,14 +20,6 @@ class CameraDescriptorBase extends Object3DDescriptor {
 
   setParent(camera, parentObject3D) {
     super.setParent(camera, parentObject3D);
-
-    const root = getRoot(parentObject3D);
-
-    const rootInstance = root && root.instance;
-
-    if (rootInstance && rootInstance instanceof React3DInstance && rootInstance.getMainCameraName() === camera.name) {
-      rootInstance.setCamera(camera);
-    }
   }
 
 
