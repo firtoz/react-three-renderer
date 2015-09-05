@@ -58,7 +58,6 @@ class WebGLCameraExample extends React.Component {
     const {
       camera,
       cameraPerspective,
-      cameraOrthographic,
       } = this.refs;
 
     const {
@@ -69,8 +68,6 @@ class WebGLCameraExample extends React.Component {
     this.setState({
       camera,
       activeCamera: 'perspective',
-      cameraPerspective,
-      cameraOrthographic,
     }, () => {
       // helpers will be mounted now!
       this.setState({
@@ -201,13 +198,9 @@ class WebGLCameraExample extends React.Component {
     const {
       width,
       height,
-      activeCamera,
-      currentCamera,
       viewports,
-      cameraOrthographic,
       meshPosition,
       childPosition,
-      cameraPerspective,
       r,
       } = this.state;
 
@@ -233,17 +226,17 @@ class WebGLCameraExample extends React.Component {
       rotation={new THREE.Euler(0, Math.PI, 0)}
     />);
 
-    if (cameraPerspective) {
-      const visible = activeCamera !== 'orthographic' && currentCamera !== 'perspective';
-
-      cameraHelpers.push(<cameraHelper
-        key="perspective"
-        ref="cameraPerspectiveHelper"
-        camera={cameraPerspective}
-        autoUpdate={true}
-        visible={visible}
-      />);
-    }
+    //if (cameraPerspective) {
+    //  const visible = activeCamera !== 'orthographic' && currentCamera !== 'perspective';
+    //
+    //  cameraHelpers.push(<cameraHelper
+    //    key="perspective"
+    //    ref="cameraPerspectiveHelper"
+    //    camera={cameraPerspective}
+    //    autoUpdate={true}
+    //    visible={visible}
+    //  />);
+    //}
 
     const cameraOrthographicComponent = (<orthographicCamera
       ref="cameraOrthographic"
@@ -256,17 +249,17 @@ class WebGLCameraExample extends React.Component {
       rotation={new THREE.Euler(0, Math.PI, 0)}
     />);
 
-    if (cameraOrthographic) {
-      const visible = activeCamera !== 'perspective' && currentCamera !== 'orthographic';
-
-      cameraHelpers.push(<cameraHelper
-        key="orthographic"
-        ref="cameraOrthographicHelper"
-        camera={cameraOrthographic}
-        autoUpdate={true}
-        visible={visible}
-      />);
-    }
+    //if (cameraOrthographic) {
+    //  const visible = activeCamera !== 'perspective' && currentCamera !== 'orthographic';
+    //
+    //  cameraHelpers.push(<cameraHelper
+    //    key="orthographic"
+    //    ref="cameraOrthographicHelper"
+    //    camera={cameraOrthographic}
+    //    autoUpdate={true}
+    //    visible={visible}
+    //  />);
+    //}
 
     const cameraRig = (<object3D
       ref="cameraRig"
