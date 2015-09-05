@@ -112,7 +112,10 @@ class Object3DDescriptor extends THREEElementDescriptor {
   unmount(self) {
     // i'll allow it too
 
+    self.userData.events.emit('dispose');
     self.userData.events.removeAllListeners();
+    delete self.userData.events;
+
     delete self.userData.events;
   }
 }

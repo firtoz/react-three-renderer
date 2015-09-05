@@ -51,9 +51,6 @@ class CameraDescriptorBase extends Object3DDescriptor {
   }
 
   unmount(self) {
-    self.userData.events.emit('dispose');
-    delete self.userData.events;
-
     super.unmount(self);
   }
 
