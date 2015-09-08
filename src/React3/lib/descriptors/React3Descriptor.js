@@ -1,13 +1,6 @@
 import React3DInstance from '../React3DInstance';
-import invariant from 'fbjs/lib/invariant';
-import THREE from 'three';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
-
-
-function noop() {
-}
-
 
 class React3Descriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
@@ -17,7 +10,6 @@ class React3Descriptor extends THREEElementDescriptor {
       width: this._updateWidth,
       height: this._updateHeight,
       viewports: this._updateViewports,
-      canvasStyle: noop,
     };
   }
 
@@ -25,10 +17,18 @@ class React3Descriptor extends THREEElementDescriptor {
     return new React3DInstance(props);
   }
 
+  // gets called every time there are children to be added
+  // this can be called multiple times as more children are added.
   addChildren(self, children) {
-    invariant(children.length === 1 && children[0] instanceof THREE.Scene, 'The react3 component should only have one scene as a child!');
+    self.addChildren(children);
+  }
 
-    self.setScene(children[0]);
+  moveChild() {
+    // do nothing
+  }
+
+  removeChild(self, child) {
+    debugger;
   }
 
   _updateWidth(self, newWidth) {

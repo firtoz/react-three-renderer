@@ -1,18 +1,18 @@
-import DOMProperty from 'react/lib/DOMProperty';
-import ReactElement from 'react/lib/ReactElement';
-import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
-import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
-import ReactReconciler from 'react/lib/ReactReconciler';
-import ReactUpdates from 'react/lib/ReactUpdates';
-import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
-import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
-import emptyObject from 'fbjs/lib/emptyObject';
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
-import flattenChildren from 'react/lib/flattenChildren';
-import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
-import React3DInstance from './lib/React3DInstance';
+import DOMProperty from '../../../node_modules/react/lib/DOMProperty';
+import ReactElement from '../../../node_modules/react/lib/ReactElement';
+import ReactInstanceMap from '../../../node_modules/react/lib/ReactInstanceMap';
+import ReactEmptyComponent from '../../../node_modules/react/lib/ReactEmptyComponent';
+import ReactInstanceHandles from '../../../node_modules/react/lib/ReactInstanceHandles';
+import ReactReconciler from '../../../node_modules/react/lib/ReactReconciler';
+import ReactUpdates from '../../../node_modules/react/lib/ReactUpdates';
+import ReactCurrentOwner from '../../../node_modules/react/lib/ReactCurrentOwner';
+import ReactUpdateQueue from '../../../node_modules/react/lib/ReactUpdateQueue';
+import emptyObject from '../../../node_modules/fbjs/lib/emptyObject';
+import invariant from '../../../node_modules/fbjs/lib/invariant';
+import warning from '../../../node_modules/fbjs/lib/warning';
+import flattenChildren from '../../../node_modules/react/lib/flattenChildren';
+import shouldUpdateReactComponent from '../../../node_modules/react/lib/shouldUpdateReactComponent';
+import React3DInstance from './React3DInstance';
 
 import InternalComponent from './InternalComponent';
 import ElementDescriptorContainer from './ElementDescriptorContainer';
@@ -37,12 +37,6 @@ class TopLevelWrapper {
 
 function unmountComponentInternal(instance, container) {
   ReactReconciler.unmountComponent(instance);
-
-  while (container.instance._scene.children.length > 0) {
-    container.instance._scene.remove(container.instance._scene.children[0]);
-  }
-
-  delete container.instance._scene;
 }
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;

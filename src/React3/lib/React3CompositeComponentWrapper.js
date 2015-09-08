@@ -1,10 +1,10 @@
-import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
-import ReactReconciler from 'react/lib/ReactReconciler';
-import invariant from 'fbjs/lib/invariant';
-import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-import emptyObject from 'fbjs/lib/emptyObject';
-import warning from 'fbjs/lib/warning';
-import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
+import ReactCompositeComponent from '../../../node_modules/react/lib/ReactCompositeComponent';
+import ReactReconciler from '../../../node_modules/react/lib/ReactReconciler';
+import invariant from '../../../node_modules/fbjs/lib/invariant';
+import ReactInstanceMap from '../../../node_modules/react/lib/ReactInstanceMap';
+import emptyObject from '../../../node_modules/fbjs/lib/emptyObject';
+import warning from '../../../node_modules/fbjs/lib/warning';
+import ReactUpdateQueue from '../../../node_modules/react/lib/ReactUpdateQueue';
 
 class ReactCompositeComponentMixinImpl {
 }

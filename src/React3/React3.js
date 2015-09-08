@@ -1,5 +1,5 @@
 import React from 'react';
-import React3Renderer from './React3Renderer';
+import React3Renderer from './lib/React3Renderer';
 
 class React3 extends React.Component {
   static propTypes = {
@@ -18,19 +18,22 @@ class React3 extends React.Component {
 
     this.react3Renderer = new React3Renderer(canvas);
 
-    this.react3Renderer.render(<react3 {...this.props} canvas={canvas}>
-      <scene>{this.props.children}</scene>
-    </react3>);
+    this._render();
   }
 
   componentDidUpdate() {
+    this._render();
+  }
+
+  _render() {
     const canvas = this.refs.canvas;
 
     this.react3Renderer.render(<react3
       {...this.props}
+      // overwrite the canvas style prop if it exists
       canvasStyle={null}
       canvas={canvas}>
-      <scene>{this.props.children}</scene>
+      {this.props.children}
     </react3>);
   }
 

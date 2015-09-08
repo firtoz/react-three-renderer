@@ -1,8 +1,8 @@
-import ReactReconciler from 'react/lib/ReactReconciler';
-import DOMProperty from 'react/lib/DOMProperty';
-import ReactMultiChild from 'react/lib/ReactMultiChild';
+import ReactReconciler from '../../../node_modules/react/lib/ReactReconciler';
+import DOMProperty from '../../../node_modules/react/lib/DOMProperty';
+import ReactMultiChild from '../../../node_modules/react/lib/ReactMultiChild';
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from '../../../node_modules/fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning.js';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;

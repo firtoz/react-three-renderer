@@ -1,5 +1,6 @@
 import THREE from 'three';
 import invariant from 'fbjs/lib/invariant.js';
+import Viewport from './Viewport';
 import ReactUpdates from 'react/lib/ReactUpdates';
 
 class React3DInstance {
@@ -29,8 +30,32 @@ class React3DInstance {
     this._objectsByName = {};
   }
 
+  addViewport(viewport) {
+    this._viewports.push(viewport);
+  }
+
+  addChildren(children) {
+    children.forEach(child => {
+      if (child instanceof THREE.Scene) {
+        this.setScene(child);
+      } else if (child instanceof Viewport) {
+        this.addViewport(child);
+      } else {
+        invariant(false, 'The react3 component should only contain viewports or scenes.');
+      }
+    });
+    // const scenes = children.filter()
+    // invariant(children.length === 1 && children[0] instanceof THREE.Scene, 'The react3 component should only have one scene as a child!');
+
+    // self.setScene(children[0]);
+  }
+
   _render = () => {
     this._renderRequest = requestAnimationFrame(this._render);
+
+    if(!this._scene) {
+      return;
+    }
 
     if (this._onAnimate) {
       ReactUpdates.batchedUpdates(this._onAnimate);
@@ -121,6 +146,8 @@ class React3DInstance {
     invariant(Object.keys(this._objectsByUUID).length === 0, 'Failed to cleanup some child objects for React3DInstance');
 
     delete this._objectsByUUID;
+    delete this._viewports;
+    delete this._scene;
   }
 
   objectMounted(object) {

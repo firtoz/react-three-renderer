@@ -22,35 +22,35 @@ class THREEElementDescriptor {
 
   // noinspection JSUnusedLocalSymbols
   addChildren(self, children) { // eslint-disable-line no-unused-vars
-    invariant(false, 'Cannot add children to this type!');
+    invariant(false, `Cannot add children to ${this.constructor.name}!`);
   }
 
   moveChild() {
-    invariant(false, 'Cannot add children to this type!');
+    invariant(false, `Cannot move children in ${this.constructor.name}!`);
   }
 
   removeChild() {
-    invariant(false, 'Cannot add children to this type!');
+    invariant(false, `Cannot remove children in ${this.constructor.name}!`);
   }
 
   setParent() {
-    invariant(false, 'Cannot add parent to this type!');
+    invariant(false, `Cannot add parent to ${this.constructor.name}!`);
   }
 
   unmount() {
-    invariant(false, 'Cannot unmount this type!');
+    invariant(false, `Cannot unmount ${this.constructor.name}!`);
   }
 
   // noinspection JSUnusedLocalSymbols
   deleteProperty(threeObject, propKey) { // eslint-disable-line no-unused-vars
-    invariant(false, 'Cannot delete property!');
+    invariant(false, `Cannot delete property from ${this.constructor.name}!`);
   }
 
   updateProperty(threeObject, propKey, nextProp) {
     if (this.propUpdates[propKey]) {
       this.propUpdates[propKey](threeObject, nextProp);
     } else {
-      invariant(false, `updating prop ${propKey} ${nextProp} for ${threeObject}`);
+      invariant(false, `updating prop ${propKey} ( ${nextProp} ) for ${this.constructor.name}`);
     }
   }
 

@@ -1,16 +1,17 @@
-import React3Descriptor from './lib/descriptors/React3Descriptor';
-import Object3DDescriptor from './lib/descriptors/Object3DDescriptor';
-import SceneDescriptor from './lib/descriptors/SceneDescriptor';
-import OrthographicCameraDescriptor from './lib/descriptors/OrthographicCameraDescriptor';
-import PerspectiveCameraDescriptor from './lib/descriptors/PerspectiveCameraDescriptor';
-import CameraHelperDescriptor from './lib/descriptors/CameraHelperDescriptor';
-import MeshDescriptor from './lib/descriptors/MeshDescriptor';
-import PointCloudDescriptor from './lib/descriptors/PointCloudDescriptor';
-import MeshBasicMaterialDescriptor from './lib/descriptors/MeshBasicMaterialDescriptor';
-import PointCloudMaterialDescriptor from './lib/descriptors/PointCloudMaterialDescriptor';
-import GeometryDescriptor from './lib/descriptors/GeometryDescriptor';
-import BoxGeometryDescriptor from './lib/descriptors/BoxGeometryDescriptor';
-import SphereGeometryDescriptor from './lib/descriptors/SphereGeometryDescriptor';
+import React3Descriptor from './descriptors/React3Descriptor';
+import Object3DDescriptor from './descriptors/Object3DDescriptor';
+import SceneDescriptor from './descriptors/SceneDescriptor';
+import OrthographicCameraDescriptor from './descriptors/OrthographicCameraDescriptor';
+import PerspectiveCameraDescriptor from './descriptors/PerspectiveCameraDescriptor';
+import CameraHelperDescriptor from './descriptors/CameraHelperDescriptor';
+import MeshDescriptor from './descriptors/MeshDescriptor';
+import PointCloudDescriptor from './descriptors/PointCloudDescriptor';
+import MeshBasicMaterialDescriptor from './descriptors/MeshBasicMaterialDescriptor';
+import PointCloudMaterialDescriptor from './descriptors/PointCloudMaterialDescriptor';
+import GeometryDescriptor from './descriptors/GeometryDescriptor';
+import BoxGeometryDescriptor from './descriptors/BoxGeometryDescriptor';
+import SphereGeometryDescriptor from './descriptors/SphereGeometryDescriptor';
+import ViewportDescriptor from './descriptors/ViewportDescriptor';
 
 class ElementDescriptorContainer {
   constructor(react3Instance) {
@@ -21,6 +22,8 @@ class ElementDescriptorContainer {
      */
     this.descriptors = {
       react3: new React3Descriptor(react3Instance),
+
+      viewport: new ViewportDescriptor(react3Instance),
       scene: new SceneDescriptor(react3Instance),
 
       object3D: new Object3DDescriptor(react3Instance),
