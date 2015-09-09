@@ -22,7 +22,6 @@ class CameraDescriptorBase extends Object3DDescriptor {
     super.setParent(camera, parentObject3D);
   }
 
-
   _updateFov(threeObject, fov) {
     threeObject.fov = fov;
 

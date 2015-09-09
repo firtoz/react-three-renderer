@@ -1,12 +1,14 @@
 import invariant from 'fbjs/lib/invariant';
+import React3Instance from '../React3DInstance';
 
 /**
  * @abstract
  */
 class THREEElementDescriptor {
-  constructor(react3Instance) {
+  constructor(react3Instance:React3Instance) {
     /**
      * @protected
+     * @type {React3Instance}
      */
     this._react3Instance = react3Instance;
     this.propUpdates = {};

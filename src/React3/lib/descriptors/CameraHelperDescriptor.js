@@ -1,4 +1,5 @@
 import THREE from 'three';
+import CameraUtils from '../utils/Camera.js';
 import Object3DDescriptor from './Object3DDescriptor';
 
 class CameraHelperDescriptor extends Object3DDescriptor {
@@ -8,36 +9,147 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     this.propUpdates = {
       ...this.propUpdates,
       visible: this._updateVisible,
+      cameraName: this._updateCameraName,
     };
   }
 
-  construct(props) {
-    return new THREE.CameraHelper(props.camera);
+  construct() {
+    return new THREE.CameraHelper(new THREE.Camera());
   }
 
-  applyInitialProps(threeObject, props) {
-    super.applyInitialProps(threeObject, props);
+  applyInitialProps(cameraHelper:THREE.CameraHelper, props) {
+    super.applyInitialProps(cameraHelper, props);
 
-    if (props.autoUpdate && props.camera) {
-      const userData = threeObject.userData;
+    cameraHelper.userData._onCameraProjectionUpdate = () => {
+      cameraHelper.update();
+    };
 
-      userData._onCameraProjectionUpdate = () => {
-        threeObject.update();
-      };
+    cameraHelper.userData._onCameraDispose = () => {
+      this._startCameraFinder(cameraHelper);
+    };
 
-      userData._onCameraDispose = () => {
-        props.camera.userData.events.off('updateProjectionMatrix', threeObject.userData._onCameraProjectionUpdate);
-      };
+    cameraHelper.userData._onCameraRename = (payload) => {
+      if (payload.oldName === cameraHelper.userData._cameraName) {
+        this._startCameraFinder(cameraHelper);
+      }
+    };
 
-      props.camera.userData.events.on('updateProjectionMatrix', userData._onCameraProjectionUpdate);
-      props.camera.userData.events.once('dispose', userData._onCameraDispose);
+    cameraHelper.userData._onBeforeRender = () => {
+      cameraHelper.visible = cameraHelper.userData._hasCamera
+        && cameraHelper.userData._visible
+        && CameraUtils.current !== cameraHelper.userData._camera;
+    };
+
+    cameraHelper.userData._cameraName = props.cameraName;
+    cameraHelper.userData._visible = props.visible;
+
+    cameraHelper.userData.events.once('addedIntoRoot', () => {
+      const rootInstance = cameraHelper.userData.markup._rootInstance;
+
+      rootInstance.addBeforeRenderListener(cameraHelper.userData._onBeforeRender);
+
+      this._startCameraFinder(cameraHelper);
+    });
+  }
+
+  unmount(self) {
+    this._clearCameraEvents(self);
+
+    delete self.userData._onCameraProjectionUpdate;
+
+    return super.unmount(self);
+  }
+
+  _getCamera(rootInstance, cameraName) {
+    let camera = null;
+
+    if (cameraName) {
+      const camerasByName = rootInstance.getObjectsByName(cameraName).filter(obj => obj instanceof THREE.Camera);
+
+      if (camerasByName.length > 0) {
+        camera = camerasByName[0];
+      }
     }
 
-    threeObject.visible = props.visible;
+    return camera;
   }
 
-  _updateVisible(threeObject, visible) {
-    threeObject.visible = visible;
+  _clearCameraEvents(helper) {
+    if (helper.userData._hasCamera) {
+      helper.userData._camera.userData.events.removeListener('updateProjectionMatrix', userData._onCameraProjectionUpdate);
+      helper.userData._camera.userData.events.removeListener('dispose', userData._onCameraDispose);
+      helper.userData._camera.userData.events.removeListener('rename', userData._onCameraRename);
+    }
+  }
+
+  _setCamera(helper:THREE.CameraHelper, camera) {
+    const userData = helper.userData;
+
+    if (userData._camera === camera) {
+      return;
+    }
+
+    this._clearCameraEvents(helper);
+
+    userData._hasCamera = true;
+    userData._camera = camera;
+    helper.camera = camera;
+    helper.matrix = camera.matrixWorld;
+    helper.update();
+    helper.visible = userData._visible;
+    const cameraEvents = helper.userData._camera.userData.events;
+
+    cameraEvents.on('rename', userData._onCameraRename);
+    cameraEvents.on('updateProjectionMatrix', userData._onCameraProjectionUpdate);
+    cameraEvents.once('dispose', userData._onCameraDispose);
+  }
+
+  _startCameraFinder(helper) {
+    this._clearCameraEvents(helper);
+
+    const rootInstance = helper.userData.markup && helper.userData.markup._rootInstance;
+
+    if (!rootInstance) {
+      return;
+    }
+
+    helper.userData._hasCamera = false;
+    helper.userData._camera = null;
+    helper.camera = new THREE.Camera();
+    helper.visible = false;
+
+    const camera = this._getCamera(rootInstance, helper.userData._cameraName);
+
+    if (camera) {
+      this._setCamera(helper, camera);
+    } else {
+      // try to find camera before renders
+      const findCamera = () => {
+        const foundCamera = this._getCamera(rootInstance, helper.userData._cameraName);
+
+        if (foundCamera) {
+          rootInstance.removeAnimateListener(findCamera);
+
+          this._setCamera(helper, foundCamera);
+        }
+      };
+
+      rootInstance.addAnimateListener(findCamera);
+    }
+  }
+
+  _updateVisible(cameraHelper, visible) {
+    cameraHelper.userData._visible = visible;
+
+    cameraHelper.visible = cameraHelper.userData._hasCamera && visible;
+  }
+
+  _updateCameraName(cameraHelper, cameraName) {
+    this._clearCameraEvents(cameraHelper);
+
+    cameraHelper.userData._cameraName = cameraName;
+
+    this._startCameraFinder(cameraHelper);
   }
 }
 

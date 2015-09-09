@@ -77,6 +77,11 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
     threeObject.name = nextName;
 
+    threeObject.userData.events.emit('rename', {
+      oldName,
+      nextName,
+    });
+
     const markup = threeObject.userData.markup;
 
     if (markup._rootInstance) {
@@ -123,16 +128,19 @@ class Object3DDescriptor extends THREEElementDescriptor {
   }
 
   unmount(self) {
-    self.userData.events.emit('dispose');
-    self.userData.events.removeAllListeners();
-
-    delete self.userData.events;
-
     const markup = self.userData.markup;
 
     if (markup._rootInstance) {
       markup._rootInstance.objectRemoved(self);
     }
+
+    self.userData.events.emit('dispose', {
+      object: self,
+    });
+
+    self.userData.events.removeAllListeners();
+
+    delete self.userData.events;
   }
 }
 

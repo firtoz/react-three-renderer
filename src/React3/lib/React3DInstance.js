@@ -3,6 +3,12 @@ import invariant from 'fbjs/lib/invariant.js';
 import Viewport from './Viewport';
 import ReactUpdates from 'react/lib/ReactUpdates';
 
+import events from 'events';
+
+const {EventEmitter} = events;
+
+import CameraUtils from './utils/Camera';
+
 class React3DInstance {
   constructor(props) {
     const {
@@ -24,11 +30,55 @@ class React3DInstance {
     this._height = height;
     this._renderer.setSize(this._width, this._height);
     this._onAnimate = onAnimate;
-
-    this._renderRequest = requestAnimationFrame(this._render);
     this._objectsByUUID = {};
     this._objectsByName = {};
+
+    this._lastRenderMode = null;
+
+    this._events = new EventEmitter();
+
+    this._events.on('animate', this._callOnAnimate);
+
+    this._renderRequest = requestAnimationFrame(this._render);
   }
+
+  getObjectsByName(objectName) {
+    const objectsByName = this._objectsByName[objectName];
+
+    let result;
+
+    if (objectsByName) {
+      const idToObjectMap = objectsByName.values;
+      result = Object.keys(idToObjectMap)
+        .map((name) => idToObjectMap[name]);
+    } else {
+      result = [];
+    }
+
+    return result;
+  }
+
+  addAnimateListener(callback) {
+    this._events.on('animate', callback);
+  }
+
+  removeAnimateListener(callback) {
+    this._events.removeListener('animate', callback);
+  }
+
+  addBeforeRenderListener(callback) {
+    this._events.on('preRender', callback);
+  }
+
+  removeBeforeRenderListener(callback) {
+    this._events.removeListener('preRender', callback);
+  }
+
+  _callOnAnimate = () => {
+    if (this._onAnimate) {
+      ReactUpdates.batchedUpdates(this._onAnimate);
+    }
+  };
 
   addViewport(viewport) {
     this._viewports.push(viewport);
@@ -53,13 +103,11 @@ class React3DInstance {
   _render = () => {
     this._renderRequest = requestAnimationFrame(this._render);
 
-    if(!this._scene) {
+    if (!this._scene) {
       return;
     }
 
-    if (this._onAnimate) {
-      ReactUpdates.batchedUpdates(this._onAnimate);
-    }
+    this._events.emit('animate');
 
     let mainCamera = null;
 
@@ -77,11 +125,21 @@ class React3DInstance {
     }
 
     if (mainCamera) {
-      this._renderer.autoClear = true;
-      this._renderer.setViewport(0, 0, this._width, this._height);
+      if (this._lastRenderMode !== 'camera') {
+        this._renderer.autoClear = true;
+        this._renderer.setViewport(0, 0, this._width, this._height);
+        this._lastRenderMode = 'camera';
+      }
+      CameraUtils.current = mainCamera;
+      this._events.emit('preRender');
       this._renderer.render(this._scene, mainCamera);
+      CameraUtils.current = null;
     } else if (this._viewports.length > 0) {
-      this._renderer.autoClear = false;
+      if (this._lastRenderMode !== 'viewport') {
+        this._renderer.autoClear = false;
+        this._lastRenderMode = 'viewport';
+      }
+
       this._renderer.clear();
       this._viewports.forEach(viewport => {
         let viewportCamera = null;
@@ -108,7 +166,10 @@ class React3DInstance {
         }
 
         this._renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+        CameraUtils.current = viewportCamera;
+        this._events.emit('preRender');
         this._renderer.render(this._scene, viewportCamera);
+        CameraUtils.current = null;
       });
     }
   };
@@ -132,6 +193,10 @@ class React3DInstance {
   }
 
   unmount() {
+    this._events.removeListener('animate', this._callOnAnimate);
+    this._events.removeAllListeners();
+    delete this._events;
+
     cancelAnimationFrame(this._renderRequest);
 
     try {
@@ -158,6 +223,8 @@ class React3DInstance {
     object.userData.markup._rootInstance = this;
 
     this._addObjectWithName(object.name, object);
+
+    object.userData.events.emit('addedIntoRoot');
   }
 
   objectRenamed(object, oldName, nextName) {
