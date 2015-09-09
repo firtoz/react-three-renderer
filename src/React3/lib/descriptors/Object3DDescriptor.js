@@ -13,6 +13,8 @@ class Object3DDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
+    this._simpleProperties = [];
+
     this.propUpdates = {
       'position': this._updatePosition,
       'rotation': this._updateRotation,
@@ -20,6 +22,12 @@ class Object3DDescriptor extends THREEElementDescriptor {
       'scale': this._updateScale,
       'name': this._updateName,
     };
+
+    this.registerSimpleProperties([
+      'castShadow',
+      'receiveShadow',
+      'visible',
+    ]);
   }
 
   construct() {
@@ -54,6 +62,16 @@ class Object3DDescriptor extends THREEElementDescriptor {
     }
 
     threeObject.userData.events = new EventEmitter();
+
+    this._simpleProperties.forEach(propertyName => {
+      if (props.hasOwnProperty(propertyName)) {
+        threeObject[propertyName] = props[propertyName];
+      }
+
+      this.propUpdates[propertyName] = (threeObject, nextValue) => {
+        threeObject[propertyName] = nextValue;
+      };
+    });
   }
 
   _updatePosition = (threeObject, nextPosition) => {
@@ -141,6 +159,16 @@ class Object3DDescriptor extends THREEElementDescriptor {
     self.userData.events.removeAllListeners();
 
     delete self.userData.events;
+  }
+
+  registerSimpleProperties(propertyNames) {
+    this._simpleProperties = this._simpleProperties.concat(propertyNames);
+
+    propertyNames.forEach(propertyName => {
+      this.propUpdates[propertyName] = (threeObject, nextValue) => {
+        threeObject[propertyName] = nextValue;
+      };
+    });
   }
 }
 

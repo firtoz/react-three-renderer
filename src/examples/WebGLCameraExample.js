@@ -81,7 +81,8 @@ class WebGLCameraExample extends ExampleBase {
       <React3 width={width}
               height={height}
               antialias={true}
-              onAnimate={this._onAnimate}>
+              onAnimate={this._onAnimate}
+      >
         <viewport
           x={0}
           y={0}

@@ -19,18 +19,30 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     return new THREE.Material({});
   }
 
+  applyInitialProps(self, props) {
+    self.userData = {};
+
+    if (props.hasOwnProperty('slot')) {
+      self.userData._materialSlot = props.slot;
+    } else {
+      self.userData._materialSlot = 'material';
+    }
+  }
+
   setParent(material, parentObject3D) {
     invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
-    invariant(parentObject3D.material === undefined, 'Parent already has a material');
+    invariant(parentObject3D[material.userData._materialSlot] === undefined, 'Parent already has a ' + material.userData._materialSlot + ' defined');
 
-    parentObject3D.material = material;
+    parentObject3D[material.userData._materialSlot] = material;
   }
 
   unmount(material) {
     const parent = material.userData.parentMarkup.threeObject;
 
-    if (parent.material === material) {
-      parent.material = undefined;
+    const slot = material.userData._materialSlot;
+
+    if (parent[slot] === material) {
+      parent[slot] = undefined;
     }
 
     material.dispose();

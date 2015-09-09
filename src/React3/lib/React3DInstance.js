@@ -9,6 +9,12 @@ const {EventEmitter} = events;
 
 import CameraUtils from './utils/Camera';
 
+const rendererProperties = [
+  'gammaInput',
+  'gammaOutput',
+  'shadowMapEnabled',
+];
+
 class React3DInstance {
   constructor(props) {
     const {
@@ -26,6 +32,21 @@ class React3DInstance {
     this._viewports = viewports || [];
     this._canvas = canvas;
     this._renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: antialias});
+
+    if (props.hasOwnProperty('pixelRatio')) {
+      this._renderer.setPixelRatio(props.pixelRatio);
+    }
+
+    if (props.hasOwnProperty('clearColor')) {
+      this._renderer.setClearColor(props.clearColor);
+    }
+
+    rendererProperties.forEach(propertyName => {
+      if (props.hasOwnProperty(propertyName)) {
+        this._renderer[propertyName] = props[propertyName];
+      }
+    });
+
     this._width = width;
     this._height = height;
     this._renderer.setSize(this._width, this._height);

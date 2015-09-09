@@ -7,9 +7,6 @@ class SphereGeometryDescriptor extends GeometryDescriptorBase {
 
     this.propUpdates = {
       ...this.propUpdates,
-      'width': this._updateWidth,
-      'height': this._updateHeight,
-      'depth': this._updateDepth,
     };
   }
 
