@@ -1,5 +1,6 @@
 import React from 'react';
 import THREE from 'three';
+import ExampleBase from './ExampleBase';
 
 import React3 from '../React3/React3';
 
@@ -11,15 +12,14 @@ const perspectiveCameraName = 'perspectiveCamera';
 const orthographicCameraName = 'orthographicCamera';
 const mainCameraName = 'mainCamera';
 
-class WebGLCameraExample extends React.Component {
+class WebGLCameraExample extends ExampleBase {
   constructor(props, context) {
     super(props, context);
 
     const r = Date.now() * 0.0005;
 
     this.state = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      ... this.state,
       meshPosition: new THREE.Vector3(Math.cos(r), Math.sin(r), Math.sin(r)).multiplyScalar(700),
       childPosition: new THREE.Vector3(70 * Math.cos(2 * r), 150, 70 * Math.sin(r)),
       activeCameraName: perspectiveCameraName,
@@ -27,23 +27,15 @@ class WebGLCameraExample extends React.Component {
   }
 
   componentDidMount() {
+    super.componentDidMount();
     document.addEventListener('keydown', this._onKeyDown, false);
-
-    window.addEventListener('resize', this._onWindowResize, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this._onKeyDown, false);
 
-    window.removeEventListener('resize', this._onWindowResize, false);
+    super.componentWillUnmount();
   }
-
-  _onWindowResize = () => {
-    this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  };
 
   _onKeyDown = (event) => {
     switch (event.keyCode) {
