@@ -41,7 +41,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     };
 
     cameraHelper.userData._cameraName = props.cameraName;
-    cameraHelper.userData._visible = props.visible;
+    cameraHelper.userData._visible = props.hasOwnProperty('visible') ? props.visible : true;
 
     cameraHelper.userData.events.once('addedIntoRoot', () => {
       const rootInstance = cameraHelper.userData.markup._rootInstance;
@@ -76,9 +76,9 @@ class CameraHelperDescriptor extends Object3DDescriptor {
 
   _clearCameraEvents(helper) {
     if (helper.userData._hasCamera) {
-      helper.userData._camera.userData.events.removeListener('updateProjectionMatrix', userData._onCameraProjectionUpdate);
-      helper.userData._camera.userData.events.removeListener('dispose', userData._onCameraDispose);
-      helper.userData._camera.userData.events.removeListener('rename', userData._onCameraRename);
+      helper.userData._camera.userData.events.removeListener('updateProjectionMatrix', helper.userData._onCameraProjectionUpdate);
+      helper.userData._camera.userData.events.removeListener('dispose', helper.userData._onCameraDispose);
+      helper.userData._camera.userData.events.removeListener('rename', helper.userData._onCameraRename);
     }
   }
 
@@ -144,7 +144,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     cameraHelper.visible = cameraHelper.userData._hasCamera && visible;
   }
 
-  _updateCameraName(cameraHelper, cameraName) {
+  _updateCameraName = (cameraHelper, cameraName) => {
     this._clearCameraEvents(cameraHelper);
 
     cameraHelper.userData._cameraName = cameraName;
