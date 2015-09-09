@@ -9,7 +9,7 @@ class SceneDescriptor extends Object3DDescriptor {
   applyInitialProps(threeObject:THREE.Scene, props) {
     super.applyInitialProps(threeObject, props);
 
-    threeObject.fov = props.fov;
+    threeObject.fog = props.fog;
   }
 
   construct() {

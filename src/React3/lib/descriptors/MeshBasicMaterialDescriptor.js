@@ -13,6 +13,10 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
       materialDescription.wireframe = props.wireframe;
     }
 
+    if (props.hasOwnProperty('map')) {
+      materialDescription.map = props.map;
+    }
+
     return new THREE.MeshBasicMaterial(materialDescription);
   }
 }

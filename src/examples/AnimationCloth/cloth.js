@@ -69,6 +69,7 @@ class Particle {
 
 class Cloth {
   static clothFunction = clothFunction;
+  static MASS = MASS;
 
   constructor(w = 10, h = 10) {
     this.w = w;
@@ -89,8 +90,8 @@ class Cloth {
       }
     }
 
-    function index(u, v) {
-      return u + v * (w + 1);
+    function index(indexU, indexV) {
+      return indexU + indexV * (w + 1);
     }
 
     // Structural

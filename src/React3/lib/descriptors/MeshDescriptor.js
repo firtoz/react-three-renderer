@@ -2,8 +2,6 @@ import THREE from 'three';
 import Object3DDescriptor from './Object3DDescriptor';
 import invariant from 'fbjs/lib/invariant';
 
-import React3CompositeComponentWrapper from '../React3CompositeComponentWrapper';
-
 class MeshDescriptor extends Object3DDescriptor {
   construct(props) {
     const geometry = props.hasOwnProperty('geometry') ? props.geometry : undefined;

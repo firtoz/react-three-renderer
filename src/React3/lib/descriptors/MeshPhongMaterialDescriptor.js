@@ -33,6 +33,10 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
       materialDescription.side = props.side;
     }
 
+    if (props.hasOwnProperty('map')) {
+      materialDescription.map = props.map;
+    }
+
     return new THREE.MeshPhongMaterial(materialDescription);
   }
 }

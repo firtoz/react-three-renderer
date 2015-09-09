@@ -25,8 +25,8 @@ class Poles extends React.Component {
     this.lastPolePosition = new THREE.Vector3(-250, -125);
 
     this.boxPositions = [
-      new THREE.Vector3(-125, -62, 0),
-      new THREE.Vector3(125, -62, 0),
+      new THREE.Vector3(125, -250, 0),
+      new THREE.Vector3(-125, -250, 0),
     ];
   }
 

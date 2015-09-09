@@ -7,6 +7,7 @@ class React3 extends React.Component {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     children: React.PropTypes.any,
+    canvasStyle: React.PropTypes.any,
   };
 
   static defaultProps = {
@@ -41,6 +42,8 @@ class React3 extends React.Component {
     this.react3Renderer.dispose();
     delete this.react3Renderer;
   }
+
+  static findTHREEObject = React3Renderer.findTHREEObject;
 
   render() {
     return (<canvas

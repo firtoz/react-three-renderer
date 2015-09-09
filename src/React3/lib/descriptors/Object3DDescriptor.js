@@ -58,6 +58,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     }
 
     if (props.lookAt) {
+      threeObject.userData._lookAt = props.lookAt;
       threeObject.lookAt(props.lookAt);
     }
 
@@ -67,15 +68,15 @@ class Object3DDescriptor extends THREEElementDescriptor {
       if (props.hasOwnProperty(propertyName)) {
         threeObject[propertyName] = props[propertyName];
       }
-
-      this.propUpdates[propertyName] = (threeObject, nextValue) => {
-        threeObject[propertyName] = nextValue;
-      };
     });
   }
 
   _updatePosition = (threeObject, nextPosition) => {
     threeObject.position.copy(nextPosition);
+
+    if (threeObject.userData._lookAt) {
+      threeObject.lookAt(threeObject.userData._lookAt);
+    }
   };
 
   _updateRotation = (threeObject, nextRotation) => {
@@ -108,6 +109,8 @@ class Object3DDescriptor extends THREEElementDescriptor {
   };
 
   _updateLookAt = (threeObject, lookAt) => {
+    threeObject.userData._lookAt = lookAt;
+
     if (!!lookAt) {
       threeObject.lookAt(lookAt);
     }

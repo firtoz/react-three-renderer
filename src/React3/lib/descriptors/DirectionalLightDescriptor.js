@@ -7,7 +7,6 @@ class DirectionalLightDescriptor extends Object3DDescriptor {
 
     this.registerSimpleProperties([
       'intensity',
-      'castShadow',
       'shadowMapWidth',
       'shadowMapHeight',
       'shadowCameraLeft',
