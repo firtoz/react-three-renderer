@@ -1,6 +1,13 @@
 import React from 'react';
 
+const {PropTypes} = React;
+
 class Info extends React.Component {
+  static propTypes = {
+    pause: PropTypes.func.isRequired,
+    frame: PropTypes.func.isRequired,
+  };
+
   render() {
     return (<div style={{
       position: 'absolute',
@@ -16,7 +23,9 @@ class Info extends React.Component {
         color: 'lightgreen',
       }}>O</b> orthographic <b style={{
         color: 'lightgreen',
-      }}>P</b> perspective
+      }}>P</b> perspective <br/>
+      <button onClick={this.props.pause}>Pause</button>
+      <button onClick={this.props.frame}>Frame</button>
     </div>);
   }
 }

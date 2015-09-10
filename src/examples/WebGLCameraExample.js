@@ -23,6 +23,7 @@ class WebGLCameraExample extends ExampleBase {
       meshPosition: new THREE.Vector3(Math.cos(r), Math.sin(r), Math.sin(r)).multiplyScalar(700),
       childPosition: new THREE.Vector3(70 * Math.cos(2 * r), 150, 70 * Math.sin(r)),
       activeCameraName: perspectiveCameraName,
+      paused: false,
     };
   }
 
@@ -56,6 +57,10 @@ class WebGLCameraExample extends ExampleBase {
   };
 
   _onAnimate = () => {
+    if (this.state.paused) {
+      return;
+    }
+
     const r = Date.now() * 0.0005;
 
     this.setState({
@@ -77,7 +82,23 @@ class WebGLCameraExample extends ExampleBase {
     const aspectRatio = 0.5 * width / height;
 
     return (<div>
-      <Info/>
+      <Info
+        pause={() => {
+          this.setState({
+            paused: !this.state.paused,
+          });
+        }}
+        frame={() => {
+          this.setState({
+            paused: false,
+          }, () => {
+            this._onAnimate();
+            this.setState({
+              paused: true,
+            });
+          });
+        }}
+      />
       <React3 width={width}
               height={height}
               antialias={true}
@@ -104,7 +125,7 @@ class WebGLCameraExample extends ExampleBase {
             far={10000}
             position={new THREE.Vector3(0, 0, 2500)}/>
           <object3D
-            lookAt={meshPosition}>
+            lookAt={meshPosition.clone()}>
             <perspectiveCamera
               name={perspectiveCameraName}
               fov={35 + 30 * Math.sin( 0.5 * r )}
@@ -135,7 +156,7 @@ class WebGLCameraExample extends ExampleBase {
           <cameraHelper
             cameraName={this.state.activeCameraName}/>
           <object3D
-            position={meshPosition}>
+            position={meshPosition.clone()}>
             <mesh>
               <sphereGeometry
                 radius={100}
@@ -146,7 +167,7 @@ class WebGLCameraExample extends ExampleBase {
                 wireframe={true}/>
             </mesh>
             <mesh
-              position={childPosition}>
+              position={childPosition.clone()}>
               <sphereGeometry
                 radius={50}
                 widthSegments={16}
