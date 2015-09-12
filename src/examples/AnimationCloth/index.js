@@ -39,7 +39,7 @@ class AnimationCloth extends ExampleBase {
 
     this.state = {
       ...this.state,
-      minTimePerFrame: 60,
+      minTimePerFrame: 0,
       rotate: true,
       wind: true,
       sphere: false,
@@ -277,6 +277,9 @@ class AnimationCloth extends ExampleBase {
         toggleWind={this._toggleWind}
         toggleSphere={this._toggleSphere}
         togglePins={this._togglePins}
+        rotating={this.state.rotate}
+        winding={this.state.wind}
+        balling={this.state.sphere}
         onFrameChange={(event) => {
           this.setState({
             minTimePerFrame: +event.target.value,
