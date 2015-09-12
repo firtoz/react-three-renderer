@@ -1,15 +1,15 @@
 import React from 'react';
 import THREE from 'three';
 
-import React3 from '../React3/React3';
+import React3 from '../../React3/React3';
 
-import ExampleBase from './ExampleBase';
+import ExampleBase from '../ExampleBase';
 
-import Info from './AnimationCloth/Info';
+import Info from './Info';
 
-import Cloth from './AnimationCloth/Cloth';
-import ClothGeometry from './AnimationCloth/ClothGeometry';
-import Poles from './AnimationCloth/Poles';
+import Cloth from './Cloth';
+import ClothGeometry from './ClothGeometry';
+import Poles from './Poles';
 
 const fragmentShaderDepth = `
       uniform sampler2D texture;

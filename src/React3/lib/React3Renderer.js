@@ -1,17 +1,18 @@
-import DOMProperty from '../../../node_modules/react/lib/DOMProperty';
-import ReactElement from '../../../node_modules/react/lib/ReactElement';
-import ReactInstanceMap from '../../../node_modules/react/lib/ReactInstanceMap';
-import ReactEmptyComponent from '../../../node_modules/react/lib/ReactEmptyComponent';
-import ReactInstanceHandles from '../../../node_modules/react/lib/ReactInstanceHandles';
-import ReactReconciler from '../../../node_modules/react/lib/ReactReconciler';
-import ReactUpdates from '../../../node_modules/react/lib/ReactUpdates';
-import ReactCurrentOwner from '../../../node_modules/react/lib/ReactCurrentOwner';
-import ReactUpdateQueue from '../../../node_modules/react/lib/ReactUpdateQueue';
-import emptyObject from '../../../node_modules/fbjs/lib/emptyObject';
-import invariant from '../../../node_modules/fbjs/lib/invariant';
-import warning from '../../../node_modules/fbjs/lib/warning';
-import flattenChildren from '../../../node_modules/react/lib/flattenChildren';
-import shouldUpdateReactComponent from '../../../node_modules/react/lib/shouldUpdateReactComponent';
+import DOMProperty from 'react/lib/DOMProperty';
+import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
+import ReactElement from 'react/lib/ReactElement';
+import ReactInstanceMap from 'react/lib/ReactInstanceMap';
+import ReactEmptyComponentRegistry from 'react/lib/ReactEmptyComponentRegistry';
+import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
+import ReactReconciler from 'react/lib/ReactReconciler';
+import ReactUpdates from 'react/lib/ReactUpdates';
+import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
+import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
+import emptyObject from 'fbjs/lib/emptyObject';
+import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
+import flattenChildren from 'react/lib/flattenChildren';
+import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 import React3DInstance from './React3DInstance';
 
 import InternalComponent from './InternalComponent';
@@ -28,11 +29,13 @@ const SEPARATOR = ReactInstanceHandles.SEPARATOR;
  * @type string
  * @name process.env.NODE_ENV
  */
-
 class TopLevelWrapper {
   render() {
     return this.props;
   }
+
+  static isReactClass = {};
+  static displayName = 'TopLevelWrapper';
 }
 
 function unmountComponentInternal(instance, container) {
@@ -182,7 +185,7 @@ class React3Renderer {
   getUserDataFromInstance(instance) {
     const id = ReactInstanceMap.get(instance)._rootNodeID;
 
-    if (ReactEmptyComponent.isNullComponentID(id)) {
+    if (ReactEmptyComponentRegistry.isNullComponentID(id)) {
       return null;
     }
 
@@ -352,10 +355,10 @@ class React3Renderer {
   };
 
   nativeTagToRootNodeID = () => {
-    console.log('wat');
-    debugger;
-
-    invariant(false, 'Wat!');
+    // console.log('wat');
+    // debugger;
+    // invariant(false, 'Wat!');
+    return null;
   };
 
   /**
@@ -466,7 +469,7 @@ class React3Renderer {
 
     const markup = ReactReconciler.mountComponent(componentInstance, rootID, transaction, context);
     componentInstance._renderedComponent._topLevelWrapper = componentInstance;
-    this._mountRootImage(markup, container, shouldReuseMarkup);
+    this._mountRootImage(markup, container, shouldReuseMarkup, transaction);
   };
 
   _mountRootImage(markup, container) {
@@ -584,7 +587,7 @@ class React3Renderer {
       }
     }
 
-    const nextWrappedElement = new ReactElement(TopLevelWrapper, null, null, null, nextElement);
+    const nextWrappedElement = new ReactElement(TopLevelWrapper, null, null, null, null, null, nextElement);
 
     const prevComponent = this._instancesByReactRootID[this.getReactRootID(root)];
 
@@ -599,7 +602,7 @@ class React3Renderer {
     }
 
     const reactRootUserData = getReactRootUserDataInObject3D(root);
-    const containerHasReactMarkup = reactRootUserData && this.isRenderedByReact(reactRootUserData);
+    const containerHasReactMarkup = reactRootUserData && internalGetID(reactRootUserData);
 
     // if (process.env.NODE_ENV !== 'production') {
     //   if (!containerHasReactMarkup || reactRootUserData.nextSibling) {
@@ -709,16 +712,6 @@ class React3Renderer {
     return rootElement && this.getID(rootElement.userData);
   }
 
-  isRenderedByReact(userData) {
-    const id = this.getID(userData);
-
-    if (id) {
-      return id.charAt(0) === SEPARATOR;
-    }
-
-    return false;
-  }
-
   instantiateReactComponent(elementToInstantiate) {
     // console.log('instantiating react component', elementToInstantiate);
     let instance;
@@ -726,10 +719,8 @@ class React3Renderer {
     let virtualNode = elementToInstantiate;
 
     if (virtualNode === null || virtualNode === false) {
-      virtualNode = ReactEmptyComponent.emptyElement;
-    }
-
-    if (typeof virtualNode === 'object') {
+      virtualNode = new ReactEmptyComponent(this.instantiateReactComponent);
+    } else if (typeof virtualNode === 'object') {
       const element = virtualNode;
       if (!(element && (typeof element.type === 'function' || typeof element.type === 'string'))) {
         if (process.env.NODE_ENV !== 'production') {
@@ -756,7 +747,9 @@ class React3Renderer {
         // This is temporarily available for custom components that are not string
         // representations. I.e. ART. Once those are updated to use the string
         // representation, we can drop this code path.
-        instance = new element.type(element);
+        const Constructor = element.type;
+
+        instance = new Constructor(element);
 
         console.log('internal component type herp derp');
       } else {

@@ -46,8 +46,6 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   mountComponent(rootID, transaction, context) {
-    // console.log('mounting composite component');
-
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;
     this._rootNodeID = rootID;
@@ -90,7 +88,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       process.env.NODE_ENV !== 'production' ? warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component') : undefined;
       process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentShouldUpdate !== 'function', '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', this.getName() || 'A component') : undefined;
       process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentDidUnmount !== 'function', '%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', this.getName() || 'A component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentWillReceiveProps !== 'function', '%s has a method called ' + 'componentWillReceiveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component') : undefined;
+      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentWillRecieveProps !== 'function', '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component') : undefined;
     }
 
     let initialState = inst.state;
@@ -125,7 +123,6 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const markup = ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, this._processChildContext(context));
     this._threeObject = this._renderedComponent._threeObject;
     if (inst.componentDidMount) {
-      // console.log('calling component did mount for markup', markup);
       transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
     }
 

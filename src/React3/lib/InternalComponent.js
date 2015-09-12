@@ -3,7 +3,6 @@ import DOMProperty from '../../../node_modules/react/lib/DOMProperty';
 import ReactMultiChild from '../../../node_modules/react/lib/ReactMultiChild';
 
 import invariant from '../../../node_modules/fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning.js';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
@@ -37,6 +36,8 @@ function _arrayMove(array, oldIndex, newIndex) {
 const ReactMultiChildMixin = ReactMultiChild.Mixin;
 
 class InternalComponent {
+  static displayName = 'React3Component';
+
   constructor(element, react3RendererInstance) {
     this._currentElement = element;
     /**
@@ -63,37 +64,6 @@ class InternalComponent {
   construct(element) {
     // console.log('constructing', element);
     this._currentElement = element;
-  }
-
-  mountChildren(nestedChildren, transaction, context) {
-    const children = this._react3RendererInstance.instantiateChildren(nestedChildren, transaction, context);
-    this._renderedChildren = children;
-    const mountImages = [];
-    let index = 0;
-    for (const name in children) {
-      if (children.hasOwnProperty(name)) {
-        const child = children[name];
-        // Inlined for performance, see `ReactInstanceHandles.createReactID`.
-        const rootID = this._rootNodeID + name;
-        const mountImage = ReactReconciler.mountComponent(child, rootID, transaction, context);
-        child._mountIndex = index;
-        mountImages.push(mountImage);
-        index++;
-      }
-    }
-    return mountImages;
-  }
-
-  moveChild(child, toIndex, lastIndex) {
-    if (toIndex === lastIndex) {
-      return;
-    }
-
-    this.threeElementDescriptor.moveChild(this._threeObject, child._threeObject, toIndex, lastIndex);
-
-    const markup = this._markup;
-
-    _arrayMove(markup.userData.childrenMarkup, lastIndex, toIndex);
   }
 
   mountComponent(rootID, transaction, context) {
@@ -150,9 +120,81 @@ class InternalComponent {
     return markup;
   }
 
+  _reconcilerInstantiateChildren(nestedChildren, transaction, context) {
+    // if (__DEV__) {
+    //   if (this._currentElement) {
+    //     try {
+    //       ReactCurrentOwner.current = this._currentElement._owner;
+    //       return this._react3RendererInstance.instantiateChildren(
+    //         nestedChildren, transaction, context
+    //       );
+    //     } finally {
+    //       ReactCurrentOwner.current = null;
+    //     }
+    //   }
+    // }
+    return this._react3RendererInstance.instantiateChildren(
+      nestedChildren, transaction, context
+    );
+  }
+
+  _reconcilerUpdateChildren(prevChildren, nextNestedChildrenElements, transaction, context) {
+    // var nextChildren;
+    // if (__DEV__) {
+    //   if (this._currentElement) {
+    //     try {
+    //       ReactCurrentOwner.current = this._currentElement._owner;
+    //       nextChildren = flattenChildren(nextNestedChildrenElements);
+    //     } finally {
+    //       ReactCurrentOwner.current = null;
+    //     }
+    //     return ReactChildReconciler.updateChildren(
+    //       prevChildren, nextChildren, transaction, context
+    //     );
+    //   }
+    // }
+    const nextChildren = flattenChildren(nextNestedChildrenElements);
+    return this._react3RendererInstance.updateChildren(
+      prevChildren, nextChildren, transaction, context
+    );
+  }
+
+
+  mountChildren(nestedChildren, transaction, context) {
+    const children = this._reconcilerInstantiateChildren(
+      nestedChildren, transaction, context);
+    this._renderedChildren = children;
+    const mountImages = [];
+    let index = 0;
+    for (const name in children) {
+      if (children.hasOwnProperty(name)) {
+        const child = children[name];
+        // Inlined for performance, see `ReactInstanceHandles.createReactID`.
+        const rootID = this._rootNodeID + name;
+        const mountImage = ReactReconciler.mountComponent(child, rootID, transaction, context);
+        child._mountIndex = index;
+        mountImages.push(mountImage);
+        index++;
+      }
+    }
+    return mountImages;
+  }
+
+  moveChild(child, toIndex, lastIndex) {
+    if (toIndex === lastIndex) {
+      return;
+    }
+
+    this.threeElementDescriptor.moveChild(this._threeObject, child._threeObject, toIndex, lastIndex);
+
+    const markup = this._markup;
+
+    _arrayMove(markup.userData.childrenMarkup, lastIndex, toIndex);
+  }
+
 
   receiveComponent(nextElement, transaction, context) {
-    //console.log('receive component');
+    // console.log('receive component');
 
     const prevElement = this._currentElement;
     this._currentElement = nextElement;
@@ -161,7 +203,7 @@ class InternalComponent {
   }
 
   updateComponent(transaction, prevElement, nextElement, context) {
-    //console.log('ahh updating', transaction, prevElement, nextElement, context);
+    // console.log('ahh updating', transaction, prevElement, nextElement, context);
 
     const lastProps = prevElement.props;
     const nextProps = this._currentElement.props;
