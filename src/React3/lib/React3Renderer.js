@@ -211,6 +211,11 @@ class React3Renderer {
 
     this._root = {};
 
+    this._highlightElement = document.createElement('div');
+    this._highlightCache = null;
+
+    this._agent = null;
+
     // this._scene = new THREE.Scene();
 
     // Inject the runtime into a devtools global hook regardless of browser.
@@ -225,8 +230,56 @@ class React3Renderer {
       };
 
       __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this.rendererDefinition);
+
+      if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent !== 'undefined') {
+        const agent = __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent;
+        this._hookAgent(agent);
+      } else {
+        __REACT_DEVTOOLS_GLOBAL_HOOK__.on('react-devtools', (agent) => {
+          this._hookAgent(agent);
+        });
+      }
     }
   }
+
+  _hookAgent(agent) {
+    this._agent = agent;
+
+    // agent.on('startInspecting', (...args) => {
+    //   console.log('start inspecting?', args);
+    // });
+    // agent.on('setSelection', (...args) => {
+    //   console.log('set selection?', args);
+    // });
+    // agent.on('selected', (...args) => {
+    //   console.log('selected?', args);
+    // });
+    agent.on('highlight', this._onHighlightFromInspector);
+    agent.on('hideHighlight', this._onHideHighlightFromInspector);
+    // agent.on('highlightMany', (...args) => {
+    //   console.log('highlightMany?', args);
+    // });
+  }
+
+  _onHideHighlightFromInspector = () => {
+    if (this._highlightCache && this._highlightCache.react3internalComponent) {
+      const internalComponent = this._highlightCache.react3internalComponent;
+
+      internalComponent.hideHighlight();
+
+      this._highlightCache = null;
+    }
+  };
+
+  _onHighlightFromInspector = (highlightInfo) => {
+    if (highlightInfo.node === this._highlightElement) {
+      if (this._highlightCache && this._highlightCache.react3internalComponent) {
+        const internalComponent = this._highlightCache.react3internalComponent;
+
+        internalComponent.highlightComponent();
+      }
+    }
+  };
 
   findDeepestCachedAncestorImpl = (ancestorID) => {
     const ancestorUserData = this.userDataCache[ancestorID];
@@ -347,11 +400,12 @@ class React3Renderer {
     return this.userDataCache[id];
   }
 
-  findNodeHandle = () => {
-    // used by react developer tools
-    // TODO create a temporary handle?
-    return this._canvas;
-    // getUserData(instance._rootNodeID);
+  findNodeHandle = (instance) => {
+    const userData = this.getUserData(instance._rootNodeID);
+    const object3D = userData;
+
+    this._highlightCache = userData;
+    return this._highlightElement;
   };
 
   nativeTagToRootNodeID = () => {
@@ -524,7 +578,10 @@ class React3Renderer {
           return '---USERDATA---';
         },
       },
-      getBoundingClientRect: this.getBoundingClientRect,
+      getBoundingClientRect: () => {
+        console.log('?', this.getBoundingClientRect());
+        return this.getBoundingClientRect();
+      },
       threeObject: container,
       toJSON: () => {
         return '---MARKUP---';
@@ -650,14 +707,17 @@ class React3Renderer {
     delete this.findComponentRootReusableArray;
     delete this.userDataCache;
     delete this.deepestObject3DSoFar;
+    delete this._highlightElement;
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
 
-    if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent) {
-      debugger;
-
-      __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent.onUnmounted(this.rendererDefinition);
+    if (this._agent) {
+      this._agent.onUnmounted(this.rendererDefinition);
+      this._agent.removeListener('highlight', this._onHighlightFromInspector);
+      this._agent.removeListener('hideHighlight', this._onHideHighlightFromInspector);
     }
+
+    delete this._agent;
   }
 
   _updateRootComponent(prevComponent, nextElement, container, callback) {

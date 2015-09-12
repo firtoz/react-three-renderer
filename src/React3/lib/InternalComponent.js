@@ -85,6 +85,7 @@ class InternalComponent {
         [ID_ATTR_NAME]: rootID,
         childrenMarkup: mountImages,
         object3D: this._threeObject,
+        react3internalComponent: this, // used for highlighting etc
         toJSON: () => {
           return '---USERDATA---';
         },
@@ -291,6 +292,14 @@ class InternalComponent {
       node._reactInternalComponent = null;
       this._nodeWithLegacyProperties = null;
     }
+  }
+
+  highlightComponent() {
+    this.threeElementDescriptor.highlight(this._threeObject);
+  }
+
+  hideHighlight() {
+    this.threeElementDescriptor.hideHighlight(this._threeObject);
   }
 
   emptyJson() {

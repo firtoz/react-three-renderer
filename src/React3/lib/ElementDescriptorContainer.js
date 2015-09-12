@@ -20,40 +20,40 @@ import ShaderMaterial from './descriptors/ShaderMaterial';
 import PlaneBufferGeometry from './descriptors/PlaneBufferGeometry';
 
 class ElementDescriptorContainer {
-  constructor(react3Instance) {
-    this.react3Instance = react3Instance;
+  constructor(react3RendererInstance) {
+    this.react3RendererInstance = react3RendererInstance;
 
     /**
      * @type {Object.<string, THREEElementDescriptor>}
      */
     this.descriptors = {
-      react3: new React3Descriptor(react3Instance),
+      react3: new React3Descriptor(react3RendererInstance),
 
-      viewport: new ViewportDescriptor(react3Instance),
-      scene: new SceneDescriptor(react3Instance),
+      viewport: new ViewportDescriptor(react3RendererInstance),
+      scene: new SceneDescriptor(react3RendererInstance),
 
-      object3D: new Object3DDescriptor(react3Instance),
+      object3D: new Object3DDescriptor(react3RendererInstance),
 
-      orthographicCamera: new OrthographicCameraDescriptor(react3Instance),
-      perspectiveCamera: new PerspectiveCameraDescriptor(react3Instance),
-      cameraHelper: new CameraHelperDescriptor(react3Instance),
+      orthographicCamera: new OrthographicCameraDescriptor(react3RendererInstance),
+      perspectiveCamera: new PerspectiveCameraDescriptor(react3RendererInstance),
+      cameraHelper: new CameraHelperDescriptor(react3RendererInstance),
 
-      mesh: new MeshDescriptor(react3Instance),
-      pointCloud: new PointCloudDescriptor(react3Instance),
+      mesh: new MeshDescriptor(react3RendererInstance),
+      pointCloud: new PointCloudDescriptor(react3RendererInstance),
 
-      meshBasicMaterial: new MeshBasicMaterialDescriptor(react3Instance),
-      meshPhongMaterial: new MeshPhongMaterialDescriptor(react3Instance),
-      pointCloudMaterial: new PointCloudMaterialDescriptor(react3Instance),
-      shaderMaterial: new ShaderMaterial(react3Instance),
+      meshBasicMaterial: new MeshBasicMaterialDescriptor(react3RendererInstance),
+      meshPhongMaterial: new MeshPhongMaterialDescriptor(react3RendererInstance),
+      pointCloudMaterial: new PointCloudMaterialDescriptor(react3RendererInstance),
+      shaderMaterial: new ShaderMaterial(react3RendererInstance),
 
-      geometry: new GeometryDescriptor(react3Instance),
-      boxGeometry: new BoxGeometryDescriptor(react3Instance),
-      sphereGeometry: new SphereGeometryDescriptor(react3Instance),
-      parametricGeometry: new ParametricGeometryDescriptor(react3Instance),
-      planeBufferGeometry: new PlaneBufferGeometry(react3Instance),
+      geometry: new GeometryDescriptor(react3RendererInstance),
+      boxGeometry: new BoxGeometryDescriptor(react3RendererInstance),
+      sphereGeometry: new SphereGeometryDescriptor(react3RendererInstance),
+      parametricGeometry: new ParametricGeometryDescriptor(react3RendererInstance),
+      planeBufferGeometry: new PlaneBufferGeometry(react3RendererInstance),
 
-      ambientLight: new AmbientLightDescriptor(react3Instance),
-      directionalLight: new DirectionalLightDescriptor(react3Instance),
+      ambientLight: new AmbientLightDescriptor(react3RendererInstance),
+      directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
     };
   }
 }

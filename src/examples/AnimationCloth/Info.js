@@ -8,8 +8,8 @@ class Info extends React.Component {
     toggleSphere: PropTypes.func.isRequired,
     togglePins: PropTypes.func.isRequired,
     toggleRotate: PropTypes.func.isRequired,
-    pause: PropTypes.func.isRequired,
-    frame: PropTypes.func.isRequired,
+    onFrameChange: PropTypes.func.isRequired,
+    minTimePerFrame: PropTypes.number.isRequired,
   };
 
   render() {
@@ -23,8 +23,8 @@ class Info extends React.Component {
       toggleWind,
       toggleSphere,
       togglePins,
-      pause,
-      frame,
+      minTimePerFrame,
+      onFrameChange,
       } = this.props;
 
     return (<div style={{
@@ -43,8 +43,11 @@ class Info extends React.Component {
       <span> <a onClick={toggleWind} style={linkStyle}>Wind</a></span> |
       <span> <a onClick={toggleSphere} style={linkStyle}>Ball</a></span> |
       <span> <a onClick={togglePins} style={linkStyle}>Pins</a></span> |
-      <span> <a onClick={pause} style={linkStyle}>Pause</a></span> |
-      <span> <a onClick={frame} style={linkStyle}>Frame</a></span>
+      <span> Time between frames: <input
+        onChange={onFrameChange}
+        value={minTimePerFrame}
+        type="number"
+        min="0"/> </span>
     </div>);
   }
 }

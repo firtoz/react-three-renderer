@@ -2,9 +2,6 @@ import THREE from 'three';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 
-import events from 'events';
-const {EventEmitter} = events;
-
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
 }
@@ -61,8 +58,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
       threeObject.userData._lookAt = props.lookAt;
       threeObject.lookAt(props.lookAt);
     }
-
-    threeObject.userData.events = new EventEmitter();
 
     this._simpleProperties.forEach(propertyName => {
       if (props.hasOwnProperty(propertyName)) {
@@ -172,6 +167,23 @@ class Object3DDescriptor extends THREEElementDescriptor {
         threeObject[propertyName] = nextValue;
       };
     });
+  }
+
+  highlight(threeObject) {
+    threeObject.userData.events.emit('highlight', {
+      uuid: threeObject.uuid,
+      boundingBoxFunc: () => {
+        const boundingBox = new THREE.Box3();
+
+        boundingBox.setFromObject(threeObject);
+
+        return boundingBox;
+      },
+    });
+  }
+
+  hideHighlight(threeObject) {
+    threeObject.userData.events.emit('hideHighlight');
   }
 }
 

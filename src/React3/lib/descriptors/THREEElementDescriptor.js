@@ -1,21 +1,22 @@
 import invariant from 'fbjs/lib/invariant';
-import React3Instance from '../React3DInstance';
+import React3Renderer from '../React3DInstance';
+
+import events from 'events';
+const {EventEmitter} = events;
 
 /**
  * @abstract
  */
 class THREEElementDescriptor {
-  constructor(react3Instance:React3Instance) {
-    /**
-     * @protected
-     * @type {React3Instance}
-     */
-    this._react3Instance = react3Instance;
+  constructor(react3RendererInstance:React3Renderer) {
+    this.react3RendererInstance = react3RendererInstance;
     this.propUpdates = {};
   }
 
   applyInitialProps(self, props) { // eslint-disable-line no-unused-vars
     // do nothing for now
+
+    self.userData.events = new EventEmitter();
   }
 
   construct() {
@@ -68,6 +69,14 @@ class THREEElementDescriptor {
    */
   completePropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
 
+  }
+
+  highlight(threeObject) { // eslint-disable-line no-unused-vars
+    // no highlighting by default!
+  }
+
+  hideHighlight(threeObject) { // eslint-disable-line no-unused-vars
+    // no highlighting by default!
   }
 }
 

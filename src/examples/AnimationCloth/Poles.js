@@ -13,21 +13,22 @@ class Poles extends React.Component {
       shininess: 100,
     });
 
-    this.sidePolePositions = [
-      new THREE.Vector3(-125, -62, 0),
-      new THREE.Vector3(125, -62, 0),
-    ];
-
-    this.topPolePosition = new THREE.Vector3(0, -250 + 750 / 2, 0);
-
     this.boxGeometry = new THREE.BoxGeometry(10, 10, 10);
 
-    this.lastPolePosition = new THREE.Vector3(-250, -125);
-
-    this.boxPositions = [
-      new THREE.Vector3(125, -250, 0),
-      new THREE.Vector3(-125, -250, 0),
-    ];
+    this.state = {
+      poleMaterialColor: this.poleMaterial.color.getHex().toString(16),
+      poleMaterialSpecular: this.poleMaterial.specular.getHex().toString(16),
+      poleMaterialShininess: this.poleMaterial.shininess,
+      sidePolePositions: [
+        new THREE.Vector3(-125, -62, 0),
+        new THREE.Vector3(125, -62, 0),
+      ],
+      boxPositions: [
+        new THREE.Vector3(125, -250, 0),
+        new THREE.Vector3(-125, -250, 0),
+      ],
+      topPolePosition: new THREE.Vector3(0, -250 + 750 / 2, 0),
+    };
   }
 
   componentWillUnmount() {
@@ -39,22 +40,26 @@ class Poles extends React.Component {
   }
 
   render() {
+    this.poleMaterial.color.set(Number.parseInt(this.state.poleMaterialColor, 16));
+    this.poleMaterial.specular.set(Number.parseInt(this.state.poleMaterialSpecular, 16));
+    this.poleMaterial.shininess = this.state.poleMaterialShininess;
+
     return (<object3D>
-      {this.sidePolePositions.map((position, i) => {
+      {this.state.sidePolePositions.map((position, i) => {
         return (<mesh
           key={i}
           geometry={this.poleGeometry}
           material={this.poleMaterial}
           position={position}
-          receiveShadow={true}
-          castShadow={true}
+          receiveShadow
+          castShadow
         />);
       })}
       <mesh
         material={this.poleMaterial}
-        position={this.topPolePosition}
-        receiveShadow={true}
-        castShadow={true}
+        position={this.state.topPolePosition}
+        receiveShadow
+        castShadow
       >
         <boxGeometry
           width={255}
@@ -62,14 +67,14 @@ class Poles extends React.Component {
           depth={5}
         />
       </mesh>
-      {this.boxPositions.map((position, i) => {
+      {this.state.boxPositions.map((position, i) => {
         return (<mesh
           key={i}
           geometry={this.boxGeometry}
           material={this.poleMaterial}
           position={position}
-          receiveShadow={true}
-          castShadow={true}
+          receiveShadow
+          castShadow
         />);
       })}
     </object3D>);

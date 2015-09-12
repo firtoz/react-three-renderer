@@ -1,12 +1,12 @@
 import React from 'react';
 import THREE from 'three';
-import ExampleBase from './ExampleBase';
+import ExampleBase from './../ExampleBase';
 
-import React3 from '../React3/React3';
+import React3 from '../../React3/React3';
 
-import Info from './WebGLCameraExample/Info';
+import Info from './Info';
 
-import PointCloud from './WebGLCameraExample/PointCloud';
+import PointCloud from './PointCloud';
 
 const perspectiveCameraName = 'perspectiveCamera';
 const orthographicCameraName = 'orthographicCamera';
@@ -101,7 +101,7 @@ class WebGLCameraExample extends ExampleBase {
       />
       <React3 width={width}
               height={height}
-              antialias={true}
+              antialias
               onAnimate={this._onAnimate}
       >
         <viewport
@@ -150,7 +150,7 @@ class WebGLCameraExample extends ExampleBase {
                 heightSegments={8}/>
               <meshBasicMaterial
                 color={0x0000ff}
-                wireframe={true}/>
+                wireframe/>
             </mesh>
           </object3D>
           <cameraHelper
@@ -164,7 +164,7 @@ class WebGLCameraExample extends ExampleBase {
                 heightSegments={8}/>
               <meshBasicMaterial
                 color={0xffffff}
-                wireframe={true}/>
+                wireframe/>
             </mesh>
             <mesh
               position={childPosition.clone()}>
@@ -174,7 +174,7 @@ class WebGLCameraExample extends ExampleBase {
                 heightSegments={8}/>
               <meshBasicMaterial
                 color={0x00ff00}
-                wireframe={true}/>
+                wireframe/>
             </mesh>
           </object3D>
           <PointCloud/>

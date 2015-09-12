@@ -9,6 +9,8 @@ const {EventEmitter} = events;
 
 import CameraUtils from './utils/Camera';
 
+import React3Renderer from '../lib/React3Renderer';
+
 const rendererProperties = [
   'gammaInput',
   'gammaOutput',
@@ -16,7 +18,7 @@ const rendererProperties = [
 ];
 
 class React3DInstance {
-  constructor(props) {
+  constructor(props, rendererInstance:React3Renderer) {
     const {
       mainCamera,
       viewports,
@@ -27,7 +29,24 @@ class React3DInstance {
       antialias,
       } = props;
 
+    this._rendererInstance = rendererInstance;
+
     this._scene = null;
+    this._highlightScene = new THREE.Scene();
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x0000ff,
+      transparent: true,
+      opacity: 0.4,
+    });
+
+    this._highlightCube = new THREE.Mesh(geometry, material);
+    this._highlightScene.add(this._highlightCube);
+
+    this._highlightObjectId = null;
+    this._getHighlightBoundingBox = null;
+
     this._mainCameraName = mainCamera;
     this._viewports = viewports || [];
     this._canvas = canvas;
@@ -61,6 +80,8 @@ class React3DInstance {
     this._events.on('animate', this._callOnAnimate);
 
     this._renderRequest = requestAnimationFrame(this._render);
+
+    this.userData = {};
   }
 
   getObjectsByName(objectName) {
@@ -153,7 +174,7 @@ class React3DInstance {
       }
       CameraUtils.current = mainCamera;
       this._events.emit('preRender');
-      this._renderer.render(this._scene, mainCamera);
+      this._renderScene(mainCamera);
       CameraUtils.current = null;
     } else if (this._viewports.length > 0) {
       if (this._lastRenderMode !== 'viewport') {
@@ -189,11 +210,33 @@ class React3DInstance {
         this._renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
         CameraUtils.current = viewportCamera;
         this._events.emit('preRender');
-        this._renderer.render(this._scene, viewportCamera);
+        this._renderScene(viewportCamera);
         CameraUtils.current = null;
       });
     }
   };
+
+  _renderScene(camera) {
+    this._renderer.render(this._scene, camera);
+    if (this._highlightObjectId !== null) {
+      const boundingBox = this._getHighlightBoundingBox();
+
+      const center = boundingBox.min.clone().add(boundingBox.max).multiplyScalar(0.5);
+
+
+      const size = boundingBox.max.clone().sub(boundingBox.min);
+
+      const obj = this._objectsByUUID[this._highlightObjectId];
+
+      this._highlightCube.position.copy(center);
+      this._highlightCube.scale.copy(size);
+
+      const autoClear = this._renderer.autoClear;
+      this._renderer.autoClear = false;
+      this._renderer.render(this._highlightScene, camera);
+      this._renderer.autoClear = autoClear;
+    }
+  }
 
   setScene(scene) {
     this._scene = scene;
@@ -217,6 +260,7 @@ class React3DInstance {
     this._events.removeListener('animate', this._callOnAnimate);
     this._events.removeAllListeners();
     delete this._events;
+    delete this._rendererInstance;
 
     cancelAnimationFrame(this._renderRequest);
 
@@ -234,6 +278,9 @@ class React3DInstance {
     delete this._objectsByUUID;
     delete this._viewports;
     delete this._scene;
+    delete this._highlightScene;
+    delete this._highlightObjectId;
+    delete this._getHighlightBoundingBox;
   }
 
   objectMounted(object) {
@@ -245,8 +292,34 @@ class React3DInstance {
 
     this._addObjectWithName(object.name, object);
 
+    object.userData.events.on('highlight', this._objectHighlighted);
+
     object.userData.events.emit('addedIntoRoot');
   }
+
+  _hideHighlight = () => {
+    this._highlightObjectId = null;
+    this._getHighlightBoundingBox = null;
+  };
+
+  _objectHighlighted = (info) => {
+    const {uuid, boundingBoxFunc} = info;
+
+    let obj;
+
+    if (this._highlightObjectId) {
+      obj = this._objectsByUUID[this._highlightObjectId];
+
+      obj.userData.events.removeListener('hideHighlight', this._hideHighlight);
+    }
+
+    this._highlightObjectId = uuid;
+    this._getHighlightBoundingBox = boundingBoxFunc;
+
+    obj = this._objectsByUUID[uuid];
+
+    obj.userData.events.once('hideHighlight', this._hideHighlight);
+  };
 
   objectRenamed(object, oldName, nextName) {
     this._removeObjectWithName(oldName, object);
@@ -279,6 +352,13 @@ class React3DInstance {
   objectRemoved(object) {
     invariant(this._objectsByUUID[object.uuid] === object, 'The removed object does not belong here!?');
 
+    if (this._highlightObjectId === object.uuid) {
+      this._highlightObjectId = null;
+    }
+
+    object.userData.events.removeListener('highlight', this._objectHighlighted);
+    object.userData.events.removeListener('hideHighlight', this._hideHighlight);
+
     delete this._objectsByUUID[object.uuid];
 
     this._removeObjectWithName(object.name, object);
@@ -294,11 +374,32 @@ class React3DInstance {
 
       this.objectMounted(current);
 
-      for (let i = 0; i < current.children.length; ++i) {
-        const child = current.children[i];
+      const childrenMarkup = current.userData.childrenMarkup;
 
-        allChildren.push(child);
+      for (let i = 0; i < childrenMarkup.length; ++i) {
+        const childMarkup = childrenMarkup[i];
+
+        allChildren.push(childMarkup.threeObject);
       }
+
+      // debugger;
+      //
+      // if(current.children) {
+      //   for (let i = 0; i < current.children.length; ++i) {
+      //     const child = current.children[i];
+      //
+      //     allChildren.push(child);
+      //   }
+      // }
+      //
+      // if (current instanceof THREE.Mesh) {
+      //   if (current.material && current.material.userData && this._rendererInstance.getID(current.material.userData)) {
+      //     allChildren.push(current.material);
+      //   }
+      //   if (current.geometry && current.geometry.userData && this._rendererInstance.getID(current.geometry.userData)) {
+      //     allChildren.push(current.geometry);
+      //   }
+      // }
     }
   }
 }

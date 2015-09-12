@@ -20,13 +20,17 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   applyInitialProps(self, props) {
-    self.userData = {};
+    self.userData = {
+      ...self.userData,
+    };
 
     if (props.hasOwnProperty('slot')) {
       self.userData._materialSlot = props.slot;
     } else {
       self.userData._materialSlot = 'material';
     }
+
+    super.applyInitialProps(self, props);
   }
 
   setParent(material, parentObject3D) {
@@ -34,6 +38,12 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     invariant(parentObject3D[material.userData._materialSlot] === undefined, 'Parent already has a ' + material.userData._materialSlot + ' defined');
 
     parentObject3D[material.userData._materialSlot] = material;
+
+    const parentMarkup = parentObject3D.userData.markup;
+
+    if (parentMarkup && parentMarkup._rootInstance) {
+      parentMarkup._rootInstance.objectMounted(self);
+    }
   }
 
   unmount(material) {
@@ -46,6 +56,24 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     }
 
     material.dispose();
+  }
+
+  highlight(threeObject) {
+    const ownerMesh = threeObject.userData.parentMarkup.threeObject;
+    threeObject.userData.events.emit('highlight', {
+      uuid: threeObject.uuid,
+      boundingBoxFunc: () => {
+        const boundingBox = new THREE.Box3();
+
+        boundingBox.setFromObject(ownerMesh);
+
+        return boundingBox;
+      },
+    });
+  }
+
+  hideHighlight(threeObject) {
+    threeObject.userData.events.emit('hideHighlight');
   }
 }
 

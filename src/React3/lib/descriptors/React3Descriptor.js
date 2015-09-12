@@ -3,8 +3,8 @@ import React3DInstance from '../React3DInstance';
 import THREEElementDescriptor from './THREEElementDescriptor';
 
 class React3Descriptor extends THREEElementDescriptor {
-  constructor(react3Instance) {
-    super(react3Instance);
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
 
     this.propUpdates = {
       width: this._updateWidth,
@@ -14,7 +14,7 @@ class React3Descriptor extends THREEElementDescriptor {
   }
 
   construct(props) {
-    return new React3DInstance(props);
+    return new React3DInstance(props, this.react3RendererInstance);
   }
 
   // gets called every time there are children to be added

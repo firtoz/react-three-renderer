@@ -8,45 +8,8 @@ import ExampleBase from '../ExampleBase';
 import Info from './Info';
 
 import Cloth from './Cloth';
-import ClothGeometry from './ClothGeometry';
-import Poles from './Poles';
-
-const fragmentShaderDepth = `
-      uniform sampler2D texture;
-			varying vec2 vUV;
-
-			vec4 pack_depth( const in float depth ) {
-
-				const vec4 bit_shift = vec4( 256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0 );
-				const vec4 bit_mask  = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
-				vec4 res = fract( depth * bit_shift );
-				res -= res.xxyz * bit_mask;
-				return res;
-
-			}
-
-			void main() {
-
-				vec4 pixel = texture2D( texture, vUV );
-
-				if ( pixel.a < 0.5 ) discard;
-
-				gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
-
-			}`;
-
-const vertexShaderDepth = `
-			varying vec2 vUV;
-
-			void main() {
-
-				vUV = 0.75 * uv;
-
-				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-
-				gl_Position = projectionMatrix * mvPosition;
-
-			}`;
+import StaticWorld from './StaticWorld';
+import Sphere from './Sphere';
 
 const ballSize = 60; // 40
 
@@ -70,127 +33,13 @@ function satisfyConstrains(p1, p2, distance) {
 
 const tmpForce = new THREE.Vector3();
 
-class StaticWorld extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-
-    this.directionalLightPosition = new THREE.Vector3(50, 200, 100).multiplyScalar(1.3);
-
-    this.clothTexture = THREE.ImageUtils.loadTexture('textures/patterns/circuit_pattern.png');
-    this.clothTexture.wrapS = this.clothTexture.wrapT = THREE.RepeatWrapping;
-    this.clothTexture.anisotropy = 16;
-
-    this.uniforms = {
-      texture: {type: 't', value: this.clothTexture},
-    };
-
-    this.groundPosition = new THREE.Vector3(0, -250, 0);
-    this.groundRotation = new THREE.Euler(-Math.PI / 2, 0, 0);
-
-    this.groundTexture = THREE.ImageUtils.loadTexture('textures/terrain/grasslight-big.jpg');
-    this.groundTexture.wrapS = this.groundTexture.wrapT = THREE.RepeatWrapping;
-    this.groundTexture.repeat.set(25, 25);
-    this.groundTexture.anisotropy = 16;
-  }
-
-  render() {
-    const d = 300;
-
-    return (<object3D>
-      <ambientLight
-        color={0x666666}
-      />
-      <directionalLight
-        color={0xdfebff}
-        intensity={1.75}
-        position={this.directionalLightPosition}
-        castShadow={true}
-        shadowMapWidth={1024}
-        shadowMapHeight={1024}
-        shadowCameraLeft={-d}
-        shadowCameraRight={d}
-        shadowCameraTop={d}
-        shadowCameraBottom={-d}
-        shadowCameraFar={1000}
-        shadowDarkness={0.5}
-      />
-      <mesh
-        castShadow={true}
-        receiveShadow={true}
-      >
-        <ClothGeometry
-          ref={this.props.clothRef}
-          cloth={this.props.cloth}
-        />
-        <meshPhongMaterial
-          alphaTest={0.5}
-          color={0xffffff}
-          specular={0x030303}
-          emissive={0x111111}
-          shininess={10}
-          map={this.clothTexture}
-          side={THREE.DoubleSide}
-        />
-        <shaderMaterial
-          slot="customDepthMaterial"
-          uniforms={this.uniforms}
-          vertexShader={vertexShaderDepth}
-          fragmentShader={fragmentShaderDepth}
-        />
-      </mesh>
-      { /* <arrowHelper
-       direction={this.arrowDirection}
-       origin={this.arrowOrigin}
-       length={this.arrowLength}
-       color={0xff0000}
-       position={this.arrowPosition}
-       /> */ }
-      <mesh
-        position={this.groundPosition}
-        rotation={this.groundRotation}
-        receiveShadow={true}
-      >
-        <planeBufferGeometry
-          width={20000}
-          height={20000}
-        />
-        <meshPhongMaterial
-          color={0xffffff}
-          specular={0x111111}
-          map={this.groundTexture}
-        />
-      </mesh>
-      <Poles/>
-    </object3D>);
-  }
-}
-
-class Sphere extends React.Component {
-  render() {
-    return (<mesh
-      castShadow={true}
-      receiveShadow={true}
-      visible={this.props.visible}
-      position={this.props.position}
-    >
-      <sphereGeometry
-        radius={ballSize}
-        widthSegments={20}
-        heightSegments={20}
-      />
-      <meshPhongMaterial
-        color={0xffffff}
-      />
-    </mesh>);
-  }
-}
-
 class AnimationCloth extends ExampleBase {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       ...this.state,
+      minTimePerFrame: 60,
       rotate: true,
       wind: true,
       sphere: false,
@@ -238,7 +87,6 @@ class AnimationCloth extends ExampleBase {
       ...this.state,
       ballPosition: new THREE.Vector3(0, -45, 0),
       cameraPosition: new THREE.Vector3(0, 50, 1500),
-      paused: false,
     };
 
     this.scenePosition = new THREE.Vector3(0, 0, 0);
@@ -359,11 +207,21 @@ class AnimationCloth extends ExampleBase {
   }
 
   _onAnimate = () => {
-    if (this.state.paused) {
-      return;
+    const {
+      minTimePerFrame,
+      } = this.state;
+
+    let time;
+
+    if (minTimePerFrame > 0) {
+      time = Math.round(Date.now() / minTimePerFrame) * minTimePerFrame;
+    } else {
+      time = Date.now();
     }
 
-    const time = Date.now();
+    if (time === this.state.time) {
+      return;
+    }
 
     const windStrength = Math.cos(time / 7000) * 20 + 40;
     this.windForce.set(Math.sin(time / 2000), Math.cos(time / 3000), Math.sin(time / 1000)).normalize().multiplyScalar(windStrength);
@@ -391,6 +249,7 @@ class AnimationCloth extends ExampleBase {
     clothGeometry.verticesNeedUpdate = true;
 
     const newState = {
+      time: time,
       spherePosition: this.ballPosition,
     };
 
@@ -409,7 +268,7 @@ class AnimationCloth extends ExampleBase {
     const {
       width,
       height,
-      paused,
+      minTimePerFrame,
       } = this.state;
 
     return (<div>
@@ -418,30 +277,21 @@ class AnimationCloth extends ExampleBase {
         toggleWind={this._toggleWind}
         toggleSphere={this._toggleSphere}
         togglePins={this._togglePins}
-        pause={() => {
+        onFrameChange={(event) => {
           this.setState({
-            paused: !paused,
+            minTimePerFrame: +event.target.value,
           });
         }}
-        frame={() => {
-          this.setState({
-            paused: false,
-          }, () => {
-            this._onAnimate();
-            this.setState({
-              paused: true,
-            });
-          });
-        }}/>
+        minTimePerFrame={minTimePerFrame}/>
       <React3
         width={width}
         height={height}
-        antialias={true}
+        antialias
         pixelRatio={window.devicePixelRatio}
         clearColor={this.fog.color}
-        gammaInput={true}
-        gammaOutput={true}
-        shadowMapEnabled={true}
+        gammaInput
+        gammaOutput
+        shadowMapEnabled
         mainCamera="mainCamera"
         onAnimate={this._onAnimate}
       >

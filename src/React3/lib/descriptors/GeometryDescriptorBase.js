@@ -9,6 +9,21 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
     invariant(parentObject3D.geometry === undefined, 'Parent already has a geometry');
 
     parentObject3D.geometry = geometry;
+
+    const parentMarkup = parentObject3D.userData.markup;
+
+    if (parentMarkup && parentMarkup._rootInstance) {
+      parentMarkup._rootInstance.objectMounted(self);
+    }
+  }
+
+
+  applyInitialProps(self, props) {
+    self.userData = {
+      ...self.userData,
+    };
+
+    super.applyInitialProps(self, props);
   }
 
   unmount(geometry) {
@@ -19,6 +34,24 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
     }
 
     geometry.dispose();
+  }
+
+  highlight(threeObject) {
+    const ownerMesh = threeObject.userData.parentMarkup.threeObject;
+    threeObject.userData.events.emit('highlight', {
+      uuid: threeObject.uuid,
+      boundingBoxFunc: () => {
+        const boundingBox = new THREE.Box3();
+
+        boundingBox.setFromObject(ownerMesh);
+
+        return boundingBox;
+      },
+    });
+  }
+
+  hideHighlight(threeObject) {
+    threeObject.userData.events.emit('hideHighlight');
   }
 }
 
