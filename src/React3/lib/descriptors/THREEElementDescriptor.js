@@ -32,7 +32,7 @@ class THREEElementDescriptor {
     invariant(false, `Cannot move children in ${this.constructor.name}!`);
   }
 
-  removeChild() {
+  removeChild(self, child) { // eslint-disable-line no-unused-vars
     invariant(false, `Cannot remove children in ${this.constructor.name}!`);
   }
 
@@ -46,7 +46,7 @@ class THREEElementDescriptor {
     }
   }
 
-  unmount() {
+  unmount(self) { // eslint-disable-line no-unused-vars
     invariant(false, `Cannot unmount ${this.constructor.name}!`);
   }
 

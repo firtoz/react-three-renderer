@@ -15,6 +15,23 @@ class Resources extends THREEElementDescriptor {
     return new ResourceContainer();
   }
 
+  unmount(self) { // eslint-disable-line no-unused-vars
+    // TODO
+  }
+
+  removeChild(self, child) {
+    const resourceId = child.userData._resourceId;
+
+    delete self._resourceIds[resourceId];
+
+    const parentMarkup = self.userData.parentMarkup;
+    if (parentMarkup) {
+      parentMarkup.userData._events.emit('resource.removed', {
+        id: resourceId,
+      });
+    }
+  }
+
   setParent(self, parentObject) {
     super.setParent(self, parentObject);
 
