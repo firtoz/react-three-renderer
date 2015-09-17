@@ -36,6 +36,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   setParent(material, parentObject3D) {
     invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
     invariant(parentObject3D[material.userData._materialSlot] === undefined, 'Parent already has a ' + material.userData._materialSlot + ' defined');
+    super.setParent(material, parentObject3D);
 
     parentObject3D[material.userData._materialSlot] = material;
 

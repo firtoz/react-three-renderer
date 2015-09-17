@@ -36,8 +36,14 @@ class THREEElementDescriptor {
     invariant(false, `Cannot remove children in ${this.constructor.name}!`);
   }
 
-  setParent() {
-    invariant(false, `Cannot add parent to ${this.constructor.name}!`);
+  setParent(self, parentObject3D) {
+    // yep that's allowed
+
+    const parentMarkup = parentObject3D.userData.markup;
+
+    if (parentMarkup && parentMarkup._rootInstance) {
+      parentMarkup._rootInstance.objectMounted(self);
+    }
   }
 
   unmount() {

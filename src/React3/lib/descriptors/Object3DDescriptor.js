@@ -130,17 +130,13 @@ class Object3DDescriptor extends THREEElementDescriptor {
   }
 
   moveChild(self, childObject, toIndex, lastIndex) {
+    invariant(toIndex >= 0 && self.children.length > toIndex, "Cannot move a child to that index!");
     _arrayMove(self.children, lastIndex, toIndex);
   }
 
-  setParent(self, parentObject3D) {
-    // yep that's allowed
 
-    const parentMarkup = parentObject3D.userData.markup;
-
-    if (parentMarkup && parentMarkup._rootInstance) {
-      parentMarkup._rootInstance.objectMounted(self);
-    }
+  setParent(self, parentObject3d) {
+    super.setParent(self, parentObject3d);
   }
 
   unmount(self) {

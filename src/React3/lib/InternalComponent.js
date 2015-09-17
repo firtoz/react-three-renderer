@@ -182,11 +182,11 @@ class InternalComponent {
   }
 
   moveChild(child, toIndex, lastIndex) {
-    if (toIndex === lastIndex) {
+    if(child._mountIndex === toIndex) {
       return;
     }
 
-    this.threeElementDescriptor.moveChild(this._threeObject, child._threeObject, toIndex, lastIndex);
+    this.threeElementDescriptor.moveChild(this._threeObject, child._threeObject, toIndex, child._mountIndex);
 
     const markup = this._markup;
 
