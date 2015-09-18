@@ -2,7 +2,10 @@ import THREE from 'three';
 import THREEElementDescriptor from './THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
 
-class MaterialDescriptorBase extends THREEElementDescriptor {
+import ResourceContainer from '../Resources/Container';
+import resource from './decorators/resource';
+
+@resource class MaterialDescriptorBase extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
@@ -39,21 +42,18 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     super.setParent(material, parentObject3D);
 
     parentObject3D[material.userData._materialSlot] = material;
-
-    const parentMarkup = parentObject3D.userData.markup;
-
-    if (parentMarkup && parentMarkup._rootInstance) {
-      parentMarkup._rootInstance.objectMounted(self);
-    }
   }
 
   unmount(material) {
     const parent = material.userData.parentMarkup.threeObject;
 
-    const slot = material.userData._materialSlot;
+    // could either be a resource description or an actual material
+    if (parent instanceof THREE.Mesh || parent instanceof THREE.PointCloud) {
+      const slot = material.userData._materialSlot;
 
-    if (parent[slot] === material) {
-      parent[slot] = undefined;
+      if (parent[slot] === material) {
+        parent[slot] = undefined;
+      }
     }
 
     material.dispose();

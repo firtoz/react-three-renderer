@@ -19,7 +19,7 @@ class THREEElementDescriptor {
     self.userData.events = new EventEmitter();
   }
 
-  construct() {
+  construct(props) { // eslint-disable-line no-unused-vars
     invariant(false, 'Missing constructor!');
   }
 

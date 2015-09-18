@@ -1,19 +1,16 @@
 import THREE from 'three';
-import THREEElementDescriptor from './THREEElementDescriptor';
+import THREEElementDescriptor from './../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
 
 class Resource extends THREEElementDescriptor {
-  constructor(react3RendererInstance:React3Renderer, type) {
+  constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
   }
 
   applyInitialProps(self, props) {
     super.applyInitialProps(self, props);
 
-    invariant(props.hasOwnProperty('resourceId'), 'A resource type must have a property named "resourceId"!');
-
-    self.userData._resourceId = props._resourceId;
-    self.userData._resourceMap = [];
+    self.userData.resourceMap = [];
     self.userData._chosenResource = null;
   }
 
@@ -23,12 +20,14 @@ class Resource extends THREEElementDescriptor {
     });
 
     delete self.userData._eventCleanupQueue;
-    delete self.userData._resourceMap;
+    delete self.userData.resourceMap;
     self.userData._chosenResource = null;
   }
 
   setParent(self, parentObject) {
     super.setParent(self, parentObject);
+
+    invariant(self.userData._eventCleanupQueue.length === 0, "Changing parents?");
 
     let currentParentMarkup = parentObject.userData.markup;
 
@@ -48,8 +47,8 @@ class Resource extends THREEElementDescriptor {
       const parentResources = currentParentMarkup.userData._resources;
 
       if (parentResources) {
-        const resourceId = self.userData._resourceId;
-        const resourceInParent = parentResources._resourceIds[resourceId];
+        const resourceId = self.resourceId;
+        const resourceInParent = parentResources.resourceIds[resourceId];
 
         if (resourceInParent) {
           this._addResource(self, distance, {
@@ -70,7 +69,7 @@ class Resource extends THREEElementDescriptor {
   }
 
   _onResourceAdded(self, distance, resourceInfo) {
-    if (self.userData._resourceId !== resourceInfo.id) {
+    if (self.resourceId !== resourceInfo.id) {
       return;
     }
 
@@ -80,7 +79,7 @@ class Resource extends THREEElementDescriptor {
   }
 
   _addResource(self, distance, resourceInfo) {
-    const resourceMap = self.userData._resourceMap;
+    const resourceMap = self.userData.resourceMap;
 
     let i;
 
@@ -97,11 +96,11 @@ class Resource extends THREEElementDescriptor {
   }
 
   _onResourceRemoved(self, distance, resourceInfo) {
-    if (self.userData._resourceId !== resourceInfo.id) {
+    if (self.resourceId !== resourceInfo.id) {
       return;
     }
 
-    const resourceMap = self.userData._resourceMap;
+    const resourceMap = self.userData.resourceMap;
 
     for (let i = 0; i < resourceMap.length; ++i) {
       if (resourceMap[i].distance === distance) {
@@ -120,7 +119,7 @@ class Resource extends THREEElementDescriptor {
   }
 
   _updateResource(self) {
-    const resourceMap = self.userData._resourceMap;
+    const resourceMap = self.userData.resourceMap;
 
     let chosenResource = null;
 
@@ -131,7 +130,7 @@ class Resource extends THREEElementDescriptor {
     if (self.userData._chosenResource !== chosenResource) {
       self.userData._chosenResource = chosenResource;
 
-      this.resourceUpdated(self);
+      this.resourceUpdated(self, chosenResource);
     }
   }
 }

@@ -1,8 +1,8 @@
-import ReactReconciler from '../../../node_modules/react/lib/ReactReconciler';
-import DOMProperty from '../../../node_modules/react/lib/DOMProperty';
-import ReactMultiChild from '../../../node_modules/react/lib/ReactMultiChild';
+import ReactReconciler from 'react/lib/ReactReconciler';
+import DOMProperty from 'react/lib/DOMProperty';
+import ReactMultiChild from 'react/lib/ReactMultiChild';
 
-import invariant from '../../../node_modules/fbjs/lib/invariant';
+import invariant from 'fbjs/lib/invariant';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
@@ -182,7 +182,7 @@ class InternalComponent {
   }
 
   moveChild(child, toIndex, lastIndex) {
-    if(child._mountIndex === toIndex) {
+    if (child._mountIndex === toIndex) {
       return;
     }
 
