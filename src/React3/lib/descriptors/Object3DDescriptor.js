@@ -146,13 +146,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
       markup._rootInstance.objectRemoved(self);
     }
 
-    self.userData.events.emit('dispose', {
-      object: self,
-    });
-
-    self.userData.events.removeAllListeners();
-
-    delete self.userData.events;
+    super.unmount(self);
   }
 
   registerSimpleProperties(propertyNames) {
@@ -173,7 +167,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
         boundingBox.setFromObject(threeObject);
 
-        return boundingBox;
+        return [boundingBox];
       },
     });
   }

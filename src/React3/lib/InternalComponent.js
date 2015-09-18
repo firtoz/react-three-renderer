@@ -394,6 +394,8 @@ class InternalComponent {
   removeChild(child) {
     this.threeElementDescriptor.removeChild(this._threeObject, child._threeObject);
 
+    child.threeElementDescriptor.removedFromParent(child._threeObject);
+
     const childrenMarkup = this._markup.userData.childrenMarkup;
 
     for (let i = 0; i < childrenMarkup.length; i++) {

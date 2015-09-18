@@ -31,7 +31,7 @@ class ViewportDescriptor extends THREEElementDescriptor {
   }
 
   unmount() {
-    // no need to do anything, viewports are simple!
+    super.unmount(self);
   }
 
   setParent() {

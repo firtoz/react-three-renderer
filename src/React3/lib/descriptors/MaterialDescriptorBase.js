@@ -57,6 +57,8 @@ import resource from './decorators/resource';
     }
 
     material.dispose();
+
+    super.unmount(material);
   }
 
   highlight(threeObject) {
@@ -68,7 +70,7 @@ import resource from './decorators/resource';
 
         boundingBox.setFromObject(ownerMesh);
 
-        return boundingBox;
+        return [boundingBox];
       },
     });
   }

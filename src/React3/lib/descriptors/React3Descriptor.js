@@ -17,7 +17,13 @@ class React3Descriptor extends THREEElementDescriptor {
     return new React3DInstance(props, this.react3RendererInstance);
   }
 
-  // gets called every time there are children to be added
+  applyInitialProps(self, props) {
+    super.applyInitialProps(self, props);
+
+    self.initialize();
+  }
+
+// gets called every time there are children to be added
   // this can be called multiple times as more children are added.
   addChildren(self, children) {
     self.addChildren(children);
@@ -45,6 +51,7 @@ class React3Descriptor extends THREEElementDescriptor {
 
   unmount(self) {
     self.unmount();
+    super.unmount(self);
   }
 }
 

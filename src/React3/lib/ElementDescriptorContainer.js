@@ -19,6 +19,9 @@ import DirectionalLightDescriptor from './descriptors/DirectionalLightDescriptor
 import ShaderMaterial from './descriptors/ShaderMaterial';
 import PlaneBufferGeometry from './descriptors/PlaneBufferGeometry';
 
+import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
+import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
+
 class ElementDescriptorContainer {
   constructor(react3RendererInstance) {
     this.react3RendererInstance = react3RendererInstance;
@@ -54,6 +57,9 @@ class ElementDescriptorContainer {
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
+
+      resources: new ResourcesDescriptor(react3RendererInstance),
+      materialResource: new MaterialResourceDescriptor(react3RendererInstance),
     };
   }
 }

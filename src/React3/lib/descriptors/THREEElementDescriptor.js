@@ -16,7 +16,30 @@ class THREEElementDescriptor {
   applyInitialProps(self, props) { // eslint-disable-line no-unused-vars
     // do nothing for now
 
-    self.userData.events = new EventEmitter();
+    const events = new EventEmitter();
+
+    // pass down resources!
+
+    events.on('resource.added', (data) => {
+      const childrenMarkup = self.userData.childrenMarkup;
+
+      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.added', {
+        id: data.id,
+        distance: data.distance + 1,
+        resource: data.resource,
+      }));
+    });
+
+    events.on('resource.removed', (data) => {
+      const childrenMarkup = self.userData.childrenMarkup;
+
+      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.removed', {
+        id: data.id,
+        distance: data.distance + 1,
+      }));
+    });
+
+    self.userData.events = events;
   }
 
   construct(props) { // eslint-disable-line no-unused-vars
@@ -47,7 +70,15 @@ class THREEElementDescriptor {
   }
 
   unmount(self) { // eslint-disable-line no-unused-vars
-    invariant(false, `Cannot unmount ${this.constructor.name}!`);
+    self.userData.events.emit('dispose', {
+      object: self,
+    });
+
+    self.userData.events.removeAllListeners();
+  }
+
+  removedFromParent(self) {
+    delete self.userData.events;
   }
 
   // noinspection JSUnusedLocalSymbols

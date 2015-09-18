@@ -1,4 +1,7 @@
 import ResourceContainer from '../../Resources/Container';
+import invariant from 'fbjs/lib/invariant';
+
+import THREE from 'three';
 
 function resource(descriptor) {
   class ResourceDescriptor extends descriptor {
@@ -9,6 +12,7 @@ function resource(descriptor) {
 
       if (props.hasOwnProperty('resourceId')) {
         self.userData._resourceId = props.resourceId;
+        self.userData._references = [];
       }
     }
 
@@ -20,12 +24,31 @@ function resource(descriptor) {
       }
     }
 
-    highlight(self) {
-      // disable for now
+    highlight(threeObject) {
+      if (!!threeObject.userData._resourceId) {
+        threeObject.userData.events.emit('highlight', {
+          uuid: threeObject.uuid,
+          boundingBoxFunc: () => {
+            return threeObject.userData._references.map(objectWithReference => {
+              const boundingBox = new THREE.Box3();
+
+              boundingBox.setFromObject(objectWithReference);
+
+              return boundingBox;
+            });
+          },
+        });
+      } else {
+        return super.highlight(threeObject);
+      }
     }
 
-    hideHighlight(self) {
-      // disable for now
+    hideHighlight(threeObject) {
+      if (!!threeObject.userData._resourceId) {
+        threeObject.userData.events.emit('hideHighlight');
+      } else {
+        return super.hideHighlight(threeObject);
+      }
     }
   }
 

@@ -1,8 +1,8 @@
-import THREE from 'three';
 import THREEElementDescriptor from './../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
+import THREE from 'three';
 
-class Resource extends THREEElementDescriptor {
+class ResourceDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
   }
@@ -11,7 +11,8 @@ class Resource extends THREEElementDescriptor {
     super.applyInitialProps(self, props);
 
     self.userData.resourceMap = [];
-    self.userData._chosenResource = null;
+    self.userData._eventCleanupQueue = [];
+    self.userData._chosenResource = undefined;
   }
 
   unmount(self) {
@@ -22,6 +23,16 @@ class Resource extends THREEElementDescriptor {
     delete self.userData._eventCleanupQueue;
     delete self.userData.resourceMap;
     self.userData._chosenResource = null;
+
+    const chosenResource = null;
+    const oldResource = self.userData._chosenResource;
+    if (oldResource !== chosenResource) {
+      self.userData._chosenResource = chosenResource;
+
+      this.resourceUpdated(self, chosenResource, oldResource);
+    }
+
+    super.unmount(self);
   }
 
   setParent(self, parentObject) {
@@ -37,7 +48,7 @@ class Resource extends THREEElementDescriptor {
       const onResourceAdded = this._onResourceAdded.bind(this, self, distance);
       const onResourceRemoved = this._onResourceRemoved.bind(this, self, distance);
 
-      const parentEvents = currentParentMarkup.userData._events;
+      const parentEvents = currentParentMarkup.userData.events;
 
       self.userData._eventCleanupQueue.push(() => {
         parentEvents.removeListener('resource.added', onResourceAdded);
@@ -73,7 +84,7 @@ class Resource extends THREEElementDescriptor {
       return;
     }
 
-    this._addResource(self, distance, resourceInfo);
+    this._addResource(self, resourceInfo.distance, resourceInfo);
 
     this._updateResource(self);
   }
@@ -114,7 +125,7 @@ class Resource extends THREEElementDescriptor {
     invariant(false, 'This resource was not in this map?');
   }
 
-  resourceUpdated(self) { // eslint-disable-line no-unused-vars
+  resourceUpdated(self, newResource, oldResource) { // eslint-disable-line no-unused-vars
     // needs to be handled by children!
   }
 
@@ -124,15 +135,35 @@ class Resource extends THREEElementDescriptor {
     let chosenResource = null;
 
     if (resourceMap.length > 0) {
-      chosenResource = resourceMap[0];
+      chosenResource = resourceMap[0].resource;
     }
 
-    if (self.userData._chosenResource !== chosenResource) {
+    const oldResource = self.userData._chosenResource;
+    if (oldResource !== chosenResource) {
       self.userData._chosenResource = chosenResource;
 
-      this.resourceUpdated(self, chosenResource);
+      this.resourceUpdated(self, chosenResource, oldResource);
     }
+  }
+
+
+  highlight(threeObject) {
+    const ownerObject = threeObject.userData.parentMarkup.threeObject;
+    threeObject.userData.events.emit('highlight', {
+      uuid: threeObject.uuid,
+      boundingBoxFunc: () => {
+        const boundingBox = new THREE.Box3();
+
+        boundingBox.setFromObject(ownerObject);
+
+        return [boundingBox];
+      },
+    });
+  }
+
+  hideHighlight(threeObject) {
+    threeObject.userData.events.emit('hideHighlight');
   }
 }
 
-export default Resource;
+export default ResourceDescriptorBase;

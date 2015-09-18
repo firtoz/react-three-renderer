@@ -1,5 +1,8 @@
 import THREE from 'three';
 import Object3DDescriptor from './Object3DDescriptor';
+
+import ResourceReference from '../Resources/ResourceReference';
+
 import invariant from 'fbjs/lib/invariant';
 
 class MeshDescriptor extends Object3DDescriptor {
@@ -23,7 +26,7 @@ class MeshDescriptor extends Object3DDescriptor {
   }
 
   _invalidChild = child => {
-    const invalid = !(child instanceof THREE.Material || child instanceof THREE.Geometry || child instanceof THREE.BufferGeometry);
+    const invalid = !(child instanceof THREE.Material || child instanceof ResourceReference || child instanceof THREE.Geometry || child instanceof THREE.BufferGeometry);
 
     if (invalid) {
       debugger;
@@ -33,7 +36,7 @@ class MeshDescriptor extends Object3DDescriptor {
   };
 
   addChildren(self, children) {
-    invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials ore geometries!');
+    invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
   }
 
   moveChild() {
