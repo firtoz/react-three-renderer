@@ -21,6 +21,7 @@ import PlaneBufferGeometry from './descriptors/PlaneBufferGeometry';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
+import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
 
 class ElementDescriptorContainer {
   constructor(react3RendererInstance) {
@@ -60,6 +61,7 @@ class ElementDescriptorContainer {
 
       resources: new ResourcesDescriptor(react3RendererInstance),
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),
+      geometryResource: new GeometryResourceDescriptor(react3RendererInstance),
     };
   }
 }

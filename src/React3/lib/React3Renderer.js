@@ -11,7 +11,7 @@ import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
 import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-import flattenChildren from 'react/lib/flattenChildren';
+import traverseAllChildren from 'react/lib/traverseAllChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 import React3DInstance from './React3DInstance';
 
@@ -38,7 +38,7 @@ class TopLevelWrapper {
   static displayName = 'TopLevelWrapper';
 }
 
-function unmountComponentInternal(instance, container) {
+function unmountComponentInternal(instance) {
   ReactReconciler.unmountComponent(instance);
 }
 
@@ -139,19 +139,18 @@ class React3Renderer {
    * Updates the rendered children and returns a new set of children.
    *
    * @param {?object} prevChildren Previously initialized set of children.
-   * @param {?object} nextNestedChildNodes Nested child maps.
+   * @param {?object} nextChildren Nested child maps.
    * @param {ReactReconcileTransaction} transaction
    * @param {object} context
    * @return {?object} A new set of child instances.
    * @internal
    */
-  updateChildren(prevChildren, nextNestedChildNodes, transaction, context) {
+  updateChildren(prevChildren, nextChildren, transaction, context) {
     // We currently don't have a way to track moves here but if we use iterators
     // instead of for..in we can zip the iterators and check if an item has
     // moved.
     // TODO: If nothing has changed, return the prevChildren object so that we
     // can quickly bailout if nothing has changed.
-    const nextChildren = flattenChildren(nextNestedChildNodes);
     if (!nextChildren && !prevChildren) {
       return null;
     }
@@ -162,7 +161,7 @@ class React3Renderer {
       const prevChild = prevChildren && prevChildren[childName];
       const prevElement = prevChild && prevChild._currentElement;
       const nextElement = nextChildren[childName];
-      if (shouldUpdateReactComponent(prevElement, nextElement)) {
+      if (prevChild !== null && prevChild !== undefined && shouldUpdateReactComponent(prevElement, nextElement)) {
         ReactReconciler.receiveComponent(prevChild, nextElement, transaction, context);
         nextChildren[childName] = prevChild;
       } else {
@@ -305,17 +304,27 @@ class React3Renderer {
     return foundUserData;
   }
 
-  instantiateChildren(nestedChildNodes) {
-    const children = flattenChildren(nestedChildNodes);
-    for (const name in children) {
-      if (children.hasOwnProperty(name)) {
-        const child = children[name];
-        // The rendered children must be turned into instances as they're
-        // mounted.
-        children[name] = this.instantiateReactComponent(child, null);
-      }
+  instantiateChild = (childInstances, child, name) => {
+    // We found a component instance.
+    const keyUnique = childInstances[name] === undefined;
+    if (process.env.NODE_ENV !== 'production') {
+      process.env.NODE_ENV !== 'production' ? warning(keyUnique, 'flattenChildren(...): Encountered two children with the same key, ' + '`%s`. Child keys must be unique; when two children share a key, only ' + 'the first child will be used.', name) : undefined;
     }
-    return children;
+    if (child !== null && keyUnique) {
+      childInstances[name] = this.instantiateReactComponent(child, null);
+    }
+  };
+
+  instantiateChildren(nestedChildNodes) {
+    if (nestedChildNodes === null) {
+      return null;
+    }
+
+    const childInstances = {};
+
+    traverseAllChildren(nestedChildNodes, this.instantiateChild, childInstances);
+
+    return childInstances;
   }
 
   containsChild(container, userData) {
@@ -402,7 +411,6 @@ class React3Renderer {
 
   findNodeHandle = (instance) => {
     const userData = this.getUserData(instance._rootNodeID);
-    const object3D = userData;
 
     this._highlightCache = userData;
     return this._highlightElement;
@@ -577,10 +585,6 @@ class React3Renderer {
         toJSON: () => {
           return '---USERDATA---';
         },
-      },
-      getBoundingClientRect: () => {
-        console.log('?', this.getBoundingClientRect());
-        return this.getBoundingClientRect();
       },
       threeObject: container,
       toJSON: () => {
@@ -776,12 +780,12 @@ class React3Renderer {
     // console.log('instantiating react component', elementToInstantiate);
     let instance;
 
-    let virtualNode = elementToInstantiate;
+    let node = elementToInstantiate;
 
-    if (virtualNode === null || virtualNode === false) {
-      virtualNode = new ReactEmptyComponent(this.instantiateReactComponent);
-    } else if (typeof virtualNode === 'object') {
-      const element = virtualNode;
+    if (node === null || node === false) {
+      node = new ReactEmptyComponent(this.instantiateReactComponent);
+    } else if (typeof node === 'object') {
+      const element = node;
       if (!(element && (typeof element.type === 'function' || typeof element.type === 'string'))) {
         if (process.env.NODE_ENV !== 'production') {
           if (element.type === null) {
@@ -815,16 +819,16 @@ class React3Renderer {
       } else {
         instance = new React3CompositeComponentWrapper(this);
       }
-    } else if (typeof virtualNode === 'string' || typeof virtualNode === 'number') {
+    } else if (typeof node === 'string' || typeof node === 'number') {
       console.log('string or number?!');
 
       debugger;
-      invariant(false, 'Encountered invalid React node of type %s', typeof virtualNode);
+      invariant(false, 'Encountered invalid React node of type %s', typeof node);
 
       // instance = ReactNativeComponent.createInstanceForText(node);
     } else {
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Encountered invalid React node of type %s', typeof virtualNode);
+        invariant(false, 'Encountered invalid React node of type %s', typeof node);
       } else {
         invariant(false);
       }
@@ -835,7 +839,7 @@ class React3Renderer {
     }
 
     // Sets up the instance. This can probably just move into the constructor now.
-    instance.construct(virtualNode);
+    instance.construct(node);
 
     // These two fields are used by the DOM and ART diffing algorithms
     // respectively. Instead of using expandos on components, we should be

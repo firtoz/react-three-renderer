@@ -4,6 +4,9 @@ import ReactMultiChild from 'react/lib/ReactMultiChild';
 
 import invariant from 'fbjs/lib/invariant';
 
+import flattenChildren from 'react/lib/flattenChildren';
+
+
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
 function processChildContext(context) {
@@ -332,7 +335,7 @@ class InternalComponent {
    */
   _updateChildren(nextNestedChildren, transaction, context) {
     const prevChildren = this._renderedChildren;
-    const nextChildren = this._react3RendererInstance.updateChildren(prevChildren, nextNestedChildren, transaction, context);
+    const nextChildren = this._reconcilerUpdateChildren(prevChildren, nextNestedChildren, transaction, context);
 
     this._renderedChildren = nextChildren;
     if (!nextChildren && !prevChildren) {

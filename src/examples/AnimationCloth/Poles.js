@@ -6,12 +6,9 @@ class Poles extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.poleGeometry = new THREE.BoxGeometry(5, 375, 5);
-    this.boxGeometry = new THREE.BoxGeometry(10, 10, 10);
-
     this.state = {
-      poleMaterialColor: new Number(0xffffff).toString(16),
-      poleMaterialSpecular: new Number(0x111111).toString(16),
+      poleMaterialColor: Number(0xffffff).toString(16),
+      poleMaterialSpecular: Number(0x111111).toString(16),
       poleMaterialShininess: 100,
       sidePolePositions: [
         new THREE.Vector3(-125, -62, 0),
@@ -22,13 +19,11 @@ class Poles extends React.Component {
         new THREE.Vector3(-125, -250, 0),
       ],
       topPolePosition: new THREE.Vector3(0, -250 + 750 / 2, 0),
-      subResource: true,
+      subResource: false,
     };
   }
 
   componentWillUnmount() {
-    this.poleGeometry.dispose();
-    delete this.poleGeometry;
   }
 
   render() {
@@ -39,6 +34,11 @@ class Poles extends React.Component {
           width={5}
           height={375}
           depth={5}/>
+        <boxGeometry
+          resourceId="boxGeometry"
+          width={10}
+          height={10}
+          depth={10}/>
         <meshPhongMaterial
           resourceId="poleMaterial"
           color={Number.parseInt(this.state.poleMaterialColor, 16)}
@@ -49,11 +49,13 @@ class Poles extends React.Component {
       {this.state.sidePolePositions.map((position, i) => {
         return (<mesh
           key={i}
-          geometry={this.poleGeometry}
           position={position}
           receiveShadow
           castShadow
         >
+          <geometryResource
+            resourceId="poleGeometry"
+          />
           <materialResource
             resourceId="poleMaterial"
           />
@@ -74,22 +76,27 @@ class Poles extends React.Component {
         />
       </mesh>
       <object3D>
-        <resources>
+        { this.state.subResource ? <resources>
           {this.state.subResource ? <meshPhongMaterial
             resourceId="poleMaterial"
             color={0x00ff00}
             specular={0x111111}
             shininess={100}
           /> : null}
-        </resources>
+          {
+            <sphereGeometry resourceId="boxGeometry"
+                         radius={20}/> }
+        </resources> : null }
         {this.state.boxPositions.map((position, i) => {
           return (<mesh
             key={i}
-            geometry={this.boxGeometry}
             position={position}
             receiveShadow
             castShadow
           >
+            <geometryResource
+              resourceId="boxGeometry"
+            />
             <materialResource
               resourceId="poleMaterial"
             />

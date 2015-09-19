@@ -308,6 +308,16 @@ class React3DInstance {
     object.userData.events.on('highlight', this._objectHighlighted);
 
     object.userData.events.emit('addedIntoRoot');
+
+    const current:THREE.Object3D = object;
+
+    const childrenMarkup = current.userData.childrenMarkup;
+
+    for (let i = 0; i < childrenMarkup.length; ++i) {
+      const childMarkup = childrenMarkup[i];
+
+      this.objectMounted(childMarkup.threeObject);
+    }
   }
 
   _hideHighlight = () => {
@@ -377,43 +387,28 @@ class React3DInstance {
     this._removeObjectWithName(object.name, object);
   }
 
+  //addAllChildren(object) {
+  //  const allChildren = [object];
+  //
+  //  while (allChildren.length > 0) {
+  //    const current:THREE.Object3D = allChildren.pop();
+  //
+  //    this.objectMounted(current);
+  //
+  //    const childrenMarkup = current.userData.childrenMarkup;
+  //
+  //    for (let i = 0; i < childrenMarkup.length; ++i) {
+  //      const childMarkup = childrenMarkup[i];
+  //
+  //      allChildren.push(childMarkup.threeObject);
+  //    }
+  //  }
+  //}
+
   mountedIntoRoot() {
-    const scene = this._scene;
+    this.objectMounted(this._scene);
 
-    const allChildren = [scene];
-
-    while (allChildren.length > 0) {
-      const current:THREE.Object3D = allChildren.pop();
-
-      this.objectMounted(current);
-
-      const childrenMarkup = current.userData.childrenMarkup;
-
-      for (let i = 0; i < childrenMarkup.length; ++i) {
-        const childMarkup = childrenMarkup[i];
-
-        allChildren.push(childMarkup.threeObject);
-      }
-
-      // debugger;
-      //
-      // if(current.children) {
-      //   for (let i = 0; i < current.children.length; ++i) {
-      //     const child = current.children[i];
-      //
-      //     allChildren.push(child);
-      //   }
-      // }
-      //
-      // if (current instanceof THREE.Mesh) {
-      //   if (current.material && current.material.userData && this._rendererInstance.getID(current.material.userData)) {
-      //     allChildren.push(current.material);
-      //   }
-      //   if (current.geometry && current.geometry.userData && this._rendererInstance.getID(current.geometry.userData)) {
-      //     allChildren.push(current.geometry);
-      //   }
-      // }
-    }
+    //this.addAllChildren(this._scene);
   }
 }
 

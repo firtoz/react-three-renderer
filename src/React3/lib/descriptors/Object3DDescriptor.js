@@ -2,6 +2,8 @@ import THREE from 'three';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 
+import invariant from 'fbjs/lib/invariant';
+
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
 }
@@ -130,7 +132,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
   }
 
   moveChild(self, childObject, toIndex, lastIndex) {
-    invariant(toIndex >= 0 && self.children.length > toIndex, "Cannot move a child to that index!");
+    invariant(toIndex >= 0 && self.children.length > toIndex, 'Cannot move a child to that index!');
     _arrayMove(self.children, lastIndex, toIndex);
   }
 

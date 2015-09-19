@@ -1,10 +1,17 @@
 import THREEElementDescriptor from './../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
 import THREE from 'three';
+import ResourceContainer from './../../Resources/ResourceReference';
 
 class ResourceDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
+  }
+
+  construct(props) {
+    invariant(props.hasOwnProperty('resourceId'), 'A resource type must have a property named "resourceId"!');
+
+    return new ResourceContainer(props.resourceId);
   }
 
   applyInitialProps(self, props) {
@@ -13,6 +20,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     self.userData.resourceMap = [];
     self.userData._eventCleanupQueue = [];
     self.userData._chosenResource = undefined;
+    self.userData._debug = props.debug || false;
   }
 
   unmount(self) {
@@ -35,86 +43,100 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     super.unmount(self);
   }
 
-  setParent(self, parentObject) {
-    super.setParent(self, parentObject);
+  setParent(self, parentObject3D) {
+    super.setParent(self, parentObject3D);
 
-    invariant(self.userData._eventCleanupQueue.length === 0, "Changing parents?");
+    invariant(parentObject3D[self.userData._propertySlot] === undefined, 'Parent already has a ' + self.userData._propertySlot + ' defined');
 
-    let currentParentMarkup = parentObject.userData.markup;
+    invariant(self.userData._eventCleanupQueue.length === 0, 'Changing parents?');
 
-    let distance = 1;
+    let currentParentMarkup = parentObject3D.userData.markup;
+
+    const onResourceAdded = this._onResourceAdded.bind(this, self);
+    const onResourceRemoved = this._onResourceRemoved.bind(this, self);
+
+    const parentEvents = currentParentMarkup.userData.events;
+    parentEvents.on('resource.added', onResourceAdded);
+    parentEvents.on('resource.removed', onResourceRemoved);
+
+    self.userData._eventCleanupQueue.push(() => {
+      parentEvents.removeListener('resource.added', onResourceAdded);
+      parentEvents.removeListener('resource.removed', onResourceRemoved);
+    });
+
+    let distance = 0;
 
     while (currentParentMarkup) {
-      const onResourceAdded = this._onResourceAdded.bind(this, self, distance);
-      const onResourceRemoved = this._onResourceRemoved.bind(this, self, distance);
-
-      const parentEvents = currentParentMarkup.userData.events;
-
-      self.userData._eventCleanupQueue.push(() => {
-        parentEvents.removeListener('resource.added', onResourceAdded);
-        parentEvents.removeListener('resource.removed', onResourceRemoved);
-      });
-
       const parentResources = currentParentMarkup.userData._resources;
 
       if (parentResources) {
+        if (self.userData._debug) {
+          debugger;
+        }
+
         const resourceId = self.resourceId;
         const resourceInParent = parentResources.resourceIds[resourceId];
 
         if (resourceInParent) {
-          this._addResource(self, distance, {
+          this._addResource(self, {
             id: resourceId,
+            distance,
             resource: resourceInParent,
           });
         }
       }
 
-      parentEvents.on('resource.added', onResourceAdded);
-      parentEvents.on('resource.removed', onResourceRemoved);
-
-      currentParentMarkup = currentParentMarkup.userData.parentMarkup;
       distance++;
+      currentParentMarkup = currentParentMarkup.userData.parentMarkup;
     }
 
     this._updateResource(self);
   }
 
-  _onResourceAdded(self, distance, resourceInfo) {
+  _onResourceAdded(self, resourceInfo) {
     if (self.resourceId !== resourceInfo.id) {
       return;
     }
 
-    this._addResource(self, resourceInfo.distance, resourceInfo);
+    if (self.userData._debug) {
+      debugger;
+    }
+
+    this._addResource(self, resourceInfo);
 
     this._updateResource(self);
   }
 
-  _addResource(self, distance, resourceInfo) {
+  _addResource(self, resourceInfo) {
     const resourceMap = self.userData.resourceMap;
 
     let i;
 
     for (i = 0; i < resourceMap.length; ++i) {
-      if (resourceMap[i].distance > distance) {
+      if (resourceMap[i].distance > resourceInfo.distance) {
         break;
       }
     }
 
     resourceMap.splice(i, 0, {
-      distance,
+      distance: resourceInfo.distance,
       resource: resourceInfo.resource,
     });
   }
 
-  _onResourceRemoved(self, distance, resourceInfo) {
+  _onResourceRemoved(self, resourceInfo) {
     if (self.resourceId !== resourceInfo.id) {
       return;
+    }
+
+    if (self.userData._debug) {
+      debugger;
     }
 
     const resourceMap = self.userData.resourceMap;
 
     for (let i = 0; i < resourceMap.length; ++i) {
-      if (resourceMap[i].distance === distance) {
+      if (resourceMap[i].distance === resourceInfo.distance) {
         resourceMap.splice(i, 1);
 
         this._updateResource(self);
@@ -125,8 +147,31 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     invariant(false, 'This resource was not in this map?');
   }
 
-  resourceUpdated(self, newResource, oldResource) { // eslint-disable-line no-unused-vars
-    // needs to be handled by children!
+  resourceUpdated(self, newResource, oldResource) {
+    const parentObject = self.userData.parentMarkup && self.userData.parentMarkup.threeObject || undefined;
+
+    if (self.userData._debug) {
+      debugger;
+    }
+
+    if (parentObject) {
+      const propertySlot = self.userData._propertySlot;
+      parentObject[propertySlot] = newResource;
+
+      if (newResource === null) {
+        // invariant(false, 'Could not find resource named ' + self.resourceId);
+      } else {
+        newResource.userData._references.push(parentObject);
+      }
+
+      if (oldResource) {
+        const removalIndex = oldResource.userData._references.indexOf(parentObject);
+
+        invariant(removalIndex !== -1, 'Bad reference count for resource');
+
+        oldResource.userData._references.splice(removalIndex, 1);
+      }
+    }
   }
 
   _updateResource(self) {

@@ -16,30 +16,33 @@ class THREEElementDescriptor {
   applyInitialProps(self, props) { // eslint-disable-line no-unused-vars
     // do nothing for now
 
-    const events = new EventEmitter();
+    const eventsForObject = new EventEmitter();
 
     // pass down resources!
 
-    events.on('resource.added', (data) => {
+    eventsForObject.on('resource.added', (data) => {
       const childrenMarkup = self.userData.childrenMarkup;
 
-      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.added', {
-        id: data.id,
+      const increasedDistance = {
+        ...data,
         distance: data.distance + 1,
-        resource: data.resource,
-      }));
+      };
+
+      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.added', increasedDistance));
     });
 
-    events.on('resource.removed', (data) => {
+    eventsForObject.on('resource.removed', (data) => {
       const childrenMarkup = self.userData.childrenMarkup;
 
-      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.removed', {
-        id: data.id,
+      const increasedDistance = {
+        ...data,
         distance: data.distance + 1,
-      }));
+      };
+
+      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.removed', increasedDistance));
     });
 
-    self.userData.events = events;
+    self.userData.events = eventsForObject;
   }
 
   construct(props) { // eslint-disable-line no-unused-vars
