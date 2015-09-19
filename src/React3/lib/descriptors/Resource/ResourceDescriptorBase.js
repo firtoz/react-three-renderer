@@ -146,7 +146,6 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     }
   }
 
-
   highlight(threeObject) {
     const ownerObject = threeObject.userData.parentMarkup.threeObject;
     threeObject.userData.events.emit('highlight', {

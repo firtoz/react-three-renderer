@@ -71,6 +71,24 @@ class ResourcesDescriptor extends THREEElementDescriptor {
       });
     });
   }
+
+  highlight(threeObject) {
+    const ownerObject = threeObject.userData.parentMarkup.threeObject;
+    threeObject.userData.events.emit('highlight', {
+      uuid: threeObject.uuid,
+      boundingBoxFunc: () => {
+        const boundingBox = new THREE.Box3();
+
+        boundingBox.setFromObject(ownerObject);
+
+        return [boundingBox];
+      },
+    });
+  }
+
+  hideHighlight(threeObject) {
+    threeObject.userData.events.emit('hideHighlight');
+  }
 }
 
 export default ResourcesDescriptor;
