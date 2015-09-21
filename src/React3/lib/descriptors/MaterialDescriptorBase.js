@@ -76,6 +76,14 @@ import ResourceReference from '../Resources/ResourceReference';
     });
   }
 
+  getBoundingBoxes(threeObject) {
+    const boundingBox = new THREE.Box3();
+
+    boundingBox.setFromObject(threeObject.userData.parentMarkup.threeObject);
+
+    return [boundingBox];
+  }
+
   hideHighlight(threeObject) {
     threeObject.userData.events.emit('hideHighlight');
   }
@@ -88,7 +96,7 @@ import ResourceReference from '../Resources/ResourceReference';
     // doesn't matter
   }
 
-  _invalidChild = child => {
+  invalidChildInternal(child) {
     const invalid = !(child instanceof THREE.Texture || child instanceof ResourceReference );
 
     if (invalid) {
@@ -96,6 +104,10 @@ import ResourceReference from '../Resources/ResourceReference';
     }
 
     return invalid;
+  }
+
+  _invalidChild = child => {
+    return this.invalidChildInternal(child);
   };
 }
 

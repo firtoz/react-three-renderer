@@ -307,7 +307,7 @@ class React3DInstance {
 
     object.userData.events.on('highlight', this._objectHighlighted);
 
-    object.userData.events.emit('addedIntoRoot');
+    object.userData.events.emit('addedIntoRoot', object);
 
     const current:THREE.Object3D = object;
 

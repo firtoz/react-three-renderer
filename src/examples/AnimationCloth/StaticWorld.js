@@ -68,16 +68,6 @@ class StaticWorld extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.uniforms = {
-      texture: {type: 't', value: this.refs.clothTexture},
-    };
-
-    this.setState({
-      textureLoaded: true,
-    });
-  }
-
   render() {
     const d = 300;
 
@@ -89,7 +79,6 @@ class StaticWorld extends React.Component {
           wrapT={THREE.RepeatWrapping}
           anisotropy={16}
           resourceId="clothTexture"
-          ref="clothTexture"
         />
       </resources>
       <ambientLight
@@ -131,18 +120,20 @@ class StaticWorld extends React.Component {
         </meshPhongMaterial>
         {this.state.textureLoaded ? <shaderMaterial
           slot="customDepthMaterial"
-          uniforms={this.uniforms}
           vertexShader={vertexShaderDepth}
           fragmentShader={fragmentShaderDepth}
-        >{/*
-        <uniforms>
-          <uniform
-            name="texture"
-            type="t"
-            value="this.clothTexture"
-          />
-        </uniforms>
-        */}</shaderMaterial> : null}
+        >
+          <uniforms>
+            <uniform
+              name="texture"
+              type="t"
+            >
+              <textureResource
+                resourceId="clothTexture"
+              />
+            </uniform>
+          </uniforms>
+        </shaderMaterial> : null}
       </mesh>
       { /* <arrowHelper
        direction={this.arrowDirection}

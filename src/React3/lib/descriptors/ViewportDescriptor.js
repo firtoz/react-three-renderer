@@ -15,17 +15,6 @@ class ViewportDescriptor extends THREEElementDescriptor {
     ]);
   }
 
-  useSimpleUpdates(names) {
-    for (let i = 0; i < names.length; ++i) {
-      const propName = names[i];
-      this.propUpdates[propName] = this._updateSimple.bind(this, propName);
-    }
-  }
-
-  _updateSimple(propName, self, propValue) {
-    self[propName] = propValue;
-  }
-
   construct(props) {
     return new Viewport(props);
   }
@@ -34,8 +23,8 @@ class ViewportDescriptor extends THREEElementDescriptor {
     super.unmount(self);
   }
 
-  setParent() {
-    // no need to do anything, viewports are simple!
+  setParent(self, parentObject3D) {
+    super.setParent(self, parentObject3D);
   }
 }
 

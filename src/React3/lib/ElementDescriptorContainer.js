@@ -25,6 +25,9 @@ import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceD
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
 import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDescriptor';
 
+import UniformsDescriptor from './descriptors/UniformsDescriptor';
+import UniformDescriptor from './descriptors/UniformDescriptor';
+
 class ElementDescriptorContainer {
   constructor(react3RendererInstance) {
     this.react3RendererInstance = react3RendererInstance;
@@ -67,6 +70,9 @@ class ElementDescriptorContainer {
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),
       geometryResource: new GeometryResourceDescriptor(react3RendererInstance),
       textureResource: new TextureResourceDescriptor(react3RendererInstance),
+
+      uniforms: new UniformsDescriptor(react3RendererInstance),
+      uniform: new UniformDescriptor(react3RendererInstance),
     };
   }
 }

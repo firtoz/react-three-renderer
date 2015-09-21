@@ -5,28 +5,25 @@ import invariant from 'fbjs/lib/invariant';
 
 import resource from './decorators/resource';
 
-import MaterialDescriptorBase from './MaterialDescriptorBase';
-
 @resource class TextureDescriptor extends THREEElementDescriptor {
   construct(props) {
     if (props.hasOwnProperty('url')) {
       return THREE.ImageUtils.loadTexture(props.url);
     }
-    /*
-     this.clothTexture = THREE.ImageUtils.loadTexture('textures/patterns/circuit_pattern.png');
-     this.clothTexture.wrapS = this.clothTexture.wrapT = THREE.RepeatWrapping;
-     this.clothTexture.anisotropy = 16;
-     */
-    //return new THREE.Geometry();
   }
 
   setParent(texture, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Material, 'Parent is not a material');
-    invariant(parentObject3D.map === undefined, 'Parent already has a texture');
+    invariant(parentObject3D instanceof THREE.Material || parentObject3D instanceof Uniform,
+      'Parent is not a material or a uniform');
+
+    if (parentObject3D instanceof THREE.Material) {
+      invariant(parentObject3D.map === undefined, 'Parent already has a texture');
+      parentObject3D.map = texture;
+    } else { // Uniform as per the assert above
+      parentObject3D.setValue(texture);
+    }
 
     super.setParent(texture, parentObject3D);
-
-    parentObject3D.geometry = texture;
   }
 
 
@@ -58,6 +55,10 @@ import MaterialDescriptorBase from './MaterialDescriptorBase';
       if (parent.map === texture) {
         parent.map = undefined;
       }
+    } else if (parent instanceof Uniform) {
+      if (uniform.value === texture) {
+        uniform.setValue(null);
+      }
     }
 
     texture.dispose();
@@ -66,15 +67,13 @@ import MaterialDescriptorBase from './MaterialDescriptorBase';
   }
 
   highlight(threeObject) {
-    const ownerMaterial = threeObject.userData.parentMarkup.threeObject;
-
-    new MaterialDescriptorBase(this.react3RendererInstance).highlight(ownerMaterial);
+    const parent = threeObject.userData.parentMarkup.threeObject;
+    parent.userData._descriptor.highlight(parent);
   }
 
   hideHighlight(threeObject) {
-    const ownerMaterial = threeObject.userData.parentMarkup.threeObject;
-
-    new MaterialDescriptorBase(this.react3RendererInstance).hideHighlight(ownerMaterial);
+    const parent = threeObject.userData.parentMarkup.threeObject;
+    parent.userData._descriptor.hideHighlight(parent);
   }
 }
 

@@ -12,8 +12,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this._simpleProperties = [];
-
     this.propUpdates = {
       'position': this._updatePosition,
       'rotation': this._updateRotation,
@@ -60,12 +58,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
       threeObject.userData._lookAt = props.lookAt;
       threeObject.lookAt(props.lookAt);
     }
-
-    this._simpleProperties.forEach(propertyName => {
-      if (props.hasOwnProperty(propertyName)) {
-        threeObject[propertyName] = props[propertyName];
-      }
-    });
   }
 
   _updatePosition = (threeObject, nextPosition) => {
@@ -149,16 +141,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
     }
 
     super.unmount(self);
-  }
-
-  registerSimpleProperties(propertyNames) {
-    this._simpleProperties = this._simpleProperties.concat(propertyNames);
-
-    propertyNames.forEach(propertyName => {
-      this.propUpdates[propertyName] = (threeObject, nextValue) => {
-        threeObject[propertyName] = nextValue;
-      };
-    });
   }
 
   highlight(threeObject) {

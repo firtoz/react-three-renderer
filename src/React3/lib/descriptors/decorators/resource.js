@@ -33,13 +33,13 @@ function resource(descriptor) {
         threeObject.userData.events.emit('highlight', {
           uuid: threeObject.uuid,
           boundingBoxFunc: () => {
-            return threeObject.userData._references.map(objectWithReference => {
-              const boundingBox = new THREE.Box3();
-
-              boundingBox.setFromObject(objectWithReference);
-
-              return boundingBox;
-            });
+            return threeObject.userData._references.reduce((boxes, objectWithReference) => {
+              const boxesForReference = objectWithReference.userData._descriptor.getBoundingBoxes(objectWithReference);
+              if (boxesForReference.length === 0) {
+                debugger;
+              }
+              return boxes.concat(boxesForReference);
+            }, []);
           },
         });
       } else {

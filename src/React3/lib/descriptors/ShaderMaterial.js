@@ -1,6 +1,8 @@
 import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
+import UniformContainer from '../UniformContainer';
+
 class ShaderMaterial extends MaterialDescriptorBase {
   construct(props) {
     const materialDescription = {};
@@ -18,6 +20,24 @@ class ShaderMaterial extends MaterialDescriptorBase {
     }
 
     return new THREE.ShaderMaterial(materialDescription);
+  }
+
+  invalidChildInternal(child) {
+    const invalid = !(child instanceof UniformContainer || super.invalidChildInternal(child) );
+
+    if (invalid) {
+      debugger;
+    }
+
+    return invalid;
+  }
+
+  applyInitialProps(self, props) {
+    super.applyInitialProps(self, props);
+
+    if (!props.hasOwnProperty('uniforms')) {
+      self.uniforms = undefined;
+    }
   }
 }
 

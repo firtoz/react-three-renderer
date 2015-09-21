@@ -11,6 +11,7 @@ class THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     this.react3RendererInstance = react3RendererInstance;
     this.propUpdates = {};
+    this._simpleProperties = [];
   }
 
   applyInitialProps(self, props) { // eslint-disable-line no-unused-vars
@@ -43,6 +44,13 @@ class THREEElementDescriptor {
     });
 
     self.userData.events = eventsForObject;
+    self.userData._descriptor = this;
+
+    this._simpleProperties.forEach(propertyName => {
+      if (props.hasOwnProperty(propertyName)) {
+        self[propertyName] = props[propertyName];
+      }
+    });
   }
 
   construct(props) { // eslint-disable-line no-unused-vars
@@ -117,6 +125,31 @@ class THREEElementDescriptor {
 
   hideHighlight(threeObject) { // eslint-disable-line no-unused-vars
     // no highlighting by default!
+  }
+
+  /**
+   * @protected
+   * @param names
+   */
+  useSimpleUpdates(names) {
+    for (let i = 0; i < names.length; ++i) {
+      const propName = names[i];
+      this.propUpdates[propName] = this._updateSimple.bind(this, propName);
+    }
+  }
+
+  _updateSimple(propName, self, propValue) {
+    self[propName] = propValue;
+  }
+
+  registerSimpleProperties(propertyNames) {
+    this._simpleProperties = this._simpleProperties.concat(propertyNames);
+
+    this.useSimpleUpdates(propertyNames);
+  }
+
+  getBoundingBoxes(threeObject) {
+    return [];
   }
 }
 

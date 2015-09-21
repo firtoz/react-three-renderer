@@ -21,7 +21,42 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     self.userData._eventCleanupQueue = [];
     self.userData._chosenResource = undefined;
     self.userData._debug = props.debug || false;
+
+    self.userData.events.once('addedIntoRoot', this._addedIntoRoot);
   }
+
+  _addedIntoRoot = (self) => {
+    let currentParentMarkup = self.userData.parentMarkup;
+
+    let distance = 0;
+
+    while (currentParentMarkup) {
+      const parentResources = currentParentMarkup.userData._resources;
+
+      if (parentResources) {
+
+        const resourceId = self.resourceId;
+        const resourceInParent = parentResources.resourceMap[resourceId];
+
+        if (self.userData._debug) {
+          debugger;
+        }
+
+        if (resourceInParent) {
+          this._addResource(self, {
+            id: resourceId,
+            distance,
+            resource: resourceInParent,
+          });
+        }
+      }
+
+      distance++;
+      currentParentMarkup = currentParentMarkup.userData.parentMarkup;
+    }
+
+    this._updateResource(self);
+  };
 
   unmount(self) {
     self.userData._eventCleanupQueue.forEach(cleanup => {
@@ -50,7 +85,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
 
     invariant(self.userData._eventCleanupQueue.length === 0, 'Changing parents?');
 
-    let currentParentMarkup = parentObject3D.userData.markup;
+    const currentParentMarkup = parentObject3D.userData.markup;
 
     const onResourceAdded = this._onResourceAdded.bind(this, self);
     const onResourceRemoved = this._onResourceRemoved.bind(this, self);
@@ -63,34 +98,6 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
       parentEvents.removeListener('resource.added', onResourceAdded);
       parentEvents.removeListener('resource.removed', onResourceRemoved);
     });
-
-    let distance = 0;
-
-    while (currentParentMarkup) {
-      const parentResources = currentParentMarkup.userData._resources;
-
-      if (parentResources) {
-        if (self.userData._debug) {
-          debugger;
-        }
-
-        const resourceId = self.resourceId;
-        const resourceInParent = parentResources.resourceIds[resourceId];
-
-        if (resourceInParent) {
-          this._addResource(self, {
-            id: resourceId,
-            distance,
-            resource: resourceInParent,
-          });
-        }
-      }
-
-      distance++;
-      currentParentMarkup = currentParentMarkup.userData.parentMarkup;
-    }
-
-    this._updateResource(self);
   }
 
   _onResourceAdded(self, resourceInfo) {
@@ -147,6 +154,11 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     invariant(false, 'This resource was not in this map?');
   }
 
+  applyToSlot(self, parentObject, newResource) {
+    const propertySlot = self.userData._propertySlot;
+    parentObject[propertySlot] = newResource;
+  }
+
   resourceUpdated(self, newResource, oldResource) {
     const parentObject = self.userData.parentMarkup && self.userData.parentMarkup.threeObject || undefined;
 
@@ -155,8 +167,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     }
 
     if (parentObject) {
-      const propertySlot = self.userData._propertySlot;
-      parentObject[propertySlot] = newResource;
+      this.applyToSlot(self, parentObject, newResource);
 
       if (newResource === null) {
         // invariant(false, 'Could not find resource named ' + self.resourceId);
@@ -193,20 +204,12 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
 
   highlight(threeObject) {
     const ownerObject = threeObject.userData.parentMarkup.threeObject;
-    threeObject.userData.events.emit('highlight', {
-      uuid: threeObject.uuid,
-      boundingBoxFunc: () => {
-        const boundingBox = new THREE.Box3();
-
-        boundingBox.setFromObject(ownerObject);
-
-        return [boundingBox];
-      },
-    });
+    ownerObject.userData._descriptor.highlight(ownerObject);
   }
 
   hideHighlight(threeObject) {
-    threeObject.userData.events.emit('hideHighlight');
+    const ownerObject = threeObject.userData.parentMarkup.threeObject;
+    ownerObject.userData._descriptor.hideHighlight(ownerObject);
   }
 }
 
