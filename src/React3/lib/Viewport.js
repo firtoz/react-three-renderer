@@ -1,5 +1,7 @@
 class Viewport {
   constructor(props) {
+    this.userData = {};
+
     this.x = props.x;
     this.y = props.y;
     this.width = props.width;

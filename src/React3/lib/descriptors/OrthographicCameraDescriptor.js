@@ -8,6 +8,8 @@ class OrthographicCameraDescriptor extends CameraDescriptorBase {
     this.propUpdates = {
       ...this.propUpdates,
 
+      left: this._updateAndRefreshProjection.bind(this, 'left'),
+      right: this._updateAndRefreshProjection.bind(this, 'right'),
       top: this._updateAndRefreshProjection.bind(this, 'top'),
       bottom: this._updateAndRefreshProjection.bind(this, 'bottom'),
     };
