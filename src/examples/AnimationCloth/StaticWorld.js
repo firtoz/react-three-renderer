@@ -53,19 +53,9 @@ class StaticWorld extends React.Component {
     super(props, context);
 
     this.directionalLightPosition = new THREE.Vector3(50, 200, 100).multiplyScalar(1.3);
-
-
     this.groundPosition = new THREE.Vector3(0, -250, 0);
     this.groundRotation = new THREE.Euler(-Math.PI / 2, 0, 0);
-
-    this.groundTexture = THREE.ImageUtils.loadTexture('textures/terrain/grasslight-big.jpg');
-    this.groundTexture.wrapS = this.groundTexture.wrapT = THREE.RepeatWrapping;
-    this.groundTexture.repeat.set(25, 25);
-    this.groundTexture.anisotropy = 16;
-
-    this.state = {
-      textureLoaded: false,
-    };
+    this.groundRepeat = new THREE.Vector2(25, 25);
   }
 
   render() {
@@ -118,7 +108,7 @@ class StaticWorld extends React.Component {
             resourceId="clothTexture"
           />
         </meshPhongMaterial>
-        {this.state.textureLoaded ? <shaderMaterial
+        <shaderMaterial
           slot="customDepthMaterial"
           vertexShader={vertexShaderDepth}
           fragmentShader={fragmentShaderDepth}
@@ -133,7 +123,7 @@ class StaticWorld extends React.Component {
               />
             </uniform>
           </uniforms>
-        </shaderMaterial> : null}
+        </shaderMaterial>
       </mesh>
       { /* <arrowHelper
        direction={this.arrowDirection}
@@ -154,8 +144,16 @@ class StaticWorld extends React.Component {
         <meshPhongMaterial
           color={0xffffff}
           specular={0x111111}
-          map={this.groundTexture}
-        />
+          // map={this.groundTexture}
+        >
+          <texture
+            url="textures/terrain/grasslight-big.jpg"
+            wrapS={THREE.RepeatWrapping}
+            wrapT={THREE.RepeatWrapping}
+            repeat={this.groundRepeat}
+            anisotropy={16}
+          />
+        </meshPhongMaterial>
       </mesh>
       <Poles/>
     </object3D>);

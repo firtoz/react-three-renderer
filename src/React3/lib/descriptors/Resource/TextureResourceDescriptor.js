@@ -16,7 +16,6 @@ class TextureResourceDescriptor extends ResourceDescriptorBase {
     if (parentObject3D instanceof THREE.Material) {
       super.applyToSlot(self, parentObject3D, newResource);
     } else if (parentObject3D instanceof Uniform) {
-      debugger;
       parentObject3D.setValue(newResource);
     } else {
       invariant(false, 'Parent is not a material or a uniform');

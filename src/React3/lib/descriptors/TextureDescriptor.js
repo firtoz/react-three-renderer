@@ -6,9 +6,30 @@ import invariant from 'fbjs/lib/invariant';
 import resource from './decorators/resource';
 
 @resource class TextureDescriptor extends THREEElementDescriptor {
+  constructor(react3RendererInstance:React3Renderer) {
+    super(react3RendererInstance);
+
+    this.registerSimpleProperties([
+      'wrapS',
+      'wrapT',
+      'anisotropy',
+    ]);
+
+    this.propUpdates = {
+      ...this.propUpdates,
+      'repeat': this._setRepeat,
+    }
+  }
+
+  _setRepeat = (self, repeat) => {
+    self.repeat.copy(repeat);
+  };
+
   construct(props) {
     if (props.hasOwnProperty('url')) {
       return THREE.ImageUtils.loadTexture(props.url);
+    } else {
+      invariant(false, 'The texture needs a url property.');
     }
   }
 
@@ -32,16 +53,8 @@ import resource from './decorators/resource';
       ...self.userData,
     };
 
-    if (props.hasOwnProperty('anisotropy')) {
-      self.anisotropy = props.anisotropy;
-    }
-
-    if (props.hasOwnProperty('wrapS')) {
-      self.wrapS = props.wrapS;
-    }
-
-    if (props.hasOwnProperty('wrapT')) {
-      self.wrapT = props.wrapT;
+    if (props.hasOwnProperty('repeat')) {
+      self.repeat.copy(props.repeat);
     }
 
     super.applyInitialProps(self, props);

@@ -57,8 +57,6 @@ class UniformDescriptor extends THREEElementDescriptor {
     };
 
     self.userData.events.on('valueChanged', self.userData._onValueChanged);
-
-    debugger;
   }
 
   addChildren(self, children) {
