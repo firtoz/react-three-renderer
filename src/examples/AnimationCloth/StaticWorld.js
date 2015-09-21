@@ -54,13 +54,6 @@ class StaticWorld extends React.Component {
 
     this.directionalLightPosition = new THREE.Vector3(50, 200, 100).multiplyScalar(1.3);
 
-    this.clothTexture = THREE.ImageUtils.loadTexture('textures/patterns/circuit_pattern.png');
-    this.clothTexture.wrapS = this.clothTexture.wrapT = THREE.RepeatWrapping;
-    this.clothTexture.anisotropy = 16;
-
-    this.uniforms = {
-      texture: {type: 't', value: this.clothTexture},
-    };
 
     this.groundPosition = new THREE.Vector3(0, -250, 0);
     this.groundRotation = new THREE.Euler(-Math.PI / 2, 0, 0);
@@ -69,12 +62,36 @@ class StaticWorld extends React.Component {
     this.groundTexture.wrapS = this.groundTexture.wrapT = THREE.RepeatWrapping;
     this.groundTexture.repeat.set(25, 25);
     this.groundTexture.anisotropy = 16;
+
+    this.state = {
+      textureLoaded: false,
+    };
+  }
+
+  componentDidMount() {
+    this.uniforms = {
+      texture: {type: 't', value: this.refs.clothTexture},
+    };
+
+    this.setState({
+      textureLoaded: true,
+    });
   }
 
   render() {
     const d = 300;
 
     return (<object3D>
+      <resources>
+        <texture
+          url="textures/patterns/circuit_pattern.png"
+          wrapS={THREE.RepeatWrapping}
+          wrapT={THREE.RepeatWrapping}
+          anisotropy={16}
+          resourceId="clothTexture"
+          ref="clothTexture"
+        />
+      </resources>
       <ambientLight
         color={0x666666}
       />
@@ -106,15 +123,26 @@ class StaticWorld extends React.Component {
           specular={0x030303}
           emissive={0x111111}
           shininess={10}
-          map={this.clothTexture}
           side={THREE.DoubleSide}
-        />
-        <shaderMaterial
+        >
+          <textureResource
+            resourceId="clothTexture"
+          />
+        </meshPhongMaterial>
+        {this.state.textureLoaded ? <shaderMaterial
           slot="customDepthMaterial"
           uniforms={this.uniforms}
           vertexShader={vertexShaderDepth}
           fragmentShader={fragmentShaderDepth}
-        />
+        >{/*
+        <uniforms>
+          <uniform
+            name="texture"
+            type="t"
+            value="this.clothTexture"
+          />
+        </uniforms>
+        */}</shaderMaterial> : null}
       </mesh>
       { /* <arrowHelper
        direction={this.arrowDirection}

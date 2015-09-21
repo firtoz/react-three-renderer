@@ -17,11 +17,13 @@ import ViewportDescriptor from './descriptors/ViewportDescriptor';
 import AmbientLightDescriptor from './descriptors/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/DirectionalLightDescriptor';
 import ShaderMaterial from './descriptors/ShaderMaterial';
+import TextureDescriptor from './descriptors/TextureDescriptor';
 import PlaneBufferGeometry from './descriptors/PlaneBufferGeometry';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
+import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDescriptor';
 
 class ElementDescriptorContainer {
   constructor(react3RendererInstance) {
@@ -50,6 +52,8 @@ class ElementDescriptorContainer {
       pointCloudMaterial: new PointCloudMaterialDescriptor(react3RendererInstance),
       shaderMaterial: new ShaderMaterial(react3RendererInstance),
 
+      texture: new TextureDescriptor(react3RendererInstance),
+
       geometry: new GeometryDescriptor(react3RendererInstance),
       boxGeometry: new BoxGeometryDescriptor(react3RendererInstance),
       sphereGeometry: new SphereGeometryDescriptor(react3RendererInstance),
@@ -62,6 +66,7 @@ class ElementDescriptorContainer {
       resources: new ResourcesDescriptor(react3RendererInstance),
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),
       geometryResource: new GeometryResourceDescriptor(react3RendererInstance),
+      textureResource: new TextureResourceDescriptor(react3RendererInstance),
     };
   }
 }

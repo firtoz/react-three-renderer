@@ -39,6 +39,15 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
 
     return new THREE.MeshPhongMaterial(materialDescription);
   }
+
+
+  applyInitialProps(self, props) {
+    super.applyInitialProps(self, props);
+
+    if (!props.hasOwnProperty('map')) {
+      self.map = undefined;
+    }
+  }
 }
 
 export default MeshPhongMaterialDescriptor;

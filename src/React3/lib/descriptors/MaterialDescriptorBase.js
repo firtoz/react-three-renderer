@@ -2,8 +2,9 @@ import THREE from 'three';
 import THREEElementDescriptor from './THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
 
-import ResourceContainer from '../Resources/Container';
 import resource from './decorators/resource';
+
+import ResourceReference from '../Resources/ResourceReference';
 
 @resource class MaterialDescriptorBase extends THREEElementDescriptor {
   constructor(react3Instance) {
@@ -78,6 +79,24 @@ import resource from './decorators/resource';
   hideHighlight(threeObject) {
     threeObject.userData.events.emit('hideHighlight');
   }
+
+  addChildren(self, children) {
+    invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
+  }
+
+  moveChild() {
+    // doesn't matter
+  }
+
+  _invalidChild = child => {
+    const invalid = !(child instanceof THREE.Texture || child instanceof ResourceReference );
+
+    if (invalid) {
+      debugger;
+    }
+
+    return invalid;
+  };
 }
 
 export default MaterialDescriptorBase;
