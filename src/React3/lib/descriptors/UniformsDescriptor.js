@@ -34,6 +34,21 @@ class UniformsDescriptor extends THREEElementDescriptor {
       invariant(child instanceof Uniform, 'The <uniforms/> component can only have <uniform/> elements as children.');
     });
   }
+
+  highlight(threeObject) {
+    const parent = threeObject.userData.parentMarkup.threeObject;
+    parent.userData._descriptor.highlight(parent);
+  }
+
+  getBoundingBoxes(threeObject) {
+    const parent = threeObject.userData.parentMarkup.threeObject;
+    return parent.userData._descriptor.getBoundingBoxes(parent);
+  }
+
+  hideHighlight(threeObject) {
+    const parent = threeObject.userData.parentMarkup.threeObject;
+    parent.userData._descriptor.hideHighlight(parent);
+  }
 }
 
 export default UniformsDescriptor;
