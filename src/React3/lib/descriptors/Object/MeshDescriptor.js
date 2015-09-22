@@ -26,7 +26,12 @@ class MeshDescriptor extends Object3DDescriptor {
   }
 
   _invalidChild = child => {
-    const invalid = !(child instanceof THREE.Material || child instanceof ResourceReference || child instanceof THREE.Geometry || child instanceof THREE.BufferGeometry);
+    const invalid = !(
+      child instanceof THREE.Material ||
+      child instanceof ResourceReference ||
+      child instanceof THREE.Geometry ||
+      child instanceof THREE.BufferGeometry
+    );
 
     if (invalid) {
       debugger;

@@ -16,25 +16,13 @@ class GeometryResourceDescriptor extends ResourceDescriptorBase {
     super.setParent(self, parentObject3D);
   }
 
-
   resourceUpdated(self, newResource, oldResource) {
-    let fixedResource;
-    if (newResource && newResource.clone) {
-      fixedResource = newResource.clone();
-
-      fixedResource.userData = {
-        ... newResource.userData,
-        _isClone: true,
-      };
-    } else {
-      fixedResource = newResource;
+    if (self.userData.parentMarkup.threeObject.__webglInit) {
+      // pretend the object has been removed so that the context can be reinitialized
+      self.userData.parentMarkup.threeObject.dispatchEvent({type: 'removed'});
     }
 
-    if (oldResource && oldResource.userData._isClone) {
-      oldResource.dispose();
-    }
-
-    return super.resourceUpdated(self, fixedResource, oldResource);
+    return super.resourceUpdated(self, newResource, oldResource);
   }
 }
 

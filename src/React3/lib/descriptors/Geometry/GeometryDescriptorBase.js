@@ -12,6 +12,11 @@ import resource from './../decorators/resource';
 
     super.setParent(geometry, parentObject3D);
 
+    if (parentObject3D.__webglInit) {
+      // pretend the object has been removed so that the context can be reinitialized
+      parentObject3D.dispatchEvent({type: 'removed'});
+    }
+
     parentObject3D.geometry = geometry;
   }
 

@@ -48,7 +48,7 @@ class Geometries extends ExampleBase {
   }
 
   _onAnimate = () => {
-    const timer = Date.now() * 0.0001;
+    var timer = Date.now() * 0.0001;
 
     this.setState({
       timer,
