@@ -10,16 +10,11 @@ import MeshBasicMaterialDescriptor from './descriptors/MeshBasicMaterialDescript
 import MeshPhongMaterialDescriptor from './descriptors/MeshPhongMaterialDescriptor';
 import MeshLambertMaterialDescriptor from './descriptors/MeshLambertMaterialDescriptor';
 import PointCloudMaterialDescriptor from './descriptors/PointCloudMaterialDescriptor';
-import GeometryDescriptor from './descriptors/GeometryDescriptor';
-import BoxGeometryDescriptor from './descriptors/BoxGeometryDescriptor';
-import SphereGeometryDescriptor from './descriptors/SphereGeometryDescriptor';
-import ParametricGeometryDescriptor from './descriptors/ParametricGeometryDescriptor';
 import ViewportDescriptor from './descriptors/ViewportDescriptor';
 import AmbientLightDescriptor from './descriptors/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/DirectionalLightDescriptor';
-import ShaderMaterial from './descriptors/ShaderMaterial';
+import ShaderMaterialDescriptor from './descriptors/ShaderMaterialDescriptor';
 import TextureDescriptor from './descriptors/TextureDescriptor';
-import PlaneBufferGeometry from './descriptors/PlaneBufferGeometry';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
@@ -28,6 +23,24 @@ import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDes
 
 import UniformsDescriptor from './descriptors/UniformsDescriptor';
 import UniformDescriptor from './descriptors/UniformDescriptor';
+
+import AxisHelperDescriptor from './descriptors/AxisHelperDescriptor';
+import ArrowHelperDescriptor from './descriptors/ArrowHelperDescriptor';
+
+import GeometryDescriptor from './descriptors/GeometryDescriptor';
+import BoxGeometryDescriptor from './descriptors/BoxGeometryDescriptor';
+import SphereGeometryDescriptor from './descriptors/SphereGeometryDescriptor';
+import ParametricGeometryDescriptor from './descriptors/ParametricGeometryDescriptor';
+import PlaneBufferGeometryDescriptor from './descriptors/PlaneBufferGeometryDescriptor';
+import IcosahedronGeometryDescriptor from './descriptors/IcosahedronGeometryDescriptor';
+import OctahedronGeometryDescriptor from './descriptors/OctahedronGeometryDescriptor';
+import TetrahedronGeometryDescriptor from './descriptors/TetrahedronGeometryDescriptor';
+import CircleGeometryDescriptor from './descriptors/CircleGeometryDescriptor';
+import RingGeometryDescriptor from './descriptors/RingGeometryDescriptor';
+import CylinderGeometryDescriptor from './descriptors/CylinderGeometryDescriptor';
+import LatheGeometryDescriptor from './descriptors/LatheGeometryDescriptor';
+import TorusGeometryDescriptor from './descriptors/TorusGeometryDescriptor';
+import TorusKnotGeometryDescriptor from './descriptors/TorusKnotGeometryDescriptor';
 
 class ElementDescriptorContainer {
   constructor(react3RendererInstance) {
@@ -55,7 +68,7 @@ class ElementDescriptorContainer {
       meshPhongMaterial: new MeshPhongMaterialDescriptor(react3RendererInstance),
       meshLambertMaterial: new MeshLambertMaterialDescriptor(react3RendererInstance),
       pointCloudMaterial: new PointCloudMaterialDescriptor(react3RendererInstance),
-      shaderMaterial: new ShaderMaterial(react3RendererInstance),
+      shaderMaterial: new ShaderMaterialDescriptor(react3RendererInstance),
 
       texture: new TextureDescriptor(react3RendererInstance),
 
@@ -63,7 +76,16 @@ class ElementDescriptorContainer {
       boxGeometry: new BoxGeometryDescriptor(react3RendererInstance),
       sphereGeometry: new SphereGeometryDescriptor(react3RendererInstance),
       parametricGeometry: new ParametricGeometryDescriptor(react3RendererInstance),
-      planeBufferGeometry: new PlaneBufferGeometry(react3RendererInstance),
+      planeBufferGeometry: new PlaneBufferGeometryDescriptor(react3RendererInstance),
+      icosahedronGeometry: new IcosahedronGeometryDescriptor(react3RendererInstance),
+      octahedronGeometry: new OctahedronGeometryDescriptor(react3RendererInstance),
+      tetrahedronGeometry: new TetrahedronGeometryDescriptor(react3RendererInstance),
+      circleGeometry: new CircleGeometryDescriptor(react3RendererInstance),
+      ringGeometry: new RingGeometryDescriptor(react3RendererInstance),
+      cylinderGeometry: new CylinderGeometryDescriptor(react3RendererInstance),
+      latheGeometry: new LatheGeometryDescriptor(react3RendererInstance),
+      torusGeometry: new TorusGeometryDescriptor(react3RendererInstance),
+      torusKnotGeometry: new TorusKnotGeometryDescriptor(react3RendererInstance),
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
@@ -75,6 +97,9 @@ class ElementDescriptorContainer {
 
       uniforms: new UniformsDescriptor(react3RendererInstance),
       uniform: new UniformDescriptor(react3RendererInstance),
+
+      axisHelper: new AxisHelperDescriptor(react3RendererInstance),
+      arrowHelper: new ArrowHelperDescriptor(react3RendererInstance),
     };
   }
 }

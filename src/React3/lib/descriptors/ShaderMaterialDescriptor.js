@@ -3,7 +3,7 @@ import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 import UniformContainer from '../UniformContainer';
 
-class ShaderMaterial extends MaterialDescriptorBase {
+class ShaderMaterialDescriptor extends MaterialDescriptorBase {
   construct(props) {
     const materialDescription = {};
 
@@ -41,4 +41,4 @@ class ShaderMaterial extends MaterialDescriptorBase {
   }
 }
 
-export default ShaderMaterial;
+export default ShaderMaterialDescriptor;

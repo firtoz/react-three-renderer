@@ -133,16 +133,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
     super.setParent(self, parentObject3d);
   }
 
-  unmount(self) {
-    const markup = self.userData.markup;
-
-    if (markup._rootInstance) {
-      markup._rootInstance.objectRemoved(self);
-    }
-
-    super.unmount(self);
-  }
-
   highlight(threeObject) {
     threeObject.userData.events.emit('highlight', {
       uuid: threeObject.uuid,

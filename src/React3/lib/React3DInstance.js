@@ -1,11 +1,9 @@
 import THREE from 'three';
 import invariant from 'fbjs/lib/invariant.js';
 import Viewport from './Viewport';
+import ResourceContainer from './Resources/Container';
 import ReactUpdates from 'react/lib/ReactUpdates';
 
-import events from 'events';
-
-const {EventEmitter} = events;
 
 import CameraUtils from './utils/Camera';
 
@@ -130,6 +128,8 @@ class React3DInstance {
         this.setScene(child);
       } else if (child instanceof Viewport) {
         this.addViewport(child);
+      } else if (child instanceof ResourceContainer) {
+        // this.addViewport(child);
       } else {
         invariant(false, 'The react3 component should only contain viewports or scenes.');
       }

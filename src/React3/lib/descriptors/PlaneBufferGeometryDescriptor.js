@@ -2,7 +2,7 @@ import THREE from 'three';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 import invariant from 'fbjs/lib/invariant';
 
-class PlaneBufferGeometry extends GeometryDescriptorBase {
+class PlaneBufferGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
 
@@ -26,4 +26,4 @@ class PlaneBufferGeometry extends GeometryDescriptorBase {
   };
 }
 
-export default PlaneBufferGeometry;
+export default PlaneBufferGeometryDescriptor;

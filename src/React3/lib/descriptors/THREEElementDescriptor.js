@@ -81,6 +81,12 @@ class THREEElementDescriptor {
   }
 
   unmount(self) { // eslint-disable-line no-unused-vars
+    const markup = self.userData.markup;
+
+    if (markup._rootInstance) {
+      markup._rootInstance.objectRemoved(self);
+    }
+
     self.userData.events.emit('dispose', {
       object: self,
     });

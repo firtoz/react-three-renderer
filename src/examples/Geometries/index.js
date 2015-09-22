@@ -42,9 +42,18 @@ class Geometries extends ExampleBase {
     this.scenePosition = new THREE.Vector3(0, 0, 0);
 
     this.state = {
+      ...this.state,
       timer: Date.now() * 0.0001,
     };
   }
+
+  _onAnimate = () => {
+    var timer = Date.now() * 0.0001;
+
+    this.setState({
+      timer,
+    });
+  };
 
   render() {
     const {
@@ -70,7 +79,9 @@ class Geometries extends ExampleBase {
         <resources>
           <texture
             resourceId="map"
-            url="textures/UV_Grid_Sm.jpg"
+            //url="textures/UV_Grid_Sm.jpg"
+            //url="textures/patterns/circuit_pattern.png"
+            url="textures/terrain/grasslight-big.jpg"
             wrapS={THREE.RepeatWrapping}
             wrapT={THREE.RepeatWrapping}
             anisotropy={16}
@@ -95,7 +106,7 @@ class Geometries extends ExampleBase {
             position={new THREE.Vector3(
               Math.cos(timer) * 800,
               0,
-              Math.cos(timer) * 800
+              Math.sin(timer) * 800
             )}
           />
           <ambientLight
@@ -270,6 +281,7 @@ class Geometries extends ExampleBase {
           </mesh>
           <axisHelper
             position={this.objectPositions[11]}
+            size={50}
             rotation={objectRotation}
           />
           <arrowHelper
