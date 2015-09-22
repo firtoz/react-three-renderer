@@ -79,9 +79,7 @@ class Geometries extends ExampleBase {
         <resources>
           <texture
             resourceId="map"
-            //url="textures/UV_Grid_Sm.jpg"
-            //url="textures/patterns/circuit_pattern.png"
-            url="textures/terrain/grasslight-big.jpg"
+            url="textures/UV_Grid_Sm.jpg"
             wrapS={THREE.RepeatWrapping}
             wrapT={THREE.RepeatWrapping}
             anisotropy={16}
@@ -105,7 +103,7 @@ class Geometries extends ExampleBase {
             name="mainCamera"
             position={new THREE.Vector3(
               Math.cos(timer) * 800,
-              0,
+              400,
               Math.sin(timer) * 800
             )}
           />
@@ -267,7 +265,7 @@ class Geometries extends ExampleBase {
             />
           </mesh>
           <mesh
-            position={this.objectPositions[10]}
+            position={this.objectPositions[11]}
             rotation={objectRotation}
           >
             <torusKnotGeometry
@@ -281,7 +279,7 @@ class Geometries extends ExampleBase {
             />
           </mesh>
           <axisHelper
-            position={this.objectPositions[11]}
+            position={this.objectPositions[12]}
             size={50}
             rotation={objectRotation}
           />
@@ -289,7 +287,7 @@ class Geometries extends ExampleBase {
             dir={this.arrowDir}
             origin={this.arrowOrigin}
             length={50}
-            position={this.objectPositions[11]}
+            position={this.objectPositions[13]}
             rotation={objectRotation}
           />
         </scene>
