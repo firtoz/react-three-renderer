@@ -1,9 +1,9 @@
 import THREE from 'three';
-import THREEElementDescriptor from './THREEElementDescriptor';
+import THREEElementDescriptor from './../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
 
-import resource from './decorators/resource';
+import resource from './../decorators/resource';
 
 @resource class GeometryDescriptorBase extends THREEElementDescriptor {
   setParent(geometry, parentObject3D) {

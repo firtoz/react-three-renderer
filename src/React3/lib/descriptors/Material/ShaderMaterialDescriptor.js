@@ -1,7 +1,7 @@
 import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
-import UniformContainer from '../UniformContainer';
+import UniformContainer from '../../UniformContainer';
 
 class ShaderMaterialDescriptor extends MaterialDescriptorBase {
   construct(props) {

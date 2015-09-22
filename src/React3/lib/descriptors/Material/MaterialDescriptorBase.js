@@ -1,10 +1,10 @@
 import THREE from 'three';
-import THREEElementDescriptor from './THREEElementDescriptor';
+import THREEElementDescriptor from './../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
 
-import resource from './decorators/resource';
+import resource from './../decorators/resource';
 
-import ResourceReference from '../Resources/ResourceReference';
+import ResourceReference from '../../Resources/ResourceReference';
 
 @resource class MaterialDescriptorBase extends THREEElementDescriptor {
   constructor(react3Instance) {

@@ -1,5 +1,5 @@
 import THREE from 'three';
-import Object3DDescriptor from './Object3DDescriptor';
+import Object3DDescriptor from './../Object/Object3DDescriptor';
 
 class DirectionalLightDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {

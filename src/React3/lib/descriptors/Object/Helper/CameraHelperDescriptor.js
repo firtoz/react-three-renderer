@@ -1,6 +1,6 @@
 import THREE from 'three';
-import CameraUtils from '../utils/Camera.js';
-import Object3DDescriptor from './Object3DDescriptor';
+import CameraUtils from '../../../utils/Camera.js';
+import Object3DDescriptor from './../Object3DDescriptor';
 
 class CameraHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {

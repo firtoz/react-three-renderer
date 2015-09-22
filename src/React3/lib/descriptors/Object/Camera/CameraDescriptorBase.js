@@ -1,7 +1,7 @@
-import Object3DDescriptor from './Object3DDescriptor';
+import Object3DDescriptor from './../Object3DDescriptor';
 import THREE from 'three';
 
-import getRoot from '../getRoot';
+import getRoot from '../../../getRoot';
 
 class CameraDescriptorBase extends Object3DDescriptor {
   constructor(react3Instance) {

@@ -1,5 +1,5 @@
 import THREE from 'three';
-import Object3DDescriptor from './Object3DDescriptor';
+import Object3DDescriptor from './../Object3DDescriptor';
 
 class ArrowHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {

@@ -1,9 +1,9 @@
 import THREE from 'three';
 
-import THREEElementDescriptor from './THREEElementDescriptor';
+import THREEElementDescriptor from './../THREEElementDescriptor';
 
-import UniformContainer from '../UniformContainer';
-import Uniform from '../Uniform';
+import UniformContainer from '../../UniformContainer';
+import Uniform from '../../Uniform';
 
 import invariant from 'fbjs/lib/invariant';
 

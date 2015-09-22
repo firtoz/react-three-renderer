@@ -1,10 +1,10 @@
 import THREE from 'three';
 
-import THREEElementDescriptor from './THREEElementDescriptor';
+import THREEElementDescriptor from './../THREEElementDescriptor';
 
-import Uniform from '../Uniform';
-import UniformContainer from '../UniformContainer';
-import ResourceReference from '../Resources/ResourceReference';
+import Uniform from '../../Uniform';
+import UniformContainer from '../../UniformContainer';
+import ResourceReference from '../../Resources/ResourceReference';
 
 import invariant from 'fbjs/lib/invariant';
 

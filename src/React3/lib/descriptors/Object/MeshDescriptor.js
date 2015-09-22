@@ -1,7 +1,7 @@
 import THREE from 'three';
 import Object3DDescriptor from './Object3DDescriptor';
 
-import ResourceReference from '../Resources/ResourceReference';
+import ResourceReference from '../../Resources/ResourceReference';
 
 import invariant from 'fbjs/lib/invariant';
 
