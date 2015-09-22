@@ -8,6 +8,7 @@ import MeshDescriptor from './descriptors/MeshDescriptor';
 import PointCloudDescriptor from './descriptors/PointCloudDescriptor';
 import MeshBasicMaterialDescriptor from './descriptors/MeshBasicMaterialDescriptor';
 import MeshPhongMaterialDescriptor from './descriptors/MeshPhongMaterialDescriptor';
+import MeshLambertMaterialDescriptor from './descriptors/MeshLambertMaterialDescriptor';
 import PointCloudMaterialDescriptor from './descriptors/PointCloudMaterialDescriptor';
 import GeometryDescriptor from './descriptors/GeometryDescriptor';
 import BoxGeometryDescriptor from './descriptors/BoxGeometryDescriptor';
@@ -52,6 +53,7 @@ class ElementDescriptorContainer {
 
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3RendererInstance),
       meshPhongMaterial: new MeshPhongMaterialDescriptor(react3RendererInstance),
+      meshLambertMaterial: new MeshLambertMaterialDescriptor(react3RendererInstance),
       pointCloudMaterial: new PointCloudMaterialDescriptor(react3RendererInstance),
       shaderMaterial: new ShaderMaterial(react3RendererInstance),
 

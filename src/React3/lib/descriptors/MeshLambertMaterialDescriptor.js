@@ -1,7 +1,7 @@
 import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
-class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
+class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
   construct(props) {
     const materialDescription = {};
 
@@ -33,7 +33,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
       materialDescription.side = props.side;
     }
 
-    return new THREE.MeshPhongMaterial(materialDescription);
+    return new THREE.MeshLambertMaterial(materialDescription);
   }
 
 
@@ -46,4 +46,4 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
   }
 }
 
-export default MeshPhongMaterialDescriptor;
+export default MeshLambertMaterialDescriptor;
