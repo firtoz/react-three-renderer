@@ -147,13 +147,17 @@ class Object3DDescriptor extends THREEElementDescriptor {
     threeObject.userData.events.emit('highlight', {
       uuid: threeObject.uuid,
       boundingBoxFunc: () => {
-        const boundingBox = new THREE.Box3();
-
-        boundingBox.setFromObject(threeObject);
-
-        return [boundingBox];
+        return this.getBoundingBoxes(threeObject);
       },
     });
+  }
+
+  getBoundingBoxes(threeObject) {
+    const boundingBox = new THREE.Box3();
+
+    boundingBox.setFromObject(threeObject);
+
+    return [boundingBox];
   }
 
   hideHighlight(threeObject) {
