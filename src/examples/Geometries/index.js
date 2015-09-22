@@ -211,6 +211,7 @@ class Geometries extends ExampleBase {
           </mesh>
           <mesh
             position={this.objectPositions[7]}
+            rotation={objectRotation}
           >
             <ringGeometry
               innerRadius={10}

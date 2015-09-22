@@ -34,7 +34,7 @@ class React3Descriptor extends THREEElementDescriptor {
   }
 
   removeChild(self, child) {
-    debugger;
+    self.removeChild(child);
   }
 
   _updateWidth(self, newWidth) {

@@ -1,5 +1,5 @@
 import THREE from 'three';
-import CameraUtils from '../../../utils/Camera.js';
+import CameraUtils from '../../../utils/CameraUtils.js';
 import Object3DDescriptor from './../Object3DDescriptor';
 
 class CameraHelperDescriptor extends Object3DDescriptor {

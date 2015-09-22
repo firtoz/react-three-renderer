@@ -1,4 +1,4 @@
-import ResourceContainer from '../../Resources/Container';
+import ResourceContainer from '../../Resources/ResourceContainer';
 import invariant from 'fbjs/lib/invariant';
 
 import THREE from 'three';

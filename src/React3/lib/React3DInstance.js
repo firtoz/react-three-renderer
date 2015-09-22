@@ -1,11 +1,11 @@
 import THREE from 'three';
 import invariant from 'fbjs/lib/invariant.js';
 import Viewport from './Viewport';
-import ResourceContainer from './Resources/Container';
+import ResourceContainer from './Resources/ResourceContainer';
 import ReactUpdates from 'react/lib/ReactUpdates';
 
 
-import CameraUtils from './utils/Camera';
+import CameraUtils from './utils/CameraUtils';
 
 import React3Renderer from '../lib/React3Renderer';
 
@@ -138,6 +138,10 @@ class React3DInstance {
     // invariant(children.length === 1 && children[0] instanceof THREE.Scene, 'The react3 component should only have one scene as a child!');
 
     // self.setScene(children[0]);
+  }
+
+  removeChild(child) {
+    debugger;
   }
 
   _render = () => {
