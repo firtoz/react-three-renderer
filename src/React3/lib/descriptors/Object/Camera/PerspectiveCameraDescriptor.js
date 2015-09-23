@@ -9,7 +9,21 @@ class PerspectiveCameraDescriptor extends CameraDescriptorBase {
     this.propUpdates = {
       ...this.propUpdates,
       aspect: this._updateAspect,
+      fov: this._updateFov,
+      far: this._updateFar,
     };
+  }
+
+  _updateFov(threeObject, fov) {
+    threeObject.fov = fov;
+
+    threeObject.userData._needsProjectionMatrixUpdate = true;
+  }
+
+  _updateFar(threeObject, far) {
+    threeObject.far = far;
+
+    threeObject.userData._needsProjectionMatrixUpdate = true;
   }
 
   construct(props) {

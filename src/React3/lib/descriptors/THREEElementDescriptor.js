@@ -118,9 +118,6 @@ class THREEElementDescriptor {
 
   }
 
-  /**
-   * @param {THREE.Object3D} threeObject
-   */
   completePropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
 
   }

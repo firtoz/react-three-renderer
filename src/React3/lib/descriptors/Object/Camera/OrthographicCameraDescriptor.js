@@ -12,7 +12,21 @@ class OrthographicCameraDescriptor extends CameraDescriptorBase {
       right: this._updateAndRefreshProjection.bind(this, 'right'),
       top: this._updateAndRefreshProjection.bind(this, 'top'),
       bottom: this._updateAndRefreshProjection.bind(this, 'bottom'),
+      fov: this._updateFov,
+      far: this._updateFar,
     };
+  }
+
+  _updateFov(threeObject, fov) {
+    threeObject.fov = fov;
+
+    threeObject.userData._needsProjectionMatrixUpdate = true;
+  }
+
+  _updateFar(threeObject, far) {
+    threeObject.far = far;
+
+    threeObject.userData._needsProjectionMatrixUpdate = true;
   }
 
   construct(props) {
