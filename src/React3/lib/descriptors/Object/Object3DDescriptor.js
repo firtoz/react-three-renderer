@@ -15,6 +15,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     this.propUpdates = {
       'position': this._updatePosition,
       'rotation': this._updateRotation,
+      'quaternion': this._updateQuaternion,
       'lookAt': this._updateLookAt,
       'scale': this._updateScale,
       'name': this._updateName,
@@ -23,7 +24,9 @@ class Object3DDescriptor extends THREEElementDescriptor {
     this.registerSimpleProperties([
       'castShadow',
       'receiveShadow',
+      'frustumCulled',
       'visible',
+      'renderOrder',
     ]);
   }
 
@@ -50,6 +53,10 @@ class Object3DDescriptor extends THREEElementDescriptor {
       threeObject.rotation.copy(props.rotation);
     }
 
+    if (props.quaternion) {
+      threeObject.quaternion.copy(props.quaternion);
+    }
+
     if (props.name) {
       threeObject.name = props.name;
     }
@@ -69,11 +76,11 @@ class Object3DDescriptor extends THREEElementDescriptor {
   };
 
   _updateRotation = (threeObject, nextRotation) => {
-    const {x, y, z} = threeObject.rotation;
+    threeObject.rotation.copy(nextRotation);
+  };
 
-    if (x !== nextRotation.x || y !== nextRotation.y || z !== nextRotation.z) {
-      threeObject.rotation.copy(nextRotation);
-    }
+  _updateQuaternion = (threeObject, nextQuaternion) => {
+    threeObject.quaternion.copy(nextQuaternion);
   };
 
   _updateScale = (threeObject, nextScale) => {
