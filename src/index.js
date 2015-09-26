@@ -7,4 +7,4 @@ import Perf from 'react-addons-perf';
 
 window.Perf = Perf;
 
-ReactDOM.render(<AnimationCloth/>, document.getElementById('content'));
+ReactDOM.render(<WebGLCameraExample/>, document.getElementById('content'));

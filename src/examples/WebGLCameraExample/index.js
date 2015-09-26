@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 import THREE from 'three';
 import ExampleBase from './../ExampleBase';
 
@@ -8,9 +10,16 @@ import Info from './Info';
 
 import PointCloud from './PointCloud';
 
+import TrackballControls from '../../React3/ref/trackball';
+
 const perspectiveCameraName = 'perspectiveCamera';
 const orthographicCameraName = 'orthographicCamera';
 const mainCameraName = 'mainCamera';
+
+const perspectiveCameraRotation = new THREE.Euler(0, Math.PI, 0);
+const orthographicCameraRotation = new THREE.Euler(0, Math.PI, 0);
+
+const spherePosition = new THREE.Vector3(0, 0, 150);
 
 class WebGLCameraExample extends ExampleBase {
   constructor(props, context) {
@@ -24,12 +33,33 @@ class WebGLCameraExample extends ExampleBase {
       childPosition: new THREE.Vector3(70 * Math.cos(2 * r), 150, 70 * Math.sin(r)),
       activeCameraName: perspectiveCameraName,
       paused: false,
+      mainCameraPosition: new THREE.Vector3(0, 0, 2500),
     };
   }
 
   componentDidMount() {
     super.componentDidMount();
     document.addEventListener('keydown', this._onKeyDown, false);
+
+    const controls = new TrackballControls(this.refs.mainCamera, ReactDOM.findDOMNode(this.refs.react3));
+    controls.rotateSpeed = 1.0;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+
+    controls.noZoom = false;
+    controls.noPan = false;
+
+    controls.staticMoving = true;
+    controls.dynamicDampingFactor = 0.3;
+
+    controls.addEventListener('change', () => {
+      this.setState({
+        mainCameraPosition: this.refs.mainCamera.position,
+      });
+    });
+
+    this.controls = controls;
+    //console.log(this.refs.mainCamera);
   }
 
   componentWillUnmount() {
@@ -57,6 +87,8 @@ class WebGLCameraExample extends ExampleBase {
   };
 
   _onAnimate = () => {
+    this.controls.update();
+
     if (this.state.paused) {
       return;
     }
@@ -99,7 +131,9 @@ class WebGLCameraExample extends ExampleBase {
           });
         }}
       />
-      <React3 width={width}
+      <React3
+        ref="react3"
+        width={width}
               height={height}
               antialias
               onAnimate={this._onAnimate}
@@ -118,21 +152,22 @@ class WebGLCameraExample extends ExampleBase {
           cameraName={mainCameraName}/>
         <scene>
           <perspectiveCamera
+            ref="mainCamera"
             name={mainCameraName}
             fov={50}
             aspect={aspectRatio}
             near={1}
             far={10000}
-            position={new THREE.Vector3(0, 0, 2500)}/>
+            position={this.state.mainCameraPosition}/>
           <object3D
-            lookAt={meshPosition.clone()}>
+            lookAt={meshPosition}>
             <perspectiveCamera
               name={perspectiveCameraName}
               fov={35 + 30 * Math.sin( 0.5 * r )}
               aspect={aspectRatio}
               near={150}
               far={meshPosition.length()}
-              rotation={new THREE.Euler(0, Math.PI, 0)}/>
+              rotation={perspectiveCameraRotation}/>
             <orthographicCamera
               name={orthographicCameraName}
               left={0.5 * width / -2}
@@ -141,9 +176,9 @@ class WebGLCameraExample extends ExampleBase {
               bottom={height / -2}
               near={150}
               far={meshPosition.length()}
-              rotation={new THREE.Euler(0, Math.PI, 0)}/>
+              rotation={orthographicCameraRotation}/>
             <mesh
-              position={new THREE.Vector3(0, 0, 150)}>
+              position={spherePosition}>
               <sphereGeometry
                 radius={5}
                 widthSegments={16}
@@ -156,7 +191,7 @@ class WebGLCameraExample extends ExampleBase {
           <cameraHelper
             cameraName={this.state.activeCameraName}/>
           <object3D
-            position={meshPosition.clone()}>
+            position={meshPosition}>
             <mesh>
               <sphereGeometry
                 radius={100}
@@ -167,7 +202,7 @@ class WebGLCameraExample extends ExampleBase {
                 wireframe/>
             </mesh>
             <mesh
-              position={childPosition.clone()}>
+              position={childPosition}>
               <sphereGeometry
                 radius={50}
                 widthSegments={16}
@@ -177,7 +212,9 @@ class WebGLCameraExample extends ExampleBase {
                 wireframe/>
             </mesh>
           </object3D>
-          <PointCloud/>
+          {
+            <PointCloud/>
+          }
         </scene>
       </React3>
     </div>);

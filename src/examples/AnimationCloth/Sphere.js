@@ -2,6 +2,8 @@ import React from 'react';
 
 import THREE from 'three';
 
+import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
+
 const { PropTypes } = React;
 
 const ballSize = 60; // 40
@@ -19,6 +21,8 @@ class Sphere extends React.Component {
       color: 'ffffff',
     };
   }
+
+  shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
   render() {
     const {

@@ -4,6 +4,8 @@ import ClothGeometry from './ClothGeometry';
 import Poles from './Poles';
 import Cloth from './Cloth';
 
+import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
+
 const { PropTypes } = React;
 
 const fragmentShaderDepth = `
@@ -57,6 +59,8 @@ class StaticWorld extends React.Component {
     this.groundRotation = new THREE.Euler(-Math.PI / 2, 0, 0);
     this.groundRepeat = new THREE.Vector2(25, 25);
   }
+
+  shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
   render() {
     const d = 300;

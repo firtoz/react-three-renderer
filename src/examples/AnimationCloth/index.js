@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import THREE from 'three';
 
 import React3 from '../../React3/React3';
@@ -20,6 +21,8 @@ const TIMESTEP = 18 / 1000;
 const TIMESTEP_SQ = TIMESTEP * TIMESTEP;
 
 const diff = new THREE.Vector3();
+
+import TrackballControls from '../../React3/ref/trackball';
 
 function satisfyConstrains(p1, p2, distance) {
   diff.subVectors(p2.position, p1.position);
@@ -144,8 +147,7 @@ class AnimationCloth extends ExampleBase {
       }
     }
 
-    for (particles = this.cloth.particles, i = 0, il = particles.length
-      ; i < il; i++) {
+    for (particles = this.cloth.particles, i = 0, il = particles.length; i < il; i++) {
       particle = particles[i];
       particle.addForce(gravity);
 
@@ -206,7 +208,31 @@ class AnimationCloth extends ExampleBase {
     });
   }
 
+  componentDidMount() {
+    super.componentDidMount();
+    const controls = new TrackballControls(this.refs.mainCamera, ReactDOM.findDOMNode(this.refs.react3));
+    controls.rotateSpeed = 1.0;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+
+    controls.noZoom = false;
+    controls.noPan = false;
+
+    controls.staticMoving = true;
+    controls.dynamicDampingFactor = 0.3;
+
+    controls.addEventListener('change', () => {
+      this.setState({
+        cameraPosition: this.refs.mainCamera.position,
+      });
+    });
+
+    this.controls = controls;
+  }
+
   _onAnimate = () => {
+    this.controls.update();
+
     const {
       minTimePerFrame,
       } = this.state;
@@ -287,6 +313,7 @@ class AnimationCloth extends ExampleBase {
         }}
         minTimePerFrame={minTimePerFrame}/>
       <React3
+        ref="react3"
         width={width}
         height={height}
         antialias
@@ -303,10 +330,11 @@ class AnimationCloth extends ExampleBase {
             name="mainCamera"
             fov={30}
             aspect={width / height}
+            ref="mainCamera"
             position={this.state.cameraPosition}
             near={1}
             far={10000}
-            lookAt={this.scenePosition}
+            lookAt={this.state.rotate ? this.scenePosition : null}
           />
           <StaticWorld
             clothRef={this._clothRef}

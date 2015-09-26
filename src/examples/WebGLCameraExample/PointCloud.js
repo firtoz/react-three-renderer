@@ -2,6 +2,10 @@ import React from 'react';
 import THREE from 'three';
 
 class PointCloud extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
   constructor(props, context) {
     super(props, context);
 
