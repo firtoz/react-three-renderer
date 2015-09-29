@@ -1,13 +1,32 @@
 import ResourceContainer from '../../Resources/ResourceContainer';
 import invariant from 'fbjs/lib/invariant';
 
-import THREE from 'three';
-
 import THREEElementDescriptor from '../THREEElementDescriptor';
 
+import React from 'react';
+const {PropTypes} = React;
+
+/**
+ * Resource decorator.
+ * Allows descriptors to be slotted into the <resources/> component.
+ *
+ * @param descriptor The descriptor to be patched
+ * @returns {ResourceDescriptor} the modified descriptor class
+ */
 function resource(descriptor) {
   class ResourceDescriptor extends descriptor {
     static displayName = `${descriptor.displayName || descriptor.name}`;
+
+    constructor(react3RendererInstance) {
+      super(react3RendererInstance);
+
+      if (process.env.NODE_ENV !== 'production') {
+        this.propTypes = {
+          ...this.propTypes,
+          resourceId: PropTypes.string,
+        };
+      }
+    }
 
     applyInitialProps(self, props) {
       super.applyInitialProps(self, props);
@@ -20,7 +39,11 @@ function resource(descriptor) {
 
     setParent(self, parentObject3D) {
       if (parentObject3D instanceof ResourceContainer) {
-        invariant(!!self.userData._resourceId, 'All resources inside <resources> should have the "resourceId" property.');
+        if (process.env.NODE_ENV !== 'production') {
+          invariant(!!self.userData._resourceId, 'All resources inside <resources> should have the "resourceId" property.');
+        } else {
+          invariant(false);
+        }
 
         THREEElementDescriptor.prototype.setParent.call(this, self, parentObject3D);
       } else {
@@ -30,13 +53,16 @@ function resource(descriptor) {
 
     highlight(threeObject) {
       if (!!threeObject.userData._resourceId) {
+        // it's a resource. Let's highlight all references.
         threeObject.userData.events.emit('highlight', {
           uuid: threeObject.uuid,
           boundingBoxFunc: () => {
             return threeObject.userData._references.reduce((boxes, objectWithReference) => {
               const boxesForReference = objectWithReference.userData._descriptor.getBoundingBoxes(objectWithReference);
-              if (boxesForReference.length === 0) {
-                debugger;
+              if (process.env.NODE_ENV !== 'production') {
+                invariant(boxesForReference.length === 0, 'No boxes found for resource.');
+              } else {
+                invariant(false);
               }
               return boxes.concat(boxesForReference);
             }, []);
