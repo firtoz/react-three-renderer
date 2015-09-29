@@ -45,6 +45,7 @@ function resource(descriptor) {
           invariant(false);
         }
 
+        // still let it be mounted to root
         THREEElementDescriptor.prototype.setParent.call(this, self, parentObject3D);
       } else {
         super.setParent(self, parentObject3D);

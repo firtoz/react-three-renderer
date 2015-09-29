@@ -79,8 +79,6 @@ class THREEElementDescriptor {
   }
 
   setParent(self, parentObject3D) {
-    // yep that's allowed
-
     const parentMarkup = parentObject3D.userData.markup;
 
     if (parentMarkup && parentMarkup._rootInstance) {
