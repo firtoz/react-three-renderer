@@ -2,12 +2,13 @@ import gulp from 'gulp';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import gutil from 'gulp-util';
-import webpackConfig from './webpack.config';
+import webpackConfig from './webpack.config.babel';
 
 gulp.task('webpack-dev-server', (callback) => {
   void callback;
 
   webpackConfig.devtool = 'source-map';
+  webpackConfig.plugins = [];
 
   // Start a webpack-dev-server
   const compiler = webpack(webpackConfig);

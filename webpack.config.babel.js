@@ -1,4 +1,5 @@
 import path from 'path';
+import webpack from 'webpack';
 
 const outPath = path.join(__dirname, 'build');
 
@@ -33,4 +34,17 @@ export default {
     inline: true,
     stats: {colors: true},
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': '"production"',
+      },
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+      },
+      mangle: true,
+    }),
+  ],
 };
