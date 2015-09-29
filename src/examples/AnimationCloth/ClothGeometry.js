@@ -11,13 +11,13 @@ class ClothGeometry extends React.Component {
     cloth: PropTypes.instanceOf(Cloth).isRequired,
   };
 
-  shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
-
   componentDidMount() {
     const geometry = this.refs.geometry;
 
     geometry.computeFaceNormals();
   }
+
+  shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
   render() {
     const {
@@ -29,7 +29,7 @@ class ClothGeometry extends React.Component {
       parametricFunction={Cloth.clothFunction}
       slices={cloth.w}
       stacks={cloth.h}
-      dynamic={true}
+      dynamic
     />);
   }
 }
