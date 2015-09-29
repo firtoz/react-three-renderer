@@ -11,18 +11,22 @@ class IcosahedronGeometryDescriptor extends GeometryDescriptorBase {
     this.propTypes = {
       ...this.propTypes,
 
-      radius: PropTypes.number,
-      detail: PropTypes.number,
+      vertices: PropTypes.arrayOf(PropTypes.number).isRequired,
+      indices: PropTypes.arrayOf(PropTypes.number).isRequired,
+      radius: PropTypes.number.isRequired,
+      detail: PropTypes.number.isRequired,
     };
   }
 
   construct(props) {
     const {
+      vertices,
+      indices,
       radius,
       detail,
       } = props;
 
-    return new THREE.IcosahedronGeometry(radius, detail);
+    return new THREE.PolyhedronGeometry(vertices, indices, radius, detail);
   }
 }
 

@@ -24,6 +24,14 @@ import THREE from 'three';
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
+if (process.env.NODE_ENV !== 'production') {
+  // prop type helpers
+  THREE.Vector2 = class Vector2 extends THREE.Vector2 {
+  };
+  THREE.Vector3 = class Vector3 extends THREE.Vector3 {
+  };
+}
+
 /**
  * @namespace process.env
  * @type string
@@ -199,7 +207,9 @@ class React3Renderer {
     this._canvas = canvas;
     this._instancesByReactRootID = {};
     this.object3DsByReactRootID = {};
-    this.rootUserDatasByReactRootID = {};
+    if (process.env.NODE_ENV !== 'production') {
+      this.rootUserDatasByReactRootID = {};
+    }
     this.findComponentRootReusableArray = [];
     this.userDataCache = {};
     this.deepestObject3DSoFar = null;
@@ -213,72 +223,81 @@ class React3Renderer {
     this._highlightElement = document.createElement('div');
     this._highlightCache = null;
 
-    this._agent = null;
+    if (process.env.NODE_ENV !== 'production') {
+      this._agent = null;
 
-    // this._scene = new THREE.Scene();
+      this._onHideHighlightFromInspector = () => {
+        if (this._highlightCache && this._highlightCache.react3internalComponent) {
+          const internalComponent = this._highlightCache.react3internalComponent;
 
-    // Inject the runtime into a devtools global hook regardless of browser.
-    // Allows for debugging when the hook is injected on the page.
-    if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
-      this.rendererDefinition = {
-        CurrentOwner: ReactCurrentOwner,
-        InstanceHandles: ReactInstanceHandles,
-        Mount: this,
-        Reconciler: ReactReconciler,
-        TextComponent: InternalComponent,
+          internalComponent.hideHighlight();
+
+          this._highlightCache = null;
+        }
       };
 
-      __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this.rendererDefinition);
+      this._onHighlightFromInspector = (highlightInfo) => {
+        if (highlightInfo.node === this._highlightElement) {
+          if (this._highlightCache && this._highlightCache.react3internalComponent) {
+            const internalComponent = this._highlightCache.react3internalComponent;
 
-      if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent !== 'undefined') {
-        const agent = __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent;
-        this._hookAgent(agent);
-      } else {
-        __REACT_DEVTOOLS_GLOBAL_HOOK__.on('react-devtools', (agent) => {
+            internalComponent.highlightComponent();
+          }
+        }
+      };
+
+      this._hookAgent = (agent) => {
+        this._agent = agent;
+
+        // agent.on('startInspecting', (...args) => {
+        //   console.log('start inspecting?', args);
+        // });
+        // agent.on('setSelection', (...args) => {
+        //   console.log('set selection?', args);
+        // });
+        // agent.on('selected', (...args) => {
+        //   console.log('selected?', args);
+        // });
+        agent.on('highlight', this._onHighlightFromInspector);
+        agent.on('hideHighlight', this._onHideHighlightFromInspector);
+        // agent.on('highlightMany', (...args) => {
+        //   console.log('highlightMany?', args);
+        // });
+      };
+
+      // this._scene = new THREE.Scene();
+
+      // Inject the runtime into a devtools global hook regardless of browser.
+      // Allows for debugging when the hook is injected on the page.
+      if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
+        this.rendererDefinition = {
+          CurrentOwner: ReactCurrentOwner,
+          InstanceHandles: ReactInstanceHandles,
+          Mount: this,
+          Reconciler: ReactReconciler,
+          TextComponent: InternalComponent,
+        };
+
+        __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this.rendererDefinition);
+
+        if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent !== 'undefined') {
+          const agent = __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent;
           this._hookAgent(agent);
-        });
+        } else {
+          this._onDevTools = (agent) => {
+            this._hookAgent(agent);
+
+            __REACT_DEVTOOLS_GLOBAL_HOOK__.off('react-devtools', this._onDevTools);
+
+            delete this._onDevTools;
+          };
+
+          __REACT_DEVTOOLS_GLOBAL_HOOK__.on('react-devtools', this._onDevTools);
+        }
       }
     }
   }
 
-  _hookAgent(agent) {
-    this._agent = agent;
-
-    // agent.on('startInspecting', (...args) => {
-    //   console.log('start inspecting?', args);
-    // });
-    // agent.on('setSelection', (...args) => {
-    //   console.log('set selection?', args);
-    // });
-    // agent.on('selected', (...args) => {
-    //   console.log('selected?', args);
-    // });
-    agent.on('highlight', this._onHighlightFromInspector);
-    agent.on('hideHighlight', this._onHideHighlightFromInspector);
-    // agent.on('highlightMany', (...args) => {
-    //   console.log('highlightMany?', args);
-    // });
-  }
-
-  _onHideHighlightFromInspector = () => {
-    if (this._highlightCache && this._highlightCache.react3internalComponent) {
-      const internalComponent = this._highlightCache.react3internalComponent;
-
-      internalComponent.hideHighlight();
-
-      this._highlightCache = null;
-    }
-  };
-
-  _onHighlightFromInspector = (highlightInfo) => {
-    if (highlightInfo.node === this._highlightElement) {
-      if (this._highlightCache && this._highlightCache.react3internalComponent) {
-        const internalComponent = this._highlightCache.react3internalComponent;
-
-        internalComponent.highlightComponent();
-      }
-    }
-  };
 
   findDeepestCachedAncestorImpl = (ancestorID) => {
     const ancestorUserData = this.userDataCache[ancestorID];
@@ -707,7 +726,9 @@ class React3Renderer {
     delete this._canvas;
     delete this._instancesByReactRootID;
     delete this.object3DsByReactRootID;
-    delete this.rootUserDatasByReactRootID;
+    if (process.env.NODE_ENV !== 'production') {
+      delete this.rootUserDatasByReactRootID;
+    }
     delete this.findComponentRootReusableArray;
     delete this.userDataCache;
     delete this.deepestObject3DSoFar;
@@ -715,13 +736,24 @@ class React3Renderer {
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
 
-    if (this._agent) {
-      this._agent.onUnmounted(this.rendererDefinition);
-      this._agent.removeListener('highlight', this._onHighlightFromInspector);
-      this._agent.removeListener('hideHighlight', this._onHideHighlightFromInspector);
-    }
+    if (process.env.NODE_ENV !== 'production') {
+      if (this._agent) {
+        this._agent.onUnmounted(this.rendererDefinition);
+        this._agent.removeListener('highlight', this._onHighlightFromInspector);
+        this._agent.removeListener('hideHighlight', this._onHideHighlightFromInspector);
+      }
 
-    delete this._agent;
+      delete this._agent;
+      delete this._onHighlightFromInspector;
+      delete this._onHideHighlightFromInspector;
+      delete this._hookAgent;
+
+
+      if (this._onDevTools) {
+        __REACT_DEVTOOLS_GLOBAL_HOOK__.off('react-devtools', this._onDevTools);
+        delete this._onDevTools;
+      }
+    }
   }
 
   _updateRootComponent(prevComponent, nextElement, container, callback) {
@@ -820,12 +852,12 @@ class React3Renderer {
         instance = new React3CompositeComponentWrapper(this);
       }
     } else if (typeof node === 'string' || typeof node === 'number') {
-      console.log('string or number?!');
 
-      debugger;
-      invariant(false, 'Encountered invalid React node of type %s', typeof node);
-
-      // instance = ReactNativeComponent.createInstanceForText(node);
+      if (process.env.NODE_ENV !== 'production') {
+        invariant(false, 'Encountered invalid React node of type %s : %s', typeof node, node);
+      } else {
+        invariant(false);
+      }
     } else {
       if (process.env.NODE_ENV !== 'production') {
         invariant(false, 'Encountered invalid React node of type %s', typeof node);

@@ -6,6 +6,7 @@ import invariant from 'fbjs/lib/invariant';
 import resource from './../decorators/resource';
 
 @resource class GeometryDescriptorBase extends THREEElementDescriptor {
+
   setParent(geometry, parentObject3D) {
     invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
     invariant(parentObject3D.geometry === undefined, 'Parent already has a geometry');
@@ -22,6 +23,7 @@ import resource from './../decorators/resource';
 
 
   applyInitialProps(self, props) {
+    // ensure the userData is created
     self.userData = {
       ...self.userData,
     };

@@ -1,7 +1,23 @@
 import THREE from 'three';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 
+import React from 'react';
+const {PropTypes} = React;
+
 class CircleGeometryDescriptor extends GeometryDescriptorBase {
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      radius: PropTypes.number,
+      segments: PropTypes.number,
+      thetaStart: PropTypes.number,
+      thetaLength: PropTypes.number,
+    };
+  }
+
   construct(props) {
     const {
       radius,

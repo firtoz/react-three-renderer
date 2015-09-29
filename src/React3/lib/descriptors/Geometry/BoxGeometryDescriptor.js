@@ -1,34 +1,37 @@
 import THREE from 'three';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
-import invariant from 'fbjs/lib/invariant';
+
+import React from 'react';
+const {PropTypes} = React;
 
 class BoxGeometryDescriptor extends GeometryDescriptorBase {
-  constructor(react3Instance) {
-    super(react3Instance);
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
 
-    this.propUpdates = {
-      ...this.propUpdates,
-      'width': this._updateWidth,
-      'height': this._updateHeight,
-      'depth': this._updateDepth,
+    this.propTypes = {
+      ...this.propTypes,
+
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+      depth: PropTypes.number.isRequired,
+      widthSegments: PropTypes.number,
+      heightSegments: PropTypes.number,
+      depthSegments: PropTypes.number,
     };
   }
 
   construct(props) {
-    return new THREE.BoxGeometry(props.width, props.height, props.depth);
+    const {
+      width,
+      height,
+      depth,
+      widthSegments,
+      heightSegments,
+      depthSegments,
+      } = props;
+
+    return new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments);
   }
-
-  _updateWidth = () => {
-    invariant(false, 'Please do not modify the width property of the boxGeometry component.');
-  };
-
-  _updateHeight = () => {
-    invariant(false, 'Please do not modify the height property of the boxGeometry component.');
-  };
-
-  _updateDepth = () => {
-    invariant(false, 'Please do not modify the depth property of the boxGeometry component.');
-  };
 }
 
 export default BoxGeometryDescriptor;

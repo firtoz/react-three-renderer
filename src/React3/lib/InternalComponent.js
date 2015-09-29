@@ -5,7 +5,7 @@ import ReactMultiChild from 'react/lib/ReactMultiChild';
 import invariant from 'fbjs/lib/invariant';
 
 import flattenChildren from 'react/lib/flattenChildren';
-
+import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
@@ -60,7 +60,21 @@ class InternalComponent {
 
     this.threeElementDescriptor = react3RendererInstance.threeElementDescriptors[element.type];
     if (!this.threeElementDescriptor) {
-      invariant(false, 'No constructor for ' + element.type);
+      if (process.env.NODE_ENV !== 'production') {
+        invariant(false, 'No constructor for ' + element.type);
+      } else {
+        invariant(false);
+      }
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      this.highlightComponent = () => {
+        this.threeElementDescriptor.highlight(this._threeObject);
+      };
+
+      this.hideHighlight = () => {
+        this.threeElementDescriptor.hideHighlight(this._threeObject);
+      };
     }
   }
 
@@ -74,6 +88,10 @@ class InternalComponent {
 
     const element = this._currentElement;
     this._rootNodeID = rootID;
+
+    if (process.env.NODE_ENV !== 'production') {
+      this.threeElementDescriptor.checkPropTypes(element.type, this._currentElement._owner, element.props);
+    }
 
     this._threeObject = this.threeElementDescriptor.construct(element.props);
     this.threeElementDescriptor.applyInitialProps(this._threeObject, element.props);
@@ -116,53 +134,51 @@ class InternalComponent {
       });
     }
 
-    // console.log('mountComponent', this, 'childrenmarkup', mountImages);
-
-
     this._markup = markup;
 
     return markup;
   }
 
   _reconcilerInstantiateChildren(nestedChildren, transaction, context) {
-    // if (__DEV__) {
-    //   if (this._currentElement) {
-    //     try {
-    //       ReactCurrentOwner.current = this._currentElement._owner;
-    //       return this._react3RendererInstance.instantiateChildren(
-    //         nestedChildren, transaction, context
-    //       );
-    //     } finally {
-    //       ReactCurrentOwner.current = null;
-    //     }
-    //   }
-    // }
+    if (process.env.NODE_ENV !== 'production') {
+      if (this._currentElement) {
+        try {
+          ReactCurrentOwner.current = this._currentElement._owner;
+          return this._react3RendererInstance.instantiateChildren(
+            nestedChildren, transaction, context
+          );
+        } finally {
+          ReactCurrentOwner.current = null;
+        }
+      }
+    }
     return this._react3RendererInstance.instantiateChildren(
       nestedChildren, transaction, context
     );
   }
 
   _reconcilerUpdateChildren(prevChildren, nextNestedChildrenElements, transaction, context) {
-    // var nextChildren;
-    // if (__DEV__) {
-    //   if (this._currentElement) {
-    //     try {
-    //       ReactCurrentOwner.current = this._currentElement._owner;
-    //       nextChildren = flattenChildren(nextNestedChildrenElements);
-    //     } finally {
-    //       ReactCurrentOwner.current = null;
-    //     }
-    //     return ReactChildReconciler.updateChildren(
-    //       prevChildren, nextChildren, transaction, context
-    //     );
-    //   }
-    // }
-    const nextChildren = flattenChildren(nextNestedChildrenElements);
+    let nextChildren;
+    if (process.env.NODE_ENV !== 'production') {
+      if (this._currentElement) {
+        try {
+          ReactCurrentOwner.current = this._currentElement._owner;
+          nextChildren = flattenChildren(nextNestedChildrenElements);
+        } finally {
+          ReactCurrentOwner.current = null;
+        }
+
+        return this._react3RendererInstance.updateChildren(
+          prevChildren, nextChildren, transaction, context
+        );
+      }
+    }
+
+    nextChildren = flattenChildren(nextNestedChildrenElements);
     return this._react3RendererInstance.updateChildren(
       prevChildren, nextChildren, transaction, context
     );
   }
-
 
   mountChildren(nestedChildren, transaction, context) {
     const children = this._reconcilerInstantiateChildren(
@@ -207,13 +223,15 @@ class InternalComponent {
   }
 
   updateComponent(transaction, prevElement, nextElement, context) {
-    // console.log('ahh updating', transaction, prevElement, nextElement, context);
-
     const lastProps = prevElement.props;
     const nextProps = this._currentElement.props;
 
     if (prevElement.type !== nextElement.type) {
-      debugger;
+      if (process.env.NODE_ENV !== 'production') {
+        invariant(false, 'The component type changed unexpectedly');
+      } else {
+        invariant(false);
+      }
     }
 
     this._updateObjectProperties(lastProps, nextProps, transaction);
@@ -228,6 +246,10 @@ class InternalComponent {
 
   _updateObjectProperties(lastProps, nextProps, transaction) {
     this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
+
+    if (process.env.NODE_ENV !== 'production') {
+      this.threeElementDescriptor.checkPropTypes(this._currentElement.type, this._currentElement._owner, nextProps);
+    }
 
     for (const propKey in lastProps) {
       if (!lastProps.hasOwnProperty(propKey) || nextProps.hasOwnProperty(propKey)) {
@@ -297,13 +319,6 @@ class InternalComponent {
     }
   }
 
-  highlightComponent() {
-    this.threeElementDescriptor.highlight(this._threeObject);
-  }
-
-  hideHighlight() {
-    this.threeElementDescriptor.hideHighlight(this._threeObject);
-  }
 
   emptyJson() {
     debugger;
@@ -318,7 +333,11 @@ class InternalComponent {
       return node.object3D;
     }
 
-    invariant(false, 'Node has no object3d?');
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(false, 'Node has no object3d?');
+    } else {
+      invariant(false);
+    }
   }
 
   /**
@@ -410,7 +429,11 @@ class InternalComponent {
       }
     }
 
-    invariant(false, `The child is not mounted here!`);
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(false, `Trying to remove a child that is not mounted`);
+    } else {
+      invariant(false);
+    }
   }
 
   updateChildren = ReactMultiChildMixin.updateChildren.bind(this);

@@ -1,6 +1,10 @@
 import invariant from 'fbjs/lib/invariant';
 import React3Renderer from '../React3DInstance';
 
+import ReactPropTypeLocations from 'react/lib/ReactPropTypeLocations';
+import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames.js';
+import warning from 'fbjs/lib/warning';
+
 import events from 'events';
 const {EventEmitter} = events;
 
@@ -12,6 +16,10 @@ class THREEElementDescriptor {
     this.react3RendererInstance = react3RendererInstance;
     this.propUpdates = {};
     this._simpleProperties = [];
+
+    if (process.env.NODE_ENV !== 'production') {
+      this.propTypes = {};
+    }
   }
 
   applyInitialProps(self, props) { // eslint-disable-line no-unused-vars
@@ -151,9 +159,69 @@ class THREEElementDescriptor {
     this.useSimpleUpdates(propertyNames);
   }
 
-  getBoundingBoxes(threeObject) {
+  getBoundingBoxes(threeObject) { // eslint-disable-line no-unused-vars
     return [];
   }
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  // @see ReactElementValidator
+
+  const loggedTypeFailures = {};
+
+  const getDeclarationErrorAddendum = (owner) => {
+    if (owner) {
+      const name = owner.getName();
+      if (name) {
+        return ' Check the render method of `' + name + '`.';
+      }
+    }
+    return '';
+  };
+
+  /**
+   * Assert that the props are valid
+   * @private
+   */
+  const _checkPropTypes = (componentName, propTypes, props, location, owner) => {
+    for (const propName in propTypes) {
+      if (propTypes.hasOwnProperty(propName)) {
+        let error;
+        // Prop type validation may throw. In case they do, we don't want to
+        // fail the render phase where it didn't fail before. So we log it.
+        // After these have been cleaned up, we'll let them throw.
+        try {
+          // This is intentionally an invariant that gets caught. It's the same
+          // behavior as without this statement except with a better message.
+          if (typeof propTypes[propName] !== 'function') {
+            if (process.env.NODE_ENV !== 'production') {
+              invariant(false, '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', componentName || 'React class', ReactPropTypeLocationNames[location], propName);
+            } else {
+              invariant(false);
+            }
+          }
+          error = propTypes[propName](props, propName, componentName, location);
+        } catch (ex) {
+          error = ex;
+        }
+
+        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', ReactPropTypeLocationNames[location], propName, typeof error);
+
+        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+          // Only monitor this failure once because there tends to be a lot of the
+          // same error.
+          loggedTypeFailures[error.message] = true;
+
+          const addendum = getDeclarationErrorAddendum(owner);
+          warning(false, 'Failed propType: %s%s', error.message, addendum);
+        }
+      }
+    }
+  };
+
+  THREEElementDescriptor.prototype.checkPropTypes = function checkPropTypes(name, owner, props) {
+    _checkPropTypes(name, this.propTypes, props, ReactPropTypeLocations.prop, owner);
+  };
 }
 
 export default THREEElementDescriptor;
