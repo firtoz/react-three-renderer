@@ -1,8 +1,7 @@
 import THREE from 'three';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 
-import React from 'react';
-const {PropTypes} = React;
+import PropTypes from 'react/lib/ReactPropTypes';
 
 class CylinderGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {

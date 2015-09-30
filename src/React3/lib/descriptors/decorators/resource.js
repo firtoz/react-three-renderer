@@ -3,8 +3,7 @@ import invariant from 'fbjs/lib/invariant';
 
 import THREEElementDescriptor from '../THREEElementDescriptor';
 
-import React from 'react';
-const {PropTypes} = React;
+import PropTypes from 'react/lib/ReactPropTypes';
 
 /**
  * Resource decorator.
