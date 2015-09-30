@@ -30,6 +30,10 @@ if (process.env.NODE_ENV !== 'production') {
   };
   THREE.Vector3 = class Vector3 extends THREE.Vector3 {
   };
+  THREE.Color = class Color extends THREE.Color {
+  };
+  THREE.Euler = class Euler extends THREE.Euler {
+  };
 }
 
 /**

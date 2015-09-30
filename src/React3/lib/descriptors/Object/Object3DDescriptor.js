@@ -3,6 +3,7 @@ import THREE from 'three';
 import THREEElementDescriptor from './../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
+import PropTypes from 'react/lib/ReactPropTypes';
 
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
@@ -11,6 +12,17 @@ function _arrayMove(array, oldIndex, newIndex) {
 class Object3DDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      'position': PropTypes.instanceOf(THREE.Vector3),
+      'rotation': PropTypes.instanceOf(THREE.Euler),
+      'quaternion': PropTypes.instanceOf(THREE.Quaternion),
+      'lookAt': PropTypes.instanceOf(THREE.Vector3),
+      'scale': PropTypes.instanceOf(THREE.Vector3),
+      'name': PropTypes.string,
+    };
 
     this.propUpdates = {
       'position': this._updatePosition,

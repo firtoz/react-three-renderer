@@ -13,7 +13,7 @@ class CylinderGeometryDescriptor extends GeometryDescriptorBase {
 
       radiusTop: PropTypes.number,
       radiusBottom: PropTypes.number,
-      height: PropTypes.number.isRequired,
+      height: PropTypes.number,
       radialSegments: PropTypes.number,
       heightSegments: PropTypes.number,
       openEnded: PropTypes.number,

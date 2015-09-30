@@ -5,6 +5,8 @@ import invariant from 'fbjs/lib/invariant';
 
 import resource from './../decorators/resource';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 @resource class GeometryDescriptorBase extends THREEElementDescriptor {
 
   setParent(geometry, parentObject3D) {
@@ -19,8 +21,15 @@ import resource from './../decorators/resource';
     }
 
     parentObject3D.geometry = geometry;
-  }
 
+    this.propTypes = {
+      ...this.propTypes,
+
+      name: PropTypes.string,
+    };
+
+    this.registerSimpleProperties(['name']);
+  }
 
   applyInitialProps(self, props) {
     // ensure the userData is created
