@@ -1,4 +1,4 @@
-import Object3DDescriptor from './../Object3DDescriptor';
+import Object3DDescriptor from '../Object3DDescriptor';
 import THREE from 'three';
 
 import getRoot from '../../../getRoot';

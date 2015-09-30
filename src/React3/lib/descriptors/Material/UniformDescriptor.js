@@ -1,6 +1,6 @@
 import THREE from 'three';
 
-import THREEElementDescriptor from './../THREEElementDescriptor';
+import THREEElementDescriptor from '../THREEElementDescriptor';
 
 import Uniform from '../../Uniform';
 import UniformContainer from '../../UniformContainer';

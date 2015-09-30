@@ -1,31 +1,19 @@
 import THREE from 'three';
-import Object3DDescriptor from './../Object/Object3DDescriptor';
+import LightDescriptorBase from './LightDescriptorBase';
 
-import PropTypes from 'react/lib/ReactPropTypes'
+import PropTypes from 'react/lib/ReactPropTypes';
 
-class AmbientLightDescriptor extends Object3DDescriptor {
+class AmbientLightDescriptor extends LightDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      color: PropTypes.number,
-    };
-
-    this.propUpdates = {
-      ...this.propUpdates,
-
-      color: this._updateColor,
-    };
-  }
-
-  _updateColor(self, newColor) {
-    self.color.set(newColor);
+    this.hasColor();
   }
 
   construct(props) {
-    const color = props.hasOwnProperty('color') ? props.color : 0xffffff;
+    const {
+      color,
+      } = props;
 
     return new THREE.AmbientLight(color);
   }

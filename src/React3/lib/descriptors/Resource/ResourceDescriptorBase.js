@@ -1,7 +1,7 @@
-import THREEElementDescriptor from './../THREEElementDescriptor';
+import THREEElementDescriptor from '../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
 import THREE from 'three';
-import ResourceContainer from './../../Resources/ResourceReference';
+import ResourceContainer from '../../Resources/ResourceReference';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 

@@ -1,6 +1,6 @@
 import THREE from 'three';
 import CameraUtils from '../../../utils/CameraUtils.js';
-import Object3DDescriptor from './../Object3DDescriptor';
+import Object3DDescriptor from '../Object3DDescriptor';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 

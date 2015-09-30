@@ -1,9 +1,9 @@
 import THREE from 'three';
-import Object3DDescriptor from './../Object/Object3DDescriptor';
+import LightDescriptorBase from './LightDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
-class DirectionalLightDescriptor extends Object3DDescriptor {
+class DirectionalLightDescriptor extends LightDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
 
@@ -18,6 +18,8 @@ class DirectionalLightDescriptor extends Object3DDescriptor {
       'shadowCameraFar',
       'shadowDarkness',
     ]);
+
+    this.hasColor();
 
     this.propTypes = {
       ...this.propTypes,
