@@ -60,7 +60,7 @@ function resource(descriptor) {
             return threeObject.userData._references.reduce((boxes, objectWithReference) => {
               const boxesForReference = objectWithReference.userData._descriptor.getBoundingBoxes(objectWithReference);
               if (process.env.NODE_ENV !== 'production') {
-                invariant(boxesForReference.length === 0, 'No boxes found for resource.');
+                invariant(boxesForReference.length > 0, 'No boxes found for resource.');
               } else {
                 invariant(false);
               }
