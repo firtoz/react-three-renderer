@@ -21,7 +21,7 @@ import PropTypes from 'react/lib/ReactPropTypes';
   }
 
   setParent(geometry, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
+    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.Points, 'Parent is not a mesh');
     invariant(parentObject3D.geometry === undefined, 'Parent already has a geometry');
 
     super.setParent(geometry, parentObject3D);
@@ -51,7 +51,7 @@ import PropTypes from 'react/lib/ReactPropTypes';
     const parent = geometry.userData.parentMarkup.threeObject;
 
     // could either be a resource description or an actual geometry
-    if (parent instanceof THREE.Mesh || parent instanceof THREE.PointCloud) {
+    if (parent instanceof THREE.Mesh || parent instanceof THREE.Points) {
       if (parent.geometry === geometry) {
         parent.geometry = undefined;
       }

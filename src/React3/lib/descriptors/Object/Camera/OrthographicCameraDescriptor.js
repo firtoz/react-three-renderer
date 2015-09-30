@@ -1,9 +1,22 @@
 import CameraDescriptorBase from './CameraDescriptorBase';
 import THREE from 'three';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class OrthographicCameraDescriptor extends CameraDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      left: PropTypes.number.isRequired,
+      right: PropTypes.number.isRequired,
+      top: PropTypes.number.isRequired,
+      bottom: PropTypes.number.isRequired,
+      near: PropTypes.number,
+      far: PropTypes.number,
+    };
 
     this.propUpdates = {
       ...this.propUpdates,

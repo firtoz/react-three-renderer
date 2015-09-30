@@ -2,21 +2,21 @@ import THREE from 'three';
 import Object3DDescriptor from './Object3DDescriptor';
 import invariant from 'fbjs/lib/invariant';
 
-class PointCloudDescriptor extends Object3DDescriptor {
+class PointsDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
   }
 
   construct() {
-    const pointCloud = new THREE.PointCloud();
+    const points = new THREE.Points();
 
-    pointCloud.geometry.dispose();
-    pointCloud.material.dispose();
+    points.geometry.dispose();
+    points.material.dispose();
 
-    pointCloud.geometry = undefined;
-    pointCloud.material = undefined;
+    points.geometry = undefined;
+    points.material = undefined;
 
-    return pointCloud;
+    return points;
   }
 
   addChildren(self, children) {
@@ -29,4 +29,4 @@ class PointCloudDescriptor extends Object3DDescriptor {
 }
 
 
-export default PointCloudDescriptor;
+export default PointsDescriptor;

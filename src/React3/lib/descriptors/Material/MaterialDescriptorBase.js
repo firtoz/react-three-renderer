@@ -60,7 +60,7 @@ import PropTypes from 'react/lib/ReactPropTypes';
   }
 
   setParent(material, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
+    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.Points, 'Parent is not a mesh');
     invariant(parentObject3D[material.userData._materialSlot] === undefined, 'Parent already has a ' + material.userData._materialSlot + ' defined');
     super.setParent(material, parentObject3D);
 
@@ -71,7 +71,7 @@ import PropTypes from 'react/lib/ReactPropTypes';
     const parent = material.userData.parentMarkup.threeObject;
 
     // could either be a resource description or an actual material
-    if (parent instanceof THREE.Mesh || parent instanceof THREE.PointCloud) {
+    if (parent instanceof THREE.Mesh || parent instanceof THREE.Points) {
       const slot = material.userData._materialSlot;
 
       if (parent[slot] === material) {

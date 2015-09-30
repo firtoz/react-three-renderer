@@ -11,7 +11,7 @@ class GeometryResourceDescriptor extends ResourceDescriptorBase {
   }
 
   setParent(self, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
+    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.Points, 'Parent is not a mesh');
 
     super.setParent(self, parentObject3D);
   }

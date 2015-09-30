@@ -2,14 +2,22 @@ import THREE from 'three';
 import CameraUtils from '../../../utils/CameraUtils.js';
 import Object3DDescriptor from './../Object3DDescriptor';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class CameraHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
     this.propUpdates = {
       ...this.propUpdates,
-      visible: this._updateVisible,
+      visible: this._updateVisible, //overwrite
       cameraName: this._updateCameraName,
+    };
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      cameraName: PropTypes.string.isRequired,
     };
   }
 

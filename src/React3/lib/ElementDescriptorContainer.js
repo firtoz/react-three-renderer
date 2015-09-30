@@ -5,11 +5,11 @@ import OrthographicCameraDescriptor from './descriptors/Object/Camera/Orthograph
 import PerspectiveCameraDescriptor from './descriptors/Object/Camera/PerspectiveCameraDescriptor';
 import CameraHelperDescriptor from './descriptors/Object/Helper/CameraHelperDescriptor';
 import MeshDescriptor from './descriptors/Object/MeshDescriptor';
-import PointCloudDescriptor from './descriptors/Object/PointCloudDescriptor';
+import PointsDescriptor from './descriptors/Object/PointsDescriptor';
+import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
 import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
 import MeshPhongMaterialDescriptor from './descriptors/Material/MeshPhongMaterialDescriptor';
 import MeshLambertMaterialDescriptor from './descriptors/Material/MeshLambertMaterialDescriptor';
-import PointCloudMaterialDescriptor from './descriptors/Material/PointCloudMaterialDescriptor';
 import ViewportDescriptor from './descriptors/ViewportDescriptor';
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
@@ -62,12 +62,12 @@ class ElementDescriptorContainer {
       cameraHelper: new CameraHelperDescriptor(react3RendererInstance),
 
       mesh: new MeshDescriptor(react3RendererInstance),
-      pointCloud: new PointCloudDescriptor(react3RendererInstance),
+      points: new PointsDescriptor(react3RendererInstance),
 
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3RendererInstance),
       meshPhongMaterial: new MeshPhongMaterialDescriptor(react3RendererInstance),
       meshLambertMaterial: new MeshLambertMaterialDescriptor(react3RendererInstance),
-      pointCloudMaterial: new PointCloudMaterialDescriptor(react3RendererInstance),
+      pointsMaterial: new PointsMaterialDescriptor(react3RendererInstance),
       shaderMaterial: new ShaderMaterialDescriptor(react3RendererInstance),
 
       texture: new TextureDescriptor(react3RendererInstance),

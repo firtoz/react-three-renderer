@@ -2,9 +2,22 @@ import Viewport from '../Viewport';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class ViewportDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+
+      cameraName: PropTypes.string.isRequired,
+    };
 
     this.useSimpleUpdates([
       'x',

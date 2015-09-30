@@ -1,7 +1,21 @@
 import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    this.hasColor();
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      wireframe: PropTypes.bool,
+    };
+  }
+
   construct(props) {
     const materialDescription = {};
 
