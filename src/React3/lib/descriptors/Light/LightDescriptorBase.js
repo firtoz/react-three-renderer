@@ -7,12 +7,6 @@ class LightDescriptorBase extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this._hasColor = false;
-  }
-
-  hasColor() {
-    this._hasColor = true;
-
     this.propTypes = {
       ...this.propTypes,
 

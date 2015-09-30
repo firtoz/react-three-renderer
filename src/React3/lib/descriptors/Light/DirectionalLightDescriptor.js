@@ -15,11 +15,13 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       'shadowCameraRight',
       'shadowCameraTop',
       'shadowCameraBottom',
+      'shadowCameraNear',
       'shadowCameraFar',
+      'shadowBias',
       'shadowDarkness',
+      'shadowCameraVisible',
+      'onlyShadow',
     ]);
-
-    this.hasColor();
 
     this.propTypes = {
       ...this.propTypes,
@@ -32,20 +34,13 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       shadowCameraRight: PropTypes.number,
       shadowCameraTop: PropTypes.number,
       shadowCameraBottom: PropTypes.number,
+      shadowCameraNear: PropTypes.number,
       shadowCameraFar: PropTypes.number,
+      shadowBias: PropTypes.number,
       shadowDarkness: PropTypes.number,
       castShadow: PropTypes.bool,
+      shadowCameraVisible: PropTypes.bool,
     };
-
-    this.propUpdates = {
-      ...this.propUpdates,
-
-      color: this._updateColor,
-    };
-  }
-
-  _updateColor(self, newColor) {
-    self.color.set(newColor);
   }
 
   construct(props) {
