@@ -22,7 +22,7 @@
     "react": "^0.14.0-rc1",
     "react-addons-perf": "^0.14.0-rc1",
     "react-dom": "^0.14.0-rc1",
-    "three": "^0.71.1",
+    "three": "^0.72.0",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.11.0"
   }
