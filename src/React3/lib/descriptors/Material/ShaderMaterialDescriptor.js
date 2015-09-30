@@ -3,7 +3,20 @@ import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 import UniformContainer from '../../UniformContainer';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class ShaderMaterialDescriptor extends MaterialDescriptorBase {
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      vertexShader: PropTypes.string.isRequired,
+      fragmentShader: PropTypes.string.isRequired,
+    };
+  }
+
   construct(props) {
     const materialDescription = {};
 

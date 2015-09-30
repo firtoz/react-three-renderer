@@ -6,11 +6,33 @@ import resource from './../decorators/resource';
 
 import ResourceReference from '../../Resources/ResourceReference';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 @resource class MaterialDescriptorBase extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
+    this.propTypes = {
+      ...this.propTypes,
+
+      slot: PropTypes.string,
+    };
+
+    this._hasColor = false;
+  }
+
+  hasColor() {
+    this._hasColor = true;
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      color: PropTypes.number,
+    };
+
     this.propUpdates = {
+      ...this.propUpdates,
+
       'color': this._updateColor,
     };
   }

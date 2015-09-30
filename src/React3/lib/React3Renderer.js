@@ -34,6 +34,8 @@ if (process.env.NODE_ENV !== 'production') {
   };
   THREE.Euler = class Euler extends THREE.Euler {
   };
+  THREE.Fog = class Fog extends THREE.Fog {
+  };
 }
 
 /**

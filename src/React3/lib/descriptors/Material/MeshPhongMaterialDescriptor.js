@@ -1,7 +1,26 @@
 import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      alphaTest: PropTypes.number,
+      specular: PropTypes.number,
+      emissive: PropTypes.number,
+      shininess: PropTypes.number,
+      map: PropTypes.number,
+      side: PropTypes.number,
+    };
+
+    this.hasColor();
+  }
+
   construct(props) {
     const materialDescription = {};
 

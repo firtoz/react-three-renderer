@@ -5,6 +5,8 @@ import invariant from 'fbjs/lib/invariant';
 
 import resource from './../decorators/resource';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 @resource class TextureDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
@@ -18,7 +20,17 @@ import resource from './../decorators/resource';
     this.propUpdates = {
       ...this.propUpdates,
       'repeat': this._setRepeat,
-    }
+    };
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      url: PropTypes.string.isRequired,
+      wrapS: PropTypes.number,
+      wrapT: PropTypes.number,
+      anisotropy: PropTypes.number,
+      repeat: PropTypes.instanceOf(THREE.Vector2),
+    };
   }
 
   _setRepeat = (self, repeat) => {

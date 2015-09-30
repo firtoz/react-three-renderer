@@ -13,7 +13,6 @@ class GeometryDescriptor extends GeometryDescriptorBase {
       vertices: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
       colors: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Color)),
       faces: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Face3)),
-      dynamic: PropTypes.arrayOf(PropTypes.bool),
     };
 
     this.propUpdates = {
@@ -39,7 +38,7 @@ class GeometryDescriptor extends GeometryDescriptorBase {
   }
 
   _updateVertices(self, vertices) {
-    if (vertices !== self.vertices) {
+    if (self.vertices !== vertices) {
       self.vertices = vertices;
 
       self.verticesNeedUpdate = true;

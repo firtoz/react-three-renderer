@@ -1,9 +1,19 @@
 import THREE from 'three';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class ParametricGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      parametricFunction: PropTypes.func.isRequired,
+      slices: PropTypes.number.isRequired,
+      stacks: PropTypes.number.isRequired,
+    };
   }
 
   construct(props) {
@@ -19,10 +29,6 @@ class ParametricGeometryDescriptor extends GeometryDescriptorBase {
 
   applyInitialProps(self, props) {
     super.applyInitialProps(self, props);
-
-    if (props.hasOwnProperty('dynamic')) {
-      self.dynamic = !!props.dynamic;
-    }
   }
 }
 

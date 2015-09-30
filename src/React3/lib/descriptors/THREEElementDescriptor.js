@@ -222,6 +222,24 @@ if (process.env.NODE_ENV !== 'production') {
    * @private
    */
   const _checkPropTypes = (componentName, propTypes, props, location, owner) => {
+    for (const propName in props) {
+      if (props.hasOwnProperty(propName)) {
+        if(propName === 'children') {
+          continue;
+        }
+
+        const addendum = getDeclarationErrorAddendum(owner);
+
+        const errorMessage = `Foreign prop ${propName} found in ${componentName}.`;
+        if (!propTypes.hasOwnProperty(propName) && !(errorMessage in loggedTypeFailures)) {
+          // Only monitor this failure once because there tends to be a lot of the
+          // same error.
+          loggedTypeFailures[errorMessage] = true;
+
+          warning(false, `${errorMessage}${addendum}`);
+        }
+      }
+    }
     for (const propName in propTypes) {
       if (propTypes.hasOwnProperty(propName)) {
         let error;

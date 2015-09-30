@@ -21,6 +21,11 @@ class Object3DDescriptor extends THREEElementDescriptor {
       'quaternion': PropTypes.instanceOf(THREE.Quaternion),
       'lookAt': PropTypes.instanceOf(THREE.Vector3),
       'scale': PropTypes.instanceOf(THREE.Vector3),
+      castShadow: PropTypes.bool,
+      receiveShadow: PropTypes.bool,
+      frustumCulled: PropTypes.bool,
+      visible: PropTypes.bool,
+      renderOrder: PropTypes.number,
     };
 
     this.propUpdates = {
@@ -48,10 +53,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
     return new THREE.Object3D();
   }
 
-  /**
-   * @param {THREE.Object3D} threeObject
-   * @param props
-   */
   applyInitialProps(threeObject, props) {
     super.applyInitialProps(threeObject, props);
 

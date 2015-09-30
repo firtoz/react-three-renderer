@@ -3,9 +3,17 @@ import invariant from 'fbjs/lib/invariant';
 import THREE from 'three';
 import ResourceContainer from './../../Resources/ResourceReference';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class ResourceDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      resourceId: PropTypes.string.isRequired,
+    };
   }
 
   construct(props) {

@@ -5,9 +5,17 @@ import invariant from 'fbjs/lib/invariant';
 
 import resource from './../decorators/resource';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 @resource class GeometryDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      dynamic: PropTypes.bool,
+    };
 
     this.hasName();
   }
@@ -31,6 +39,10 @@ import resource from './../decorators/resource';
     self.userData = {
       ...self.userData,
     };
+
+    if (props.hasOwnProperty('dynamic')) {
+      self.dynamic = !!props.dynamic;
+    }
 
     super.applyInitialProps(self, props);
   }

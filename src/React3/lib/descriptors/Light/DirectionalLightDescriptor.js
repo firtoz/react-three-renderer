@@ -23,6 +23,7 @@ class DirectionalLightDescriptor extends Object3DDescriptor {
       ...this.propTypes,
 
       color: PropTypes.number,
+      intensity: PropTypes.number,
       shadowMapWidth: PropTypes.number,
       shadowMapHeight: PropTypes.number,
       shadowCameraLeft: PropTypes.number,
@@ -31,6 +32,7 @@ class DirectionalLightDescriptor extends Object3DDescriptor {
       shadowCameraBottom: PropTypes.number,
       shadowCameraFar: PropTypes.number,
       shadowDarkness: PropTypes.number,
+      castShadow: PropTypes.bool,
     };
 
     this.propUpdates = {

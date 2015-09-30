@@ -15,6 +15,10 @@ class React3Descriptor extends THREEElementDescriptor {
 
       width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
+      gammaInput: PropTypes.bool,
+      gammaOutput: PropTypes.bool,
+      context: PropTypes.string.isRequired,
+      canvasStyle: PropTypes.any,
       mainCamera: PropTypes.string,
       canvas: PropTypes.instanceOf(HTMLCanvasElement),
       onAnimate: PropTypes.func,

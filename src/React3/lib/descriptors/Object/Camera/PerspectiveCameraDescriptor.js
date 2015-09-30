@@ -1,10 +1,21 @@
 import CameraDescriptorBase from './CameraDescriptorBase';
 import THREE from 'three';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class PerspectiveCameraDescriptor extends CameraDescriptorBase {
 
   constructor(react3Instance) {
     super(react3Instance);
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      fov: PropTypes.number,
+      aspect: PropTypes.number,
+      near: PropTypes.number,
+      far: PropTypes.number,
+    };
 
     this.propUpdates = {
       ...this.propUpdates,
@@ -12,6 +23,10 @@ class PerspectiveCameraDescriptor extends CameraDescriptorBase {
       fov: this._updateFov,
       far: this._updateFar,
     };
+  }
+
+  construct(props) {
+    return new THREE.PerspectiveCamera(props.fov, props.aspect, props.near, props.far);
   }
 
   _updateFov(threeObject, fov) {
@@ -24,10 +39,6 @@ class PerspectiveCameraDescriptor extends CameraDescriptorBase {
     threeObject.far = far;
 
     threeObject.userData._needsProjectionMatrixUpdate = true;
-  }
-
-  construct(props) {
-    return new THREE.PerspectiveCamera(props.fov, props.aspect, props.near, props.far);
   }
 
   /**
