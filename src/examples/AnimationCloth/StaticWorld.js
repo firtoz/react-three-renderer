@@ -58,12 +58,22 @@ class StaticWorld extends React.Component {
     this.groundPosition = new THREE.Vector3(0, -250, 0);
     this.groundRotation = new THREE.Euler(-Math.PI / 2, 0, 0);
     this.groundRepeat = new THREE.Vector2(25, 25);
+
+    this.state = {
+      ambientLightColor: '666666',
+      directionalLightColor: 'dfebff',
+    }
   }
 
   shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
   render() {
     const d = 300;
+
+    const {
+      ambientLightColor,
+      directionalLightColor,
+      } = this.state;
 
     return (<object3D>
       <resources>
@@ -76,10 +86,10 @@ class StaticWorld extends React.Component {
         />
       </resources>
       <ambientLight
-        color={0x666666}
+        color={Number.parseInt(ambientLightColor, 16)}
       />
       <directionalLight
-        color={0xdfebff}
+        color={Number.parseInt(directionalLightColor, 16)}
         intensity={1.75}
         position={this.directionalLightPosition}
         castShadow
