@@ -13,6 +13,8 @@ class PlaneBufferGeometryDescriptor extends GeometryDescriptorBase {
 
       width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
+      widthSegments: PropTypes.number.isRequired,
+      heightSegments: PropTypes.number.isRequired,
     };
 
     this.propUpdates = {
@@ -23,7 +25,14 @@ class PlaneBufferGeometryDescriptor extends GeometryDescriptorBase {
   }
 
   construct(props) {
-    return new THREE.PlaneBufferGeometry(props.width, props.height);
+    const {
+      width,
+      height,
+      widthSegments,
+      heightSegments,
+      } = props;
+
+    return new THREE.PlaneBufferGeometry(width, height, widthSegments, heightSegments);
   }
 
   _updateWidth = () => {

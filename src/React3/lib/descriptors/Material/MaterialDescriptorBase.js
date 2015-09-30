@@ -14,11 +14,32 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
     this.propTypes = {
       ...this.propTypes,
-
+      side: PropTypes.oneOf([THREE.FrontSide, THREE.BackSide, THREE.DoubleSide]),
+      opacity: PropTypes.number,
+      alphaTest: PropTypes.number,
+      transparent: PropTypes.bool,
       slot: PropTypes.string,
     };
 
     this._hasColor = false;
+  }
+
+  getMaterialDescription(props) {
+    const materialDescription = {};
+
+    if (props.hasOwnProperty('color')) {
+      materialDescription.color = props.color;
+    }
+
+    if (props.hasOwnProperty('side')) {
+      materialDescription.side = props.side;
+    }
+
+    if (props.hasOwnProperty('alphaTest')) {
+      materialDescription.alphaTest = props.alphaTest;
+    }
+
+    return materialDescription;
   }
 
   hasColor() {

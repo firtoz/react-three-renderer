@@ -3,15 +3,13 @@ import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
   construct(props) {
-    const materialDescription = {};
+    const materialDescription = this.getMaterialDescription(props);
 
-    if (props.hasOwnProperty('color')) {
-      materialDescription.color = props.color;
-    }
+    return new THREE.MeshLambertMaterial(materialDescription);
+  }
 
-    if (props.hasOwnProperty('alphaTest')) {
-      materialDescription.alphaTest = props.alphaTest;
-    }
+  getMaterialDescription(props) {
+    const materialDescription = super.getMaterialDescription(props);
 
     if (props.hasOwnProperty('specular')) {
       materialDescription.specular = props.specular;
@@ -29,13 +27,8 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
       materialDescription.map = props.map;
     }
 
-    if (props.hasOwnProperty('side')) {
-      materialDescription.side = props.side;
-    }
-
-    return new THREE.MeshLambertMaterial(materialDescription);
+    return materialDescription;
   }
-
 
   applyInitialProps(self, props) {
     super.applyInitialProps(self, props);

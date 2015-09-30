@@ -26,16 +26,20 @@ const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
 if (process.env.NODE_ENV !== 'production') {
   // prop type helpers
-  THREE.Vector2 = class Vector2 extends THREE.Vector2 {
-  };
-  THREE.Vector3 = class Vector3 extends THREE.Vector3 {
-  };
-  THREE.Color = class Color extends THREE.Color {
-  };
-  THREE.Euler = class Euler extends THREE.Euler {
-  };
-  THREE.Fog = class Fog extends THREE.Fog {
-  };
+  if (!THREE._renamed) {
+    THREE._renamed = true;
+
+    THREE.Vector2 = class Vector2 extends THREE.Vector2 {
+    };
+    THREE.Vector3 = class Vector3 extends THREE.Vector3 {
+    };
+    THREE.Color = class Color extends THREE.Color {
+    };
+    THREE.Euler = class Euler extends THREE.Euler {
+    };
+    THREE.Fog = class Fog extends THREE.Fog {
+    };
+  }
 }
 
 /**

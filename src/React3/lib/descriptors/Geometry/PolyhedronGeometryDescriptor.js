@@ -1,9 +1,9 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
+import PolyhedronGeometryDescriptorBase from './PolyhedronGeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
-class IcosahedronGeometryDescriptor extends GeometryDescriptorBase {
+class PolyhedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
@@ -12,8 +12,6 @@ class IcosahedronGeometryDescriptor extends GeometryDescriptorBase {
 
       vertices: PropTypes.arrayOf(PropTypes.number).isRequired,
       indices: PropTypes.arrayOf(PropTypes.number).isRequired,
-      radius: PropTypes.number.isRequired,
-      detail: PropTypes.number.isRequired,
     };
   }
 
@@ -29,4 +27,4 @@ class IcosahedronGeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default IcosahedronGeometryDescriptor;
+export default PolyhedronGeometryDescriptor;

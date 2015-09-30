@@ -1,7 +1,7 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
+import PolyhedronGeometryDescriptorBase from './PolyhedronGeometryDescriptorBase';
 
-class TetrahedronGeometryDescriptor extends GeometryDescriptorBase {
+class TetrahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
   construct(props) {
     const {
       radius,

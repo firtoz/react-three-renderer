@@ -8,7 +8,9 @@ gulp.task('webpack-dev-server', (callback) => {
   void callback;
 
   webpackConfig.devtool = 'source-map';
-  webpackConfig.plugins = [];
+  webpackConfig.plugins = [
+    new webpack.HotModuleReplacementPlugin(),
+  ];
 
   // Start a webpack-dev-server
   const compiler = webpack(webpackConfig);

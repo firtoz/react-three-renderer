@@ -1,20 +1,9 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
+import PolyhedronGeometryDescriptorBase from './PolyhedronGeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
-class IcosahedronGeometryDescriptor extends GeometryDescriptorBase {
-  constructor(react3RendererInstance) {
-    super(react3RendererInstance);
-
-    this.propTypes = {
-      ...this.propTypes,
-
-      radius: PropTypes.number,
-      detail: PropTypes.number,
-    };
-  }
-
+class IcosahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
   construct(props) {
     const {
       radius,

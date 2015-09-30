@@ -5,7 +5,11 @@ const outPath = path.join(__dirname, 'build');
 
 export default {
   entry: {
-    app: ['./src/index.js'],
+    app: [
+      'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
+      'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
+      './src/index.js',
+    ],
   },
   output: {
     path: outPath,
@@ -14,7 +18,10 @@ export default {
   'module': {
     'loaders': [
       {
-        test: /\.jsx?$/,
+        loaders: ['react-hot'],
+        include: path.join(__dirname, 'src'),
+      },
+      {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         query: {
@@ -30,7 +37,7 @@ export default {
   devServer: {
     contentBase: outPath,
     // noInfo: true, //  --no-info option
-    // hot: true,
+    hot: true,
     inline: true,
     stats: {colors: true},
   },
