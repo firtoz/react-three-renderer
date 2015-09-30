@@ -21,16 +21,16 @@ class Object3DDescriptor extends THREEElementDescriptor {
       'quaternion': PropTypes.instanceOf(THREE.Quaternion),
       'lookAt': PropTypes.instanceOf(THREE.Vector3),
       'scale': PropTypes.instanceOf(THREE.Vector3),
-      'name': PropTypes.string,
     };
 
     this.propUpdates = {
+      ...this.propUpdates,
+
       'position': this._updatePosition,
       'rotation': this._updateRotation,
       'quaternion': this._updateQuaternion,
       'lookAt': this._updateLookAt,
       'scale': this._updateScale,
-      'name': this._updateName,
     };
 
     this.registerSimpleProperties([
@@ -40,6 +40,8 @@ class Object3DDescriptor extends THREEElementDescriptor {
       'visible',
       'renderOrder',
     ]);
+
+    this.hasName();
   }
 
   construct() {
@@ -69,10 +71,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
       threeObject.quaternion.copy(props.quaternion);
     }
 
-    if (props.name) {
-      threeObject.name = props.name;
-    }
-
     if (props.lookAt) {
       threeObject.userData._lookAt = props.lookAt;
       threeObject.lookAt(props.lookAt);
@@ -97,23 +95,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
   _updateScale = (threeObject, nextScale) => {
     threeObject.scale.copy(nextScale);
-  };
-
-  _updateName = (threeObject, nextName) => {
-    const oldName = threeObject.name;
-
-    threeObject.name = nextName;
-
-    threeObject.userData.events.emit('rename', {
-      oldName,
-      nextName,
-    });
-
-    const markup = threeObject.userData.markup;
-
-    if (markup._rootInstance) {
-      markup._rootInstance.objectRenamed(self, oldName, nextName);
-    }
   };
 
   _updateLookAt = (threeObject, lookAt) => {

@@ -5,9 +5,12 @@ import invariant from 'fbjs/lib/invariant';
 
 import resource from './../decorators/resource';
 
-import PropTypes from 'react/lib/ReactPropTypes';
-
 @resource class GeometryDescriptorBase extends THREEElementDescriptor {
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    this.hasName();
+  }
 
   setParent(geometry, parentObject3D) {
     invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.PointCloud, 'Parent is not a mesh');
@@ -21,14 +24,6 @@ import PropTypes from 'react/lib/ReactPropTypes';
     }
 
     parentObject3D.geometry = geometry;
-
-    this.propTypes = {
-      ...this.propTypes,
-
-      name: PropTypes.string,
-    };
-
-    this.registerSimpleProperties(['name']);
   }
 
   applyInitialProps(self, props) {

@@ -12,14 +12,12 @@ import React3Renderer from '../lib/React3Renderer';
 const rendererProperties = [
   'gammaInput',
   'gammaOutput',
-  'shadowMapEnabled',
 ];
 
 class React3DInstance {
   constructor(props, rendererInstance:React3Renderer) {
     const {
       mainCamera,
-      viewports,
       canvas,
       width,
       height,
@@ -43,8 +41,9 @@ class React3DInstance {
     this._getHighlightBoundingBox = null;
 
     this._mainCameraName = mainCamera;
-    this._viewports = viewports || [];
+    this._viewports = [];
     this._canvas = canvas;
+    this._antialias = antialias;
     this._renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: antialias});
 
     if (props.hasOwnProperty('pixelRatio')) {
@@ -53,6 +52,22 @@ class React3DInstance {
 
     if (props.hasOwnProperty('clearColor')) {
       this._renderer.setClearColor(props.clearColor);
+    }
+
+    if (props.hasOwnProperty('shadowMapEnabled')) {
+      this._renderer.shadowMap.enabled = props['shadowMapEnabled'];
+    }
+
+    if (props.hasOwnProperty('shadowMapType')) {
+      this._renderer.shadowMap.type = props['shadowMapType'];
+    }
+
+    if (props.hasOwnProperty('shadowMapCullFace')) {
+      this._renderer.shadowMap.cullFace = props['shadowMapCullFace'];
+    }
+
+    if (props.hasOwnProperty('shadowMapDebug')) {
+      this._renderer.shadowMap.debug = props['shadowMapDebug'];
     }
 
     rendererProperties.forEach(propertyName => {
@@ -64,12 +79,12 @@ class React3DInstance {
     this._width = width;
     this._height = height;
     this._renderer.setSize(this._width, this._height);
+
     this._onAnimate = onAnimate;
     this._objectsByUUID = {};
     this._objectsByName = {};
 
     this._lastRenderMode = null;
-
 
     this._renderRequest = requestAnimationFrame(this._render);
 
@@ -269,8 +284,8 @@ class React3DInstance {
     this._renderer.setSize(this._width, this._height);
   }
 
-  updateViewports(newViewports) {
-    this._viewports = newViewports || [];
+  updateShadowMapDebug(newShadowMapDebug) {
+    this._renderer.shadowMap.debug = newShadowMapDebug;
   }
 
   unmount() {
@@ -391,28 +406,8 @@ class React3DInstance {
     this._removeObjectWithName(object.name, object);
   }
 
-  //addAllChildren(object) {
-  //  const allChildren = [object];
-  //
-  //  while (allChildren.length > 0) {
-  //    const current:THREE.Object3D = allChildren.pop();
-  //
-  //    this.objectMounted(current);
-  //
-  //    const childrenMarkup = current.userData.childrenMarkup;
-  //
-  //    for (let i = 0; i < childrenMarkup.length; ++i) {
-  //      const childMarkup = childrenMarkup[i];
-  //
-  //      allChildren.push(childMarkup.threeObject);
-  //    }
-  //  }
-  //}
-
   mountedIntoRoot() {
     this.objectMounted(this._scene);
-
-    //this.addAllChildren(this._scene);
   }
 }
 

@@ -8,6 +8,8 @@ import warning from 'fbjs/lib/warning';
 import events from 'events';
 const {EventEmitter} = events;
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 /**
  * @abstract
  */
@@ -17,20 +19,58 @@ class THREEElementDescriptor {
     this.propUpdates = {};
     this._simpleProperties = [];
 
-    if (process.env.NODE_ENV !== 'production') {
-      this.propTypes = {};
-    }
+    this.propTypes = {};
+
+    this._hasName = false;
   }
 
-  applyInitialProps(self, props) { // eslint-disable-line no-unused-vars
+  hasName() {
+    this._hasName = true;
+
+    this.propTypes = {
+      ...this.propTypes,
+
+      'name': PropTypes.string,
+    };
+
+
+    this.propUpdates = {
+      ...this.propUpdates,
+
+      'name': this._updateName,
+    };
+  }
+
+  _updateName = (threeObject, nextName) => {
+    const oldName = threeObject.name;
+
+    threeObject.name = nextName;
+
+    threeObject.userData.events.emit('rename', {
+      oldName,
+      nextName,
+    });
+
+    const markup = threeObject.userData.markup;
+
+    if (markup._rootInstance) {
+      markup._rootInstance.objectRenamed(self, oldName, nextName);
+    }
+  };
+
+  applyInitialProps(threeObject, props) {
     // do nothing for now
 
     const eventsForObject = new EventEmitter();
 
+    if (this._hasName && props.name) {
+      threeObject.name = props.name;
+    }
+
     // pass down resources!
 
     eventsForObject.on('resource.added', (data) => {
-      const childrenMarkup = self.userData.childrenMarkup;
+      const childrenMarkup = threeObject.userData.childrenMarkup;
 
       const increasedDistance = {
         ...data,
@@ -41,7 +81,7 @@ class THREEElementDescriptor {
     });
 
     eventsForObject.on('resource.removed', (data) => {
-      const childrenMarkup = self.userData.childrenMarkup;
+      const childrenMarkup = threeObject.userData.childrenMarkup;
 
       const increasedDistance = {
         ...data,
@@ -51,12 +91,12 @@ class THREEElementDescriptor {
       childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.removed', increasedDistance));
     });
 
-    self.userData.events = eventsForObject;
-    self.userData._descriptor = this;
+    threeObject.userData.events = eventsForObject;
+    threeObject.userData._descriptor = this;
 
     this._simpleProperties.forEach(propertyName => {
       if (props.hasOwnProperty(propertyName)) {
-        self[propertyName] = props[propertyName];
+        threeObject[propertyName] = props[propertyName];
       }
     });
   }

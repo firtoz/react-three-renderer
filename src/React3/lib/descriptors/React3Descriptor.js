@@ -2,14 +2,39 @@ import React3DInstance from '../React3DInstance';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 
+import THREE from 'three';
+
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class React3Descriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
+    this.propTypes = {
+      ...this.propTypes,
+
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+      mainCamera: PropTypes.string,
+      canvas: PropTypes.instanceOf(HTMLCanvasElement),
+      onAnimate: PropTypes.func,
+      antialias: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.number,
+      ]).isRequired,
+      pixelRatio: PropTypes.number,
+      clearColor: PropTypes.instanceOf(THREE.Color),
+      shadowMapEnabled: PropTypes.bool,
+      shadowMapType: PropTypes.bool,
+      shadowMapCullFace: PropTypes.bool,
+      shadowMapDebug: PropTypes.bool,
+    };
+
     this.propUpdates = {
+      ...this.propUpdates,
+
       width: this._updateWidth,
       height: this._updateHeight,
-      viewports: this._updateViewports,
     };
   }
 
@@ -43,10 +68,6 @@ class React3Descriptor extends THREEElementDescriptor {
 
   _updateHeight(self, newHeight) {
     self.updateHeight(newHeight);
-  }
-
-  _updateViewports(self, newViewports) {
-    self.updateViewports(newViewports);
   }
 
   unmount(self) {
