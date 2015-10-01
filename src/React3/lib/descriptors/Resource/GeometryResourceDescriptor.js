@@ -15,15 +15,6 @@ class GeometryResourceDescriptor extends ResourceDescriptorBase {
 
     super.setParent(self, parentObject3D);
   }
-
-  resourceUpdated(self, newResource, oldResource) {
-    if (self.userData.parentMarkup.threeObject.__webglInit) {
-      // pretend the object has been removed so that the context can be reinitialized
-      self.userData.parentMarkup.threeObject.dispatchEvent({type: 'removed'});
-    }
-
-    return super.resourceUpdated(self, newResource, oldResource);
-  }
 }
 
 export default GeometryResourceDescriptor;

@@ -7,4 +7,4 @@ import Perf from 'react-addons-perf';
 
 window.Perf = Perf;
 
-ReactDOM.render(<AnimationCloth/>, document.getElementById('content'));
+ReactDOM.render(<Geometries/>, document.getElementById('content'));
