@@ -284,6 +284,11 @@ class React3DInstance {
     this._renderer.setSize(this._width, this._height);
   }
 
+  updatePixelRatio(newPixelRatio) {
+    this._renderer.setPixelRatio(newPixelRatio);
+    this._renderer.setSize(this._width, this._height);
+  }
+
   updateShadowMapDebug(newShadowMapDebug) {
     this._renderer.shadowMap.debug = newShadowMapDebug;
   }

@@ -39,6 +39,7 @@ class React3Descriptor extends THREEElementDescriptor {
 
       width: this._updateWidth,
       height: this._updateHeight,
+      pixelRatio: this._updatePixelRatio,
     };
   }
 
@@ -72,6 +73,10 @@ class React3Descriptor extends THREEElementDescriptor {
 
   _updateHeight(self, newHeight) {
     self.updateHeight(newHeight);
+  }
+
+  _updatePixelRatio(self, newHeight) {
+    self.updatePixelRatio(newHeight);
   }
 
   unmount(self) {
