@@ -13,8 +13,8 @@ class PlaneBufferGeometryDescriptor extends GeometryDescriptorBase {
 
       width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
-      widthSegments: PropTypes.number.isRequired,
-      heightSegments: PropTypes.number.isRequired,
+      widthSegments: PropTypes.number,
+      heightSegments: PropTypes.number,
     };
 
     this.propUpdates = {
