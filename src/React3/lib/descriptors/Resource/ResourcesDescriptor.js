@@ -9,29 +9,29 @@ class ResourcesDescriptor extends THREEElementDescriptor {
     return new ResourceContainer();
   }
 
-  unmount(self) {
-    const parentMarkup = self.userData.parentMarkup;
+  unmount(threeObject) {
+    const parentMarkup = threeObject.userData.parentMarkup;
     const parentEvents = parentMarkup.userData.events;
 
-    self.resourceIds.forEach(id => {
+    threeObject.resourceIds.forEach(id => {
       parentEvents.emit('resource.removed', {
         id,
         distance: 0,
       });
     });
 
-    super.unmount(self);
+    super.unmount(threeObject);
   }
 
-  addChildren(self, children) {
+  addChildren(threeObject, children) {
     children.forEach(child => {
       const resourceId = child.userData._resourceId;
 
-      self.resourceIds.push(resourceId);
+      threeObject.resourceIds.push(resourceId);
 
-      self.resourceMap[resourceId] = child;
+      threeObject.resourceMap[resourceId] = child;
 
-      const parentMarkup = self.userData.parentMarkup;
+      const parentMarkup = threeObject.userData.parentMarkup;
       if (parentMarkup) {
         parentMarkup.userData.events.emit('resource.added', {
           id: resourceId,
@@ -42,32 +42,37 @@ class ResourcesDescriptor extends THREEElementDescriptor {
     });
   }
 
-  removeChild(self, child) {
+  addChild(threeObject, child) {
+    this.addChildren(threeObject, [child]);
+  }
+
+  removeChild(threeObject, child) {
     const resourceId = child.userData._resourceId;
 
-    delete self.resourceIds[resourceId];
+    delete threeObject.resourceIds[resourceId];
 
-    const parentMarkup = self.userData.parentMarkup;
+    const parentMarkup = threeObject.userData.parentMarkup;
     if (parentMarkup) {
       parentMarkup.userData.events.emit('resource.removed', {
         id: resourceId,
         distance: 0,
+        resource: child,
       });
     }
   }
 
-  setParent(self, parentObject) {
-    super.setParent(self, parentObject);
+  setParent(threeObject, parentObject) {
+    super.setParent(threeObject, parentObject);
 
     const parentEvents = parentObject.userData.events;
 
-    parentObject.userData._resources = self;
+    parentObject.userData._resources = threeObject;
 
-    self.resourceIds.forEach(id => {
+    threeObject.resourceIds.forEach(id => {
       parentEvents.emit('resource.added', {
         id,
         distance: 0,
-        resource: self.resourceMap[id],
+        resource: threeObject.resourceMap[id],
       });
     });
   }

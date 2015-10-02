@@ -60,12 +60,12 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     });
   }
 
-  unmount(self) {
-    this._clearCameraEvents(self);
+  unmount(threeObject) {
+    this._clearCameraEvents(threeObject);
 
-    delete self.userData._onCameraProjectionUpdate;
+    delete threeObject.userData._onCameraProjectionUpdate;
 
-    return super.unmount(self);
+    return super.unmount(threeObject);
   }
 
   _getCamera(rootInstance, cameraName) {

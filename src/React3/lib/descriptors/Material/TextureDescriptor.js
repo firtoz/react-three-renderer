@@ -7,6 +7,8 @@ import resource from '../decorators/resource';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import Uniform from '../../Uniform';
+
 @resource class TextureDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
@@ -33,8 +35,8 @@ import PropTypes from 'react/lib/ReactPropTypes';
     };
   }
 
-  _setRepeat = (self, repeat) => {
-    self.repeat.copy(repeat);
+  _setRepeat = (threeObject, repeat) => {
+    threeObject.repeat.copy(repeat);
   };
 
   construct(props) {
@@ -50,8 +52,10 @@ import PropTypes from 'react/lib/ReactPropTypes';
       'Parent is not a material or a uniform');
 
     if (parentObject3D instanceof THREE.Material) {
-      invariant(parentObject3D.map === undefined, 'Parent already has a texture');
+      invariant(parentObject3D.map === null || parentObject3D.map === undefined, 'Parent already has a texture');
       parentObject3D.map = texture;
+      // dispose to force a recreate
+      parentObject3D.dispose();
     } else { // Uniform as per the assert above
       parentObject3D.setValue(texture);
     }
@@ -60,16 +64,16 @@ import PropTypes from 'react/lib/ReactPropTypes';
   }
 
 
-  applyInitialProps(self, props) {
-    self.userData = {
-      ...self.userData,
+  applyInitialProps(threeObject, props) {
+    threeObject.userData = {
+      ...threeObject.userData,
     };
 
     if (props.hasOwnProperty('repeat')) {
-      self.repeat.copy(props.repeat);
+      threeObject.repeat.copy(props.repeat);
     }
 
-    super.applyInitialProps(self, props);
+    super.applyInitialProps(threeObject, props);
   }
 
   unmount(texture) {
@@ -78,11 +82,13 @@ import PropTypes from 'react/lib/ReactPropTypes';
     // could either be a resource description or an actual texture
     if (parent instanceof THREE.Material) {
       if (parent.map === texture) {
-        parent.map = undefined;
+        parent.map = null;
+        // dispose to force a recreate
+        parent.dispose();
       }
     } else if (parent instanceof Uniform) {
-      if (uniform.value === texture) {
-        uniform.setValue(null);
+      if (parent.value === texture) {
+        parent.setValue(null);
       }
     }
 

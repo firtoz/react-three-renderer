@@ -29,17 +29,17 @@ import PropTypes from 'react/lib/ReactPropTypes';
     parentObject3D.geometry = geometry;
   }
 
-  applyInitialProps(self, props) {
+  applyInitialProps(threeObject, props) {
     // ensure the userData is created
-    self.userData = {
-      ...self.userData,
+    threeObject.userData = {
+      ...threeObject.userData,
     };
 
     if (props.hasOwnProperty('dynamic')) {
-      self.dynamic = !!props.dynamic;
+      threeObject.dynamic = !!props.dynamic;
     }
 
-    super.applyInitialProps(self, props);
+    super.applyInitialProps(threeObject, props);
   }
 
   unmount(geometry) {

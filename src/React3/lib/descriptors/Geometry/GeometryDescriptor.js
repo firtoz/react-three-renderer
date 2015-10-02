@@ -28,20 +28,20 @@ class GeometryDescriptor extends GeometryDescriptorBase {
   }
 
   /**
-   * @param {THREE.Geometry} self
+   * @param {THREE.Geometry} threeObject
    * @param props
    */
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
-    this._updateVertices(self, props.vertices);
+    this._updateVertices(threeObject, props.vertices);
   }
 
-  _updateVertices(self, vertices) {
-    if (self.vertices !== vertices) {
-      self.vertices = vertices;
+  _updateVertices(threeObject, vertices) {
+    if (threeObject.vertices !== vertices) {
+      threeObject.vertices = vertices;
 
-      self.verticesNeedUpdate = true;
+      threeObject.verticesNeedUpdate = true;
     }
   }
 }

@@ -12,14 +12,52 @@ import PropTypes from 'react/lib/ReactPropTypes';
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
-      side: PropTypes.oneOf([THREE.FrontSide, THREE.BackSide, THREE.DoubleSide]),
-      opacity: PropTypes.number,
-      alphaTest: PropTypes.number,
-      transparent: PropTypes.bool,
-      slot: PropTypes.string,
-    };
+    this.hasProp('slot', {
+      type: PropTypes.string,
+      updateInitial: true,
+      update: (threeObject, slot, hasProperty) => {
+        if (hasProperty) {
+          threeObject.userData._materialSlot = slot;
+        } else {
+          threeObject.userData._materialSlot = 'material';
+        }
+      },
+      default: 'material',
+    });
+
+    this.hasProp('transparent', {
+      type: PropTypes.bool,
+      simple: true,
+    });
+
+    this.hasProp('alphaTest', {
+      type: PropTypes.number,
+      updateInitial: true,
+      update: (self, alphaTest) => {
+        self.alphaTest = alphaTest;
+      },
+      initialOnly: true,
+    });
+
+    this.hasProp('side', {
+      type: PropTypes.oneOf([THREE.FrontSide, THREE.BackSide, THREE.DoubleSide]),
+      updateInitial: true,
+      update: (self, side) => {
+        self.side = side;
+      },
+      default: undefined,
+    });
+
+    this.hasProp('opacity', {
+      type: PropTypes.number,
+      simple: true,
+    });
+
+    this.hasProp('visible', {
+      type: PropTypes.number,
+      simple: true,
+      default: true,
+    });
 
     this._hasColor = false;
   }
@@ -31,32 +69,24 @@ import PropTypes from 'react/lib/ReactPropTypes';
       materialDescription.color = props.color;
     }
 
-    if (props.hasOwnProperty('side')) {
-      materialDescription.side = props.side;
-    }
-
-    if (props.hasOwnProperty('alphaTest')) {
-      materialDescription.alphaTest = props.alphaTest;
-    }
-
     return materialDescription;
   }
 
   hasColor() {
     this._hasColor = true;
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      color: PropTypes.number,
-    };
-
-    this.propUpdates = {
-      ...this.propUpdates,
-
-      'color': this._updateColor,
-    };
+    this.hasProp('color', {
+      type: PropTypes.number,
+      update: (threeObject, newColor) => {
+        threeObject.color.set(newColor);
+      },
+      default: 0xffffff,
+    });
   }
+
+  _deleteColor = (threeObject) => {
+    threeObject.color.set(0xffffff); // white
+  };
 
   _updateColor = (threeObject, nextColor) => {
     threeObject.color.set(nextColor);
@@ -66,18 +96,12 @@ import PropTypes from 'react/lib/ReactPropTypes';
     return new THREE.Material({});
   }
 
-  applyInitialProps(self, props) {
-    self.userData = {
-      ...self.userData,
+  applyInitialProps(threeObject, props) {
+    threeObject.userData = {
+      ...threeObject.userData,
     };
 
-    if (props.hasOwnProperty('slot')) {
-      self.userData._materialSlot = props.slot;
-    } else {
-      self.userData._materialSlot = 'material';
-    }
-
-    super.applyInitialProps(self, props);
+    super.applyInitialProps(threeObject, props);
   }
 
   setParent(material, parentObject3D) {
@@ -131,11 +155,19 @@ import PropTypes from 'react/lib/ReactPropTypes';
     threeObject.userData.events.emit('hideHighlight');
   }
 
-  addChildren(self, children) {
+  addChildren(threeObject, children) {
     invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
   }
 
+  addChild(threeObject, child) {
+    this.addChildren(threeObject, [child]);
+  }
+
   moveChild() {
+    // doesn't matter
+  }
+
+  removeChild() {
     // doesn't matter
   }
 

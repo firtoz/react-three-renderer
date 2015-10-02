@@ -6,15 +6,16 @@ import invariant from 'fbjs/lib/invariant';
 import Uniform from '../../Uniform';
 
 class TextureResourceDescriptor extends ResourceDescriptorBase {
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
-    self.userData._propertySlot = 'map';
+    threeObject.userData._propertySlot = 'map';
   }
 
-  applyToSlot(self, parentObject3D, newResource) {
+  applyToSlot(threeObject, parentObject3D, newResource) {
     if (parentObject3D instanceof THREE.Material) {
-      super.applyToSlot(self, parentObject3D, newResource);
+      super.applyToSlot(threeObject, parentObject3D, newResource);
+      parentObject3D.dispose();
     } else if (parentObject3D instanceof Uniform) {
       parentObject3D.setValue(newResource);
     } else {
@@ -22,15 +23,20 @@ class TextureResourceDescriptor extends ResourceDescriptorBase {
     }
   }
 
-  setParent(self, parentObject3D) {
+  setParent(threeObject, parentObject3D) {
     if (parentObject3D instanceof THREE.Material) {
-      super.setParent(self, parentObject3D);
+      super.setParent(threeObject, parentObject3D);
     } else if (parentObject3D instanceof Uniform) {
-      self.userData._propertySlot = 'value';
-      super.setParent(self, parentObject3D);
+      threeObject.userData._propertySlot = 'value';
+      super.setParent(threeObject, parentObject3D);
     } else {
       invariant(false, 'Parent is not a material or a uniform');
     }
+  }
+
+  unmount(threeObject) {
+    debugger;
+    return super.unmount(threeObject);
   }
 }
 

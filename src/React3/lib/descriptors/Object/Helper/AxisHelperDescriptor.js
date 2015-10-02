@@ -25,11 +25,11 @@ class AxisHelperDescriptor extends Object3DDescriptor {
     return new THREE.AxisHelper(size);
   }
 
-  unmount(self) {
-    self.geometry.dispose();
-    self.material.dispose();
+  unmount(threeObject) {
+    threeObject.geometry.dispose();
+    threeObject.material.dispose();
 
-    super.unmount(self);
+    super.unmount(threeObject);
   }
 }
 

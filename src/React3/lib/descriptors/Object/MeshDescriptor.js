@@ -40,8 +40,16 @@ class MeshDescriptor extends Object3DDescriptor {
     return invalid;
   };
 
-  addChildren(self, children) {
-    invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
+  addChildren(threeObject, children) {
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
+    } else {
+      invariant(children.filter(this._invalidChild).length === 0, false);
+    }
+  }
+
+  addChild(threeObject, child) {
+    this.addChildren(threeObject, [child]);
   }
 
   moveChild() {

@@ -44,8 +44,8 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     };
   }
 
-  _updateColor(self, newColor) {
-    self.color.set(newColor);
+  _updateColor(threeObject, newColor) {
+    threeObject.color.set(newColor);
   }
 
   construct(props) {

@@ -32,45 +32,50 @@ class UniformDescriptor extends THREEElementDescriptor {
     };
   }
 
-  _setValue(self, newVale) {
-    self.setValue(newVale);
+  _setValue(threeObject, newVale) {
+    threeObject.setValue(newVale);
   }
 
   construct() {
     return new Uniform();
   }
 
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
     invariant(props.hasOwnProperty('name'), 'The <uniform/> should have a \'name\' property');
-    self.name = props.name;
-    self.value = props.value;
+    threeObject.name = props.name;
+    threeObject.value = props.value;
   }
 
-  setParent(self:Uniform, parentObject3D) {
+  setParent(threeObject:Uniform, parentObject3D) {
     invariant(parentObject3D instanceof UniformContainer, 'Parent is not a Uniform Container (<uniforms/>)');
 
-    const name = self.name;
+    const name = threeObject.name;
 
     invariant(parentObject3D[name] === undefined, 'Parent already has uniforms');
 
-    super.setParent(self, parentObject3D);
+    super.setParent(threeObject, parentObject3D);
 
     parentObject3D.uniforms[name] = {
-      type: self.type,
-      value: self.value,
+      type: threeObject.type,
+      value: threeObject.value,
     };
 
-    self.userData._onValueChanged = (newValue) => {
+    threeObject.userData._onValueChanged = (newValue) => {
       parentObject3D.uniforms[name].value = newValue;
     };
 
-    self.userData.events.on('valueChanged', self.userData._onValueChanged);
+    threeObject.userData.events.on('valueChanged', threeObject.userData._onValueChanged);
   }
 
-  addChildren(self, children) {
-    invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
+  addChildren(threeObject, children) {
+    invariant(children.filter(this._invalidChild).length === 0, 'Uniform children can only be textures or resource references');
+  }
+
+
+  addChild(threeObject, child) {
+    this.addChildren(threeObject, [child]);
   }
 
   invalidChildInternal(child) {
@@ -88,11 +93,11 @@ class UniformDescriptor extends THREEElementDescriptor {
   };
 
   unmount() {
-    self.userData.events.removeListener('valueChanged', self.userData._onValueChanged);
+    threeObject.userData.events.removeListener('valueChanged', threeObject.userData._onValueChanged);
 
-    delete self.userData._onValueChanged;
+    delete threeObject.userData._onValueChanged;
 
-    super.unmount(self);
+    super.unmount(threeObject);
   }
 
   highlight(threeObject) {

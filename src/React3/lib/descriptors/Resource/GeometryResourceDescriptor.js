@@ -4,16 +4,16 @@ import THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 
 class GeometryResourceDescriptor extends ResourceDescriptorBase {
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
-    self.userData._propertySlot = 'geometry';
+    threeObject.userData._propertySlot = 'geometry';
   }
 
-  setParent(self, parentObject3D) {
+  setParent(threeObject, parentObject3D) {
     invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.Points, 'Parent is not a mesh');
 
-    super.setParent(self, parentObject3D);
+    super.setParent(threeObject, parentObject3D);
   }
 }
 
