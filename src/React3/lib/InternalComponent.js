@@ -397,12 +397,14 @@ class InternalComponent {
   }
 
   createChild(child, mountImage) {
-    this._markup.userData.childrenMarkup.push(mountImage);
-    this.threeElementDescriptor.addChildren(this._threeObject, [mountImage.threeObject]);
+    const mountIndex = child._mountIndex;
+
+    this._markup.userData.childrenMarkup.splice(mountIndex, 0, mountImage);
+    mountImage.userData.parentMarkup = this._markup;
+
+    this.threeElementDescriptor.addChild(this._threeObject, mountImage.threeObject, mountIndex);
 
     const descriptorForChild = this._react3RendererInstance.threeElementDescriptors[mountImage.elementType];
-
-    mountImage.userData.parentMarkup = this._markup;
 
     descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
   }
