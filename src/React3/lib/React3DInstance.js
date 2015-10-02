@@ -312,14 +312,15 @@ class React3DInstance {
 
     cancelAnimationFrame(this._renderRequest);
 
-    try {
-      this._renderer.forceContextLoss();
-    } finally {
-      delete this._renderer;
+    const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
+
+    if (contextLossExtension) {
+      contextLossExtension.loseContext();
     }
 
+    delete this._renderer;
+
     delete this._canvas;
-    delete this._canvasDisposed;
 
     invariant(Object.keys(this._objectsByUUID).length === 0, 'Failed to cleanup some child objects for React3DInstance');
 
