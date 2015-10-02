@@ -27,6 +27,7 @@ class React3DInstance {
 
     this._rendererInstance = rendererInstance;
 
+    this._mounted = false;
     this._scene = null;
     this._highlightScene = new THREE.Scene();
 
@@ -42,6 +43,7 @@ class React3DInstance {
 
     this._mainCameraName = mainCamera;
     this._viewports = [];
+    this._resourceContainers = [];
     this._canvas = canvas;
     this._antialias = antialias;
     this._renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: antialias});
@@ -133,10 +135,6 @@ class React3DInstance {
     }
   };
 
-  addViewport(viewport) {
-    this._viewports.push(viewport);
-  }
-
   addChildren(children) {
     children.forEach(child => {
       if (child instanceof THREE.Scene) {
@@ -144,15 +142,20 @@ class React3DInstance {
       } else if (child instanceof Viewport) {
         this.addViewport(child);
       } else if (child instanceof ResourceContainer) {
-        // this.addViewport(child);
+        this.addResourceContainer(child);
       } else {
         invariant(false, 'The react3 component should only contain viewports or scenes.');
       }
+
+      if (this._mounted) {
+        this.objectMounted(child);
+      }
     });
+
     // const scenes = children.filter()
     // invariant(children.length === 1 && children[0] instanceof THREE.Scene, 'The react3 component should only have one scene as a child!');
 
-    // self.setScene(children[0]);
+    // threeObject.setScene(children[0]);
   }
 
   removeChild(child) {
@@ -272,6 +275,14 @@ class React3DInstance {
 
   setScene(scene) {
     this._scene = scene;
+  }
+
+  addViewport(viewport) {
+    this._viewports.push(viewport);
+  }
+
+  addResourceContainer(resourceContainer) {
+    this._resourceContainers.push(resourceContainer);
   }
 
   updateWidth(newWidth) {
@@ -412,7 +423,16 @@ class React3DInstance {
   }
 
   mountedIntoRoot() {
+    this._mounted = true;
     this.objectMounted(this._scene);
+
+    this._viewports.forEach(viewport => {
+      this.objectMounted(viewport);
+    });
+
+    this._resourceContainers.forEach(resourceContainer => {
+      this.objectMounted(resourceContainer);
+    });
   }
 }
 
