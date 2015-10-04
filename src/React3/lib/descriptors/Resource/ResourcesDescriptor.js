@@ -17,6 +17,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
       parentEvents.emit('resource.removed', {
         id,
         distance: 0,
+        resource: threeObject.resourceMap[id],
       });
     });
 
