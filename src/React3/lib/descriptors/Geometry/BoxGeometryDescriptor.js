@@ -48,7 +48,7 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
     threeObject.userData._wantReplace = false;
   }
 
-  completePropertyUpdates(threeObject, transaction, context) {
+  completePropertyUpdates(threeObject) {
     super.completePropertyUpdates(threeObject);
 
     if (threeObject.userData._wantReplace) {

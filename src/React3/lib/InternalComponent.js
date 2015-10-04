@@ -301,7 +301,7 @@ class InternalComponent {
       }
     }
 
-    this.threeElementDescriptor.completePropertyUpdates(this._threeObject, transaction, context);
+    this.threeElementDescriptor.completePropertyUpdates(this._threeObject);
   }
 
   /**

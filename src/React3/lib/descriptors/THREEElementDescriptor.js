@@ -235,7 +235,7 @@ class THREEElementDescriptor {
 
   }
 
-  completePropertyUpdates(threeObject, transaction, context) { // eslint-disable-line no-unused-vars
+  completePropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
 
   }
 
