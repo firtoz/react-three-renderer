@@ -45,8 +45,8 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
   }
 
   construct(props) {
-    const color = props.hasOwnProperty('color') ? props.color : undefined;
-    const intensity = props.hasOwnProperty('intensity') ? props.intensity : undefined;
+    const color = props.color;
+    const intensity = props.intensity;
 
     return new THREE.DirectionalLight(color, intensity);
   }

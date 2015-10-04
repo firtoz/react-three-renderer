@@ -124,7 +124,7 @@ class THREEElementDescriptor {
       threeObject.name = props.name;
     }
 
-    // pass down resources!
+    // pass down resources
 
     eventsForObject.on('resource.added', (data) => {
       const childrenMarkup = threeObject.userData.childrenMarkup;
@@ -231,14 +231,11 @@ class THREEElementDescriptor {
     }
   }
 
-  /**
-   * @param {THREE.Object3D} threeObject
-   */
   beginPropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
 
   }
 
-  completePropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
+  completePropertyUpdates(threeObject, transaction, context) { // eslint-disable-line no-unused-vars
 
   }
 

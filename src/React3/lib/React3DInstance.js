@@ -164,12 +164,12 @@ class React3DInstance {
 
   _render = () => {
     this._renderRequest = requestAnimationFrame(this._render);
+    this.userData.events.emit('animate');
 
-    if (!this._scene) {
+    // the scene can be destroyed within the 'animate' event
+    if (!this._scene || !this._mounted) {
       return;
     }
-
-    this.userData.events.emit('animate');
 
     let mainCamera = null;
 
@@ -305,12 +305,12 @@ class React3DInstance {
   }
 
   unmount() {
+    this._mounted = false;
+    cancelAnimationFrame(this._renderRequest);
+
     this.userData.events.removeListener('animate', this._callOnAnimate);
     this.userData.events.removeAllListeners();
-    delete this.userData.events;
     delete this._rendererInstance;
-
-    cancelAnimationFrame(this._renderRequest);
 
     const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
 

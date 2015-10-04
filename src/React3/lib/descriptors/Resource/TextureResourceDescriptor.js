@@ -33,11 +33,6 @@ class TextureResourceDescriptor extends ResourceDescriptorBase {
       invariant(false, 'Parent is not a material or a uniform');
     }
   }
-
-  unmount(threeObject) {
-    debugger;
-    return super.unmount(threeObject);
-  }
 }
 
 export default TextureResourceDescriptor;

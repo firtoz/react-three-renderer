@@ -27,9 +27,6 @@ class Poles extends React.Component {
 
   shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
-  componentWillUnmount() {
-  }
-
   render() {
     return (<object3D>
       <resources>
@@ -89,7 +86,7 @@ class Poles extends React.Component {
           /> : null}
           {
             <sphereGeometry resourceId="boxGeometry"
-                         radius={20}/> }
+                            radius={20}/> }
         </resources> : null }
         {this.state.boxPositions.map((position, i) => {
           return (<mesh

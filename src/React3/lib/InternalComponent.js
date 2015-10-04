@@ -57,6 +57,7 @@ class InternalComponent {
     this._topLevelWrapper = null;
     this._markup = null;
     this._nodeWithLegacyProperties = null;
+    this._wantsReplace = false;
 
     this.threeElementDescriptor = react3RendererInstance.threeElementDescriptors[element.type];
     if (!this.threeElementDescriptor) {
@@ -234,7 +235,7 @@ class InternalComponent {
       }
     }
 
-    this._updateObjectProperties(lastProps, nextProps, transaction);
+    this._updateObjectProperties(lastProps, nextProps, transaction, context);
     this._updateChildrenObjects(nextProps, transaction, processChildContext(context, this));
   }
 
@@ -244,7 +245,7 @@ class InternalComponent {
     this.updateChildren(nextChildren, transaction, context);
   }
 
-  _updateObjectProperties(lastProps, nextProps, transaction) {
+  _updateObjectProperties(lastProps, nextProps, transaction, context) {
     this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
 
     if (process.env.NODE_ENV !== 'production') {
@@ -300,7 +301,7 @@ class InternalComponent {
       }
     }
 
-    this.threeElementDescriptor.completePropertyUpdates(this._threeObject);
+    this.threeElementDescriptor.completePropertyUpdates(this._threeObject, transaction, context);
   }
 
   /**
