@@ -4,20 +4,20 @@ import THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 
 class MaterialResourceDescriptor extends ResourceDescriptorBase {
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
     if (props.hasOwnProperty('slot')) {
-      self.userData._propertySlot = props.slot;
+      threeObject.userData._propertySlot = props.slot;
     } else {
-      self.userData._propertySlot = 'material';
+      threeObject.userData._propertySlot = 'material';
     }
   }
 
-  setParent(self, parentObject3D) {
+  setParent(threeObject, parentObject3D) {
     invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.Points, 'Parent is not a mesh');
 
-    super.setParent(self, parentObject3D);
+    super.setParent(threeObject, parentObject3D);
   }
 }
 

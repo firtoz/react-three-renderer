@@ -10,7 +10,6 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     this.propTypes = {
       ...this.propTypes,
 
-      alphaTest: PropTypes.number,
       specular: PropTypes.number,
       emissive: PropTypes.number,
       shininess: PropTypes.number,
@@ -26,10 +25,6 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
 
     if (props.hasOwnProperty('color')) {
       materialDescription.color = props.color;
-    }
-
-    if (props.hasOwnProperty('alphaTest')) {
-      materialDescription.alphaTest = props.alphaTest;
     }
 
     if (props.hasOwnProperty('specular')) {
@@ -56,11 +51,11 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
   }
 
 
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
     if (!props.hasOwnProperty('map')) {
-      self.map = undefined;
+      threeObject.map = undefined;
     }
   }
 }

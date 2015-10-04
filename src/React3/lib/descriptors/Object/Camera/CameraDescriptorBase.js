@@ -4,16 +4,16 @@ import THREE from 'three';
 import getRoot from '../../../getRoot';
 
 class CameraDescriptorBase extends Object3DDescriptor {
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
   }
 
   setParent(camera, parentObject3D) {
     super.setParent(camera, parentObject3D);
   }
 
-  unmount(self) {
-    super.unmount(self);
+  unmount(threeObject) {
+    super.unmount(threeObject);
   }
 
   beginPropertyUpdates(threeObject:THREE.Object3D) {

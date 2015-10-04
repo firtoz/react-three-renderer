@@ -17,19 +17,19 @@ class UniformsDescriptor extends THREEElementDescriptor {
   }
 
   unmount() {
-    super.unmount(self);
+    super.unmount(threeObject);
   }
 
-  setParent(self:UniformContainer, parentObject3D) {
+  setParent(threeObject:UniformContainer, parentObject3D) {
     invariant(parentObject3D instanceof THREE.ShaderMaterial, 'Parent is not a mesh');
     invariant(parentObject3D.uniforms === undefined, 'Parent already has uniforms');
 
-    super.setParent(self, parentObject3D);
+    super.setParent(threeObject, parentObject3D);
 
-    parentObject3D.uniforms = self.uniforms;
+    parentObject3D.uniforms = threeObject.uniforms;
   }
 
-  addChildren(self, children) {
+  addChildren(threeObject, children) {
     children.forEach(child => {
       invariant(child instanceof Uniform, 'The <uniforms/> component can only have <uniform/> elements as children.');
     });

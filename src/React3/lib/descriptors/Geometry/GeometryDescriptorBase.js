@@ -26,25 +26,20 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
     super.setParent(geometry, parentObject3D);
 
-    if (parentObject3D.__webglInit) {
-      // pretend the object has been removed so that the context can be reinitialized
-      parentObject3D.dispatchEvent({type: 'removed'});
-    }
-
     parentObject3D.geometry = geometry;
   }
 
-  applyInitialProps(self, props) {
+  applyInitialProps(threeObject, props) {
     // ensure the userData is created
-    self.userData = {
-      ...self.userData,
+    threeObject.userData = {
+      ...threeObject.userData,
     };
 
     if (props.hasOwnProperty('dynamic')) {
-      self.dynamic = !!props.dynamic;
+      threeObject.dynamic = !!props.dynamic;
     }
 
-    super.applyInitialProps(self, props);
+    super.applyInitialProps(threeObject, props);
   }
 
   unmount(geometry) {

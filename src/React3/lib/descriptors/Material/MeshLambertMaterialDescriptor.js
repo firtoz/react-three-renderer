@@ -1,7 +1,25 @@
 import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
+import PropTypes from 'react/lib/ReactPropTypes';
+
 class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
+
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    this.hasColor();
+
+    this.hasProp('emissive', {
+      type: PropTypes.number,
+      update: (threeObject, newEmissive) => {
+        threeObject.emissive.set(newEmissive);
+      },
+      default: 0,
+    });
+  }
+
+
   construct(props) {
     const materialDescription = this.getMaterialDescription(props);
 
@@ -30,11 +48,11 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
     return materialDescription;
   }
 
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
     if (!props.hasOwnProperty('map')) {
-      self.map = undefined;
+      threeObject.map = undefined;
     }
   }
 }

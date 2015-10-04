@@ -26,7 +26,6 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     this.propTypes = {
       ...this.propTypes,
 
-      color: PropTypes.number,
       intensity: PropTypes.number,
       shadowMapWidth: PropTypes.number,
       shadowMapHeight: PropTypes.number,
@@ -41,6 +40,8 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       castShadow: PropTypes.bool,
       shadowCameraVisible: PropTypes.bool,
     };
+
+    this.hasColor();
   }
 
   construct(props) {

@@ -27,8 +27,8 @@ class ParametricGeometryDescriptor extends GeometryDescriptorBase {
   }
 
 
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
   }
 }
 

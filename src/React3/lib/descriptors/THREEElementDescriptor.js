@@ -17,11 +17,68 @@ class THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     this.react3RendererInstance = react3RendererInstance;
     this.propUpdates = {};
+    this.propDeletes = {};
+    this._initialOnly = {};
+    this._updateInitial = [];
     this._simpleProperties = [];
 
     this.propTypes = {};
 
     this._hasName = false;
+  }
+
+  hasProp(name, info) {
+    invariant(info.hasOwnProperty('type'), 'The information should include a `type` property');
+    invariant(!this.propTypes.hasOwnProperty(name), 'The property %s has already been defined', name);
+
+    this.propTypes[name] = info.type;
+
+    if (info.hasOwnProperty('simple')) {
+      this.registerSimpleProperties([name]);
+
+      if (info.hasOwnProperty('default')) {
+        this.propDeletes[name] = (threeObject) => {
+          this.propUpdates[name](threeObject, info.default);
+        };
+      }
+    } else {
+      if (info.hasOwnProperty('update')) {
+        this.propUpdates[name] = info.update;
+      }
+
+      if (info.hasOwnProperty('default')) {
+        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a' +
+          '`default` property');
+
+        this.propDeletes[name] = (threeObject) => {
+          info.update(threeObject, info.default);
+        };
+      }
+
+      if (info.hasOwnProperty('remove')) {
+        invariant(!info.hasOwnProperty('default'), 'The information should not include ' +
+          'both of `default` and `remove` properties');
+        this.propDeletes[name] = (threeObject) => {
+          info.update(threeObject, info.default);
+        };
+      }
+
+      if (info.hasOwnProperty('updateInitial')) {
+        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a' +
+          '`updateInitial` property');
+
+        if (this._updateInitial.indexOf(name) === -1) {
+          this._updateInitial.push(name);
+        }
+      }
+
+      if (!!info.initialOnly) {
+        invariant(info.hasOwnProperty('updateInitial'), 'The information should include a `updateInitial` property' +
+          ' if it has an `initialOnly` property');
+      }
+
+      this._initialOnly[name] = info.initialOnly;
+    }
   }
 
   hasName() {
@@ -54,7 +111,7 @@ class THREEElementDescriptor {
     const markup = threeObject.userData.markup;
 
     if (markup._rootInstance) {
-      markup._rootInstance.objectRenamed(self, oldName, nextName);
+      markup._rootInstance.objectRenamed(threeObject, oldName, nextName);
     }
   };
 
@@ -94,6 +151,14 @@ class THREEElementDescriptor {
     threeObject.userData.events = eventsForObject;
     threeObject.userData._descriptor = this;
 
+    this._updateInitial.forEach(propertyName => {
+      if (props.hasOwnProperty(propertyName)) {
+        this.propUpdates[propertyName](threeObject, props[propertyName], true);
+      } else {
+        this.propUpdates[propertyName](threeObject, undefined, false);
+      }
+    });
+
     this._simpleProperties.forEach(propertyName => {
       if (props.hasOwnProperty(propertyName)) {
         threeObject[propertyName] = props[propertyName];
@@ -106,52 +171,61 @@ class THREEElementDescriptor {
   }
 
   // noinspection JSUnusedLocalSymbols
-  addChildren(self, children) { // eslint-disable-line no-unused-vars
+  addChildren(threeObject, children) { // eslint-disable-line no-unused-vars
     invariant(false, `Cannot add children to ${this.constructor.name}!`);
+  }
+
+  // noinspection JSUnusedLocalSymbols
+  addChild(threeObject, child, mountIndex) { // eslint-disable-line no-unused-vars
+    invariant(false, `Cannot add child to ${this.constructor.name}!`);
   }
 
   moveChild() {
     invariant(false, `Cannot move children in ${this.constructor.name}!`);
   }
 
-  removeChild(self, child) { // eslint-disable-line no-unused-vars
+  removeChild(threeObject, child) { // eslint-disable-line no-unused-vars
     invariant(false, `Cannot remove children in ${this.constructor.name}!`);
   }
 
-  setParent(self, parentObject3D) {
+  setParent(threeObject, parentObject3D) {
     const parentMarkup = parentObject3D.userData.markup;
 
     if (parentMarkup && parentMarkup._rootInstance) {
-      parentMarkup._rootInstance.objectMounted(self);
+      parentMarkup._rootInstance.objectMounted(threeObject);
     }
   }
 
-  unmount(self) { // eslint-disable-line no-unused-vars
-    const markup = self.userData.markup;
+  unmount(threeObject) { // eslint-disable-line no-unused-vars
+    const markup = threeObject.userData.markup;
 
     if (markup._rootInstance) {
-      markup._rootInstance.objectRemoved(self);
+      markup._rootInstance.objectRemoved(threeObject);
     }
 
-    self.userData.events.emit('dispose', {
-      object: self,
+    threeObject.userData.events.emit('dispose', {
+      object: threeObject,
     });
 
-    self.userData.events.removeAllListeners();
+    threeObject.userData.events.removeAllListeners();
   }
 
-  removedFromParent(self) {
-    delete self.userData.events;
+  removedFromParent(threeObject) {
+    delete threeObject.userData.events;
   }
 
   // noinspection JSUnusedLocalSymbols
   deleteProperty(threeObject, propKey) { // eslint-disable-line no-unused-vars
-    invariant(false, `Cannot delete property from ${this.constructor.name}!`);
+    if (this.propDeletes[propKey]) {
+      this.propDeletes[propKey](threeObject);
+    } else {
+      invariant(false, `Cannot delete property %s from ${this.constructor.name}`, propKey);
+    }
   }
 
   updateProperty(threeObject, propKey, nextProp) {
-    if (this.propUpdates[propKey]) {
-      this.propUpdates[propKey](threeObject, nextProp);
+    if (!this._initialOnly[propKey] && this.propUpdates[propKey]) {
+      this.propUpdates[propKey](threeObject, nextProp, true);
     } else {
       invariant(false, `updating prop ${propKey} ( ${nextProp} ) for ${this.constructor.name}`);
     }
@@ -187,12 +261,16 @@ class THREEElementDescriptor {
     }
   }
 
-  _updateSimple(propName, self, propValue) {
-    self[propName] = propValue;
+  _updateSimple(propName, threeObject, propValue) {
+    threeObject[propName] = propValue;
   }
 
   registerSimpleProperties(propertyNames) {
-    this._simpleProperties = this._simpleProperties.concat(propertyNames);
+    propertyNames.forEach(propName => {
+      if (this._simpleProperties.indexOf(propName) === -1) {
+        this._simpleProperties.push(propName);
+      }
+    });
 
     this.useSimpleUpdates(propertyNames);
   }
@@ -224,7 +302,7 @@ if (process.env.NODE_ENV !== 'production') {
   const _checkPropTypes = (componentName, propTypes, props, location, owner) => {
     for (const propName in props) {
       if (props.hasOwnProperty(propName)) {
-        if(propName === 'children') {
+        if (propName === 'children') {
           continue;
         }
 

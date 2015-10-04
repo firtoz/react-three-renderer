@@ -36,18 +36,18 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
     return new THREE.ArrowHelper(dir, origin, length, color, headLength, headWidth);
   }
 
-  unmount(self) {
-    if (self.line) {
-      self.line.geometry.dispose();
-      self.line.material.dispose();
+  unmount(threeObject) {
+    if (threeObject.line) {
+      threeObject.line.geometry.dispose();
+      threeObject.line.material.dispose();
     }
 
-    if (self.cone) {
-      self.cone.geometry.dispose();
-      self.cone.material.dispose();
+    if (threeObject.cone) {
+      threeObject.cone.geometry.dispose();
+      threeObject.cone.material.dispose();
     }
 
-    super.unmount(self);
+    super.unmount(threeObject);
   }
 }
 

@@ -39,6 +39,7 @@ class React3Descriptor extends THREEElementDescriptor {
 
       width: this._updateWidth,
       height: this._updateHeight,
+      pixelRatio: this._updatePixelRatio,
     };
   }
 
@@ -46,37 +47,45 @@ class React3Descriptor extends THREEElementDescriptor {
     return new React3DInstance(props, this.react3RendererInstance);
   }
 
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
-    self.initialize();
+    threeObject.initialize();
   }
 
 // gets called every time there are children to be added
   // this can be called multiple times as more children are added.
-  addChildren(self, children) {
-    self.addChildren(children);
+  addChildren(threeObject, children) {
+    threeObject.addChildren(children);
+  }
+
+  addChild(threeObject, child) {
+    threeObject.addChildren([child]);
   }
 
   moveChild() {
     // do nothing
   }
 
-  removeChild(self, child) {
-    self.removeChild(child);
+  removeChild(threeObject, child) {
+    threeObject.removeChild(child);
   }
 
-  _updateWidth(self, newWidth) {
-    self.updateWidth(newWidth);
+  _updateWidth(threeObject, newWidth) {
+    threeObject.updateWidth(newWidth);
   }
 
-  _updateHeight(self, newHeight) {
-    self.updateHeight(newHeight);
+  _updateHeight(threeObject, newHeight) {
+    threeObject.updateHeight(newHeight);
   }
 
-  unmount(self) {
-    self.unmount();
-    super.unmount(self);
+  _updatePixelRatio(threeObject, newHeight) {
+    threeObject.updatePixelRatio(newHeight);
+  }
+
+  unmount(threeObject) {
+    threeObject.unmount();
+    super.unmount(threeObject);
   }
 }
 

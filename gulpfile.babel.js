@@ -7,7 +7,7 @@ import webpackConfig from './webpack.config.babel';
 gulp.task('webpack-dev-server', (callback) => {
   void callback;
 
-  webpackConfig.devtool = 'source-map';
+  webpackConfig.devtool = 'eval-cheap-module-source-map';
   webpackConfig.plugins = [
     new webpack.HotModuleReplacementPlugin(),
   ];

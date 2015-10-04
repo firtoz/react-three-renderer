@@ -22,6 +22,7 @@ class PerspectiveCameraDescriptor extends CameraDescriptorBase {
       aspect: this._updateAspect,
       fov: this._updateFov,
       far: this._updateFar,
+      near: this._updateNear,
     };
   }
 
@@ -31,6 +32,12 @@ class PerspectiveCameraDescriptor extends CameraDescriptorBase {
 
   _updateFov(threeObject, fov) {
     threeObject.fov = fov;
+
+    threeObject.userData._needsProjectionMatrixUpdate = true;
+  }
+
+  _updateNear(threeObject, near) {
+    threeObject.near = near;
 
     threeObject.userData._needsProjectionMatrixUpdate = true;
   }

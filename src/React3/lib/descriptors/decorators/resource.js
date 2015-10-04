@@ -19,35 +19,39 @@ function resource(descriptor) {
     constructor(react3RendererInstance) {
       super(react3RendererInstance);
 
-      if (process.env.NODE_ENV !== 'production') {
-        this.propTypes = {
-          ...this.propTypes,
-          resourceId: PropTypes.string,
-        };
-      }
+      this.hasProp('resourceId', {
+        type: PropTypes.string,
+        updateInitial: true,
+        initialOnly: true,
+        update: (threeObject, resourceId, hasProp) => {
+          if (hasProp) {
+            threeObject.userData._resourceId = resourceId;
+
+            if (!threeObject.userData._hasReferences) {
+              threeObject.userData._hasReferences = true;
+              threeObject.userData._references = [];
+            }
+          }
+        },
+      });
     }
 
-    applyInitialProps(self, props) {
-      super.applyInitialProps(self, props);
-
-      if (props.hasOwnProperty('resourceId')) {
-        self.userData._resourceId = props.resourceId;
-        self.userData._references = [];
-      }
+    applyInitialProps(threeObject, props) {
+      super.applyInitialProps(threeObject, props);
     }
 
-    setParent(self, parentObject3D) {
+    setParent(threeObject, parentObject3D) {
       if (parentObject3D instanceof ResourceContainer) {
         if (process.env.NODE_ENV !== 'production') {
-          invariant(!!self.userData._resourceId, 'All resources inside <resources> should have the "resourceId" property.');
+          invariant(!!threeObject.userData._resourceId, 'All resources inside <resources> should have the "resourceId" property.');
         } else {
-          invariant(false);
+          invariant(!!threeObject.userData._resourceId);
         }
 
         // still let it be mounted to root
-        THREEElementDescriptor.prototype.setParent.call(this, self, parentObject3D);
+        THREEElementDescriptor.prototype.setParent.call(this, threeObject, parentObject3D);
       } else {
-        super.setParent(self, parentObject3D);
+        super.setParent(threeObject, parentObject3D);
       }
     }
 
@@ -62,7 +66,7 @@ function resource(descriptor) {
               if (process.env.NODE_ENV !== 'production') {
                 invariant(boxesForReference.length > 0, 'No boxes found for resource.');
               } else {
-                invariant(false);
+                invariant(boxesForReference.length > 0);
               }
               return boxes.concat(boxesForReference);
             }, []);

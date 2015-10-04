@@ -45,11 +45,11 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
     return invalid;
   }
 
-  applyInitialProps(self, props) {
-    super.applyInitialProps(self, props);
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
 
     if (!props.hasOwnProperty('uniforms')) {
-      self.uniforms = undefined;
+      threeObject.uniforms = undefined;
     }
   }
 }

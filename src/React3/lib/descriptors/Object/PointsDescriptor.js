@@ -1,8 +1,7 @@
 import THREE from 'three';
-import Object3DDescriptor from './Object3DDescriptor';
-import invariant from 'fbjs/lib/invariant';
+import MeshDescriptor from './MeshDescriptor';
 
-class PointsDescriptor extends Object3DDescriptor {
+class PointsDescriptor extends MeshDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
   }
@@ -17,14 +16,6 @@ class PointsDescriptor extends Object3DDescriptor {
     points.material = undefined;
 
     return points;
-  }
-
-  addChildren(self, children) {
-    invariant(children.filter(child => !(child instanceof THREE.Material || child instanceof THREE.Geometry)).length === 0, 'Mesh children can only be materials ore geometries!');
-  }
-
-  moveChild() {
-    // doesn't matter
   }
 }
 

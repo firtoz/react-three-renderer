@@ -10,13 +10,20 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
     this.propTypes = {
       ...this.propTypes,
 
-      width: PropTypes.number.isRequired,
+      //width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
       depth: PropTypes.number.isRequired,
       widthSegments: PropTypes.number,
       heightSegments: PropTypes.number,
       depthSegments: PropTypes.number,
     };
+
+    this.hasProp('width', {
+      type: PropTypes.number.isRequired,
+      update: (threeObject, width) => {
+        //threeObject.userData.parentMarkup.userData.react3internalComponent.removeChild(threeObject.userData.react3internalComponent);
+      },
+    });
   }
 
   construct(props) {

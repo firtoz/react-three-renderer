@@ -16,8 +16,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
     this.propTypes = {
       ...this.propTypes,
 
-      'position': PropTypes.instanceOf(THREE.Vector3),
-      'rotation': PropTypes.instanceOf(THREE.Euler),
       'quaternion': PropTypes.instanceOf(THREE.Quaternion),
       'lookAt': PropTypes.instanceOf(THREE.Vector3),
       'scale': PropTypes.instanceOf(THREE.Vector3),
@@ -31,8 +29,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
     this.propUpdates = {
       ...this.propUpdates,
 
-      'position': this._updatePosition,
-      'rotation': this._updateRotation,
       'quaternion': this._updateQuaternion,
       'lookAt': this._updateLookAt,
       'scale': this._updateScale,
@@ -45,6 +41,26 @@ class Object3DDescriptor extends THREEElementDescriptor {
       'visible',
       'renderOrder',
     ]);
+
+    this.hasProp('position', {
+      type: PropTypes.instanceOf(THREE.Vector3),
+      update(threeObject, position) {
+        threeObject.position.copy(position);
+
+        if (threeObject.userData._lookAt) {
+          threeObject.lookAt(threeObject.userData._lookAt);
+        }
+      },
+      default: new THREE.Vector3(),
+    });
+
+    this.hasProp('rotation', {
+      type: PropTypes.instanceOf(THREE.Euler),
+      update(threeObject, rotation) {
+        threeObject.rotation.copy(rotation);
+      },
+      default: new THREE.Euler(),
+    });
 
     this.hasName();
   }
@@ -78,18 +94,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
     }
   }
 
-  _updatePosition = (threeObject, nextPosition) => {
-    threeObject.position.copy(nextPosition);
-
-    if (threeObject.userData._lookAt) {
-      threeObject.lookAt(threeObject.userData._lookAt);
-    }
-  };
-
-  _updateRotation = (threeObject, nextRotation) => {
-    threeObject.rotation.copy(nextRotation);
-  };
-
   _updateQuaternion = (threeObject, nextQuaternion) => {
     threeObject.quaternion.copy(nextQuaternion);
   };
@@ -107,31 +111,42 @@ class Object3DDescriptor extends THREEElementDescriptor {
   };
 
   /**
-   * @param self
+   * @param threeObject
    * @param {Array} children
    */
-  addChildren(self, children) {
+  addChildren(threeObject, children) {
     children.forEach(child => {
-      self.add(child);
+      threeObject.add(child);
     });
   }
 
+  addChild(threeObject, child, mountIndex) {
+    debugger;
+
+    threeObject.add(child);
+
+    this.moveChild(threeObject, child, mountIndex, threeObject.children.length - 1);
+  }
+
   /**
-   * @param {THREE.Object3D} self
+   * @param {THREE.Object3D} threeObject
    * @param child
    */
-  removeChild(self, child) {
-    self.remove(child);
+  removeChild(threeObject, child) {
+    threeObject.remove(child);
   }
 
-  moveChild(self, childObject, toIndex, lastIndex) {
-    invariant(toIndex >= 0 && self.children.length > toIndex, 'Cannot move a child to that index!');
-    _arrayMove(self.children, lastIndex, toIndex);
+  moveChild(threeObject, childObject, toIndex, lastIndex) {
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(toIndex >= 0 && threeObject.children.length > toIndex, 'Cannot move a child to that index');
+      invariant(lastIndex === threeObject.children.indexOf(childObject), 'The child is not at the correct index');
+    }
+    _arrayMove(threeObject.children, lastIndex, toIndex);
   }
 
 
-  setParent(self, parentObject3d) {
-    super.setParent(self, parentObject3d);
+  setParent(threeObject, parentObject3d) {
+    super.setParent(threeObject, parentObject3d);
   }
 
   highlight(threeObject) {

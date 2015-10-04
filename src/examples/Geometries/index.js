@@ -48,12 +48,16 @@ class Geometries extends ExampleBase {
   }
 
   _onAnimate = () => {
+    this._onAnimateInternal();
+  };
+
+  _onAnimateInternal() {
     const timer = Date.now() * 0.0001;
 
     this.setState({
       timer,
     });
-  };
+  }
 
   render() {
     const {
@@ -77,15 +81,19 @@ class Geometries extends ExampleBase {
         mainCamera="mainCamera"
         onAnimate={this._onAnimate}>
         <resources>
+          <texture
+            resourceId="texture"
+            url="textures/UV_Grid_Sm.jpg"
+            wrapS={THREE.RepeatWrapping}
+            wrapT={THREE.RepeatWrapping}
+            anisotropy={16}
+          />
           <meshLambertMaterial
             resourceId="material"
             side={THREE.DoubleSide}
           >
-            <texture
-              url="textures/UV_Grid_Sm.jpg"
-              wrapS={THREE.RepeatWrapping}
-              wrapT={THREE.RepeatWrapping}
-              anisotropy={16}
+            <textureResource
+              resourceId="texture"
             />
           </meshLambertMaterial>
         </resources>
