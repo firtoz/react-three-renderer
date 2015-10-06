@@ -52,7 +52,6 @@ class LightDescriptorBase extends Object3DDescriptor {
   }
 
   updateAllMaterials(threeObject) {
-    // TODO: give a warning when a property like 'updatingLightIsExpensive' to have the users acknowledge the situation.
     if (threeObject.userData.markup._rootInstance) {
       if (process.env.NODE_ENV !== 'production') {
         if (!this._warnedAboutLightMaterialUpdate && !threeObject.userData._updatesRefreshAllMaterials) {
