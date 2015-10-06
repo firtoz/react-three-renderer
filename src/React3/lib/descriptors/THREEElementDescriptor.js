@@ -29,7 +29,7 @@ class THREEElementDescriptor {
 
   hasProp(name, info) {
     invariant(info.hasOwnProperty('type'), 'The information should include a `type` property');
-    invariant(!this.propTypes.hasOwnProperty(name), 'The property %s has already been defined', name);
+    invariant(!this.propTypes.hasOwnProperty(name) || info.override, 'The property %s has already been defined', name);
 
     this.propTypes[name] = info.type;
 

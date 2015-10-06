@@ -84,6 +84,7 @@ class React3DInstance {
 
     this._onAnimate = onAnimate;
     this._objectsByUUID = {};
+    this._materials = [];
     this._objectsByName = {};
 
     this._lastRenderMode = null;
@@ -349,6 +350,10 @@ class React3DInstance {
 
     const childrenMarkup = current.userData.childrenMarkup;
 
+    if (object instanceof THREE.Material) {
+      this._materials.push(object);
+    }
+
     for (let i = 0; i < childrenMarkup.length; ++i) {
       const childMarkup = childrenMarkup[i];
 
@@ -419,6 +424,10 @@ class React3DInstance {
     object.userData.events.removeListener('hideHighlight', this._hideHighlight);
 
     delete this._objectsByUUID[object.uuid];
+
+    if (object instanceof THREE.Material) {
+      this._materials.splice(this._materials.indexOf(object), 1);
+    }
 
     this._removeObjectWithName(object.name, object);
   }

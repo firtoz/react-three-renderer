@@ -37,11 +37,19 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       shadowCameraFar: PropTypes.number,
       shadowBias: PropTypes.number,
       shadowDarkness: PropTypes.number,
-      castShadow: PropTypes.bool,
       shadowCameraVisible: PropTypes.bool,
     };
 
     this.hasColor();
+
+    this.hasProp('castShadow', {
+      override: true,
+      type: PropTypes.bool,
+      update(threeObject, castShadow) {
+        threeObject.userData.react3internalComponent._wantsReplace = true;
+      },
+      default: undefined,
+    })
   }
 
   construct(props) {

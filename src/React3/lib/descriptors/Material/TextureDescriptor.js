@@ -9,7 +9,8 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
 import Uniform from '../../Uniform';
 
-@resource class TextureDescriptor extends THREEElementDescriptor {
+@resource
+class TextureDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
 
@@ -55,7 +56,7 @@ import Uniform from '../../Uniform';
       invariant(parentObject3D.map === null || parentObject3D.map === undefined, 'Parent already has a texture');
       parentObject3D.map = texture;
       // dispose to force a recreate
-      parentObject3D.dispose();
+      parentObject3D.needsUpdate = true;
     } else { // Uniform as per the assert above
       parentObject3D.setValue(texture);
     }
@@ -84,7 +85,7 @@ import Uniform from '../../Uniform';
       if (parent.map === texture) {
         parent.map = null;
         // dispose to force a recreate
-        parent.dispose();
+        parent.needsUpdate = true;
       }
     } else if (parent instanceof Uniform) {
       if (parent.value === texture) {
