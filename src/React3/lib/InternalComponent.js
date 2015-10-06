@@ -213,7 +213,6 @@ class InternalComponent {
     _arrayMove(markup.userData.childrenMarkup, lastIndex, toIndex);
   }
 
-
   receiveComponent(nextElement, transaction, context) {
     // console.log('receive component');
 
