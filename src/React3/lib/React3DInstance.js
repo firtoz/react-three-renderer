@@ -1,5 +1,6 @@
 import THREE from 'three';
-import invariant from 'fbjs/lib/invariant.js';
+import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 import Viewport from './Viewport';
 import ResourceContainer from './Resources/ResourceContainer';
 import ReactUpdates from 'react/lib/ReactUpdates';
@@ -47,13 +48,9 @@ class React3DInstance {
     this._mainCameraName = mainCamera;
     this._viewports = [];
     this._resourceContainers = [];
-    this._canvas = canvas;
-    this._antialias = antialias;
     this._recreateCanvasCallback = onRecreateCanvas;
-    this._width = width;
-    this._height = height;
 
-    this._createRenderer(this._parameters);
+    this._createRenderer();
 
     this._onAnimate = onAnimate;
     this._objectsByUUID = {};
@@ -69,39 +66,44 @@ class React3DInstance {
     this.userData = {};
   }
 
-  _createRenderer(parameters) {
-    this._renderer = new THREE.WebGLRenderer({canvas: this._canvas, antialias: this._antialias});
+  _createRenderer() {
+    const parameters = this._parameters;
+
+    this._renderer = new THREE.WebGLRenderer({canvas: parameters.canvas, antialias: parameters.antialias});
+
+    const renderer = this._renderer;
 
     if (parameters.hasOwnProperty('pixelRatio')) {
-      this._renderer.setPixelRatio(parameters.pixelRatio);
+      renderer.setPixelRatio(parameters.pixelRatio);
     }
 
     if (parameters.hasOwnProperty('clearColor')) {
-      this._renderer.setClearColor(parameters.clearColor);
+      renderer.setClearColor(parameters.clearColor);
     }
 
     if (parameters.hasOwnProperty('shadowMapEnabled')) {
-      this._renderer.shadowMap.enabled = parameters.shadowMapEnabled;
+      renderer.shadowMap.enabled = parameters.shadowMapEnabled;
     }
 
     if (parameters.hasOwnProperty('shadowMapType')) {
-      this._renderer.shadowMap.type = parameters.shadowMapType;
+      renderer.shadowMap.type = parameters.shadowMapType;
     }
 
     if (parameters.hasOwnProperty('shadowMapCullFace')) {
-      this._renderer.shadowMap.cullFace = parameters.shadowMapCullFace;
+      renderer.shadowMap.cullFace = parameters.shadowMapCullFace;
     }
 
     if (parameters.hasOwnProperty('shadowMapDebug')) {
-      this._renderer.shadowMap.debug = parameters.shadowMapDebug;
+      renderer.shadowMap.debug = parameters.shadowMapDebug;
     }
 
     rendererProperties.forEach(propertyName => {
       if (parameters.hasOwnProperty(propertyName)) {
-        this._renderer[propertyName] = parameters[propertyName];
+        renderer[propertyName] = parameters[propertyName];
       }
     });
-    this._renderer.setSize(this._width, this._height);
+
+    renderer.setSize(parameters.width, parameters.height);
   }
 
   initialize() {
@@ -155,23 +157,29 @@ class React3DInstance {
       } else if (child instanceof ResourceContainer) {
         this.addResourceContainer(child);
       } else {
-        invariant(false, 'The react3 component should only contain viewports or scenes.');
+        invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s or <resources/>.');
       }
 
       if (this._mounted) {
         this.objectMounted(child);
       }
     });
-
-    // const scenes = children.filter()
-    // invariant(children.length === 1 && children[0] instanceof THREE.Scene, 'The react3 component should only have one scene as a child!');
-
-    // threeObject.setScene(children[0]);
   }
 
   removeChild(child) {
-    debugger;
+    if (child instanceof THREE.Scene) {
+      if (this._scene === child) {
+        this.setScene(null);
+      }
+    } else if (child instanceof Viewport) {
+      this.removeViewport(child);
+    } else if (child instanceof ResourceContainer) {
+      this.removeResourceContainer(child);
+    } else {
+      invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s or <resources/>.');
+    }
   }
+
 
   _render = () => {
     this._renderRequest = requestAnimationFrame(this._render);
@@ -188,7 +196,7 @@ class React3DInstance {
       const objectsWithMainCameraName = this._objectsByName[this._mainCameraName];
 
       if (objectsWithMainCameraName) {
-        invariant(objectsWithMainCameraName.count < 2, 'There are multiple objects with name ' + this._mainCameraName);
+        warning(objectsWithMainCameraName.count < 2, 'There are multiple objects with name ' + this._mainCameraName);
 
         if (objectsWithMainCameraName.count > 0) {
           const values = objectsWithMainCameraName.values;
@@ -200,7 +208,7 @@ class React3DInstance {
     if (mainCamera) {
       if (this._lastRenderMode !== 'camera') {
         this._renderer.autoClear = true;
-        this._renderer.setViewport(0, 0, this._width, this._height);
+        this._renderer.setViewport(0, 0, this._parameters.width, this._parameters.height);
         this._lastRenderMode = 'camera';
       }
       CameraUtils.current = mainCamera;
@@ -221,7 +229,7 @@ class React3DInstance {
           const objectsWithViewportCameraName = this._objectsByName[viewport.cameraName];
 
           if (objectsWithViewportCameraName) {
-            invariant(objectsWithViewportCameraName.count < 2, 'There are multiple objects with name ' + viewport.cameraName);
+            warning(objectsWithViewportCameraName.count < 2, 'There are multiple objects with name ' + viewport.cameraName);
 
             if (objectsWithViewportCameraName.count > 0) {
               const values = objectsWithViewportCameraName.values;
@@ -285,6 +293,10 @@ class React3DInstance {
   }
 
   setScene(scene) {
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(!(this._scene && scene), 'There can only be one scene in <react3/>')
+    }
+
     this._scene = scene;
   }
 
@@ -292,102 +304,212 @@ class React3DInstance {
     this._viewports.push(viewport);
   }
 
+  removeViewport(viewport) {
+    const index = this._viewports.indexOf(viewport);
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(index != -1, 'A viewport has been removed from <react3/> but it was not present in it...');
+    }
+
+    this._viewports.splice(index, 1);
+  }
+
   addResourceContainer(resourceContainer) {
     this._resourceContainers.push(resourceContainer);
   }
 
-  updateWidth(newWidth) {
-    this._width = newWidth;
-    this._renderer.setSize(this._width, this._height);
+  removeResourceContainer(resourceContainer) {
+    const index = this._resourceContainers.indexOf(resourceContainer);
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(index != -1, 'A viewport has been removed from <react3/> but it was not present in it...');
+    }
+
+    this._resourceContainers.splice(index, 1);
   }
 
-  _updateOnRecreateCanvas(threeObject, callback) {
+  updateWidth(newWidth) {
+    this._parameters.width = newWidth;
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.setSize(this._parameters.width, this._parameters.height);
+  }
+
+  updateOnRecreateCanvas(threeObject, callback) {
     this._recreateCanvasCallback = callback;
   }
 
   updateHeight(newHeight) {
-    this._height = newHeight;
-    this._renderer.setSize(this._width, this._height);
+    this._parameters.height = newHeight;
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.setSize(this._parameters.width, this._parameters.height);
   }
 
   updatePixelRatio(newPixelRatio) {
     this._parameters.pixelRatio = newPixelRatio;
+    if (!this._renderer) {
+      return;
+    }
+
 
     this._renderer.setPixelRatio(newPixelRatio);
-    this._renderer.setSize(this._width, this._height);
+    this._renderer.setSize(this._parameters.width, this._parameters.height);
   }
 
-  updateShadowMapDebug(newShadowMapDebug) {
-    this._parameters.shadowMapDebug = newShadowMapDebug;
-
-    this._renderer.shadowMap.debug = newShadowMapDebug;
-  }
-
-  refreshRenderer() {
-    this._materials.forEach(material => {
-      material.dispose();// = true;
-    });
-
-    this._geometries.forEach(geometry => {
-      geometry.dispose();// = true;
-    });
-
-    this._textures.forEach(texture => {
-      texture.dispose();// = true;
-    });
-
-    this._renderer.dispose();
-
-    const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
-
-    delete this._renderer;
-
-    if (contextLossExtension) {
-      this._canvas.addEventListener('webglcontextlost', () => {
-        // this should recreate the canvas
-        this._recreateCanvasCallback();
-      }, false);
-
-      contextLossExtension.loseContext();
-    } else {
-      this._recreateCanvasCallback();
-    }
-  }
-
-  updateAntiAlias(antialias) {
+  updateAntialias(antialias) {
     this._parameters.antialias = antialias;
+    if (!this._renderer) {
+      // no renderer, this only happens initially or we're about to recreate it anyway.
+      // unless something broke, then we have bigger problems...
+      return;
+    }
 
-    this._antialias = antialias;
     this.refreshRenderer();
+  }
+
+  updateShadowMapEnabled(shadowMapEnabled) {
+    this._parameters.shadowMapEnabled = shadowMapEnabled;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.shadowMap.enabled = parameters.shadowMapEnabled;
+  }
+
+  updateShadowMapType(shadowMapType) {
+    this._parameters.shadowMapType = shadowMapType;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.shadowMap.type = parameters.shadowMapType;
+  }
+
+  updateShadowMapCullFace(shadowMapCullFace) {
+    this._parameters.shadowMapCullFace = shadowMapCullFace;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.shadowMap.cullFace = parameters.shadowMapCullFace;
+  }
+
+  updateShadowMapDebug(shadowMapDebug) {
+    this._parameters.shadowMapDebug = shadowMapDebug;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.shadowMap.debug = parameters.shadowMapDebug;
   }
 
   updateCanvas(canvas) {
     this._parameters.canvas = canvas;
 
-    this._canvas = canvas;
-    if (this.renderer) {
-      this._materials.forEach(material => {
-        material.dispose();// = true;
-      });
-
-      this._geometries.forEach(geometry => {
-        geometry.dispose();// = true;
-      });
-
-      this._textures.forEach(texture => {
-        texture.dispose();// = true;
-      });
-
-      this._renderer.dispose();
+    if (this._renderer) {
+      this.disposeResourcesAndRenderer();
 
       const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
       if (contextLossExtension) {
+        // noinspection JSUnresolvedFunction
         contextLossExtension.loseContext();
       }
     }
 
     this._createRenderer(this._parameters);
   }
+
+  updateGammaInput(gammaInput) {
+    console.log('update gammaInput', gammaInput);
+    this._parameters.gammaInput = gammaInput;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.gammaInput = gammaInput;
+    this.allMaterialsNeedUpdate(true);
+  }
+
+  updateGammaOutput(gammaOutput) {
+    console.log('update gammaOutput', gammaOutput);
+    this._parameters.gammaOutput = gammaOutput;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.gammaOutput = gammaOutput;
+    this.allMaterialsNeedUpdate(true);
+  }
+
+  updateContext(context) {
+    this._parameters.context = context;
+
+    console.log('only 3d context is supported for now');
+  }
+
+  updateMainCamera(mainCamera) {
+    this._parameters.mainCamera = mainCamera;
+
+    this._mainCameraName = mainCamera;
+  }
+
+  updateOnAnimate(onAnimate) {
+    this._parameters.onAnimate = onAnimate;
+
+    this._onAnimate = onAnimate;
+  }
+
+  updateClearColor(clearColor) {
+    this._parameters.clearColor = clearColor;
+
+    renderer.setClearColor(clearColor);
+  }
+
+  refreshRenderer() {
+    this.disposeResourcesAndRenderer();
+
+    const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
+
+    delete this._renderer;
+
+    if (contextLossExtension) {
+      this._parameters.canvas.addEventListener('webglcontextlost', () => {
+        // this should recreate the canvas
+        this._recreateCanvasCallback();
+      }, false);
+
+      // noinspection JSUnresolvedFunction
+      contextLossExtension.loseContext();
+    } else {
+      this._recreateCanvasCallback();
+    }
+  }
+
+  disposeResourcesAndRenderer() {
+    this._materials.forEach(material => {
+      material.dispose();
+    });
+
+    this._geometries.forEach(geometry => {
+      geometry.dispose();
+    });
+
+    this._textures.forEach(texture => {
+      texture.dispose();
+    });
+
+    this._renderer.dispose();
+  }
+
 
   unmount() {
     this._mounted = false;
@@ -400,12 +522,13 @@ class React3DInstance {
     const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
 
     if (contextLossExtension) {
+      // noinspection JSUnresolvedFunction
       contextLossExtension.loseContext();
     }
 
     delete this._renderer;
 
-    delete this._canvas;
+    delete this._parameters;
 
     invariant(Object.keys(this._objectsByUUID).length === 0, 'Failed to cleanup some child objects for React3DInstance');
 
@@ -451,6 +574,17 @@ class React3DInstance {
 
       this.objectMounted(childMarkup.threeObject);
     }
+  }
+
+  allMaterialsNeedUpdate(dispose) {
+    this._materials.forEach(material => {
+      //console.log('updating material ', material);
+      if (dispose) {
+        material.dispose();
+      } else {
+        material.needsUpdate = true;
+      }
+    });
   }
 
   _hideHighlight = () => {

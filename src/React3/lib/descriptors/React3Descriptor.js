@@ -6,6 +6,70 @@ import THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import warning from 'fbjs/lib/warning';
+
+const propProxy = {
+  gammaInput: {
+    type: PropTypes.bool,
+    default: false,
+  },
+  gammaOutput: {
+    type: PropTypes.bool,
+    default: false,
+  },
+  context: {
+    type: PropTypes.string.isRequired,
+  },
+  mainCamera: {
+    type: PropTypes.string,
+    default: undefined,
+  },
+  canvas: {
+    type: PropTypes.instanceOf(HTMLCanvasElement).isRequired,
+  },
+  onAnimate: {
+    type: PropTypes.func,
+    default: undefined,
+  },
+  clearColor: {
+    type: PropTypes.instanceOf(THREE.Color),
+    default: 0,
+  },
+  shadowMapEnabled: {
+    type: PropTypes.bool,
+  },
+  shadowMapType: {
+    type: PropTypes.bool,
+  },
+  shadowMapCullFace: {
+    type: PropTypes.bool,
+  },
+  shadowMapDebug: {
+    type: PropTypes.bool,
+  },
+  onRecreateCanvas: {
+    type: PropTypes.func.isRequired,
+    default: undefined,
+  },
+  pixelRatio: {
+    type: PropTypes.number,
+    default: 1,
+  },
+  width: {
+    type: PropTypes.number.isRequired,
+  },
+  height: {
+    type: PropTypes.number.isRequired,
+  },
+  antialias: {
+    type: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number,
+    ]),
+    default: false,
+  },
+};
+
 class React3Descriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
@@ -13,44 +77,32 @@ class React3Descriptor extends THREEElementDescriptor {
     this.propTypes = {
       ...this.propTypes,
 
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-      gammaInput: PropTypes.bool,
-      gammaOutput: PropTypes.bool,
-      context: PropTypes.string.isRequired,
       canvasStyle: PropTypes.any,
-      mainCamera: PropTypes.string,
-      canvas: PropTypes.instanceOf(HTMLCanvasElement),
-      onAnimate: PropTypes.func,
-      pixelRatio: PropTypes.number,
-      clearColor: PropTypes.instanceOf(THREE.Color),
-      shadowMapEnabled: PropTypes.bool,
-      shadowMapType: PropTypes.bool,
-      shadowMapCullFace: PropTypes.bool,
-      shadowMapDebug: PropTypes.bool,
-      onRecreateCanvas: PropTypes.func.isRequired,
     };
 
-    this.propUpdates = {
-      ...this.propUpdates,
+    Object.keys(propProxy).forEach(propName => {
+      const info = propProxy[propName];
+      const propNameFirstLetterCapital = propName[0].toUpperCase() + propName.substr(1);
 
-      width: this._updateWidth,
-      height: this._updateHeight,
-      pixelRatio: this._updatePixelRatio,
-      onRecreateCanvas: this._updateOnRecreateCanvas,
-      canvas: this._updateCanvas,
-    };
+      const updateFunctionName = `update${propNameFirstLetterCapital}`;
 
-    this.hasProp('antialias', {
-      type: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.number,
-      ]),
-      update(threeObject, antialias) {
-        threeObject.updateAntiAlias(antialias);
-      },
-      default: false,
-    })
+      if (process.env.NODE_ENV !== 'production') {
+        warning(React3DInstance.prototype.hasOwnProperty(updateFunctionName), 'Missing function %s in React3DInstance class.', updateFunctionName);
+      }
+
+      const propInfo = {
+        type: info.type,
+        update(threeObject, newValue) {
+          threeObject[updateFunctionName](newValue);
+        },
+      };
+
+      if (info.hasOwnProperty('default')) {
+        propInfo.default = info.default;
+      }
+
+      this.hasProp(propName, propInfo);
+    });
   }
 
   construct(props) {
@@ -81,10 +133,6 @@ class React3Descriptor extends THREEElementDescriptor {
     threeObject.removeChild(child);
   }
 
-  _updateWidth(threeObject, newWidth) {
-    threeObject.updateWidth(newWidth);
-  }
-
   _updateOnRecreateCanvas(threeObject, callback) {
     threeObject.updateOnRecreateCanvas(callback);
   }
@@ -95,10 +143,6 @@ class React3Descriptor extends THREEElementDescriptor {
 
   _updateHeight(threeObject, newHeight) {
     threeObject.updateHeight(newHeight);
-  }
-
-  _updatePixelRatio(threeObject, newHeight) {
-    threeObject.updatePixelRatio(newHeight);
   }
 
   unmount(threeObject) {

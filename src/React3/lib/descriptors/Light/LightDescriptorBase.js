@@ -84,9 +84,7 @@ class LightDescriptorBase extends Object3DDescriptor {
         }
       }
 
-      threeObject.userData.markup._rootInstance._materials.forEach(material => {
-        material.needsUpdate = true;
-      });
+      threeObject.userData.markup._rootInstance.allMaterialsNeedUpdate();
     }
   }
 }

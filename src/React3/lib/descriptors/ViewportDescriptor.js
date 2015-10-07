@@ -32,10 +32,6 @@ class ViewportDescriptor extends THREEElementDescriptor {
     return new Viewport(props);
   }
 
-  unmount() {
-    super.unmount(threeObject);
-  }
-
   setParent(threeObject, parentObject3D) {
     super.setParent(threeObject, parentObject3D);
   }
