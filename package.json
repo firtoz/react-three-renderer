@@ -19,9 +19,9 @@
     "fbjs": "^0.2.1",
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.6",
-    "react": "^0.14.0-rc1",
+    "react": "^0.14.0",
     "react-addons-perf": "^0.14.0-rc1",
-    "react-dom": "^0.14.0-rc1",
+    "react-dom": "^0.14.0",
     "three": "^0.72.0",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.0"
