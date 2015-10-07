@@ -1,5 +1,6 @@
 import React from 'react';
 import React3Renderer from './lib/React3Renderer';
+import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
 class React3 extends React.Component {
   static propTypes = {
@@ -14,6 +15,14 @@ class React3 extends React.Component {
     context: '3d',
   };
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      canvasKey: 0,
+    };
+  }
+
   componentDidMount() {
     const canvas = this.refs.canvas;
 
@@ -22,9 +31,18 @@ class React3 extends React.Component {
     this._render();
   }
 
+  shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
+
   componentDidUpdate() {
     this._render();
   }
+
+  _onRecreateCanvas = () => {
+    this.setState({
+      // changing the key will recreate the element
+      canvasKey: this.state.canvasKey + 1,
+    });
+  };
 
   _render() {
     const canvas = this.refs.canvas;
@@ -33,6 +51,7 @@ class React3 extends React.Component {
       {...this.props}
       // overwrite the canvas style prop if it exists
       canvasStyle={null}
+      onRecreateCanvas={this._onRecreateCanvas}
       canvas={canvas}>
       {this.props.children}
     </react3>);
@@ -46,8 +65,13 @@ class React3 extends React.Component {
   static findTHREEObject = React3Renderer.findTHREEObject;
 
   render() {
+    const {
+      canvasKey,
+      } = this.state;
+
     return (<canvas
       ref="canvas"
+      key={canvasKey}
       width={this.props.width}
       height={this.props.height}
       style={{

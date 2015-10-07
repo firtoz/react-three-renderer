@@ -23,7 +23,10 @@ class React3DInstance {
       height,
       onAnimate,
       antialias,
+      onRecreateCanvas,
       } = props;
+
+    this._parameters = {...props};
 
     this._rendererInstance = rendererInstance;
 
@@ -46,45 +49,17 @@ class React3DInstance {
     this._resourceContainers = [];
     this._canvas = canvas;
     this._antialias = antialias;
-    this._renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: antialias});
-
-    if (props.hasOwnProperty('pixelRatio')) {
-      this._renderer.setPixelRatio(props.pixelRatio);
-    }
-
-    if (props.hasOwnProperty('clearColor')) {
-      this._renderer.setClearColor(props.clearColor);
-    }
-
-    if (props.hasOwnProperty('shadowMapEnabled')) {
-      this._renderer.shadowMap.enabled = props['shadowMapEnabled'];
-    }
-
-    if (props.hasOwnProperty('shadowMapType')) {
-      this._renderer.shadowMap.type = props['shadowMapType'];
-    }
-
-    if (props.hasOwnProperty('shadowMapCullFace')) {
-      this._renderer.shadowMap.cullFace = props['shadowMapCullFace'];
-    }
-
-    if (props.hasOwnProperty('shadowMapDebug')) {
-      this._renderer.shadowMap.debug = props['shadowMapDebug'];
-    }
-
-    rendererProperties.forEach(propertyName => {
-      if (props.hasOwnProperty(propertyName)) {
-        this._renderer[propertyName] = props[propertyName];
-      }
-    });
-
+    this._recreateCanvasCallback = onRecreateCanvas;
     this._width = width;
     this._height = height;
-    this._renderer.setSize(this._width, this._height);
+
+    this._createRenderer(this._parameters);
 
     this._onAnimate = onAnimate;
     this._objectsByUUID = {};
     this._materials = [];
+    this._geometries = [];
+    this._textures = [];
     this._objectsByName = {};
 
     this._lastRenderMode = null;
@@ -92,6 +67,41 @@ class React3DInstance {
     this._renderRequest = requestAnimationFrame(this._render);
 
     this.userData = {};
+  }
+
+  _createRenderer(parameters) {
+    this._renderer = new THREE.WebGLRenderer({canvas: this._canvas, antialias: this._antialias});
+
+    if (parameters.hasOwnProperty('pixelRatio')) {
+      this._renderer.setPixelRatio(parameters.pixelRatio);
+    }
+
+    if (parameters.hasOwnProperty('clearColor')) {
+      this._renderer.setClearColor(parameters.clearColor);
+    }
+
+    if (parameters.hasOwnProperty('shadowMapEnabled')) {
+      this._renderer.shadowMap.enabled = parameters.shadowMapEnabled;
+    }
+
+    if (parameters.hasOwnProperty('shadowMapType')) {
+      this._renderer.shadowMap.type = parameters.shadowMapType;
+    }
+
+    if (parameters.hasOwnProperty('shadowMapCullFace')) {
+      this._renderer.shadowMap.cullFace = parameters.shadowMapCullFace;
+    }
+
+    if (parameters.hasOwnProperty('shadowMapDebug')) {
+      this._renderer.shadowMap.debug = parameters.shadowMapDebug;
+    }
+
+    rendererProperties.forEach(propertyName => {
+      if (parameters.hasOwnProperty(propertyName)) {
+        this._renderer[propertyName] = parameters[propertyName];
+      }
+    });
+    this._renderer.setSize(this._width, this._height);
   }
 
   initialize() {
@@ -168,7 +178,7 @@ class React3DInstance {
     this.userData.events.emit('animate');
 
     // the scene can be destroyed within the 'animate' event
-    if (!this._scene || !this._mounted) {
+    if (!this._scene || !this._mounted || !this._renderer) {
       return;
     }
 
@@ -291,18 +301,92 @@ class React3DInstance {
     this._renderer.setSize(this._width, this._height);
   }
 
+  _updateOnRecreateCanvas(threeObject, callback) {
+    this._recreateCanvasCallback = callback;
+  }
+
   updateHeight(newHeight) {
     this._height = newHeight;
     this._renderer.setSize(this._width, this._height);
   }
 
   updatePixelRatio(newPixelRatio) {
+    this._parameters.pixelRatio = newPixelRatio;
+
     this._renderer.setPixelRatio(newPixelRatio);
     this._renderer.setSize(this._width, this._height);
   }
 
   updateShadowMapDebug(newShadowMapDebug) {
+    this._parameters.shadowMapDebug = newShadowMapDebug;
+
     this._renderer.shadowMap.debug = newShadowMapDebug;
+  }
+
+  refreshRenderer() {
+    this._materials.forEach(material => {
+      material.dispose();// = true;
+    });
+
+    this._geometries.forEach(geometry => {
+      geometry.dispose();// = true;
+    });
+
+    this._textures.forEach(texture => {
+      texture.dispose();// = true;
+    });
+
+    this._renderer.dispose();
+
+    const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
+
+    delete this._renderer;
+
+    if (contextLossExtension) {
+      this._canvas.addEventListener('webglcontextlost', () => {
+        // this should recreate the canvas
+        this._recreateCanvasCallback();
+      }, false);
+
+      contextLossExtension.loseContext();
+    } else {
+      this._recreateCanvasCallback();
+    }
+  }
+
+  updateAntiAlias(antialias) {
+    this._parameters.antialias = antialias;
+
+    this._antialias = antialias;
+    this.refreshRenderer();
+  }
+
+  updateCanvas(canvas) {
+    this._parameters.canvas = canvas;
+
+    this._canvas = canvas;
+    if (this.renderer) {
+      this._materials.forEach(material => {
+        material.dispose();// = true;
+      });
+
+      this._geometries.forEach(geometry => {
+        geometry.dispose();// = true;
+      });
+
+      this._textures.forEach(texture => {
+        texture.dispose();// = true;
+      });
+
+      this._renderer.dispose();
+
+      const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
+      if (contextLossExtension) {
+        contextLossExtension.loseContext();
+      }
+    }
+
+    this._createRenderer(this._parameters);
   }
 
   unmount() {
@@ -352,6 +436,14 @@ class React3DInstance {
 
     if (object instanceof THREE.Material) {
       this._materials.push(object);
+    }
+
+    if (object instanceof THREE.Geometry || object instanceof THREE.BufferGeometry) {
+      this._geometries.push(object);
+    }
+
+    if (object instanceof THREE.Texture) {
+      this._textures.push(object);
     }
 
     for (let i = 0; i < childrenMarkup.length; ++i) {
@@ -427,6 +519,12 @@ class React3DInstance {
 
     if (object instanceof THREE.Material) {
       this._materials.splice(this._materials.indexOf(object), 1);
+    }
+    if (object instanceof THREE.Geometry || object instanceof THREE.BufferGeometry) {
+      this._geometries.splice(this._geometries.indexOf(object), 1);
+    }
+    if (object instanceof THREE.Texture) {
+      this._textures.splice(this._textures.indexOf(object), 1);
     }
 
     this._removeObjectWithName(object.name, object);

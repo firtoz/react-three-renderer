@@ -22,16 +22,13 @@ class React3Descriptor extends THREEElementDescriptor {
       mainCamera: PropTypes.string,
       canvas: PropTypes.instanceOf(HTMLCanvasElement),
       onAnimate: PropTypes.func,
-      antialias: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.number,
-      ]).isRequired,
       pixelRatio: PropTypes.number,
       clearColor: PropTypes.instanceOf(THREE.Color),
       shadowMapEnabled: PropTypes.bool,
       shadowMapType: PropTypes.bool,
       shadowMapCullFace: PropTypes.bool,
       shadowMapDebug: PropTypes.bool,
+      onRecreateCanvas: PropTypes.func.isRequired,
     };
 
     this.propUpdates = {
@@ -40,7 +37,20 @@ class React3Descriptor extends THREEElementDescriptor {
       width: this._updateWidth,
       height: this._updateHeight,
       pixelRatio: this._updatePixelRatio,
+      onRecreateCanvas: this._updateOnRecreateCanvas,
+      canvas: this._updateCanvas,
     };
+
+    this.hasProp('antialias', {
+      type: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.number,
+      ]),
+      update(threeObject, antialias) {
+        threeObject.updateAntiAlias(antialias);
+      },
+      default: false,
+    })
   }
 
   construct(props) {
@@ -73,6 +83,14 @@ class React3Descriptor extends THREEElementDescriptor {
 
   _updateWidth(threeObject, newWidth) {
     threeObject.updateWidth(newWidth);
+  }
+
+  _updateOnRecreateCanvas(threeObject, callback) {
+    threeObject.updateOnRecreateCanvas(callback);
+  }
+
+  _updateCanvas(threeObject, canvas) {
+    threeObject.updateCanvas(canvas);
   }
 
   _updateHeight(threeObject, newHeight) {
