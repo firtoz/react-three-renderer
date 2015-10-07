@@ -79,7 +79,8 @@ class Geometries extends ExampleBase {
         antialias
         pixelRatio={window.devicePixelRatio}
         mainCamera="mainCamera"
-        onAnimate={this._onAnimate}>
+        onAnimate={this._onAnimate}
+      >
         <resources>
           <texture
             resourceId="texture"
