@@ -7,15 +7,18 @@ import resource from '../decorators/resource';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
-@resource class GeometryDescriptorBase extends THREEElementDescriptor {
+@resource
+class GeometryDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      dynamic: PropTypes.bool,
-    };
+    this.hasProp('dynamic', {
+      type: PropTypes.bool,
+      update(threeObject, dynamic) {
+        threeObject.dynamic = !!dynamic;
+      },
+      default: false,
+    });
 
     this.hasName();
   }
@@ -38,6 +41,8 @@ import PropTypes from 'react/lib/ReactPropTypes';
     if (props.hasOwnProperty('dynamic')) {
       threeObject.dynamic = !!props.dynamic;
     }
+
+    threeObject.userData._remountGeometry = false;
 
     super.applyInitialProps(threeObject, props);
   }
@@ -73,6 +78,28 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
   hideHighlight(threeObject) {
     threeObject.userData.events.emit('hideHighlight');
+  }
+
+  remountInsteadOfUpdating(threeObject) {
+    threeObject.userData._remountGeometry = true;
+  }
+
+  beginPropertyUpdates(threeObject) {
+    super.beginPropertyUpdates(threeObject);
+
+    threeObject.userData._remountGeometry = false;
+  }
+
+  completePropertyUpdates(threeObject) {
+    super.completePropertyUpdates(threeObject);
+
+    if (threeObject.userData._remountGeometry) {
+      threeObject.userData._remountGeometry = false;
+
+      const ownInternal = threeObject.userData.react3internalComponent;
+
+      ownInternal._forceRemountOfComponent = true;
+    }
   }
 }
 

@@ -57,7 +57,7 @@ class InternalComponent {
     this._topLevelWrapper = null;
     this._markup = null;
     this._nodeWithLegacyProperties = null;
-    this._wantsReplace = false;
+    this._forceRemountOfComponent = false;
 
     this.threeElementDescriptor = react3RendererInstance.threeElementDescriptors[element.type];
     if (!this.threeElementDescriptor) {

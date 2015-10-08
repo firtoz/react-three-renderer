@@ -46,7 +46,7 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       override: true,
       type: PropTypes.bool,
       update(threeObject, castShadow) {
-        threeObject.userData.react3internalComponent._wantsReplace = true;
+        threeObject.userData.react3internalComponent._forceRemountOfComponent = true;
       },
       default: undefined,
     })

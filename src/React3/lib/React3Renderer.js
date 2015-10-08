@@ -182,7 +182,7 @@ class React3Renderer {
       if (prevChild !== null && prevChild !== undefined && shouldUpdateReactComponent(prevElement, nextElement)) {
         ReactReconciler.receiveComponent(prevChild, nextElement, transaction, context);
 
-        if (prevChild._wantsReplace) {
+        if (prevChild._forceRemountOfComponent) {
           ReactReconciler.unmountComponent(prevChild, childName);
           nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
         } else {

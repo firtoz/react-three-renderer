@@ -7,10 +7,6 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    const updateCacheAndReplace = (threeObject) => {
-      threeObject.userData._wantReplace = true;
-    };
-
     [
       'width',
       'height',
@@ -18,7 +14,7 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
-        update: updateCacheAndReplace,
+        update: this.remountInsteadOfUpdating,
         default: undefined,
       });
     });
@@ -30,34 +26,10 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number,
-        update: updateCacheAndReplace,
+        update: this.remountInsteadOfUpdating,
         default: undefined,
       });
     });
-  }
-
-  applyInitialProps(threeObject, props) {
-    super.applyInitialProps(threeObject, props);
-
-    threeObject.userData._wantReplace = false;
-  }
-
-  beginPropertyUpdates(threeObject) {
-    super.beginPropertyUpdates(threeObject);
-
-    threeObject.userData._wantReplace = false;
-  }
-
-  completePropertyUpdates(threeObject) {
-    super.completePropertyUpdates(threeObject);
-
-    if (threeObject.userData._wantReplace) {
-      threeObject.userData._wantReplace = false;
-
-      const ownInternal = threeObject.userData.react3internalComponent;
-
-      ownInternal._wantsReplace = true;
-    }
   }
 
   construct(props) {
