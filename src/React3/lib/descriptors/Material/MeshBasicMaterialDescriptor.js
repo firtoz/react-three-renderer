@@ -8,12 +8,7 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
     super(react3RendererInstance);
 
     this.hasColor();
-
-    this.propTypes = {
-      ...this.propTypes,
-
-      wireframe: PropTypes.bool,
-    };
+    this.hasWireframe();
   }
 
   construct(props) {

@@ -8,7 +8,8 @@ import ResourceReference from '../../Resources/ResourceReference';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
-@resource class MaterialDescriptorBase extends THREEElementDescriptor {
+@resource
+class MaterialDescriptorBase extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
@@ -58,8 +59,6 @@ import PropTypes from 'react/lib/ReactPropTypes';
       simple: true,
       default: true,
     });
-
-    this._hasColor = false;
   }
 
   getMaterialDescription(props) {
@@ -73,14 +72,23 @@ import PropTypes from 'react/lib/ReactPropTypes';
   }
 
   hasColor() {
-    this._hasColor = true;
-
     this.hasProp('color', {
       type: PropTypes.number,
       update: (threeObject, newColor) => {
         threeObject.color.set(newColor);
       },
       default: 0xffffff,
+    });
+  }
+
+  hasWireframe() {
+    this.hasProp('wireframe', {
+      type: PropTypes.bool,
+      updateInitial: true,
+      update: (threeObject, wireframe) => {
+        threeObject.wireframe = wireframe;
+      },
+      default: false,
     });
   }
 

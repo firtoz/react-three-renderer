@@ -9,6 +9,7 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
     super(react3RendererInstance);
 
     this.hasColor();
+    this.hasWireframe();
 
     this.hasProp('emissive', {
       type: PropTypes.number,
