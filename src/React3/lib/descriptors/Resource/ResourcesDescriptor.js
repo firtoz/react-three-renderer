@@ -80,6 +80,11 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
   highlight(threeObject) {
     const ownerObject = threeObject.userData.parentMarkup.threeObject;
+
+    if (!(ownerObject.updateMatrixWorld && ownerObject.traverse)) {
+      return;
+    }
+
     threeObject.userData.events.emit('highlight', {
       uuid: threeObject.uuid,
       boundingBoxFunc: () => {
