@@ -47,10 +47,12 @@ class React3 extends React.Component {
   _render() {
     const canvas = this.refs.canvas;
 
+    const propsToClone = {...this.props};
+
+    delete propsToClone.canvasStyle;
+
     this.react3Renderer.render(<react3
-      {...this.props}
-      // overwrite the canvas style prop if it exists
-      canvasStyle={null}
+      {...propsToClone}
       onRecreateCanvas={this._onRecreateCanvas}
       canvas={canvas}>
       {this.props.children}
