@@ -7,14 +7,23 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
+    [
+      'segments',
+      'phiStart',
+      'phiLength',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number,
+        update: this.remountInsteadOfUpdating,
+        default: undefined,
+      });
+    });
 
-      points: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
-      segments: PropTypes.number,
-      phiStart: PropTypes.number,
-      phiLength: PropTypes.number,
-    };
+    this.hasProp('points', {
+      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
+      update: this.remountInsteadOfUpdating,
+      default: undefined,
+    });
   }
 
   construct(props) {

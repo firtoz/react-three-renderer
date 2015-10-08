@@ -7,12 +7,16 @@ class PolyhedronGeometryDescriptorBase extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      radius: PropTypes.number.isRequired,
-      detail: PropTypes.number.isRequired,
-    };
+    [
+      'radius',
+      'detail',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number.isRequired,
+        update: this.remountInsteadOfUpdating,
+        default: undefined,
+      });
+    });
   }
 }
 

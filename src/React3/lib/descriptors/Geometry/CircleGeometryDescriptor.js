@@ -7,14 +7,18 @@ class CircleGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      radius: PropTypes.number,
-      segments: PropTypes.number,
-      thetaStart: PropTypes.number,
-      thetaLength: PropTypes.number,
-    };
+    [
+      'radius',
+      'segments',
+      'thetaStart',
+      'thetaLength',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number,
+        update: this.remountInsteadOfUpdating,
+        default: undefined,
+      });
+    });
   }
 
   construct(props) {

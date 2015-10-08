@@ -7,13 +7,22 @@ class ParametricGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
+    [
+      'slices',
+      'stacks',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number.isRequired,
+        update: this.remountInsteadOfUpdating,
+        default: undefined,
+      });
+    });
 
-      parametricFunction: PropTypes.func.isRequired,
-      slices: PropTypes.number.isRequired,
-      stacks: PropTypes.number.isRequired,
-    };
+    this.hasProp('parametricFunction', {
+      type: PropTypes.func.isRequired,
+      update: this.remountInsteadOfUpdating,
+      default: undefined,
+    });
   }
 
   construct(props) {
@@ -24,11 +33,6 @@ class ParametricGeometryDescriptor extends GeometryDescriptorBase {
       } = props;
 
     return new THREE.ParametricGeometry(parametricFunction, slices, stacks);
-  }
-
-
-  applyInitialProps(threeObject, props) {
-    super.applyInitialProps(threeObject, props);
   }
 }
 

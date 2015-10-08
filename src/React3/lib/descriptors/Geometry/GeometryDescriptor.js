@@ -7,42 +7,50 @@ class GeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
+    this.hasProp('vertices', {
+      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
+      update(threeObject, vertices) {
+        if (threeObject.vertices !== vertices) {
+          threeObject.vertices = vertices;
 
-      vertices: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
-      colors: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Color)),
-      faces: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Face3)),
-    };
+          threeObject.verticesNeedUpdate = true;
+        }
+      },
+      updateInitial: true,
+      default: [],
+    });
 
-    this.propUpdates = {
-      ...this.propUpdates,
+    this.hasProp('colors', {
+      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Color)),
+      update(threeObject, vertices) {
+        if (threeObject.colors !== colors) {
+          threeObject.colors = colors;
 
-      vertices: this._updateVertices,
-    };
+          threeObject.colorsNeedUpdate = true;
+        }
+      },
+      updateInitial: true,
+      default: [],
+    });
+
+    this.hasProp('faces', {
+      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Face3)),
+      update(threeObject, vertices) {
+        if (threeObject.faces !== faces) {
+          threeObject.faces = faces;
+
+          threeObject.verticesNeedUpdate = true;
+          threeObject.elementsNeedUpdate = true;
+          threeObject.groupsNeedUpdate = true;
+        }
+      },
+      updateInitial: true,
+      default: [],
+    });
   }
 
-
-  construct(props) { // eslint-disable-line no-unused-vars
+  construct(props) {
     return new THREE.Geometry();
-  }
-
-  /**
-   * @param {THREE.Geometry} threeObject
-   * @param props
-   */
-  applyInitialProps(threeObject, props) {
-    super.applyInitialProps(threeObject, props);
-
-    this._updateVertices(threeObject, props.vertices);
-  }
-
-  _updateVertices(threeObject, vertices) {
-    if (threeObject.vertices !== vertices) {
-      threeObject.vertices = vertices;
-
-      threeObject.verticesNeedUpdate = true;
-    }
   }
 }
 
