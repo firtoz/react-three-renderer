@@ -9,8 +9,6 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
 
     [
       'radius',
-      'widthSegments',
-      'heightSegments',
       'phiStart',
       'phiLength',
       'thetaStart',
@@ -19,6 +17,17 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.updateCacheAndReplace.bind(this, propName),
+        default: undefined,
+      });
+    });
+
+    [
+      'widthSegments',
+      'heightSegments',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number,
+        update: this.remountInsteadOfUpdating,
         default: undefined,
       });
     });
