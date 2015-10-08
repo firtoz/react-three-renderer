@@ -18,6 +18,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     };
 
     this.hasColor();
+    this.hasWireframe();
   }
 
   construct(props) {

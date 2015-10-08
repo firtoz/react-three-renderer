@@ -15,6 +15,8 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
       vertexShader: PropTypes.string.isRequired,
       fragmentShader: PropTypes.string.isRequired,
     };
+
+    this.hasWireframe();
   }
 
   construct(props) {

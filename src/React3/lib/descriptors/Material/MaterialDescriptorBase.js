@@ -84,21 +84,16 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   hasWireframe() {
     this.hasProp('wireframe', {
       type: PropTypes.bool,
-      updateInitial: true,
-      update: (threeObject, wireframe) => {
-        threeObject.wireframe = wireframe;
-      },
+      simple: true,
       default: false,
     });
+
+    this.hasProp('wireframeLinewidth', {
+      type: PropTypes.number,
+      simple: true,
+      default: 1,
+    });
   }
-
-  _deleteColor = (threeObject) => {
-    threeObject.color.set(0xffffff); // white
-  };
-
-  _updateColor = (threeObject, nextColor) => {
-    threeObject.color.set(nextColor);
-  };
 
   construct() {
     return new THREE.Material({});
