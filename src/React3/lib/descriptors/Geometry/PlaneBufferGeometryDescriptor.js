@@ -1,27 +1,33 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
+import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 import invariant from 'fbjs/lib/invariant';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
-class PlaneBufferGeometryDescriptor extends GeometryDescriptorBase {
+class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
+    [
+      'width',
+      'height',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number.isRequired,
+        update: this.updateCacheAndReplace.bind(this, propName),
+      });
+    });
 
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-      widthSegments: PropTypes.number,
-      heightSegments: PropTypes.number,
-    };
-
-    this.propUpdates = {
-      ...this.propUpdates,
-      'width': this._updateWidth,
-      'height': this._updateHeight,
-    };
+    [
+      'widthSegments',
+      'heightSegments',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number.isRequired,
+        update: this.remountInsteadOfUpdating,
+        default: undefined,
+      });
+    });
   }
 
   construct(props) {
@@ -34,14 +40,6 @@ class PlaneBufferGeometryDescriptor extends GeometryDescriptorBase {
 
     return new THREE.PlaneBufferGeometry(width, height, widthSegments, heightSegments);
   }
-
-  _updateWidth = (self, newWidth) => {
-    invariant(false, 'Please do not modify the width property of the planeBufferGeometry component.');
-  };
-
-  _updateHeight = (self, newHeight) => {
-    invariant(false, 'Please do not modify the height property of the planeBufferGeometry component.');
-  };
 }
 
 export default PlaneBufferGeometryDescriptor;
