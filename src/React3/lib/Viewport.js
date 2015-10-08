@@ -1,6 +1,10 @@
+import THREE from 'three';
+
 class Viewport {
   constructor(props) {
     this.userData = {};
+
+    this.uuid = THREE.Math.generateUUID();
 
     this.x = props.x;
     this.y = props.y;

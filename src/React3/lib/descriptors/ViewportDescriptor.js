@@ -8,32 +8,26 @@ class ViewportDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-
-      cameraName: PropTypes.string.isRequired,
-    };
-
-    this.useSimpleUpdates([
+    [
       'x',
       'y',
       'width',
       'height',
-      'cameraName',
-    ]);
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number.isRequired,
+        simple: true,
+      });
+    });
+
+    this.hasProp('cameraName', {
+      type: PropTypes.string.isRequired,
+      simple: true,
+    });
   }
 
   construct(props) {
     return new Viewport(props);
-  }
-
-  setParent(threeObject, parentObject3D) {
-    super.setParent(threeObject, parentObject3D);
   }
 }
 
