@@ -1,5 +1,5 @@
 import invariant from 'fbjs/lib/invariant';
-import React3Renderer from '../React3DInstance';
+import React3Renderer from '../React3Instance';
 
 import ReactPropTypeLocations from 'react/lib/ReactPropTypeLocations';
 import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames.js';

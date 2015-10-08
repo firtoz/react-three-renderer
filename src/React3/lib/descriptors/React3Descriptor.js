@@ -1,4 +1,4 @@
-import React3DInstance from '../React3DInstance';
+import React3DInstance from '../React3Instance';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 
@@ -37,15 +37,28 @@ const propProxy = {
   },
   shadowMapEnabled: {
     type: PropTypes.bool,
+    default: false,
   },
   shadowMapType: {
-    type: PropTypes.bool,
+    type: PropTypes.oneOf([
+      THREE.BasicShadowMap,
+      THREE.PCFShadowMap,
+      THREE.PCFSoftShadowMap,
+    ]),
+    default: THREE.PCFShadowMap,
   },
   shadowMapCullFace: {
-    type: PropTypes.bool,
+    type: PropTypes.oneOf([
+      THREE.CullFaceNone,
+      THREE.CullFaceBack,
+      THREE.CullFaceFront,
+      THREE.CullFaceFrontBack,
+    ]),
+    default: THREE.CullFaceFront,
   },
   shadowMapDebug: {
     type: PropTypes.bool,
+    default: false,
   },
   onRecreateCanvas: {
     type: PropTypes.func.isRequired,

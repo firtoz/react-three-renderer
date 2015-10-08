@@ -180,7 +180,6 @@ class React3DInstance {
     }
   }
 
-
   _render = () => {
     this._renderRequest = requestAnimationFrame(this._render);
     this.userData.events.emit('animate');
@@ -377,7 +376,8 @@ class React3DInstance {
       return;
     }
 
-    this._renderer.shadowMap.enabled = parameters.shadowMapEnabled;
+    this._renderer.shadowMap.enabled = shadowMapEnabled;
+    this.allMaterialsNeedUpdate(true);
   }
 
   updateShadowMapType(shadowMapType) {
@@ -387,7 +387,8 @@ class React3DInstance {
       return;
     }
 
-    this._renderer.shadowMap.type = parameters.shadowMapType;
+    this._renderer.shadowMap.type = shadowMapType;
+    this.allMaterialsNeedUpdate(true);
   }
 
   updateShadowMapCullFace(shadowMapCullFace) {
@@ -397,7 +398,8 @@ class React3DInstance {
       return;
     }
 
-    this._renderer.shadowMap.cullFace = parameters.shadowMapCullFace;
+    this._renderer.shadowMap.cullFace = shadowMapCullFace;
+    this.allMaterialsNeedUpdate(true);
   }
 
   updateShadowMapDebug(shadowMapDebug) {
@@ -407,7 +409,8 @@ class React3DInstance {
       return;
     }
 
-    this._renderer.shadowMap.debug = parameters.shadowMapDebug;
+    this._renderer.shadowMap.debug = shadowMapDebug;
+    this.allMaterialsNeedUpdate(true);
   }
 
   updateCanvas(canvas) {

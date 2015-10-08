@@ -13,7 +13,7 @@ import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
 import traverseAllChildren from 'react/lib/traverseAllChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
-import React3DInstance from './React3DInstance';
+import React3DInstance from './React3Instance';
 
 import InternalComponent from './InternalComponent';
 import ElementDescriptorContainer from './ElementDescriptorContainer';
