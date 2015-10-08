@@ -84,21 +84,16 @@ class THREEElementDescriptor {
   hasName() {
     this._hasName = true;
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      'name': PropTypes.string,
-    };
-
-
-    this.propUpdates = {
-      ...this.propUpdates,
-
-      'name': this._updateName,
-    };
+    this.hasProp('name', {
+      type: PropTypes.string,
+      update: (threeObject, name) => {
+        this._updateName(threeObject, name);
+      },
+      default: '',
+    });
   }
 
-  _updateName = (threeObject, nextName) => {
+  _updateName(threeObject, nextName) {
     const oldName = threeObject.name;
 
     threeObject.name = nextName;
