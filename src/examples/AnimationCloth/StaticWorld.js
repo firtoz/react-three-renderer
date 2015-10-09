@@ -8,42 +8,8 @@ import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
 const { PropTypes } = React;
 
-const fragmentShaderDepth = `
-      uniform sampler2D texture;
-			varying vec2 vUV;
-
-			vec4 pack_depth( const in float depth ) {
-
-				const vec4 bit_shift = vec4( 256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0 );
-				const vec4 bit_mask  = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
-				vec4 res = fract( depth * bit_shift );
-				res -= res.xxyz * bit_mask;
-				return res;
-
-			}
-
-			void main() {
-
-				vec4 pixel = texture2D( texture, vUV );
-
-				if ( pixel.a < 0.5 ) discard;
-
-				gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
-
-			}`;
-
-const vertexShaderDepth = `
-			varying vec2 vUV;
-
-			void main() {
-
-				vUV = 0.75 * uv;
-
-				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-
-				gl_Position = projectionMatrix * mvPosition;
-
-			}`;
+import fragmentShaderDepth from 'raw!./shaders/depth.frag';
+import vertexShaderDepth from 'raw!./shaders/depth.vert';
 
 class StaticWorld extends React.Component {
   static propTypes = {
@@ -62,6 +28,24 @@ class StaticWorld extends React.Component {
     this.state = {
       ambientLightColor: '666666',
       directionalLightColor: 'dfebff',
+      fragmentShaderDepth,
+      vertexShaderDepth,
+    };
+
+    // check if HMR is enabled
+    if (module.hot) {
+      // accept update of dependency
+      module.hot.accept('raw!./shaders/depth.frag', () => {
+        this.setState({
+          fragmentShaderDepth: require('raw!./shaders/depth.frag'),
+        });
+      });
+
+      module.hot.accept('raw!./shaders/depth.vert', () => {
+        this.setState({
+          vertexShaderDepth: require('raw!./shaders/depth.vert'),
+        });
+      });
     }
   }
 
@@ -73,6 +57,8 @@ class StaticWorld extends React.Component {
     const {
       ambientLightColor,
       directionalLightColor,
+      fragmentShaderDepth,
+      vertexShaderDepth,
       } = this.state;
 
     return (<object3D>

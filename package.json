@@ -15,6 +15,7 @@
     "fbjs": "^0.3.1",
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.6",
+    "raw-loader": "^0.5.1",
     "react": "^0.14.0",
     "react-addons-perf": "^0.14.0",
     "react-dom": "^0.14.0",

@@ -92,7 +92,7 @@ class UniformDescriptor extends THREEElementDescriptor {
     return this.invalidChildInternal(child);
   };
 
-  unmount() {
+  unmount(threeObject) {
     threeObject.userData.events.removeListener('valueChanged', threeObject.userData._onValueChanged);
 
     delete threeObject.userData._onValueChanged;

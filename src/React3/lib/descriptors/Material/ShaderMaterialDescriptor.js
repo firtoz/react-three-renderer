@@ -9,12 +9,15 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      vertexShader: PropTypes.string.isRequired,
-      fragmentShader: PropTypes.string.isRequired,
-    };
+    [
+      'vertexShader',
+      'fragmentShader',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.string.isRequired,
+        update: this.triggerRemount,
+      });
+    });
 
     this.hasWireframe();
   }

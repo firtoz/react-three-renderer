@@ -16,10 +16,6 @@ class UniformsDescriptor extends THREEElementDescriptor {
     return new UniformContainer();
   }
 
-  unmount() {
-    super.unmount(threeObject);
-  }
-
   setParent(threeObject:UniformContainer, parentObject3D) {
     invariant(parentObject3D instanceof THREE.ShaderMaterial, 'Parent is not a mesh');
     invariant(parentObject3D.uniforms === undefined, 'Parent already has uniforms');
