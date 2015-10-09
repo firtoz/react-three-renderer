@@ -34,17 +34,17 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     this.hasProp('alphaTest', {
       type: PropTypes.number,
       updateInitial: true,
-      update: (self, alphaTest) => {
-        self.alphaTest = alphaTest;
+      update: (threeObject, alphaTest) => {
+        threeObject.alphaTest = alphaTest;
+        threeObject.needsUpdate = true;
       },
-      initialOnly: true,
     });
 
     this.hasProp('side', {
       type: PropTypes.oneOf([THREE.FrontSide, THREE.BackSide, THREE.DoubleSide]),
       updateInitial: true,
-      update: (self, side) => {
-        self.side = side;
+      update: (threeObject, side) => {
+        threeObject.side = side;
       },
       default: undefined,
     });
@@ -59,12 +59,14 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       simple: true,
       default: true,
     });
+
+    this._hasColor = false;
   }
 
   getMaterialDescription(props) {
     const materialDescription = {};
 
-    if (props.hasOwnProperty('color')) {
+    if (this._hasColor && props.hasOwnProperty('color')) {
       materialDescription.color = props.color;
     }
 
@@ -72,6 +74,8 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   hasColor() {
+    this._hasColor = true;
+
     this.hasProp('color', {
       type: PropTypes.number,
       update: (threeObject, newColor) => {

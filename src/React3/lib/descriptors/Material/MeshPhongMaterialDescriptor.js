@@ -10,23 +10,46 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     this.propTypes = {
       ...this.propTypes,
 
-      specular: PropTypes.number,
-      emissive: PropTypes.number,
-      shininess: PropTypes.number,
-      map: PropTypes.number,
       side: PropTypes.number,
     };
 
     this.hasColor();
     this.hasWireframe();
+
+    this.hasProp('specular', {
+      type: PropTypes.number,
+      update: (threeObject, specular) => {
+        threeObject.specular.set(specular);
+      },
+      default: 0x111111,
+    });
+
+    this.hasProp('emissive', {
+      type: PropTypes.number,
+      update: (threeObject, emissive) => {
+        threeObject.emissive.set(emissive);
+      },
+      default: 0x000000,
+    });
+
+    this.hasProp('shininess', {
+      type: PropTypes.number,
+      simple: true,
+      default: 30,
+    });
+
+    this.hasProp('metal', {
+      type: PropTypes.bool,
+      update: (threeObject, metal) => {
+        threeObject.metal = metal;
+        threeObject.needsUpdate = true;
+      },
+      default: false,
+    });
   }
 
   construct(props) {
     const materialDescription = {};
-
-    if (props.hasOwnProperty('color')) {
-      materialDescription.color = props.color;
-    }
 
     if (props.hasOwnProperty('specular')) {
       materialDescription.specular = props.specular;
@@ -40,24 +63,11 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
       materialDescription.shininess = props.shininess;
     }
 
-    if (props.hasOwnProperty('map')) {
-      materialDescription.map = props.map;
-    }
-
     if (props.hasOwnProperty('side')) {
       materialDescription.side = props.side;
     }
 
     return new THREE.MeshPhongMaterial(materialDescription);
-  }
-
-
-  applyInitialProps(threeObject, props) {
-    super.applyInitialProps(threeObject, props);
-
-    if (!props.hasOwnProperty('map')) {
-      threeObject.map = undefined;
-    }
   }
 }
 

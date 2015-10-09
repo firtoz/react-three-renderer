@@ -14,31 +14,58 @@ class TextureDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
 
-    this.registerSimpleProperties([
+    this.hasProp('repeat', {
+      type: PropTypes.instanceOf(THREE.Vector2),
+      updateInitial: true,
+      update(threeObject, repeat) {
+        if (repeat) {
+          threeObject.repeat.copy(repeat);
+        } else {
+          threeObject.repeat.set(1, 1);
+        }
+      },
+      default: new THREE.Vector2(1, 1),
+    });
+
+    [
       'wrapS',
       'wrapT',
-      'anisotropy',
-    ]);
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.oneOf([
+          THREE.RepeatWrapping,
+          THREE.ClampToEdgeWrapping,
+          THREE.MirroredRepeatWrapping,
+        ]),
+        updateInitial: true,
+        update(threeObject, value) {
+          threeObject[propName] = value;
+          if (threeObject.image) {
+            threeObject.needsUpdate = true;
+          }
+        },
+        default: THREE.ClampToEdgeWrapping,
+      })
+    });
 
-    this.propUpdates = {
-      ...this.propUpdates,
-      'repeat': this._setRepeat,
-    };
+    this.hasProp('anisotropy', {
+      type: PropTypes.number,
+      updateInitial: true,
+      update(threeObject, value) {
+        threeObject.anisotropy = value;
+        if (threeObject.image) {
+          threeObject.needsUpdate = true;
+        }
+      },
+      default: 1,
+    });
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      url: PropTypes.string.isRequired,
-      wrapS: PropTypes.number,
-      wrapT: PropTypes.number,
-      anisotropy: PropTypes.number,
-      repeat: PropTypes.instanceOf(THREE.Vector2),
-    };
+    this.hasProp('url', {
+      type: PropTypes.string.isRequired,
+      update: this.triggerRemount,
+      default: '',
+    });
   }
-
-  _setRepeat = (threeObject, repeat) => {
-    threeObject.repeat.copy(repeat);
-  };
 
   construct(props) {
     if (props.hasOwnProperty('url')) {
@@ -69,10 +96,6 @@ class TextureDescriptor extends THREEElementDescriptor {
     threeObject.userData = {
       ...threeObject.userData,
     };
-
-    if (props.hasOwnProperty('repeat')) {
-      threeObject.repeat.copy(props.repeat);
-    }
 
     super.applyInitialProps(threeObject, props);
   }
