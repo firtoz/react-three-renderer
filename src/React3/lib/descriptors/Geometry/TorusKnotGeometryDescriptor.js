@@ -7,17 +7,21 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      radius: PropTypes.number,
-      tube: PropTypes.number,
-      radialSegments: PropTypes.number,
-      tubularSegments: PropTypes.number,
-      p: PropTypes.number,
-      q: PropTypes.number,
-      heightScale: PropTypes.number,
-    };
+    [
+      'radius',
+      'tube',
+      'radialSegments',
+      'tubularSegments',
+      'p',
+      'q',
+      'heightScale',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number,
+        update: this.remountInsteadOfUpdating,
+        default: undefined,
+      });
+    });
   }
 
   construct(props) {

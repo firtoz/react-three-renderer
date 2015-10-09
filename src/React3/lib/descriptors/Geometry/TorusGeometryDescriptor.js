@@ -7,15 +7,19 @@ class TorusGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      radius: PropTypes.number,
-      tube: PropTypes.number,
-      radialSegments: PropTypes.number,
-      tubularSegments: PropTypes.number,
-      arc: PropTypes.number,
-    };
+    [
+      'radius',
+      'tube',
+      'radialSegments',
+      'tubularSegments',
+      'arc',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number,
+        update: this.remountInsteadOfUpdating,
+        default: undefined,
+      });
+    });
   }
 
   construct(props) {

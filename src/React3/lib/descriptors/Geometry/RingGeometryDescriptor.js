@@ -7,7 +7,6 @@ class RingGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-
     [
       'innerRadius',
       'outerRadius',
