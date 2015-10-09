@@ -49,7 +49,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
   }
 
   construct(props) {
-    const materialDescription = {};
+    const materialDescription = this.getMaterialDescription(props);
 
     if (props.hasOwnProperty('specular')) {
       materialDescription.specular = props.specular;
@@ -61,10 +61,6 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
 
     if (props.hasOwnProperty('shininess')) {
       materialDescription.shininess = props.shininess;
-    }
-
-    if (props.hasOwnProperty('side')) {
-      materialDescription.side = props.side;
     }
 
     return new THREE.MeshPhongMaterial(materialDescription);

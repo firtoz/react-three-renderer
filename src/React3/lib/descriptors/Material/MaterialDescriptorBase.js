@@ -70,6 +70,10 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       materialDescription.color = props.color;
     }
 
+    if (props.hasOwnProperty('side')) {
+      materialDescription.side = props.side;
+    }
+
     return materialDescription;
   }
 
