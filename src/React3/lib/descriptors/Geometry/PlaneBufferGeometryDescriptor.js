@@ -23,7 +23,7 @@ class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
       'heightSegments',
     ].forEach(propName => {
       this.hasProp(propName, {
-        type: PropTypes.number.isRequired,
+        type: PropTypes.number,
         update: this.triggerRemount,
         default: undefined,
       });
