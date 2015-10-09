@@ -144,7 +144,6 @@ class StaticWorld extends React.Component {
         <meshPhongMaterial
           color={0xffffff}
           specular={0x111111}
-          // map={this.groundTexture}
         >
           <texture
             url="textures/terrain/grasslight-big.jpg"
