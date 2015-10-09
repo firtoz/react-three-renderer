@@ -42,7 +42,7 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
       threeObject.dynamic = !!props.dynamic;
     }
 
-    threeObject.userData._remountGeometry = false;
+    threeObject.userData._remountAfterPropsUpdate = false;
 
     super.applyInitialProps(threeObject, props);
   }
@@ -78,28 +78,6 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
 
   hideHighlight(threeObject) {
     threeObject.userData.events.emit('hideHighlight');
-  }
-
-  remountInsteadOfUpdating(threeObject) {
-    threeObject.userData._remountGeometry = true;
-  }
-
-  beginPropertyUpdates(threeObject) {
-    super.beginPropertyUpdates(threeObject);
-
-    threeObject.userData._remountGeometry = false;
-  }
-
-  completePropertyUpdates(threeObject) {
-    super.completePropertyUpdates(threeObject);
-
-    if (threeObject.userData._remountGeometry) {
-      threeObject.userData._remountGeometry = false;
-
-      const ownInternal = threeObject.userData.react3internalComponent;
-
-      ownInternal._forceRemountOfComponent = true;
-    }
   }
 }
 

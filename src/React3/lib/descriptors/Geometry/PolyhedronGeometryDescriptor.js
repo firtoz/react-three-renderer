@@ -13,7 +13,7 @@ class PolyhedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.arrayOf(PropTypes.number).isRequired,
-        update: this.remountInsteadOfUpdating,
+        update: this.triggerRemount,
         default: undefined,
       });
     });

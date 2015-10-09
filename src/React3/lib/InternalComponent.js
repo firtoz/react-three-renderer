@@ -245,7 +245,13 @@ class InternalComponent {
   }
 
   _updateObjectProperties(lastProps, nextProps, transaction, context) {
-    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
+    let wantRemount = false;
+
+    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject, () => {
+      wantRemount = true;
+
+      this._forceRemountOfComponent = true;
+    });
 
     if (process.env.NODE_ENV !== 'production') {
       this.threeElementDescriptor.checkPropTypes(this._currentElement.type, this._currentElement._owner, nextProps);
@@ -260,6 +266,10 @@ class InternalComponent {
         continue;
       }
 
+      if (wantRemount) {
+        break;
+      }
+
       if (registrationNameModules.hasOwnProperty(propKey)) {
         if (lastProps[propKey]) {
           // Only call deleteListener if there was a listener previously or
@@ -272,7 +282,6 @@ class InternalComponent {
       }
     }
 
-
     for (const propKey in nextProps) {
       if (!nextProps.hasOwnProperty(propKey)) {
         continue;
@@ -280,6 +289,10 @@ class InternalComponent {
 
       if (propKey === 'children') {
         continue;
+      }
+
+      if (wantRemount) {
+        break;
       }
 
       const nextProp = nextProps[propKey];

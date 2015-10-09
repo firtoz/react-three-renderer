@@ -14,14 +14,14 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number,
-        update: this.remountInsteadOfUpdating,
+        update: this.triggerRemount,
         default: undefined,
       });
     });
 
     this.hasProp('points', {
       type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
-      update: this.remountInsteadOfUpdating,
+      update: this.triggerRemount,
       default: undefined,
     });
   }

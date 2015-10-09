@@ -226,14 +226,6 @@ class THREEElementDescriptor {
     }
   }
 
-  beginPropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
-
-  }
-
-  completePropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
-
-  }
-
   highlight(threeObject) { // eslint-disable-line no-unused-vars
     // no highlighting by default!
   }
@@ -269,6 +261,20 @@ class THREEElementDescriptor {
 
   getBoundingBoxes(threeObject) { // eslint-disable-line no-unused-vars
     return [];
+  }
+
+  triggerRemount(threeObject) {
+    threeObject.userData._triggerRemount();
+
+    delete threeObject.userData._triggerRemount;
+  }
+
+  beginPropertyUpdates(threeObject, triggerRemount) {
+    threeObject.userData._triggerRemount = triggerRemount;
+  }
+
+  completePropertyUpdates(threeObject) {
+    delete threeObject.userData._triggerRemount;
   }
 }
 

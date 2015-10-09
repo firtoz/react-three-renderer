@@ -17,7 +17,7 @@ class RingGeometryDescriptor extends GeometryDescriptorBase {
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number,
-        update: this.remountInsteadOfUpdating,
+        update: this.triggerRemount,
         default: undefined,
       });
     });
