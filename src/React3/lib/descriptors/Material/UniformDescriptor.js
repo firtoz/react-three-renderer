@@ -14,26 +14,22 @@ class UniformDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.registerSimpleProperties([
-      'type',
-    ]);
-
-    this.propUpdates = {
-      ...this.propUpdates,
-      'value': this._setValue,
-    };
-
-    this.propTypes = {
-      ...this.propTypes,
-
+    this.hasProp('type', {
       type: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      value: PropTypes.any,
-    };
-  }
+      simple: true,
+    });
 
-  _setValue(threeObject, newVale) {
-    threeObject.setValue(newVale);
+    this.hasProp('value', {
+      type: PropTypes.any,
+      update(threeObject, value) {
+        threeObject.setValue(value);
+      },
+      default: null,
+    });
+
+    this.hasProp('name', {
+      type: PropTypes.string.isRequired,
+    });
   }
 
   construct() {
@@ -73,9 +69,12 @@ class UniformDescriptor extends THREEElementDescriptor {
     invariant(children.filter(this._invalidChild).length === 0, 'Uniform children can only be textures or resource references');
   }
 
-
   addChild(threeObject, child) {
     this.addChildren(threeObject, [child]);
+  }
+
+  removeChild(threeObject, child) {
+    // do nothing
   }
 
   invalidChildInternal(child) {

@@ -9,11 +9,11 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      resourceId: PropTypes.string.isRequired,
-    };
+    this.hasProp('resourceId', {
+      type: PropTypes.string.isRequired,
+      update: this.triggerRemount,
+      default: '',
+    });
   }
 
   construct(props) {
@@ -70,15 +70,18 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     delete threeObject.userData._eventCleanupQueue;
     delete threeObject.userData.resourceMap;
 
-    const chosenResource = null;
+    this.updateChosenResource(threeObject, null);
+
+    super.unmount(threeObject);
+  }
+
+  updateChosenResource(threeObject, chosenResource) {
     const oldResource = threeObject.userData._chosenResource;
     if (oldResource !== chosenResource) {
       threeObject.userData._chosenResource = chosenResource;
 
       this.resourceUpdated(threeObject, chosenResource, oldResource);
     }
-
-    super.unmount(threeObject);
   }
 
   setParent(threeObject, parentObject3D) {
@@ -195,12 +198,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
       chosenResource = resourceMap[0].resource;
     }
 
-    const oldResource = threeObject.userData._chosenResource;
-    if (oldResource !== chosenResource) {
-      threeObject.userData._chosenResource = chosenResource;
-
-      this.resourceUpdated(threeObject, chosenResource, oldResource);
-    }
+    this.updateChosenResource(threeObject, chosenResource);
   }
 
   highlight(threeObject) {
