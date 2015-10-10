@@ -52,13 +52,13 @@ class StaticWorld extends React.Component {
   shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
   render() {
-    const d = 300;
+    const shadowCameraSize = 300;
 
     const {
       ambientLightColor,
       directionalLightColor,
-      fragmentShaderDepth,
-      vertexShaderDepth,
+      fragmentShaderDepth: frag,
+      vertexShaderDepth: vert,
       } = this.state;
 
     return (<object3D>
@@ -81,10 +81,10 @@ class StaticWorld extends React.Component {
         castShadow
         shadowMapWidth={1024}
         shadowMapHeight={1024}
-        shadowCameraLeft={-d}
-        shadowCameraRight={d}
-        shadowCameraTop={d}
-        shadowCameraBottom={-d}
+        shadowCameraLeft={-shadowCameraSize}
+        shadowCameraRight={shadowCameraSize}
+        shadowCameraTop={shadowCameraSize}
+        shadowCameraBottom={-shadowCameraSize}
         shadowCameraFar={1000}
         shadowDarkness={0.5}
       />
@@ -110,8 +110,8 @@ class StaticWorld extends React.Component {
         </meshPhongMaterial>
         <shaderMaterial
           slot="customDepthMaterial"
-          vertexShader={vertexShaderDepth}
-          fragmentShader={fragmentShaderDepth}
+          fragmentShader={frag}
+          vertexShader={vert}
         >
           <uniforms>
             <uniform
