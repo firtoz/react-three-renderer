@@ -8,17 +8,29 @@ class CameraHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propUpdates = {
-      ...this.propUpdates,
-      visible: this._updateVisible, //overwrite
-      cameraName: this._updateCameraName,
-    };
+    this.hasProp('visible', {
+      type: PropTypes.bool,
+      override: true,
+      update(threeObject, visible) {
+        threeObject.userData._visible = visible;
 
-    this.propTypes = {
-      ...this.propTypes,
+        threeObject.visible = threeObject.userData._hasCamera && visible;
+      },
+      updateInitial: true,
+      default: true,
+    });
 
-      cameraName: PropTypes.string.isRequired,
-    };
+    this.hasProp('cameraName', {
+      type: PropTypes.string.isRequired,
+      update: (threeObject, cameraName) => {
+        this._clearCameraEvents(threeObject);
+
+        threeObject.userData._cameraName = cameraName;
+
+        this._startCameraFinder(threeObject);
+      },
+      default: undefined,
+    });
   }
 
   construct() {
@@ -144,20 +156,6 @@ class CameraHelperDescriptor extends Object3DDescriptor {
 
       rootInstance.addAnimateListener(findCamera);
     }
-  }
-
-  _updateVisible(cameraHelper, visible) {
-    cameraHelper.userData._visible = visible;
-
-    cameraHelper.visible = cameraHelper.userData._hasCamera && visible;
-  }
-
-  _updateCameraName = (cameraHelper, cameraName) => {
-    this._clearCameraEvents(cameraHelper);
-
-    cameraHelper.userData._cameraName = cameraName;
-
-    this._startCameraFinder(cameraHelper);
   }
 }
 
