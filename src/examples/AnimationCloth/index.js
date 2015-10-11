@@ -95,6 +95,28 @@ class AnimationCloth extends ExampleBase {
     this.scenePosition = new THREE.Vector3(0, 0, 0);
   }
 
+  componentDidMount() {
+    super.componentDidMount();
+    const controls = new TrackballControls(this.refs.mainCamera, ReactDOM.findDOMNode(this.refs.react3));
+    controls.rotateSpeed = 1.0;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+
+    controls.noZoom = false;
+    controls.noPan = false;
+
+    controls.staticMoving = true;
+    controls.dynamicDampingFactor = 0.3;
+
+    controls.addEventListener('change', () => {
+      this.setState({
+        cameraPosition: this.refs.mainCamera.position,
+      });
+    });
+
+    this.controls = controls;
+  }
+
   _toggleRotate = () => {
     this.setState({rotate: !this.state.rotate});
   };
@@ -206,28 +228,6 @@ class AnimationCloth extends ExampleBase {
     this.setState({
       ballPosition,
     });
-  }
-
-  componentDidMount() {
-    super.componentDidMount();
-    const controls = new TrackballControls(this.refs.mainCamera, ReactDOM.findDOMNode(this.refs.react3));
-    controls.rotateSpeed = 1.0;
-    controls.zoomSpeed = 1.2;
-    controls.panSpeed = 0.8;
-
-    controls.noZoom = false;
-    controls.noPan = false;
-
-    controls.staticMoving = true;
-    controls.dynamicDampingFactor = 0.3;
-
-    controls.addEventListener('change', () => {
-      this.setState({
-        cameraPosition: this.refs.mainCamera.position,
-      });
-    });
-
-    this.controls = controls;
   }
 
   _onAnimate = () => {
