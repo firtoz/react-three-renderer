@@ -2,7 +2,7 @@ import invariant from 'fbjs/lib/invariant';
 import React3Renderer from '../React3Instance';
 
 import ReactPropTypeLocations from 'react/lib/ReactPropTypeLocations';
-import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames.js';
+import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 import warning from 'fbjs/lib/warning';
 
 import events from 'events';
@@ -29,7 +29,8 @@ class THREEElementDescriptor {
 
   hasProp(name, info) {
     invariant(info.hasOwnProperty('type'), 'The information should include a `type` property');
-    invariant(!this.propTypes.hasOwnProperty(name) || info.override, 'The property %s has already been defined', name);
+    invariant(!this.propTypes.hasOwnProperty(name) || info.override,
+      'The property %s has already been defined', name);
 
     this.propTypes[name] = info.type;
 
@@ -47,8 +48,8 @@ class THREEElementDescriptor {
       }
 
       if (info.hasOwnProperty('default')) {
-        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a' +
-          '`default` property');
+        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a'
+          + '`default` property');
 
         this.propDeletes[name] = (threeObject) => {
           info.update(threeObject, info.default);
@@ -64,8 +65,8 @@ class THREEElementDescriptor {
       }
 
       if (info.hasOwnProperty('updateInitial')) {
-        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a' +
-          '`updateInitial` property');
+        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a'
+          + '`updateInitial` property');
 
         if (this._updateInitial.indexOf(name) === -1) {
           this._updateInitial.push(name);
@@ -73,8 +74,8 @@ class THREEElementDescriptor {
       }
 
       if (!!info.initialOnly) {
-        invariant(info.hasOwnProperty('updateInitial'), 'The information should include a `updateInitial` property' +
-          ' if it has an `initialOnly` property');
+        invariant(info.hasOwnProperty('updateInitial'), 'The information should include a `updateInitial` property'
+          + ' if it has an `initialOnly` property');
       }
 
       this._initialOnly[name] = info.initialOnly;
@@ -108,7 +109,7 @@ class THREEElementDescriptor {
     if (markup._rootInstance) {
       markup._rootInstance.objectRenamed(threeObject, oldName, nextName);
     }
-  };
+  }
 
   applyInitialProps(threeObject, props) {
     // do nothing for now
@@ -239,8 +240,8 @@ class THREEElementDescriptor {
    * @param names
    */
   useSimpleUpdates(names) {
-    for (let i = 0; i < names.length; ++i) {
-      const propName = names[i];
+    for (let index = 0; index < names.length; ++index) {
+      const propName = names[index];
       this.propUpdates[propName] = this._updateSimple.bind(this, propName);
     }
   }
@@ -327,7 +328,9 @@ if (process.env.NODE_ENV !== 'production') {
           // behavior as without this statement except with a better message.
           if (typeof propTypes[propName] !== 'function') {
             if (process.env.NODE_ENV !== 'production') {
-              invariant(false, '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', componentName || 'React class', ReactPropTypeLocationNames[location], propName);
+              invariant(false, '%s: %s type `%s` is invalid; it must be a function, usually from '
+                + 'React.PropTypes.', componentName || 'React class',
+                ReactPropTypeLocationNames[location], propName);
             } else {
               invariant(false);
             }
@@ -337,7 +340,12 @@ if (process.env.NODE_ENV !== 'production') {
           error = ex;
         }
 
-        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', ReactPropTypeLocationNames[location], propName, typeof error);
+        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker '
+          + 'function must return `null` or an `Error` but returned a %s. '
+          + 'You may have forgotten to pass an argument to the type checker '
+          + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and '
+          + 'shape all require an argument).', componentName || 'React class',
+          ReactPropTypeLocationNames[location], propName, typeof error);
 
         if (error instanceof Error && !(error.message in loggedTypeFailures)) {
           // Only monitor this failure once because there tends to be a lot of the
