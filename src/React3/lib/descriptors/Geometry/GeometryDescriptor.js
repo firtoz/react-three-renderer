@@ -22,11 +22,13 @@ class GeometryDescriptor extends GeometryDescriptorBase {
 
     this.hasProp('colors', {
       type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Color)),
-      update(threeObject, vertices) {
-        if (threeObject.colors !== colors) {
-          threeObject.colors = colors;
+      update(threeObject, colors, hasProp) {
+        if (hasProp) {
+          if (threeObject.colors !== colors) {
+            threeObject.colors = colors;
 
-          threeObject.colorsNeedUpdate = true;
+            threeObject.colorsNeedUpdate = true;
+          }
         }
       },
       updateInitial: true,
@@ -35,13 +37,12 @@ class GeometryDescriptor extends GeometryDescriptorBase {
 
     this.hasProp('faces', {
       type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Face3)),
-      update(threeObject, vertices) {
+      update(threeObject, faces) {
         if (threeObject.faces !== faces) {
           threeObject.faces = faces;
 
           threeObject.verticesNeedUpdate = true;
           threeObject.elementsNeedUpdate = true;
-          threeObject.groupsNeedUpdate = true;
         }
       },
       updateInitial: true,

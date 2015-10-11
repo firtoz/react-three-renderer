@@ -39,7 +39,7 @@ class THREEElementDescriptor {
 
       if (info.hasOwnProperty('default')) {
         this.propDeletes[name] = (threeObject) => {
-          this.propUpdates[name](threeObject, info.default);
+          this.propUpdates[name](threeObject, info.default, true);
         };
       }
     } else {
