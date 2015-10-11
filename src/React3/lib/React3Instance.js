@@ -474,7 +474,11 @@ class React3DInstance {
   updateClearColor(clearColor) {
     this._parameters.clearColor = clearColor;
 
-    renderer.setClearColor(clearColor);
+    if(!this._renderer) {
+      return;
+    }
+
+    this._renderer.setClearColor(clearColor);
   }
 
   refreshRenderer() {

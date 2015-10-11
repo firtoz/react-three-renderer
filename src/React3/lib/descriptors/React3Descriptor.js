@@ -32,7 +32,11 @@ const propProxy = {
     default: undefined,
   },
   clearColor: {
-    type: PropTypes.instanceOf(THREE.Color),
+    type: PropTypes.oneOfType([
+      PropTypes.instanceOf(THREE.Color),
+      PropTypes.number,
+      PropTypes.string,
+    ]),
     default: 0,
   },
   shadowMapEnabled: {

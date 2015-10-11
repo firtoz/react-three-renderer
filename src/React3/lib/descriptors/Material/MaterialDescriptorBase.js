@@ -81,7 +81,11 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     this._hasColor = true;
 
     this.hasProp('color', {
-      type: PropTypes.number,
+      type: PropTypes.oneOfType([
+        PropTypes.instanceOf(THREE.Color),
+        PropTypes.number,
+        PropTypes.string,
+      ]),
       update: (threeObject, newColor) => {
         threeObject.color.set(newColor);
       },
