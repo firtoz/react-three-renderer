@@ -13,30 +13,51 @@ class Object3DDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
+    function copyUpdate(propName) {
+      return (threeObject, value) => {
+        threeObject[propName].copy(value);
+      };
+    }
 
-      'quaternion': PropTypes.instanceOf(THREE.Quaternion),
-      'lookAt': PropTypes.instanceOf(THREE.Vector3),
-      'scale': PropTypes.instanceOf(THREE.Vector3),
-      frustumCulled: PropTypes.bool,
-      visible: PropTypes.bool,
-      renderOrder: PropTypes.number,
-    };
+    this.hasProp('quaternion', {
+      type: PropTypes.instanceOf(THREE.Quaternion),
+      update: copyUpdate('quaternion'),
+      default: new THREE.Quaternion(),
+    });
 
-    this.propUpdates = {
-      ...this.propUpdates,
+    this.hasProp('scale', {
+      type: PropTypes.instanceOf(THREE.Vector3),
+      update: copyUpdate('scale'),
+      default: new THREE.Vector3(1, 1, 1),
+    });
 
-      'quaternion': this._updateQuaternion,
-      'lookAt': this._updateLookAt,
-      'scale': this._updateScale,
-    };
+    this.hasProp('lookAt', {
+      type: PropTypes.instanceOf(THREE.Vector3),
+      update(threeObject, lookAt) {
+        threeObject.userData._lookAt = lookAt;
 
-    this.registerSimpleProperties([
+        if (!!lookAt) {
+          threeObject.lookAt(lookAt);
+        }
+      },
+      default: undefined,
+    });
+
+    [
       'frustumCulled',
       'visible',
-      'renderOrder',
-    ]);
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.bool,
+        simple: true,
+        default: true,
+      });
+    });
+
+    this.hasProp('renderOrder', {
+      type: PropTypes.number,
+      simple: true,
+    });
 
     this.hasProp('castShadow', {
       type: PropTypes.bool,
@@ -109,21 +130,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
     }
   }
 
-  _updateQuaternion = (threeObject, nextQuaternion) => {
-    threeObject.quaternion.copy(nextQuaternion);
-  };
-
-  _updateScale = (threeObject, nextScale) => {
-    threeObject.scale.copy(nextScale);
-  };
-
-  _updateLookAt = (threeObject, lookAt) => {
-    threeObject.userData._lookAt = lookAt;
-
-    if (!!lookAt) {
-      threeObject.lookAt(lookAt);
-    }
-  };
 
   /**
    * @param threeObject
@@ -149,7 +155,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     threeObject.remove(child);
   }
 
-  moveChild(threeObject, childObject, toIndex, lastIndex) {
+  moveChild(threeObject, childObject, toIndex, lastIndex) { // eslint-disable-line no-unused-vars
     if (process.env.NODE_ENV !== 'production') {
       invariant(toIndex >= 0 && threeObject.children.length > toIndex, 'Cannot move a child to that index');
     }
