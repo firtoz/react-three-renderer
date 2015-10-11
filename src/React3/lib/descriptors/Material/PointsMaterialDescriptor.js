@@ -9,11 +9,7 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
   }
 
   construct(props) {
-    const materialDescription = {};
-
-    if (props.hasOwnProperty('color')) {
-      materialDescription.color = props.color;
-    }
+    const materialDescription = this.getMaterialDescription(props);
 
     return new THREE.PointsMaterial(materialDescription);
   }
