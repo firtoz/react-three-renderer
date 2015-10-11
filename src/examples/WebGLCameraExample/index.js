@@ -59,7 +59,6 @@ class WebGLCameraExample extends ExampleBase {
     });
 
     this.controls = controls;
-    //console.log(this.refs.mainCamera);
   }
 
   componentWillUnmount() {
