@@ -6,23 +6,14 @@ import PerspectiveCameraDescriptor from './descriptors/Object/Camera/Perspective
 import CameraHelperDescriptor from './descriptors/Object/Helper/CameraHelperDescriptor';
 import MeshDescriptor from './descriptors/Object/MeshDescriptor';
 import PointsDescriptor from './descriptors/Object/PointsDescriptor';
-import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
-import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
-import MeshPhongMaterialDescriptor from './descriptors/Material/MeshPhongMaterialDescriptor';
-import MeshLambertMaterialDescriptor from './descriptors/Material/MeshLambertMaterialDescriptor';
 import ViewportDescriptor from './descriptors/ViewportDescriptor';
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
-import ShaderMaterialDescriptor from './descriptors/Material/ShaderMaterialDescriptor';
-import TextureDescriptor from './descriptors/Material/TextureDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
-import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
 import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDescriptor';
 
-import UniformsDescriptor from './descriptors/Material/UniformsDescriptor';
-import UniformDescriptor from './descriptors/Material/UniformDescriptor';
 
 import AxisHelperDescriptor from './descriptors/Object/Helper/AxisHelperDescriptor';
 import ArrowHelperDescriptor from './descriptors/Object/Helper/ArrowHelperDescriptor';
@@ -41,6 +32,21 @@ import CylinderGeometryDescriptor from './descriptors/Geometry/CylinderGeometryD
 import LatheGeometryDescriptor from './descriptors/Geometry/LatheGeometryDescriptor';
 import TorusGeometryDescriptor from './descriptors/Geometry/TorusGeometryDescriptor';
 import TorusKnotGeometryDescriptor from './descriptors/Geometry/TorusKnotGeometryDescriptor';
+
+import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
+import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
+import MeshPhongMaterialDescriptor from './descriptors/Material/MeshPhongMaterialDescriptor';
+import MeshLambertMaterialDescriptor from './descriptors/Material/MeshLambertMaterialDescriptor';
+import ShaderMaterialDescriptor from './descriptors/Material/ShaderMaterialDescriptor';
+import TextureDescriptor from './descriptors/Material/TextureDescriptor';
+import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
+import UniformsDescriptor from './descriptors/Material/UniformsDescriptor';
+import UniformDescriptor from './descriptors/Material/UniformDescriptor';
+import LineBasicMaterialDescriptor from './descriptors/Material/LineBasicMaterialDescriptor';
+import LineDashedMaterialDescriptor from './descriptors/Material/LineDashedMaterialDescriptor';
+import MeshDepthMaterialDescriptor from './descriptors/Material/MeshDepthMaterialDescriptor';
+import MeshNormalMaterialDescriptor from './descriptors/Material/MeshNormalMaterialDescriptor';
+import SpriteMaterialDescriptor from './descriptors/Material/SpriteMaterialDescriptor';
 
 class ElementDescriptorContainer {
   constructor(react3RendererInstance) {
@@ -69,6 +75,11 @@ class ElementDescriptorContainer {
       meshLambertMaterial: new MeshLambertMaterialDescriptor(react3RendererInstance),
       pointsMaterial: new PointsMaterialDescriptor(react3RendererInstance),
       shaderMaterial: new ShaderMaterialDescriptor(react3RendererInstance),
+      lineBasicMaterial: new LineBasicMaterialDescriptor(react3RendererInstance),
+      lineDashedMaterial: new LineDashedMaterialDescriptor(react3RendererInstance),
+      meshDepthMaterial: new MeshDepthMaterialDescriptor(react3RendererInstance),
+      meshNormalMaterial: new MeshNormalMaterialDescriptor(react3RendererInstance),
+      spriteMaterial: new SpriteMaterialDescriptor(react3RendererInstance),
 
       texture: new TextureDescriptor(react3RendererInstance),
 
