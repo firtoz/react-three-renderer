@@ -7,10 +7,6 @@ class CubeCameraDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propUpdates = {
-      ...this.propUpdates,
-    };
-
     this.propTypes = {
       ...this.propTypes,
 
