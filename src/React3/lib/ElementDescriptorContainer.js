@@ -1,22 +1,23 @@
 import React3Descriptor from './descriptors/React3Descriptor';
-import Object3DDescriptor from './descriptors/Object/Object3DDescriptor';
+
+import ViewportDescriptor from './descriptors/ViewportDescriptor';
 import SceneDescriptor from './descriptors/Object/SceneDescriptor';
+
+import Object3DDescriptor from './descriptors/Object/Object3DDescriptor';
+
 import OrthographicCameraDescriptor from './descriptors/Object/Camera/OrthographicCameraDescriptor';
 import PerspectiveCameraDescriptor from './descriptors/Object/Camera/PerspectiveCameraDescriptor';
-import CameraHelperDescriptor from './descriptors/Object/Helper/CameraHelperDescriptor';
+import CubeCameraDescriptor from './descriptors/Object/Camera/CubeCameraDescriptor';
+
 import MeshDescriptor from './descriptors/Object/MeshDescriptor';
 import PointsDescriptor from './descriptors/Object/PointsDescriptor';
-import ViewportDescriptor from './descriptors/ViewportDescriptor';
+
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
 import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDescriptor';
-
-
-import AxisHelperDescriptor from './descriptors/Object/Helper/AxisHelperDescriptor';
-import ArrowHelperDescriptor from './descriptors/Object/Helper/ArrowHelperDescriptor';
 
 import GeometryDescriptor from './descriptors/Geometry/GeometryDescriptor';
 import BoxGeometryDescriptor from './descriptors/Geometry/BoxGeometryDescriptor';
@@ -48,6 +49,10 @@ import MeshDepthMaterialDescriptor from './descriptors/Material/MeshDepthMateria
 import MeshNormalMaterialDescriptor from './descriptors/Material/MeshNormalMaterialDescriptor';
 import SpriteMaterialDescriptor from './descriptors/Material/SpriteMaterialDescriptor';
 
+import CameraHelperDescriptor from './descriptors/Object/Helper/CameraHelperDescriptor';
+import AxisHelperDescriptor from './descriptors/Object/Helper/AxisHelperDescriptor';
+import ArrowHelperDescriptor from './descriptors/Object/Helper/ArrowHelperDescriptor';
+
 class ElementDescriptorContainer {
   constructor(react3RendererInstance) {
     this.react3RendererInstance = react3RendererInstance;
@@ -65,7 +70,7 @@ class ElementDescriptorContainer {
 
       orthographicCamera: new OrthographicCameraDescriptor(react3RendererInstance),
       perspectiveCamera: new PerspectiveCameraDescriptor(react3RendererInstance),
-      cameraHelper: new CameraHelperDescriptor(react3RendererInstance),
+      cubeCamera: new CubeCameraDescriptor(react3RendererInstance),
 
       mesh: new MeshDescriptor(react3RendererInstance),
       points: new PointsDescriptor(react3RendererInstance),
@@ -109,6 +114,7 @@ class ElementDescriptorContainer {
       uniforms: new UniformsDescriptor(react3RendererInstance),
       uniform: new UniformDescriptor(react3RendererInstance),
 
+      cameraHelper: new CameraHelperDescriptor(react3RendererInstance),
       axisHelper: new AxisHelperDescriptor(react3RendererInstance),
       arrowHelper: new ArrowHelperDescriptor(react3RendererInstance),
     };
