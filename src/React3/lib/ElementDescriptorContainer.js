@@ -28,6 +28,7 @@ import IcosahedronGeometryDescriptor from './descriptors/Geometry/IcosahedronGeo
 import OctahedronGeometryDescriptor from './descriptors/Geometry/OctahedronGeometryDescriptor';
 import TetrahedronGeometryDescriptor from './descriptors/Geometry/TetrahedronGeometryDescriptor';
 import CircleGeometryDescriptor from './descriptors/Geometry/CircleGeometryDescriptor';
+import CircleBufferGeometryDescriptor from './descriptors/Geometry/CircleBufferGeometryDescriptor';
 import RingGeometryDescriptor from './descriptors/Geometry/RingGeometryDescriptor';
 import CylinderGeometryDescriptor from './descriptors/Geometry/CylinderGeometryDescriptor';
 import LatheGeometryDescriptor from './descriptors/Geometry/LatheGeometryDescriptor';
@@ -97,6 +98,7 @@ class ElementDescriptorContainer {
       octahedronGeometry: new OctahedronGeometryDescriptor(react3RendererInstance),
       tetrahedronGeometry: new TetrahedronGeometryDescriptor(react3RendererInstance),
       circleGeometry: new CircleGeometryDescriptor(react3RendererInstance),
+      circleBufferGeometry: new CircleBufferGeometryDescriptor(react3RendererInstance),
       ringGeometry: new RingGeometryDescriptor(react3RendererInstance),
       cylinderGeometry: new CylinderGeometryDescriptor(react3RendererInstance),
       latheGeometry: new LatheGeometryDescriptor(react3RendererInstance),
