@@ -52,7 +52,7 @@ class THREEElementDescriptor {
           + '`default` property');
 
         this.propDeletes[name] = (threeObject) => {
-          info.update(threeObject, info.default);
+          info.update(threeObject, info.default, true);
         };
       }
 
