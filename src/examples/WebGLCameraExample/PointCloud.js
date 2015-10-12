@@ -25,7 +25,9 @@ class PointCloud extends React.Component {
   render() {
     return (<points>
       <geometry vertices={this.pointCloudVertices}/>
-      <pointsMaterial color={0x888888}/>
+      <pointsMaterial
+        color={0x888888}
+      />
     </points>);
   }
 }

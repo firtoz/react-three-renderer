@@ -12,15 +12,7 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
   }
 
   construct(props) {
-    const materialDescription = {};
-
-    if (props.hasOwnProperty('color')) {
-      materialDescription.color = props.color;
-    }
-
-    if (props.hasOwnProperty('wireframe')) {
-      materialDescription.wireframe = props.wireframe;
-    }
+    const materialDescription = this.getMaterialDescription(props);
 
     if (props.hasOwnProperty('map')) {
       materialDescription.map = props.map;

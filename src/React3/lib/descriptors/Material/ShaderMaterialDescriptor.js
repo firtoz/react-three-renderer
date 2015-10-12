@@ -23,7 +23,7 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
   }
 
   construct(props) {
-    const materialDescription = {};
+    const materialDescription = this.getMaterialDescription(props);
 
     if (props.hasOwnProperty('uniforms')) {
       materialDescription.uniforms = props.uniforms;

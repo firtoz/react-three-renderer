@@ -60,15 +60,17 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       default: true,
     });
 
-    this._hasColor = false;
+    this._colors = [];
   }
 
   getMaterialDescription(props) {
     const materialDescription = {};
 
-    if (this._hasColor && props.hasOwnProperty('color')) {
-      materialDescription.color = props.color;
-    }
+    this._colors.forEach(colorPropName => {
+      if (props.hasOwnProperty(colorPropName)) {
+        materialDescription[colorPropName] = props[colorPropName];
+      }
+    });
 
     if (props.hasOwnProperty('side')) {
       materialDescription.side = props.side;
@@ -77,19 +79,23 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     return materialDescription;
   }
 
-  hasColor() {
-    this._hasColor = true;
+  hasColor(propName = 'color', defaultVal = 0xffffff) {
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(this._colors.indexOf(propName) === -1, 'This color is already defined for %s.', this.constructor.name);
+    }
 
-    this.hasProp('color', {
+    this._colors.push(propName);
+
+    this.hasProp(propName, {
       type: PropTypes.oneOfType([
         PropTypes.instanceOf(THREE.Color),
         PropTypes.number,
         PropTypes.string,
       ]),
-      update: (threeObject, newColor) => {
-        threeObject.color.set(newColor);
+      update: (threeObject, value) => {
+        threeObject[propName].set(value);
       },
-      default: 0xffffff,
+      default: defaultVal,
     });
   }
 

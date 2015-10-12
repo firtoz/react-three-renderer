@@ -14,23 +14,9 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     };
 
     this.hasColor();
+    this.hasColor('specular', 0x111111);
+    this.hasColor('emissive', 0x000000);
     this.hasWireframe();
-
-    this.hasProp('specular', {
-      type: PropTypes.number,
-      update: (threeObject, specular) => {
-        threeObject.specular.set(specular);
-      },
-      default: 0x111111,
-    });
-
-    this.hasProp('emissive', {
-      type: PropTypes.number,
-      update: (threeObject, emissive) => {
-        threeObject.emissive.set(emissive);
-      },
-      default: 0x000000,
-    });
 
     this.hasProp('shininess', {
       type: PropTypes.number,
@@ -50,14 +36,6 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
 
   construct(props) {
     const materialDescription = this.getMaterialDescription(props);
-
-    if (props.hasOwnProperty('specular')) {
-      materialDescription.specular = props.specular;
-    }
-
-    if (props.hasOwnProperty('emissive')) {
-      materialDescription.emissive = props.emissive;
-    }
 
     if (props.hasOwnProperty('shininess')) {
       materialDescription.shininess = props.shininess;

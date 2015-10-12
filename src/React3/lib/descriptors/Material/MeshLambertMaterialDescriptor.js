@@ -9,15 +9,8 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
     super(react3RendererInstance);
 
     this.hasColor();
+    this.hasColor('emissive', 0);
     this.hasWireframe();
-
-    this.hasProp('emissive', {
-      type: PropTypes.number,
-      update: (threeObject, newEmissive) => {
-        threeObject.emissive.set(newEmissive);
-      },
-      default: 0,
-    });
   }
 
 
@@ -29,14 +22,6 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
 
   getMaterialDescription(props) {
     const materialDescription = super.getMaterialDescription(props);
-
-    if (props.hasOwnProperty('specular')) {
-      materialDescription.specular = props.specular;
-    }
-
-    if (props.hasOwnProperty('emissive')) {
-      materialDescription.emissive = props.emissive;
-    }
 
     if (props.hasOwnProperty('shininess')) {
       materialDescription.shininess = props.shininess;
