@@ -39,6 +39,7 @@ import ExtrudeGeometryDescriptor from './descriptors/Geometry/ExtrudeGeometryDes
 import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
 import MoveToDescriptor from './descriptors/Geometry/Shapes/MoveToDescriptor';
 import LineToDescriptor from './descriptors/Geometry/Shapes/LineToDescriptor';
+import BezierCurveToDescriptor from './descriptors/Geometry/Shapes/BezierCurveToDescriptor';
 
 import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
 import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
@@ -114,6 +115,7 @@ class ElementDescriptorContainer {
       shape: new ShapeDescriptor(react3RendererInstance),
       moveTo: new MoveToDescriptor(react3RendererInstance),
       lineTo: new LineToDescriptor(react3RendererInstance),
+      bezierCurveTo: new BezierCurveToDescriptor(react3RendererInstance),
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),

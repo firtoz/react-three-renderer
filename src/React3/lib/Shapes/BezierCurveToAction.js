@@ -1,7 +1,4 @@
-eimport
-THREE
-from
-'three';
+import THREE from 'three';
 
 import ShapeAction from './ShapeAction';
 
