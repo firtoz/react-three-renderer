@@ -8,7 +8,6 @@ import resource from '../../decorators/resource';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import ShapeAction from '../../../Shapes/ShapeAction';
-//import ShapeHoleContainer from '../../../Shapes/ShapeHoleContainer';
 
 @resource
 class ShapeDescriptor extends THREEElementDescriptor {

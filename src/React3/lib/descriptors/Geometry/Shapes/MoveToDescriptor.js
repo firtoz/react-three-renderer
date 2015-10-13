@@ -9,7 +9,7 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
 import MoveToAction from '../../../Shapes/MoveToAction';
 
-class MoveToDeescriptor extends THREEElementDescriptor {
+class MoveToDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
@@ -42,4 +42,4 @@ class MoveToDeescriptor extends THREEElementDescriptor {
   }
 }
 
-export default MoveToDeescriptor;
+export default MoveToDescriptor;

@@ -9,7 +9,7 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
 import LineToAction from '../../../Shapes/LineToAction';
 
-class LineToDeescriptor extends THREEElementDescriptor {
+class LineToDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
@@ -38,4 +38,4 @@ class LineToDeescriptor extends THREEElementDescriptor {
   }
 }
 
-export default LineToDeescriptor;
+export default LineToDescriptor;
