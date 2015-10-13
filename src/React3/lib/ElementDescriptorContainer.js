@@ -34,6 +34,11 @@ import CylinderGeometryDescriptor from './descriptors/Geometry/CylinderGeometryD
 import LatheGeometryDescriptor from './descriptors/Geometry/LatheGeometryDescriptor';
 import TorusGeometryDescriptor from './descriptors/Geometry/TorusGeometryDescriptor';
 import TorusKnotGeometryDescriptor from './descriptors/Geometry/TorusKnotGeometryDescriptor';
+import ExtrudeGeometryDescriptor from './descriptors/Geometry/ExtrudeGeometryDescriptor';
+
+import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
+import MoveToDescriptor from './descriptors/Geometry/Shapes/MoveToDescriptor';
+import LineToDescriptor from './descriptors/Geometry/Shapes/LineToDescriptor';
 
 import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
 import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
@@ -104,6 +109,11 @@ class ElementDescriptorContainer {
       latheGeometry: new LatheGeometryDescriptor(react3RendererInstance),
       torusGeometry: new TorusGeometryDescriptor(react3RendererInstance),
       torusKnotGeometry: new TorusKnotGeometryDescriptor(react3RendererInstance),
+      extrudeGeometry: new ExtrudeGeometryDescriptor(react3RendererInstance),
+
+      shape: new ShapeDescriptor(react3RendererInstance),
+      moveTo: new MoveToDescriptor(react3RendererInstance),
+      lineTo: new LineToDescriptor(react3RendererInstance),
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
