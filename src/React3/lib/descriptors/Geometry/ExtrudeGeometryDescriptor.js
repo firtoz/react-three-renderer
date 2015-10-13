@@ -4,6 +4,7 @@ import GeometryDescriptorBase from './GeometryDescriptorBase';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 
 class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -36,19 +37,6 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
   }
 
   construct(props) {
-    const {
-      amount,
-      bevelThickness,
-      bevelSize,
-      bevelSegments,
-      bevelEnabled,
-      curveSegments,
-      steps,
-      extrudePath,
-      UVGenerator,
-      frames,
-      } = props;
-
     let shapes;
 
     if (props.hasOwnProperty('shapes')) {
@@ -57,18 +45,24 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
       shapes = [];
     }
 
-    const options = {
-      amount,
-      bevelThickness,
-      bevelSize,
-      bevelSegments,
-      bevelEnabled,
-      curveSegments,
-      steps,
-      extrudePath,
-      UVGenerator,
-      frames,
-    };
+    const options = {};
+
+    [
+      'amount',
+      'bevelThickness',
+      'bevelSize',
+      'bevelSegments',
+      'bevelEnabled',
+      'curveSegments',
+      'steps',
+      'extrudePath',
+      'UVGenerator',
+      'frames',
+    ].forEach(propName => {
+      if (props.hasOwnProperty(propName)) {
+        options[propName] = props[propName];
+      }
+    });
 
     return new THREE.ExtrudeGeometry(shapes, options);
   }
@@ -76,32 +70,24 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
   applyInitialProps(threeObject, props) {
     super.applyInitialProps(threeObject, props);
 
-    const {
-      amount,
-      bevelThickness,
-      bevelSize,
-      bevelSegments,
-      bevelEnabled,
-      curveSegments,
-      steps,
-      extrudePath,
-      UVGenerator,
-      frames,
-      } = props;
+    const options = {};
 
-
-    const options = {
-      amount,
-      bevelThickness,
-      bevelSize,
-      bevelSegments,
-      bevelEnabled,
-      curveSegments,
-      steps,
-      extrudePath,
-      UVGenerator,
-      frames,
-    };
+    [
+      'amount',
+      'bevelThickness',
+      'bevelSize',
+      'bevelSegments',
+      'bevelEnabled',
+      'curveSegments',
+      'steps',
+      'extrudePath',
+      'UVGenerator',
+      'frames',
+    ].forEach(propName => {
+      if (props.hasOwnProperty(propName)) {
+        options[propName] = props[propName];
+      }
+    });
 
     threeObject.userData._options = options;
   }
@@ -115,15 +101,23 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
       invariant(children.filter(this._invalidChild).length === 0, false);
     }
 
-    debugger;
-
     children.forEach(child => {
-      threeObject.addShape(child, threeObject.userData._options);
+      try {
+        threeObject.addShape(child, threeObject.userData._options);
+      } catch (e) {
+        warning(false, 'Failed to add shape to extrude geometry: %s',  e);
+      }
     });
   }
 
   addChild(threeObject, child, mountIndex) {
-    debugger;
+    // new shape was added?
+    this.triggerRemount(threeObject);
+  }
+
+  removeChild(threeObject, child) {
+    // new shape was added?
+    this.triggerRemount(threeObject);
   }
 
   _invalidChild = child => {

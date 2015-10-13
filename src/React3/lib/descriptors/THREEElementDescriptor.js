@@ -192,7 +192,12 @@ class THREEElementDescriptor {
     }
   }
 
-  unmount(threeObject) { // eslint-disable-line no-unused-vars
+  unmount(threeObject) {
+    if (!threeObject) {
+      // it was never mounted anyway
+      return;
+    }
+
     const markup = threeObject.userData.markup;
 
     if (markup._rootInstance) {
@@ -275,6 +280,14 @@ class THREEElementDescriptor {
   }
 
   completePropertyUpdates(threeObject) {
+    delete threeObject.userData._triggerRemount;
+  }
+
+  beginChildUpdates(threeObject, triggerRemount) {
+    threeObject.userData._triggerRemount = triggerRemount;
+  }
+
+  completeChildUpdates(threeObject) {
     delete threeObject.userData._triggerRemount;
   }
 }

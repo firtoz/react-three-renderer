@@ -51,21 +51,17 @@ class ShapeDescriptor extends THREEElementDescriptor {
   }
 
   setParent(threeObject, parentObject3D) {
-    debugger;
-
     super.setParent(threeObject, parentObject3D);
   }
 
   addChild(threeObject, child, mountIndex) {
     // TODO: trigger remount
-    debugger;
 
     this.triggerRemount(threeObject);
   }
 
   removeChild(threeObject, child) {
     // TODO: trigger remount
-    debugger;
 
     this.triggerRemount(threeObject);
   }

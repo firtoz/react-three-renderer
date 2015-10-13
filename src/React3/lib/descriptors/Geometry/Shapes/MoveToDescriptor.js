@@ -19,7 +19,7 @@ class MoveToDeescriptor extends THREEElementDescriptor {
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
-        simple: true,
+        update: this.triggerRemount,
         default: 0,
       });
     });
@@ -34,8 +34,6 @@ class MoveToDeescriptor extends THREEElementDescriptor {
   }
 
   setParent(threeObject, parentObject3D) {
-    debugger;
-
     super.setParent(threeObject, parentObject3D);
   }
 

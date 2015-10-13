@@ -374,12 +374,26 @@ class InternalComponent {
       return;
     }
 
+    let wantRemount = false;
+
+    this.threeElementDescriptor.beginChildUpdates(this._threeObject, () => {
+      wantRemount = true;
+
+      this._forceRemountOfComponent = true;
+    });
+
     // `nextIndex` will increment for each child in `nextChildren`, but
     // `lastIndex` will be the last index visited in `prevChildren`.
     let lastIndex = 0;
     let nextIndex = 0;
     for (const childName in nextChildren) {
       if (!nextChildren.hasOwnProperty(childName)) {
+        continue;
+      }
+
+      if (wantRemount) {
+        // This component will be remounted, (see extrude geometry)
+        // No need to update children any more as they will also be remounted!
         continue;
       }
 
@@ -396,17 +410,30 @@ class InternalComponent {
           lastIndex = Math.max(prevChild._mountIndex, lastIndex);
           this._unmountChild(prevChild);
         }
+
+        if(wantRemount) {
+          // The remount can be triggered by unmountChild as well (see extrude geometry)
+          continue;
+        }
+
         // The child must be instantiated before it's mounted.
         this._mountChildByNameAtIndex(nextChild, childName, nextIndex, transaction, context);
       }
       nextIndex++;
     }
+
     // Remove children that are no longer present.
     for (const childName in prevChildren) {
+      if (wantRemount) {
+        continue;
+      }
+
       if (prevChildren.hasOwnProperty(childName) && !(nextChildren && nextChildren.hasOwnProperty(childName))) {
         this._unmountChild(prevChildren[childName]);
       }
     }
+
+    this.threeElementDescriptor.completeChildUpdates(this._threeObject);
   }
 
   createChild(child, mountImage) {
