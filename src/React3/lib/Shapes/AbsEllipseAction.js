@@ -1,7 +1,4 @@
-eimport
-THREE
-from
-'three';
+import THREE from 'three';
 
 import ShapeAction from './ShapeAction';
 
@@ -12,7 +9,8 @@ class AbsEllipseAction extends ShapeAction {
               yRadius,
               startAngle,
               endAngle,
-              clockwise) {
+              clockwise,
+              rotation) {
     super();
 
     this.x = x;
@@ -22,13 +20,16 @@ class AbsEllipseAction extends ShapeAction {
     this.startAngle = startAngle;
     this.endAngle = endAngle;
     this.clockwise = clockwise;
+    this.rotation = rotation;
   }
 
   performAction(shape:THREE.Shape) {
-    shape.absarc(
+    shape.absellipse(
       this.x, this.y,
-      this.radius, this.startAngle,
-      this.endAngle, this.clockwise
+      this.xRadius, this.yRadius,
+      this.startAngle, this.endAngle,
+      this.clockwise,
+      this.rotation
     );
   }
 }

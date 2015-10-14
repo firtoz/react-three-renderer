@@ -1,0 +1,64 @@
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
+
+import PropTypes from 'react/lib/ReactPropTypes';
+
+import AbsEllipseAction from '../../../Shapes/AbsEllipseAction';
+
+class AbsEllipseDescriptor extends ShapeActionDescriptorBase {
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    [
+      'x',
+      'y',
+      'xRadius',
+      'yRadius',
+      'startAngle',
+      'endAngle',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number.isRequired,
+        update: this.triggerRemount,
+        default: 0,
+      });
+    });
+
+    this.hasProp('rotation', {
+      type: PropTypes.number,
+      update: this.triggerRemount,
+      default: false,
+    });
+
+    this.hasProp('clockwise', {
+      type: PropTypes.bool.isRequired,
+      update: this.triggerRemount,
+      default: false,
+    });
+  }
+
+  construct(props) {
+    const {
+      x,
+      y,
+      xRadius,
+      yRadius,
+      startAngle,
+      endAngle,
+      clockwise,
+      rotation,
+      } = props;
+
+    return new AbsEllipseAction(
+      x,
+      y,
+      xRadius,
+      yRadius,
+      startAngle,
+      endAngle,
+      clockwise,
+      rotation
+    );
+  }
+}
+
+export default AbsEllipseDescriptor;

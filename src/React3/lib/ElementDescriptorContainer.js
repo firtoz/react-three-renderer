@@ -40,6 +40,10 @@ import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
 import MoveToDescriptor from './descriptors/Geometry/Shapes/MoveToDescriptor';
 import LineToDescriptor from './descriptors/Geometry/Shapes/LineToDescriptor';
 import BezierCurveToDescriptor from './descriptors/Geometry/Shapes/BezierCurveToDescriptor';
+import QuadraticCurveToDescriptor from './descriptors/Geometry/Shapes/QuadraticCurveToDescriptor';
+import AbsArcDescriptor from './descriptors/Geometry/Shapes/AbsArcDescriptor';
+import AbsEllipseDescriptor from './descriptors/Geometry/Shapes/AbsEllipseDescriptor';
+import HoleDescriptor from './descriptors/Geometry/Shapes/HoleDescriptor';
 
 import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
 import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
@@ -116,6 +120,10 @@ class ElementDescriptorContainer {
       moveTo: new MoveToDescriptor(react3RendererInstance),
       lineTo: new LineToDescriptor(react3RendererInstance),
       bezierCurveTo: new BezierCurveToDescriptor(react3RendererInstance),
+      quadraticCurveTo: new QuadraticCurveToDescriptor(react3RendererInstance),
+      absArc: new AbsArcDescriptor(react3RendererInstance),
+      absEllipse: new AbsEllipseDescriptor(react3RendererInstance),
+      hole: new HoleDescriptor(react3RendererInstance),
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),

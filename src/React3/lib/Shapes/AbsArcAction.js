@@ -1,7 +1,4 @@
-eimport
-THREE
-from
-'three';
+import THREE from 'three';
 
 import ShapeAction from './ShapeAction';
 
@@ -22,12 +19,12 @@ class AbsArcAction extends ShapeAction {
     this.clockwise = clockwise;
   }
 
-
   performAction(shape:THREE.Shape) {
     shape.absarc(
       this.x, this.y,
-      this.radius, this.startAngle,
-      this.endAngle, this.clockwise
+      this.radius,
+      this.startAngle, this.endAngle,
+      this.clockwise
     );
   }
 }

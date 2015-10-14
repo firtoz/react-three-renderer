@@ -41,6 +41,11 @@ class PathDescriptorBase extends THREEElementDescriptor {
     this.triggerRemount(threeObject);
   }
 
+
+  moveChild(threeObject) {
+    this.triggerRemount(threeObject);
+  }
+
   removeChild(threeObject, child) {
     this.triggerRemount(threeObject);
   }

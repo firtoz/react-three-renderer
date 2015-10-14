@@ -14,6 +14,7 @@ class HoleDescriptor extends PathDescriptorBase {
   }
 
   performChildAction(threeObject, child) {
+    debugger;
     child.performAction(threeObject.path);
   }
 
