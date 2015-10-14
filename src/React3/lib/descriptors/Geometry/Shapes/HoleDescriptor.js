@@ -1,7 +1,5 @@
 import PathDescriptorBase from './PathDescriptorBase';
 
-import resource from '../../decorators/resource';
-
 import HoleAction from '../../../Shapes/HoleAction';
 
 import invariant from 'fbjs/lib/invariant';
@@ -14,7 +12,6 @@ class HoleDescriptor extends PathDescriptorBase {
   }
 
   performChildAction(threeObject, child) {
-    debugger;
     child.performAction(threeObject.path);
   }
 
