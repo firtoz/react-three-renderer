@@ -1,15 +1,12 @@
-import THREE from 'three';
 import THREEElementDescriptor from '../../THREEElementDescriptor';
 
-import invariant from 'fbjs/lib/invariant';
-
-import resource from '../../decorators/resource';
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import LineToAction from '../../../Shapes/LineToAction';
 
-class LineToDescriptor extends THREEElementDescriptor {
+class LineToDescriptor extends ShapeActionDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
@@ -23,14 +20,6 @@ class LineToDescriptor extends THREEElementDescriptor {
         default: 0,
       });
     });
-  }
-
-  applyInitialProps(threeObject, props) {
-    threeObject.userData = {
-      ...threeObject.userData,
-    };
-
-    return super.applyInitialProps(threeObject, props);
   }
 
   construct(props) {

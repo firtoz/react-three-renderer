@@ -1,15 +1,10 @@
-import THREE from 'three';
-import THREEElementDescriptor from '../../THREEElementDescriptor';
-
-import invariant from 'fbjs/lib/invariant';
-
-import resource from '../../decorators/resource';
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import BezierCurveToAction from '../../../Shapes/BezierCurveToAction';
 
-class BezierCurveToDescriptor extends THREEElementDescriptor {
+class BezierCurveToDescriptor extends ShapeActionDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
@@ -27,18 +22,6 @@ class BezierCurveToDescriptor extends THREEElementDescriptor {
         default: 0,
       });
     });
-  }
-
-  applyInitialProps(threeObject, props) {
-    threeObject.userData = {
-      ...threeObject.userData,
-    };
-
-    return super.applyInitialProps(threeObject, props);
-  }
-
-  setParent(threeObject, parentObject3D) {
-    super.setParent(threeObject, parentObject3D);
   }
 
   construct(props) {

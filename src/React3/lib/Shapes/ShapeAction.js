@@ -6,6 +6,8 @@ import THREE from 'three';
 class ShapeAction {
   constructor() {
     this.uuid = THREE.Math.generateUUID();
+
+    this.userData = {};
   }
 
   performAction(shape:THREE.Shape) {
