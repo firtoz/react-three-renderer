@@ -10,10 +10,23 @@ import PropTypes from 'react/lib/ReactPropTypes';
 import ShapeAction from '../../../Shapes/ShapeAction';
 
 class PathDescriptorBase extends THREEElementDescriptor {
+  constructor(react3RendererInstance) {
+    super(react3RendererInstance);
+
+    this.hasProp('points', {
+      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector2)),
+      update: this.triggerRemount,
+      default: [],
+    });
+  }
+
   applyInitialProps(threeObject, props) {
     threeObject.userData = {
       ...threeObject.userData,
     };
+
+    // paths don't have uuids
+    threeObject.uuid = THREE.Math.generateUUID();
 
     return super.applyInitialProps(threeObject, props);
   }
