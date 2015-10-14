@@ -4,6 +4,7 @@ import ViewportDescriptor from './descriptors/ViewportDescriptor';
 import SceneDescriptor from './descriptors/Object/SceneDescriptor';
 
 import Object3DDescriptor from './descriptors/Object/Object3DDescriptor';
+import GroupDescriptor from './descriptors/Object/GroupDescriptor';
 
 import OrthographicCameraDescriptor from './descriptors/Object/Camera/OrthographicCameraDescriptor';
 import PerspectiveCameraDescriptor from './descriptors/Object/Camera/PerspectiveCameraDescriptor';
@@ -14,6 +15,7 @@ import PointsDescriptor from './descriptors/Object/PointsDescriptor';
 
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
+import PointLightDescriptor from './descriptors/Light/PointLightDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
@@ -78,6 +80,7 @@ class ElementDescriptorContainer {
       scene: new SceneDescriptor(react3RendererInstance),
 
       object3D: new Object3DDescriptor(react3RendererInstance),
+      group: new GroupDescriptor(react3RendererInstance),
 
       orthographicCamera: new OrthographicCameraDescriptor(react3RendererInstance),
       perspectiveCamera: new PerspectiveCameraDescriptor(react3RendererInstance),
@@ -127,6 +130,7 @@ class ElementDescriptorContainer {
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
+      pointLight: new PointLightDescriptor(react3RendererInstance),
 
       resources: new ResourcesDescriptor(react3RendererInstance),
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),

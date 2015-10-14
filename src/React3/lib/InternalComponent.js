@@ -9,6 +9,8 @@ import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 
 const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
+import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
+
 function processChildContext(context) {
   // if (process.env.NODE_ENV !== 'production') {
   //   // // Pass down our tag name to child components for validation purposes
@@ -411,7 +413,7 @@ class InternalComponent {
           this._unmountChild(prevChild);
         }
 
-        if(wantRemount) {
+        if (wantRemount) {
           // The remount can be triggered by unmountChild as well (see extrude geometry)
           continue;
         }
@@ -458,7 +460,14 @@ class InternalComponent {
   removeChild(child) {
     this.threeElementDescriptor.removeChild(this._threeObject, child._threeObject);
 
-    child.threeElementDescriptor.removedFromParent(child._threeObject);
+    if (child instanceof InternalComponent) {
+      child.threeElementDescriptor.removedFromParent(child._threeObject);
+    } else if (child instanceof React3CompositeComponentWrapper) {
+      debugger;
+      child._threeObject.userData.react3internalComponent.threeElementDescriptor.removedFromParent(child._threeObject);
+    } else {
+      invariant(false, 'Cannot remove child because it is not a known component type');
+    }
 
     const childrenMarkup = this._markup.userData.childrenMarkup;
 
