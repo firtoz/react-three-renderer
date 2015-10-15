@@ -11,6 +11,7 @@ import PerspectiveCameraDescriptor from './descriptors/Object/Camera/Perspective
 import CubeCameraDescriptor from './descriptors/Object/Camera/CubeCameraDescriptor';
 
 import MeshDescriptor from './descriptors/Object/MeshDescriptor';
+import LineDescriptor from './descriptors/Object/LineDescriptor';
 import PointsDescriptor from './descriptors/Object/PointsDescriptor';
 
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
@@ -19,6 +20,7 @@ import PointLightDescriptor from './descriptors/Light/PointLightDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
+import ShapeGeometryResourceDescriptor from './descriptors/Resource/ShapeGeometryResourceDescriptor';
 import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDescriptor';
 import ShapeResourceDescriptor from './descriptors/Resource/ShapeResourceDescriptor';
 
@@ -88,6 +90,7 @@ class ElementDescriptorContainer {
       cubeCamera: new CubeCameraDescriptor(react3RendererInstance),
 
       mesh: new MeshDescriptor(react3RendererInstance),
+      line: new LineDescriptor(react3RendererInstance),
       points: new PointsDescriptor(react3RendererInstance),
 
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3RendererInstance),
@@ -136,6 +139,7 @@ class ElementDescriptorContainer {
       resources: new ResourcesDescriptor(react3RendererInstance),
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),
       geometryResource: new GeometryResourceDescriptor(react3RendererInstance),
+      shapeGeometryResource: new ShapeGeometryResourceDescriptor(react3RendererInstance),
       textureResource: new TextureResourceDescriptor(react3RendererInstance),
       shapeResource: new ShapeResourceDescriptor(react3RendererInstance),
 
