@@ -24,7 +24,9 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
   }
 
   setParent(geometry, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Mesh || parentObject3D instanceof THREE.Points, 'Parent is not a mesh');
+    invariant(parentObject3D instanceof THREE.Mesh
+      || parentObject3D instanceof THREE.Points
+      || parentObject3D instanceof THREE.Line, 'Parent is not a mesh');
     invariant(parentObject3D.geometry === undefined, 'Parent already has a geometry');
 
     super.setParent(geometry, parentObject3D);

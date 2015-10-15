@@ -23,7 +23,6 @@ class ShapeResourceDescriptor extends ResourceDescriptorBase {
     super.setParent(threeObject, parentObject3D);
   }
 
-
   applyToSlot(threeObject, parentObject, newResource) {
     threeObject.userData.events.emit('resource.set', newResource);
   }
