@@ -74,6 +74,18 @@ class PathDescriptorBase extends THREEElementDescriptor {
 
     return invalid;
   };
+
+  highlight(threeObject) {
+    const parentObject = threeObject.userData.parentMarkup.threeObject;
+
+    parentObject.userData._descriptor.highlight(parentObject);
+  }
+
+  getBoundingBoxes(threeObject) {
+    const parentObject = threeObject.userData.parentMarkup.threeObject;
+
+    return parentObject.userData._descriptor.getBoundingBoxes(parentObject);
+  }
 }
 
 export default PathDescriptorBase;

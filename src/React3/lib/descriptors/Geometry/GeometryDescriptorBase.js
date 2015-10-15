@@ -76,6 +76,16 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
     });
   }
 
+  getBoundingBoxes(threeObject) {
+    const ownerMesh = threeObject.userData.parentMarkup.threeObject;
+
+    const boundingBox = new THREE.Box3();
+
+    boundingBox.setFromObject(ownerMesh);
+
+    return [boundingBox];
+  }
+
   hideHighlight(threeObject) {
     threeObject.userData.events.emit('hideHighlight');
   }
