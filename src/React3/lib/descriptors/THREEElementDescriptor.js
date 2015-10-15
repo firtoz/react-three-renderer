@@ -193,11 +193,6 @@ class THREEElementDescriptor {
   }
 
   unmount(threeObject) {
-    if (!threeObject) {
-      // it was never mounted anyway
-      return;
-    }
-
     const markup = threeObject.userData.markup;
 
     if (markup._rootInstance) {
