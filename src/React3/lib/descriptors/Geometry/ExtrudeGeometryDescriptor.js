@@ -5,7 +5,6 @@ import ShapeResourceReference from '../../Resources/ShapeResourceReference';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
 
 class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -13,7 +12,15 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
 
     this.hasProp('shapes', {
       type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Shape)),
-      update: this.triggerRemount,
+      updateInitial: true,
+      update: (threeObject, shapes) => {
+        threeObject.userData._shapesFromProps = shapes || [];
+
+        // if the root instance exists, then it can be refreshed
+        if (threeObject.userData._rootInstance) {
+          this._refreshGeometry(threeObject);
+        }
+      },
       default: [],
     });
 
@@ -31,55 +38,27 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.any,
-        update: this.triggerRemount,
+        update: (threeObject, value) => {
+          if (value === undefined) {
+            delete threeObject.userData._options[propName];
+          } else {
+            threeObject.userData._options[propName] = value;
+          }
+
+          this._refreshGeometry(threeObject);
+        },
         default: undefined,
       });
     });
   }
 
-  construct(props) {
-    let shapes;
-
-    if (props.hasOwnProperty('shapes')) {
-      shapes = props.shapes;
-    } else {
-      shapes = [];
-    }
-
-    const options = {};
-
-    [
-      'amount',
-      'bevelThickness',
-      'bevelSize',
-      'bevelSegments',
-      'bevelEnabled',
-      'curveSegments',
-      'steps',
-      'extrudePath',
-      'UVGenerator',
-      'frames',
-    ].forEach(propName => {
-      if (props.hasOwnProperty(propName)) {
-        options[propName] = props[propName];
-      }
-    });
-
-    return new THREE.BufferGeometry()
-      .fromGeometry(new THREE.ExtrudeGeometry(shapes, options));
+  construct() {
+    return new THREE.BufferGeometry();
   }
 
   applyInitialProps(threeObject, props) {
     super.applyInitialProps(threeObject, props);
 
-    let shapes;
-
-    if (props.hasOwnProperty('shapes')) {
-      shapes = props.shapes;
-    } else {
-      shapes = [];
-    }
-
     const options = {};
 
     [
@@ -99,9 +78,11 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
       }
     });
 
+    threeObject.userData._shapeCache = [];
     threeObject.userData._options = options;
     threeObject.userData._resourceListenerCleanupFunctions = [];
-    threeObject.userData._shapesFromProps = shapes;
+
+    this._refreshGeometry(threeObject);
   }
 
   _onShapeResourceUpdate(threeObject, shapeIndex, shape) {
@@ -111,7 +92,8 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
   }
 
   _refreshGeometry(threeObject) {
-    const shapes = threeObject.userData._shapeCache.filter(shape => !!shape);
+    const shapes = threeObject.userData._shapeCache.filter(shape => !!shape)
+      .concat(threeObject.userData._shapesFromProps);
 
     threeObject.fromGeometry(new THREE.ExtrudeGeometry(shapes, threeObject.userData._options));
   }
@@ -126,7 +108,7 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
       invariant(children.filter(this._invalidChild).length === 0, false);
     }
 
-    const shapeCache = threeObject.userData._shapesFromProps.concat();
+    const shapeCache = [];
 
     children.forEach(child => {
       if (child instanceof ShapeResourceReference) {
@@ -161,15 +143,17 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
     this._refreshGeometry(threeObject);
   }
 
-  addChild(threeObject, child, mountIndex) {
-    // new shape was added?
+  addChild(threeObject) {
+    // new shape was added
     // TODO optimize
+
     this.triggerRemount(threeObject);
   }
 
-  removeChild(threeObject, child) {
-    // new shape was added?
+  removeChild(threeObject) {
+    // shape was removed
     // TODO optimize
+
     this.triggerRemount(threeObject);
   }
 

@@ -19,11 +19,7 @@ class React3DInstance {
   constructor(props, rendererInstance:React3Renderer) {
     const {
       mainCamera,
-      canvas,
-      width,
-      height,
       onAnimate,
-      antialias,
       onRecreateCanvas,
       } = props;
 
@@ -63,6 +59,7 @@ class React3DInstance {
 
     this._renderRequest = requestAnimationFrame(this._render);
 
+    this.uuid = THREE.Math.generateUUID();
     this.userData = {};
   }
 
@@ -474,7 +471,7 @@ class React3DInstance {
   updateClearColor(clearColor) {
     this._parameters.clearColor = clearColor;
 
-    if(!this._renderer) {
+    if (!this._renderer) {
       return;
     }
 
@@ -673,15 +670,7 @@ class React3DInstance {
 
   mountedIntoRoot() {
     this._mounted = true;
-    this.objectMounted(this._scene);
-
-    this._viewports.forEach(viewport => {
-      this.objectMounted(viewport);
-    });
-
-    this._resourceContainers.forEach(resourceContainer => {
-      this.objectMounted(resourceContainer);
-    });
+    this.objectMounted(this);
   }
 }
 

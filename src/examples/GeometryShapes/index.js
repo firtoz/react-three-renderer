@@ -313,10 +313,12 @@ class Geometries extends ExampleBase {
                 amount={0.5}
               >
                 <shapeResource
-                  resourceId="heartShape"
+                  resourceId="smileyShape"
                 />
               </extrudeGeometry>
-              <meshBasicMaterial/>
+              <meshBasicMaterial
+                // wireframe
+              />
             </mesh>
           </group>
 
