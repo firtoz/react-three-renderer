@@ -87,6 +87,7 @@ class Geometries extends ExampleBase {
         antialias
         pixelRatio={window.devicePixelRatio}
         mainCamera="mainCamera"
+        clearColor={0xffffff}
         // onAnimate={this._onAnimate}
       >
         <scene>
@@ -99,12 +100,12 @@ class Geometries extends ExampleBase {
             far={1000}
 
             position={this.cameraPosition}
-          />
-
-          <pointLight
-            color={0xffffff}
-            intensity={0.8}
-          />
+          >
+            <pointLight
+              color={0xffffff}
+              intensity={0.8}
+            />
+          </perspectiveCamera>
 
           <group
             position={this.groupPosition}
@@ -307,19 +308,17 @@ class Geometries extends ExampleBase {
                 </hole>
               </shape>
             </resources>
-
-            <mesh>
-              <extrudeGeometry
-                amount={0.5}
-              >
-                <shapeResource
-                  resourceId="smileyShape"
-                />
-              </extrudeGeometry>
-              <meshBasicMaterial
-                // wireframe
-              />
-            </mesh>
+            <Shape
+              resourceId="smileyShape"
+              x={-200}
+              y={250}
+              z={0}
+              color={0xf000f0}
+              rx={0}
+              ry={0}
+              rz={Math.PI}
+              s={1}
+            />
           </group>
 
         </scene>
