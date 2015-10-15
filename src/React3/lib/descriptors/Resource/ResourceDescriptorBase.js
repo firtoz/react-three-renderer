@@ -1,7 +1,8 @@
 import THREEElementDescriptor from '../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
-import THREE from 'three';
-import ResourceContainer from '../../Resources/ResourceReference';
+import ResourceReference from '../../Resources/ResourceReference';
+
+import React3Renderer from '../../React3Renderer';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -19,7 +20,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   construct(props) {
     invariant(props.hasOwnProperty('resourceId'), 'A resource type must have a property named "resourceId"!');
 
-    return new ResourceContainer(props.resourceId);
+    return new ResourceReference(props.resourceId);
   }
 
   applyInitialProps(threeObject, props) {
@@ -42,7 +43,6 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
       const parentResources = currentParentMarkup.userData._resources;
 
       if (parentResources) {
-
         const resourceId = threeObject.resourceId;
         const resourceInParent = parentResources.resourceMap[resourceId];
 

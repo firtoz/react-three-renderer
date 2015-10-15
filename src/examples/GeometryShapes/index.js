@@ -4,58 +4,11 @@ import THREE from 'three';
 
 import React3 from '../../React3/React3';
 
-import PropTypes from 'react/lib/ReactPropTypes';
-
 import ExampleBase from '../ExampleBase';
 
-class Rect extends React.Component {
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    length: PropTypes.number.isRequired,
-    resourceId: PropTypes.string.isRequired,
-  };
+import Rect from './Rect';
 
-  render() {
-    const {
-      width,
-      length,
-      resourceId,
-      } = this.props;
-
-    return (<shape resourceId={resourceId}>
-      <moveTo
-        x={0}
-        y={0}
-      />
-      <lineTo
-        x={0}
-        y={width}
-      />
-      <lineTo
-        x={length}
-        y={width}
-      />
-      <lineTo
-        x={length}
-        y={width}
-      />
-      <lineTo
-        x={length}
-        y={0}
-      />
-      <lineTo
-        x={0}
-        y={0}
-      />
-    </shape>);
-  }
-}
-
-class Shape extends React.Component {
-  render() {
-    return <group></group>;
-  }
-}
+import Shape from './Shape';
 
 class Geometries extends ExampleBase {
   constructor(props, context) {
@@ -66,7 +19,7 @@ class Geometries extends ExampleBase {
 
     this.textureRepeat = new THREE.Vector2(0.008, 0.008);
 
-    var californiaPts = [];
+    const californiaPts = [];
 
     californiaPts.push(new THREE.Vector2(610, 320));
     californiaPts.push(new THREE.Vector2(450, 300));
@@ -91,18 +44,18 @@ class Geometries extends ExampleBase {
     californiaPts.push(new THREE.Vector2(600, 370));
     californiaPts.push(new THREE.Vector2(610, 320));
 
-    for (var i = 0; i < californiaPts.length; i++) californiaPts[i].multiplyScalar(0.25);
+    for (let i = 0; i < californiaPts.length; i++) californiaPts[i].multiplyScalar(0.25);
 
     this.californiaPts = californiaPts;
-    //this.state = {
-    //  ...this.state,
-    //  timer: Date.now() * 0.0001,
-    //};
+    // this.state = {
+    //   ...this.state,
+    //   timer: Date.now() * 0.0001,
+    // };
   }
 
-  //_onAnimate = () => {
-  //  this._onAnimateInternal();
-  //};
+  // _onAnimate = () => {
+  //   this._onAnimateInternal();
+  // };
 
   _onAnimateInternal() {
     const timer = Date.now() * 0.0001;
@@ -116,7 +69,7 @@ class Geometries extends ExampleBase {
     const {
       width,
       height,
-      timer,
+      // timer,
       } = this.state;
 
     const x = 0;
@@ -260,7 +213,7 @@ class Geometries extends ExampleBase {
                   y={10}
                   radius={40}
                   startAngle={0}
-                  endAngle={Math.PI*2}
+                  endAngle={Math.PI * 2}
                   clockwise={false}
                 />
                 <hole>
@@ -273,8 +226,8 @@ class Geometries extends ExampleBase {
                     y={10}
                     radius={10}
                     startAngle={0}
-                    endAngle={Math.PI*2}
-                    clockwise={true}
+                    endAngle={Math.PI * 2}
+                    clockwise
                   />
                 </hole>
               </shape>
@@ -288,7 +241,7 @@ class Geometries extends ExampleBase {
                   y={40}
                   radius={40}
                   startAngle={0}
-                  endAngle={Math.PI*2}
+                  endAngle={Math.PI * 2}
                   clockwise={false}
                 />
                 <hole key="eye1">
@@ -302,8 +255,8 @@ class Geometries extends ExampleBase {
                     xRadius={10}
                     yRadius={10}
                     startAngle={0}
-                    endAngle={Math.PI*2}
-                    clockwise={true}
+                    endAngle={Math.PI * 2}
+                    clockwise
                   />
                 </hole>
                 <hole key="eye2">
@@ -316,8 +269,8 @@ class Geometries extends ExampleBase {
                     y={20}
                     radius={10}
                     startAngle={0}
-                    endAngle={Math.PI*2}
-                    clockwise={true}
+                    endAngle={Math.PI * 2}
+                    clockwise
                   />
                 </hole>
                 <hole key="mouth">
@@ -354,27 +307,19 @@ class Geometries extends ExampleBase {
                 </hole>
               </shape>
             </resources>
+
+            <mesh>
+              <extrudeGeometry
+                amount={0.5}
+              >
+                <shapeResource
+                  resourceId="heartShape"
+                />
+              </extrudeGeometry>
+              <meshBasicMaterial/>
+            </mesh>
           </group>
 
-          <mesh>
-            <extrudeGeometry>
-              <shape>
-                <moveTo
-                  x={80}
-                  y={20}
-                />
-                <lineTo
-                  x={40}
-                  y={80}
-                />
-                <lineTo
-                  x={120}
-                  y={80}
-                />
-              </shape>
-            </extrudeGeometry>
-            <meshBasicMaterial/>
-          </mesh>
         </scene>
       </React3>
     </div>);

@@ -28,6 +28,8 @@ class ResourcesDescriptor extends THREEElementDescriptor {
     children.forEach(child => {
       const resourceId = child.userData._resourceId;
 
+      invariant(resourceId, 'Resource container can only hold resources');
+
       threeObject.resourceIds.push(resourceId);
 
       threeObject.resourceMap[resourceId] = child;
