@@ -20,6 +20,7 @@ import PointLightDescriptor from './descriptors/Light/PointLightDescriptor';
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
 import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDescriptor';
+import ShapeResourceDescriptor from './descriptors/Resource/ShapeResourceDescriptor';
 
 import GeometryDescriptor from './descriptors/Geometry/GeometryDescriptor';
 import BoxGeometryDescriptor from './descriptors/Geometry/BoxGeometryDescriptor';
@@ -136,6 +137,7 @@ class ElementDescriptorContainer {
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),
       geometryResource: new GeometryResourceDescriptor(react3RendererInstance),
       textureResource: new TextureResourceDescriptor(react3RendererInstance),
+      shapeResource: new ShapeResourceDescriptor(react3RendererInstance),
 
       uniforms: new UniformsDescriptor(react3RendererInstance),
       uniform: new UniformDescriptor(react3RendererInstance),
