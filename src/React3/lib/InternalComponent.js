@@ -324,7 +324,9 @@ class InternalComponent {
    */
   unmountComponent() {
     this.unmountChildren();
-    this.threeElementDescriptor.unmount(this._threeObject);
+    if (this._threeObject !== null) {
+      this.threeElementDescriptor.unmount(this._threeObject);
+    }
 
     this._rootNodeID = null;
     if (this._nodeWithLegacyProperties) {

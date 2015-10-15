@@ -192,7 +192,7 @@ class THREEElementDescriptor {
     }
   }
 
-  unmount(threeObject) { // eslint-disable-line no-unused-vars
+  unmount(threeObject) {
     const markup = threeObject.userData.markup;
 
     if (markup._rootInstance) {
