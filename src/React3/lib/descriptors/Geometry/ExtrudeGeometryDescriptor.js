@@ -24,6 +24,15 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
       default: [],
     });
 
+    this.hasProp('settings', {
+      type: PropTypes.any,
+      update(threeObject, settings) {
+        threeObject.userData._settings = settings;
+      },
+      updateInitial: true,
+      default: undefined,
+    });
+
     [
       'amount',
       'bevelThickness',
@@ -95,7 +104,10 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
     const shapes = threeObject.userData._shapeCache.filter(shape => !!shape)
       .concat(threeObject.userData._shapesFromProps);
 
-    threeObject.fromGeometry(new THREE.ExtrudeGeometry(shapes, threeObject.userData._options));
+    threeObject.fromGeometry(new THREE.ExtrudeGeometry(shapes, {
+      ...threeObject.userData._options,
+      ...threeObject.userData._settings,
+    }));
   }
 
   addChildren(threeObject, children) {
