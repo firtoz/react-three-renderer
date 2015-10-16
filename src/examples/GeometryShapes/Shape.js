@@ -24,22 +24,12 @@ class Shape extends React.Component {
     s: PropTypes.number.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
-
+  render() {
     const {
       rx,
       ry,
       rz,
       s,
-      } = this.props;
-
-    this.rotation = new THREE.Euler(rx, ry, rz);
-    this.scale = new THREE.Vector3(s, s, s);
-  }
-
-  render() {
-    const {
       resourceId,
       color,
       x,
@@ -47,12 +37,15 @@ class Shape extends React.Component {
       z,
       } = this.props;
 
+    const rotation = new THREE.Euler(rx, ry, rz);
+    const scale = new THREE.Vector3(s, s, s);
+
     return (<group>
       <mesh
         // flat shape with texture
         position={new THREE.Vector3(x, y, z - 175)}
-        rotation={this.rotation}
-        scale={this.scale}
+        rotation={rotation}
+        scale={scale}
       >
         <shapeGeometryResource
           resourceId={resourceId}
@@ -65,8 +58,8 @@ class Shape extends React.Component {
       <mesh
         // flat shape
         position={new THREE.Vector3(x, y, z - 125)}
-        rotation={this.rotation}
-        scale={this.scale}
+        rotation={rotation}
+        scale={scale}
       >
         <shapeGeometryResource
           resourceId={resourceId}
@@ -80,8 +73,8 @@ class Shape extends React.Component {
       <mesh
         // 3d shape
         position={new THREE.Vector3(x, y, z - 75)}
-        rotation={this.rotation}
-        scale={this.scale}
+        rotation={rotation}
+        scale={scale}
       >
         <extrudeGeometry
           settings={extrudeSettings}
@@ -97,7 +90,7 @@ class Shape extends React.Component {
       <line
         // solid line
         position={new THREE.Vector3(x, y, z - 25)}
-        rotation={this.rotation}
+        rotation={rotation}
       >
         <shapeGeometryResource
           resourceId={resourceId}
@@ -111,7 +104,7 @@ class Shape extends React.Component {
       <points
         // vertices from real points
         position={new THREE.Vector3(x, y, z + 25)}
-        rotation={this.rotation}
+        rotation={rotation}
       >
         <shapeGeometryResource
           resourceId={resourceId}
@@ -126,7 +119,7 @@ class Shape extends React.Component {
       <line
         // line from equidistance sampled points
         position={new THREE.Vector3(x, y, z + 75)}
-        rotation={this.rotation}
+        rotation={rotation}
       >
         <shapeGeometryResource
           resourceId={resourceId}
@@ -142,7 +135,7 @@ class Shape extends React.Component {
       <points
         // equidistance sampled points
         position={new THREE.Vector3(x, y, z + 125)}
-        rotation={this.rotation}
+        rotation={rotation}
       >
         <shapeGeometryResource
           resourceId={resourceId}
