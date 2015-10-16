@@ -215,15 +215,20 @@ class THREEElementDescriptor {
     if (this.propDeletes[propKey]) {
       this.propDeletes[propKey](threeObject);
     } else {
-      invariant(false, `Cannot delete property %s from ${this.constructor.name}`, propKey);
+      warning(false, `Cannot delete property %s from ${this.constructor.name}`, propKey);
     }
   }
 
   updateProperty(threeObject, propKey, nextProp) {
-    if (!this._initialOnly[propKey] && this.propUpdates[propKey]) {
-      this.propUpdates[propKey](threeObject, nextProp, true);
+    if (!this._initialOnly[propKey]) {
+      if (this.propUpdates[propKey]) {
+        this.propUpdates[propKey](threeObject, nextProp, true);
+      } else {
+        warning(false, `updating prop ${propKey} ( ${nextProp} ) for ${this.constructor.name}`);
+        this.triggerRemount(threeObject);
+      }
     } else {
-      invariant(false, `updating prop ${propKey} ( ${nextProp} ) for ${this.constructor.name}`);
+      this.triggerRemount(threeObject);
     }
   }
 
