@@ -10,7 +10,7 @@ import Rect from './Rect';
 
 import Shape from './Shape';
 
-class Geometries extends ExampleBase {
+class GeometryShapes extends ExampleBase {
   constructor(props, context) {
     super(props, context);
 
@@ -47,6 +47,119 @@ class Geometries extends ExampleBase {
     for (let i = 0; i < californiaPts.length; i++) californiaPts[i].multiplyScalar(0.25);
 
     this.californiaPts = californiaPts;
+
+    this.targetRotationOnMouseDown = 0;
+
+    this.mouseX = 0;
+    this.mouseXOnMouseDown = 0;
+    this.targetRotation = 0;
+
+    this.state = {
+      ...this.state,
+      groupRotation: new THREE.Euler(0, 0, 0),
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this._onDocumentMouseDown, false);
+    document.addEventListener('touchstart', this._onDocumentTouchStart, false);
+    document.addEventListener('touchmove', this._onDocumentTouchMove, false);
+  }
+
+  componentWWillUnmount() {
+    document.removeEventListener('mousedown', this._onDocumentMouseDown, false);
+    document.removeEventListener('touchstart', this._onDocumentTouchStart, false);
+    document.removeEventListener('touchmove', this._onDocumentTouchMove, false);
+    document.removeEventListener('touchmove', this._onDocumentMouseMove, false);
+    document.removeEventListener('touchmove', this._onDocumentMouseUp, false);
+    document.removeEventListener('touchmove', this._onDocumentMouseOut, false);
+  }
+
+  _onDocumentMouseDown = (event) => {
+    event.preventDefault();
+
+    document.addEventListener('mousemove', this._onDocumentMouseMove, false);
+    document.addEventListener('mouseup', this._onDocumentMouseUp, false);
+    document.addEventListener('mouseout', this._onDocumentMouseOut, false);
+
+    const {
+      width,
+      } = this.state;
+
+    const windowHalfX = width / 2;
+
+    this.mouseXOnMouseDown = event.clientX - windowHalfX;
+    this.targetRotationOnMouseDown = this.targetRotation;
+  };
+
+  _onDocumentMouseMove = (event) => {
+    const {
+      width,
+      } = this.state;
+
+    const windowHalfX = width / 2;
+
+    this.mouseX = event.clientX - windowHalfX;
+    this.targetRotation = this.targetRotationOnMouseDown +
+      ( this.mouseX - this.mouseXOnMouseDown ) * 0.02;
+  };
+
+  _onDocumentMouseUp = () => {
+    document.removeEventListener('mousemove', this._onDocumentMouseMove, false);
+    document.removeEventListener('mouseup', this._onDocumentMouseUp, false);
+    document.removeEventListener('mouseout', this._onDocumentMouseOut, false);
+  };
+
+  _onDocumentMouseOut = () => {
+    document.removeEventListener('mousemove', this._onDocumentMouseMove, false);
+    document.removeEventListener('mouseup', this._onDocumentMouseUp, false);
+    document.removeEventListener('mouseout', this._onDocumentMouseOut, false);
+  };
+
+  _onDocumentTouchStart = (event) => {
+    if (event.touches.length === 1) {
+      event.preventDefault();
+
+      const {
+        width,
+        } = this.state;
+
+      const windowHalfX = width / 2;
+
+      this.mouseXOnMouseDown = event.touches[0].pageX - windowHalfX;
+      this.targetRotationOnMouseDown = this.targetRotation;
+    }
+  };
+
+  _onDocumentTouchMove = (event) => {
+    if (event.touches.length === 1) {
+      event.preventDefault();
+
+      const {
+        width,
+        } = this.state;
+
+      const windowHalfX = width / 2;
+
+      this.mouseX = event.touches[0].pageX - windowHalfX;
+      this.targetRotation = this.targetRotationOnMouseDown +
+        ( this.mouseX - this.mouseXOnMouseDown ) * 0.05;
+    }
+  };
+
+  _onAnimate = () => {
+    this._onAnimateInternal();
+  };
+
+  _onAnimateInternal() {
+    const groupRotationY = this.state.groupRotation.y;
+
+    if (Math.abs(groupRotationY - this.targetRotation) > 0.05) {
+      this.setState({
+        groupRotation: new THREE.Euler(0, groupRotationY +
+          ( this.targetRotation - groupRotationY ) * 0.05, 0),
+      });
+    }
   }
 
   render() {
@@ -71,6 +184,7 @@ class Geometries extends ExampleBase {
         pixelRatio={window.devicePixelRatio}
         mainCamera="mainCamera"
         clearColor={0xf0f0f0}
+        onAnimate={this._onAnimate}
       >
         <scene>
           <perspectiveCamera
@@ -90,6 +204,7 @@ class Geometries extends ExampleBase {
 
           <group
             position={this.groupPosition}
+            rotation={this.state.groupRotation}
           >
             <resources>
               <texture
@@ -584,4 +699,4 @@ class Geometries extends ExampleBase {
   }
 }
 
-export default Geometries;
+export default GeometryShapes;
