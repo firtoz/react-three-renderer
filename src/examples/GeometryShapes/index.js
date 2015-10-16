@@ -87,8 +87,7 @@ class Geometries extends ExampleBase {
         antialias
         pixelRatio={window.devicePixelRatio}
         mainCamera="mainCamera"
-        clearColor={0xffffff}
-        // onAnimate={this._onAnimate}
+        clearColor={0xf0f0f0}
       >
         <scene>
           <perspectiveCamera
@@ -126,10 +125,10 @@ class Geometries extends ExampleBase {
                 />
               </meshPhongMaterial>
               <shape
-                resourceId="californiaShape"
+                resourceId="california"
                 points={this.californiaPts}
               />
-              <shape resourceId="triangleShape">
+              <shape resourceId="triangle">
                 <moveTo
                   x={80}
                   y={20}
@@ -147,7 +146,7 @@ class Geometries extends ExampleBase {
                   y={20}
                 />
               </shape>
-              <shape resourceId="heartShape">
+              <shape resourceId="heart">
                 <moveTo
                   x={x + 25}
                   y={y + 25}
@@ -202,16 +201,132 @@ class Geometries extends ExampleBase {
                 />
               </shape>
               <Rect
-                resourceId="squareShape"
+                resourceId="square"
                 width={sqLength}
                 length={sqLength}
               />
               <Rect
-                resourceId="rectShape"
+                resourceId="rect"
                 width={rectWidth}
                 length={rectLength}
               />
-              <shape resourceId="arcShape">
+              {(function roundedRect(rectX, rectY,
+                                     rectWidth, rectHeight,
+                                     radius) {
+                return (<shape resourceId="roundedRect">
+                  <moveTo
+                    x={rectX}
+                    y={rectY + radius}
+                  />
+                  <lineTo
+                    x={rectX}
+                    y={rectY + rectHeight - radius}
+                  />
+                  <quadraticCurveTo
+                    cpX={rectX}
+                    cpY={rectY + rectHeight}
+                    x={rectX + radius}
+                    y={rectY + rectHeight}
+                  />
+                  <lineTo
+                    x={rectX + rectWidth - radius}
+                    y={rectY + rectHeight}
+                  />
+                  <quadraticCurveTo
+                    cpX={rectX + rectWidth}
+                    cpY={rectY + rectHeight}
+                    x={rectX + rectWidth}
+                    y={rectY + rectHeight - radius}
+                  />
+                  <lineTo
+                    x={rectX + rectWidth}
+                    y={rectY + radius}
+                  />
+                  <quadraticCurveTo
+                    cpX={rectX + rectWidth}
+                    cpY={rectY}
+                    x={rectX + rectWidth - radius}
+                    y={rectY}
+                  />
+                  <lineTo
+                    x={rectX + radius}
+                    y={rectY}
+                  />
+                  <quadraticCurveTo
+                    cpX={rectX}
+                    cpY={rectY}
+                    x={rectX}
+                    y={rectY + radius}
+                  />
+                </shape>);
+              })(0, 0, 50, 50, 20)}
+              <shape
+                resourceId="track"
+              >
+                <moveTo
+                  x={40}
+                  y={40}
+                />
+                <lineTo
+                  x={40}
+                  y={160}
+                />
+                <absArc
+                  x={60}
+                  y={160}
+                  radius={20}
+                  startAngle={Math.PI}
+                  endAngle={0}
+                  clockwise
+                />
+                <lineTo
+                  x={80}
+                  y={40}
+                />
+                <absArc
+                  x={60}
+                  y={40}
+                  radius={20}
+                  startAngle={2 * Math.PI}
+                  endAngle={Math.PI}
+                  clockwise
+                />
+              </shape>
+              {(function circleShape() {
+                const circleRadius = 40;
+
+                return (<shape resourceId="circle">
+                  <moveTo
+                    x={0}
+                    y={circleRadius}
+                  />
+                  <quadraticCurveTo
+                    cpX={circleRadius}
+                    cpY={circleRadius}
+                    x={circleRadius}
+                    y={0}
+                  />
+                  <quadraticCurveTo
+                    cpX={circleRadius}
+                    cpY={-circleRadius}
+                    x={0}
+                    y={-circleRadius}
+                  />
+                  <quadraticCurveTo
+                    cpX={-circleRadius}
+                    cpY={-circleRadius}
+                    x={-circleRadius}
+                    y={0}
+                  />
+                  <quadraticCurveTo
+                    cpX={-circleRadius}
+                    cpY={circleRadius}
+                    x={0}
+                    y={circleRadius}
+                  />
+                </shape>);
+              })()}
+              <shape resourceId="arc">
                 <moveTo
                   x={50}
                   y={10}
@@ -239,7 +354,7 @@ class Geometries extends ExampleBase {
                   />
                 </hole>
               </shape>
-              <shape resourceId="smileyShape">
+              <shape resourceId="smiley">
                 <moveTo
                   x={80}
                   y={40}
@@ -316,7 +431,62 @@ class Geometries extends ExampleBase {
               </shape>
             </resources>
             <Shape
-              resourceId="smileyShape"
+              resourceId="california"
+              x={-300}
+              y={-100}
+              z={0}
+              color={0xf08000}
+              rx={0}
+              ry={0}
+              rz={0}
+              s={1}
+            />
+            <Shape
+              resourceId="triangle"
+              x={-180}
+              y={0}
+              z={0}
+              color={0x8080f0}
+              rx={0}
+              ry={0}
+              rz={0}
+              s={1}
+            />
+            <Shape
+              resourceId="roundedRect"
+              x={-150}
+              y={150}
+              z={0}
+              color={0x008000}
+              rx={0}
+              ry={0}
+              rz={0}
+              s={1}
+            />
+            <Shape
+              resourceId="track"
+              x={200}
+              y={-100}
+              z={0}
+              color={0x008080}
+              rx={0}
+              ry={0}
+              rz={0}
+              s={1}
+            />
+            <Shape
+              resourceId="circle"
+              color={0x00f000}
+              x={120}
+              y={250}
+              z={0}
+              rx={0}
+              ry={0}
+              rz={0}
+              s={1}
+            />
+            <Shape
+              resourceId="smiley"
               x={-200}
               y={250}
               z={0}
