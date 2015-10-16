@@ -49,6 +49,7 @@ import QuadraticCurveToDescriptor from './descriptors/Geometry/Shapes/QuadraticC
 import AbsArcDescriptor from './descriptors/Geometry/Shapes/AbsArcDescriptor';
 import AbsEllipseDescriptor from './descriptors/Geometry/Shapes/AbsEllipseDescriptor';
 import HoleDescriptor from './descriptors/Geometry/Shapes/HoleDescriptor';
+import SplineThruDescriptor from './descriptors/Geometry/Shapes/SplineThruDescriptor';
 
 import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
 import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
@@ -131,6 +132,7 @@ class ElementDescriptorContainer {
       absArc: new AbsArcDescriptor(react3RendererInstance),
       absEllipse: new AbsEllipseDescriptor(react3RendererInstance),
       hole: new HoleDescriptor(react3RendererInstance),
+      splineThru: new SplineThruDescriptor(react3RendererInstance),
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),

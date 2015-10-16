@@ -211,7 +211,7 @@ class Geometries extends ExampleBase {
                 length={rectLength}
               />
               {(function roundedRect(rectX, rectY,
-                                     rectWidth, rectHeight,
+                                     roundedRectWidth, roundedRectHeight,
                                      radius) {
                 return (<shape resourceId="roundedRect">
                   <moveTo
@@ -220,32 +220,32 @@ class Geometries extends ExampleBase {
                   />
                   <lineTo
                     x={rectX}
-                    y={rectY + rectHeight - radius}
+                    y={rectY + roundedRectHeight - radius}
                   />
                   <quadraticCurveTo
                     cpX={rectX}
-                    cpY={rectY + rectHeight}
+                    cpY={rectY + roundedRectHeight}
                     x={rectX + radius}
-                    y={rectY + rectHeight}
+                    y={rectY + roundedRectHeight}
                   />
                   <lineTo
-                    x={rectX + rectWidth - radius}
-                    y={rectY + rectHeight}
+                    x={rectX + roundedRectWidth - radius}
+                    y={rectY + roundedRectHeight}
                   />
                   <quadraticCurveTo
-                    cpX={rectX + rectWidth}
-                    cpY={rectY + rectHeight}
-                    x={rectX + rectWidth}
-                    y={rectY + rectHeight - radius}
+                    cpX={rectX + roundedRectWidth}
+                    cpY={rectY + roundedRectHeight}
+                    x={rectX + roundedRectWidth}
+                    y={rectY + roundedRectHeight - radius}
                   />
                   <lineTo
-                    x={rectX + rectWidth}
+                    x={rectX + roundedRectWidth}
                     y={rectY + radius}
                   />
                   <quadraticCurveTo
-                    cpX={rectX + rectWidth}
+                    cpX={rectX + roundedRectWidth}
                     cpY={rectY}
-                    x={rectX + rectWidth - radius}
+                    x={rectX + roundedRectWidth - radius}
                     y={rectY}
                   />
                   <lineTo
@@ -354,6 +354,42 @@ class Geometries extends ExampleBase {
                   />
                 </hole>
               </shape>
+              <shape resourceId="fish">
+                <moveTo
+                  x={x}
+                  y={y}
+                />
+                <quadraticCurveTo
+                  cpX={x + 50}
+                  cpY={y - 80}
+                  x={x + 90}
+                  y={y - 10}
+                />
+                <quadraticCurveTo
+                  cpX={x + 100}
+                  cpY={y - 10}
+                  x={x + 115}
+                  y={y - 40}
+                />
+                <quadraticCurveTo
+                  cpX={x + 115}
+                  cpY={y}
+                  x={x + 115}
+                  y={y + 40}
+                />
+                <quadraticCurveTo
+                  cpX={x + 100}
+                  cpY={y + 10}
+                  x={x + 90}
+                  y={y + 10}
+                />
+                <quadraticCurveTo
+                  cpX={x + 50}
+                  cpY={y + 80}
+                  x={x}
+                  y={y}
+                />
+              </shape>
               <shape resourceId="smiley">
                 <moveTo
                   x={80}
@@ -429,6 +465,23 @@ class Geometries extends ExampleBase {
                   />
                 </hole>
               </shape>
+              {(function splineShape() {
+                const splinePoints = [];
+                splinePoints.push(new THREE.Vector2(70, 20));
+                splinePoints.push(new THREE.Vector2(80, 90));
+                splinePoints.push(new THREE.Vector2(-30, 70));
+                splinePoints.push(new THREE.Vector2(0, 0));
+
+                return (<shape resourceId="spline">
+                  <moveTo
+                    x={0}
+                    y={0}
+                  />
+                  <splineThru
+                    points={splinePoints}
+                  />
+                </shape>);
+              })()}
             </resources>
             <Shape
               resourceId="california"
@@ -443,10 +496,10 @@ class Geometries extends ExampleBase {
             />
             <Shape
               resourceId="triangle"
+              color={0x8080f0}
               x={-180}
               y={0}
               z={0}
-              color={0x8080f0}
               rx={0}
               ry={0}
               rz={0}
@@ -475,10 +528,43 @@ class Geometries extends ExampleBase {
               s={1}
             />
             <Shape
+              resourceId="square"
+              color={0x0040f0}
+              x={150}
+              y={100}
+              z={0}
+              rx={0}
+              ry={0}
+              rz={0}
+              s={1}
+            />
+            <Shape
+              resourceId="heart"
+              color={0xf00000}
+              x={60}
+              y={100}
+              z={0}
+              rx={0}
+              ry={0}
+              rz={Math.PI}
+              s={1}
+            />
+            <Shape
               resourceId="circle"
               color={0x00f000}
               x={120}
               y={250}
+              z={0}
+              rx={0}
+              ry={0}
+              rz={0}
+              s={1}
+            />
+            <Shape
+              resourceId="fish"
+              color={0x404040}
+              x={-60}
+              y={200}
               z={0}
               rx={0}
               ry={0}
@@ -494,6 +580,17 @@ class Geometries extends ExampleBase {
               rx={0}
               ry={0}
               rz={Math.PI}
+              s={1}
+            />
+            <Shape
+              resourceId="arc"
+              color={0x804000}
+              x={150}
+              y={0}
+              z={0}
+              rx={0}
+              ry={0}
+              rz={0}
               s={1}
             />
           </group>
