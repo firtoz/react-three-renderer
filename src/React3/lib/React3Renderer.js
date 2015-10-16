@@ -8,6 +8,7 @@ import ReactReconciler from 'react/lib/ReactReconciler';
 import ReactUpdates from 'react/lib/ReactUpdates';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
+import ReactComponent from 'react/lib/ReactComponent';
 import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
@@ -49,7 +50,7 @@ if (process.env.NODE_ENV !== 'production') {
  * @type string
  * @name process.env.NODE_ENV
  */
-class TopLevelWrapper {
+class TopLevelWrapper extends ReactComponent {
   render() {
     return this.props;
   }

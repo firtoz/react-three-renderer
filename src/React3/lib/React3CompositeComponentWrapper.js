@@ -1,10 +1,13 @@
 import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
+import ReactElement from 'react/lib/ReactElement';
+import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 import ReactReconciler from 'react/lib/ReactReconciler';
 import invariant from 'fbjs/lib/invariant';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
 import emptyObject from 'fbjs/lib/emptyObject';
 import warning from 'fbjs/lib/warning';
 import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
+import ReactComponent from 'react/lib/ReactComponent';
 
 class ReactCompositeComponentMixinImpl {
 }
@@ -13,6 +16,13 @@ ReactCompositeComponentMixinImpl.prototype = {
   ...ReactCompositeComponentMixinImpl.prototype,
   ...ReactCompositeComponent.Mixin,
 };
+
+class StatelessComponent extends ReactComponent {
+  render() {
+    const component = ReactInstanceMap.get(this)._currentElement.type;
+    return component(this.props, this.context, this.updater);
+  };
+}
 
 class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   constructor(react3RendererInstance) {
@@ -53,13 +63,51 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const Component = this._currentElement.type;
 
     // Initialize the public class
-    const inst = new Component(publicProps, publicContext, ReactUpdateQueue);
+    let inst;
+    let renderedElement;
+
+    // This is a way to detect if Component is a stateless arrow function
+    // component, which is not newable. It might not be 100% reliable but is
+    // something we can do until we start detecting that Component extends
+    // React.Component. We already assume that typeof Component === 'function'.
+    const canInstantiate = ('prototype' in Component);
+
+    if (canInstantiate) {
+      if (process.env.NODE_ENV !== 'production') {
+        ReactCurrentOwner.current = this;
+        try {
+          inst = new Component(publicProps, publicContext, ReactUpdateQueue);
+        } finally {
+          ReactCurrentOwner.current = null;
+        }
+      } else {
+        inst = new Component(publicProps, publicContext, ReactUpdateQueue);
+      }
+    }
+
+
+    if (!canInstantiate || inst === null || inst === false || ReactElement.isValidElement(inst)) {
+      renderedElement = inst;
+      inst = new StatelessComponent(Component);
+    }
 
     if (process.env.NODE_ENV !== 'production') {
       // This will throw later in _renderValidatedComponent, but add an early
       // warning now to help debugging
-      if (process.env.NODE_ENV !== 'production') {
-        warning(inst.render !== null, '%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render` in your ' + 'component or you may have accidentally tried to render an element ' + 'whose type is a function that isn\'t a React component.', Component.displayName || Component.name || 'Component');
+      if (inst.render === null) {
+        if (process.env.NODE_ENV !== 'production') {
+          warning(false, '%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render`, returned ' + 'null/false from a stateless component, or tried to render an ' + 'element whose type is a function that isn\'t a React component.', Component.displayName || Component.name || 'Component');
+        }
+      } else {
+        // We support ES6 inheriting from React.Component, the module pattern,
+        // and stateless components, but not ES6 classes that don't extend
+        if (process.env.NODE_ENV !== 'production') {
+          const allOK = Component.prototype && Component.prototype.isReactComponent || !canInstantiate || !(inst instanceof Component);
+          if (!allOK) {
+            debugger;
+          }
+          warning(allOK, '%s(...): React component classes must extend React.Component.', Component.displayName || Component.name || 'Component');
+        }
       }
     }
 
@@ -79,13 +127,15 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       // Since plain JS classes are defined without any special initialization
       // logic, we can not catch common errors early. Therefore, we have to
       // catch them here, at initialization time, instead.
-      process.env.NODE_ENV !== 'production' ? warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(!inst.propTypes, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentShouldUpdate !== 'function', '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', this.getName() || 'A component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentDidUnmount !== 'function', '%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', this.getName() || 'A component') : undefined;
-      process.env.NODE_ENV !== 'production' ? warning(typeof inst.componentWillRecieveProps !== 'function', '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component') : undefined;
+      if (process.env.NODE_ENV !== 'production') {
+        warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component');
+        warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', this.getName() || 'a component');
+        warning(!inst.propTypes, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', this.getName() || 'a component');
+        warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component');
+        warning(typeof inst.componentShouldUpdate !== 'function', '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', this.getName() || 'A component');
+        warning(typeof inst.componentDidUnmount !== 'function', '%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', this.getName() || 'A component');
+        warning(typeof inst.componentWillRecieveProps !== 'function', '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component');
+      }
     }
 
     let initialState = inst.state;
@@ -113,7 +163,10 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       }
     }
 
-    const renderedElement = this._renderValidatedComponent();
+    // If not a stateless component, we now render
+    if (renderedElement === undefined) {
+      renderedElement = this._renderValidatedComponent();
+    }
 
     this._renderedComponent = this._instantiateReactComponent(renderedElement);
 
