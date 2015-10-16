@@ -465,7 +465,6 @@ class InternalComponent {
     if (child instanceof InternalComponent) {
       child.threeElementDescriptor.removedFromParent(child._threeObject);
     } else if (child instanceof React3CompositeComponentWrapper) {
-      debugger;
       child._threeObject.userData.react3internalComponent.threeElementDescriptor.removedFromParent(child._threeObject);
     } else {
       invariant(false, 'Cannot remove child because it is not a known component type');
