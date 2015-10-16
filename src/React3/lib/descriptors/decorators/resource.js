@@ -33,6 +33,7 @@ function resource(descriptor) {
             }
           }
         },
+        default: '',
       });
     }
 
