@@ -47,29 +47,12 @@ class Geometries extends ExampleBase {
     for (let i = 0; i < californiaPts.length; i++) californiaPts[i].multiplyScalar(0.25);
 
     this.californiaPts = californiaPts;
-    // this.state = {
-    //   ...this.state,
-    //   timer: Date.now() * 0.0001,
-    // };
-  }
-
-  // _onAnimate = () => {
-  //   this._onAnimateInternal();
-  // };
-
-  _onAnimateInternal() {
-    const timer = Date.now() * 0.0001;
-
-    this.setState({
-      timer,
-    });
   }
 
   render() {
     const {
       width,
       height,
-      // timer,
       } = this.state;
 
     const x = 0;
