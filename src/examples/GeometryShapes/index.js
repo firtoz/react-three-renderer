@@ -91,7 +91,6 @@ class Geometries extends ExampleBase {
         // onAnimate={this._onAnimate}
       >
         <scene>
-
           <perspectiveCamera
             name="mainCamera"
             fov={50}
@@ -118,6 +117,14 @@ class Geometries extends ExampleBase {
                 wrapT={THREE.RepeatWrapping}
                 repeat={this.textureRepeat}
               />
+              <meshPhongMaterial
+                resourceId="phongMaterial"
+                side={THREE.DoubleSide}
+              >
+                <textureResource
+                  resourceId="texture"
+                />
+              </meshPhongMaterial>
               <shape
                 resourceId="californiaShape"
                 points={this.californiaPts}

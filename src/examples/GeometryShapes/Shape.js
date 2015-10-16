@@ -49,6 +49,7 @@ class Shape extends React.Component {
 
     return (<group>
       <mesh
+        // flat shape with texture
         position={new THREE.Vector3(x, y, z - 175)}
         rotation={this.rotation}
         scale={this.scale}
@@ -57,15 +58,12 @@ class Shape extends React.Component {
           resourceId={resourceId}
           type="shape"
         />
-        <meshPhongMaterial
-          side={THREE.DoubleSide}
-        >
-          <textureResource
-            resourceId="texture"
-          />
-        </meshPhongMaterial>
+        <materialResource
+          resourceId="phongMaterial"
+        />
       </mesh>
       <mesh
+        // flat shape
         position={new THREE.Vector3(x, y, z - 125)}
         rotation={this.rotation}
         scale={this.scale}
@@ -80,6 +78,7 @@ class Shape extends React.Component {
         />
       </mesh>
       <mesh
+        // 3d shape
         position={new THREE.Vector3(x, y, z - 75)}
         rotation={this.rotation}
         scale={this.scale}
@@ -96,6 +95,7 @@ class Shape extends React.Component {
         />
       </mesh>
       <line
+        // solid line
         position={new THREE.Vector3(x, y, z - 25)}
         rotation={this.rotation}
       >
@@ -108,19 +108,53 @@ class Shape extends React.Component {
           // wireframe
         />
       </line>
+      <points
+        // vertices from real points
+        position={new THREE.Vector3(x, y, z + 25)}
+        rotation={this.rotation}
+      >
+        <shapeGeometryResource
+          resourceId={resourceId}
+          type="points"
+        />
+        <pointsMaterial
+          color={color}
+          size={4}
+          // wireframe
+        />
+      </points>
       <line
+        // line from equidistance sampled points
         position={new THREE.Vector3(x, y, z + 75)}
         rotation={this.rotation}
       >
         <shapeGeometryResource
           resourceId={resourceId}
           type="spacedPoints"
+          divisions={50}
         />
         <lineBasicMaterial
           color={color}
+          linewidth={3}
           // wireframe
         />
       </line>
+      <points
+        // equidistance sampled points
+        position={new THREE.Vector3(x, y, z + 125)}
+        rotation={this.rotation}
+      >
+        <shapeGeometryResource
+          resourceId={resourceId}
+          type="spacedPoints"
+          divisions={50}
+        />
+        <pointsMaterial
+          color={color}
+          size={4}
+          // wireframe
+        />
+      </points>
     </group>);
   }
 }
