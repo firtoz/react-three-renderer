@@ -21,7 +21,7 @@ class StatelessComponent extends ReactComponent {
   render() {
     const component = ReactInstanceMap.get(this)._currentElement.type;
     return component(this.props, this.context, this.updater);
-  };
+  }
 }
 
 class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
@@ -74,6 +74,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 
     if (canInstantiate) {
       if (process.env.NODE_ENV !== 'production') {
+        // noinspection JSValidateTypes
         ReactCurrentOwner.current = this;
         try {
           inst = new Component(publicProps, publicContext, ReactUpdateQueue);
@@ -103,9 +104,6 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
         // and stateless components, but not ES6 classes that don't extend
         if (process.env.NODE_ENV !== 'production') {
           const allOK = Component.prototype && Component.prototype.isReactComponent || !canInstantiate || !(inst instanceof Component);
-          if (!allOK) {
-            debugger;
-          }
           warning(allOK, '%s(...): React component classes must extend React.Component.', Component.displayName || Component.name || 'Component');
         }
       }
