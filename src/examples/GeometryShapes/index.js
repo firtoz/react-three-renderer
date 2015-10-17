@@ -1,6 +1,7 @@
 import React from 'react';
 
 import THREE from 'three.js';
+import Stats from 'stats.js';
 
 import React3 from '../../React3/React3';
 
@@ -32,6 +33,13 @@ class GeometryShapes extends ExampleBase {
 
   componentDidMount() {
     super.componentDidMount();
+
+    this.stats = new Stats();
+
+    this.stats.domElement.style.position = 'absolute';
+    this.stats.domElement.style.top = '0px';
+
+    this.refs.container.appendChild(this.stats.domElement);
 
     document.addEventListener('mousedown', this._onDocumentMouseDown, false);
     document.addEventListener('touchstart', this._onDocumentTouchStart, false);
@@ -134,6 +142,8 @@ class GeometryShapes extends ExampleBase {
           ( this.targetRotation - groupRotationY ) * 0.05, 0),
       });
     }
+
+    this.stats.update();
   }
 
   render() {
@@ -143,7 +153,16 @@ class GeometryShapes extends ExampleBase {
       groupRotation,
       } = this.state;
 
-    return (<div>
+    return (<div ref="container">
+      <div style={{
+        position: 'absolute',
+        top: '10px',
+        width: '100%',
+        textAlign: 'center',
+      }}>
+        Simple procedurally generated 3D shapes<br/>
+        Drag to spin
+      </div>
       <React3
         width={width}
         height={height}

@@ -157,8 +157,10 @@ class React3Descriptor extends THREEElementDescriptor {
   }
 
   unmount(threeObject) {
-    threeObject.unmount();
+    // call super unmount first so react3instance can clean itself up
     super.unmount(threeObject);
+
+    threeObject.unmount();
   }
 }
 

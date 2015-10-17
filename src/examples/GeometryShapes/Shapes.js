@@ -3,7 +3,7 @@ import Shape from './Shape';
 
 class Shapes extends React.Component {
   shouldComponentUpdate() {
-    return false;
+    return true;
   }
 
   render() {
@@ -112,6 +112,17 @@ class Shapes extends React.Component {
         color={0x804000}
         x={150}
         y={0}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="spline"
+        color={0x808080}
+        x={-50}
+        y={-100}
         z={0}
         rx={0}
         ry={0}
