@@ -11,6 +11,8 @@ import Uniform from '../../Uniform';
 
 const textureLoader = new THREE.TextureLoader();
 
+import React3Renderer from '../../React3Renderer';
+
 @resource
 class TextureDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance:React3Renderer) {
@@ -47,7 +49,7 @@ class TextureDescriptor extends THREEElementDescriptor {
           }
         },
         default: THREE.ClampToEdgeWrapping,
-      })
+      });
     });
 
     this.hasProp('anisotropy', {
