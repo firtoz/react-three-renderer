@@ -9,14 +9,6 @@ function Rect(props) {
     resourceId,
     } = props;
 
-  // console.log('wat');
-  //
-  // this.shouldComponentUpdate = function asdf(){
-  //   console.log('should I update huh?');
-  //
-  //   return PureComponentMixin.shouldComponentUpdate.apply(this, arguments);
-  // };
-
   return (<shape resourceId={resourceId}>
     <moveTo
       x={0}
