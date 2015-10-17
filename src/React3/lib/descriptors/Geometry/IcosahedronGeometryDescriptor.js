@@ -1,4 +1,4 @@
-import THREE from 'three';
+import THREE from 'three.js';
 import PolyhedronGeometryDescriptorBase from './PolyhedronGeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';

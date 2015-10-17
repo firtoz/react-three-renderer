@@ -4,7 +4,7 @@ import HoleAction from '../../../Shapes/HoleAction';
 
 import invariant from 'fbjs/lib/invariant';
 
-import THREE from 'three';
+import THREE from 'three.js';
 
 class HoleDescriptor extends PathDescriptorBase {
   construct() {

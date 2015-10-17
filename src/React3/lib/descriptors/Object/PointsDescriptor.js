@@ -1,4 +1,4 @@
-import THREE from 'three';
+import THREE from 'three.js';
 import MeshDescriptor from './MeshDescriptor';
 
 class PointsDescriptor extends MeshDescriptor {

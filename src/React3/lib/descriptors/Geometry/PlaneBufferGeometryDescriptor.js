@@ -1,4 +1,4 @@
-import THREE from 'three';
+import THREE from 'three.js';
 import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 import invariant from 'fbjs/lib/invariant';
 

@@ -1,5 +1,5 @@
 import ResourceDescriptorBase from './ResourceDescriptorBase';
-import THREE from 'three';
+import THREE from 'three.js';
 
 import invariant from 'fbjs/lib/invariant';
 

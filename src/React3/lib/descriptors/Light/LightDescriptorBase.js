@@ -1,4 +1,4 @@
-import THREE from 'three';
+import THREE from 'three.js';
 import Object3DDescriptor from '../Object/Object3DDescriptor';
 
 import PropTypes from 'react/lib/ReactPropTypes';

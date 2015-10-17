@@ -1,4 +1,4 @@
-import THREE from 'three';
+import THREE from 'three.js';
 import THREEElementDescriptor from '../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
@@ -8,6 +8,8 @@ import resource from '../decorators/resource';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import Uniform from '../../Uniform';
+
+const textureLoader = new THREE.TextureLoader();
 
 @resource
 class TextureDescriptor extends THREEElementDescriptor {
@@ -69,10 +71,10 @@ class TextureDescriptor extends THREEElementDescriptor {
 
   construct(props) {
     if (props.hasOwnProperty('url')) {
-      return THREE.ImageUtils.loadTexture(props.url);
-    } else {
-      invariant(false, 'The texture needs a url property.');
+      return textureLoader.load(props.url);
     }
+
+    invariant(false, 'The texture needs a url property.');
   }
 
   setParent(texture, parentObject3D) {

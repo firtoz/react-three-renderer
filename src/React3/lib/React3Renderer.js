@@ -21,7 +21,7 @@ import ElementDescriptorContainer from './ElementDescriptorContainer';
 
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
-import THREE from 'three';
+import THREE from 'three.js';
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import THREE from 'three';
+import THREE from 'three.js';
 import ExampleBase from './../ExampleBase';
 
 import React3 from '../../React3/React3';
