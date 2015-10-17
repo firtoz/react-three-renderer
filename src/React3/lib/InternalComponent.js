@@ -246,7 +246,7 @@ class InternalComponent {
     this.updateChildren(nextChildren, transaction, context);
   }
 
-  _updateObjectProperties(lastProps, nextProps, transaction, context) {
+  _updateObjectProperties(lastProps, nextProps, transaction) {
     let wantRemount = false;
 
     this.threeElementDescriptor.beginPropertyUpdates(this._threeObject, () => {
@@ -259,8 +259,13 @@ class InternalComponent {
       this.threeElementDescriptor.checkPropTypes(this._currentElement.type, this._currentElement._owner, nextProps);
     }
 
-    for (const propKey in lastProps) {
-      if (!lastProps.hasOwnProperty(propKey) || nextProps.hasOwnProperty(propKey)) {
+    const lastPropKeys = Object.keys(lastProps);
+
+    // https://jsperf.com/object-keys-vs-for-in-with-closure/3
+    for (let i = 0; i < lastPropKeys.length; ++i) {
+      const propKey = lastPropKeys[i];
+
+      if (nextProps.hasOwnProperty(propKey)) {
         continue;
       }
 
@@ -284,10 +289,10 @@ class InternalComponent {
       }
     }
 
-    for (const propKey in nextProps) {
-      if (!nextProps.hasOwnProperty(propKey)) {
-        continue;
-      }
+    const nextPropKeys = Object.keys(nextProps);
+
+    for (let i = 0; i < nextPropKeys.length; ++i) {
+      const propKey = nextPropKeys[i];
 
       if (propKey === 'children') {
         continue;
@@ -467,7 +472,11 @@ class InternalComponent {
     } else if (child instanceof React3CompositeComponentWrapper) {
       child._threeObject.userData.react3internalComponent.threeElementDescriptor.removedFromParent(child._threeObject);
     } else {
-      invariant(false, 'Cannot remove child because it is not a known component type');
+      if (process.env.NODE_ENV !== 'production') {
+        invariant(false, 'Cannot remove child because it is not a known component type');
+      } else {
+        invariant(false);
+      }
     }
 
     const childrenMarkup = this._markup.userData.childrenMarkup;
