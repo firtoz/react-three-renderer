@@ -155,6 +155,7 @@ class GeometryShapes extends ExampleBase {
 
     return (<div ref="container">
       <div style={{
+        color: 'black',
         position: 'absolute',
         top: '10px',
         width: '100%',

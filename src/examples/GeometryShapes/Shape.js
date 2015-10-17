@@ -24,6 +24,10 @@ class Shape extends React.Component {
     s: PropTypes.number.isRequired,
   };
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
     const {
       rx,

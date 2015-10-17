@@ -3,7 +3,7 @@ import Shape from './Shape';
 
 class Shapes extends React.Component {
   shouldComponentUpdate() {
-    return true;
+    return false;
   }
 
   render() {
