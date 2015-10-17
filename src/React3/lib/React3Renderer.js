@@ -346,7 +346,7 @@ class React3Renderer {
     // We found a component instance.
     const keyUnique = childInstances[name] === undefined;
     if (process.env.NODE_ENV !== 'production') {
-      process.env.NODE_ENV !== 'production' ? warning(keyUnique, 'flattenChildren(...): Encountered two children with the same key, ' + '`%s`. Child keys must be unique; when two children share a key, only ' + 'the first child will be used.', name) : undefined;
+      warning(keyUnique, 'flattenChildren(...): Encountered two children with the same key, ' + '`%s`. Child keys must be unique; when two children share a key, only ' + 'the first child will be used.', name);
     }
     if (child !== null && keyUnique) {
       childInstances[name] = this.instantiateReactComponent(child, null);

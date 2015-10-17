@@ -214,7 +214,7 @@ class THREEElementDescriptor {
   deleteProperty(threeObject, propKey) { // eslint-disable-line no-unused-vars
     if (this.propDeletes[propKey]) {
       this.propDeletes[propKey](threeObject);
-    } else {
+    } else if (process.env.NODE_ENV !== 'production') {
       warning(false, `Cannot delete property %s from ${this.constructor.name}`, propKey);
     }
   }
