@@ -677,6 +677,8 @@ class React3DInstance {
     }
 
     this._removeObjectWithName(object.name, object);
+
+    delete object.userData.markup._rootInstance;
   }
 
   mountedIntoRoot() {

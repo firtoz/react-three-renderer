@@ -27,6 +27,19 @@ class THREEElementDescriptor {
     this._hasName = false;
   }
 
+  hasEvent(name) {
+    this._hasEvents = true;
+
+    this.hasProp(name, {
+      type: PropTypes.func,
+      updateInitial: true,
+      update(threeObject, callback) {
+        threeObject.userData._eventCallbacks[name] = callback;
+      },
+      default: null,
+    });
+  }
+
   hasProp(name, info) {
     invariant(info.hasOwnProperty('type'), 'The information should include a `type` property');
     invariant(!this.propTypes.hasOwnProperty(name) || info.override,
@@ -120,6 +133,10 @@ class THREEElementDescriptor {
       threeObject.name = props.name;
     }
 
+    if (this._hasEvents) {
+      threeObject.userData._eventCallbacks = {};
+    }
+
     // pass down resources
 
     eventsForObject.on('resource.added', (data) => {
@@ -197,6 +214,10 @@ class THREEElementDescriptor {
 
     if (markup._rootInstance) {
       markup._rootInstance.objectRemoved(threeObject);
+    }
+
+    if (this._hasEvents) {
+      delete threeObject.userData._eventCallbacks;
     }
 
     threeObject.userData.events.emit('dispose', {
