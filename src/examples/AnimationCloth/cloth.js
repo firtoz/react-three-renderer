@@ -9,7 +9,7 @@
 // http://en.wikipedia.org/wiki/Cloth_modeling
 // http://cg.alexandra.dk/tag/spring-mass-system/
 // Real-time Cloth Animation http://www.darwin3d.com/gamedev/articles/col0599.pdf
-import THREE from 'three';
+import THREE from 'three.js';
 
 
 function plane(width, height) {
