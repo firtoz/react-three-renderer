@@ -5,7 +5,6 @@ import Viewport from './Viewport';
 import ResourceContainer from './Resources/ResourceContainer';
 import ReactUpdates from 'react/lib/ReactUpdates';
 
-
 import CameraUtils from './utils/CameraUtils';
 
 import React3Renderer from '../lib/React3Renderer';
@@ -29,17 +28,6 @@ class React3DInstance {
 
     this._mounted = false;
     this._scene = null;
-    this._highlightScene = new THREE.Scene();
-
-    this._highlightGeometry = new THREE.BoxGeometry(1, 1, 1);
-    this._highlightMaterial = new THREE.MeshBasicMaterial({
-      color: 0x0000ff,
-      transparent: true,
-      opacity: 0.4,
-    });
-
-    this._highlightObjectId = null;
-    this._getHighlightBoundingBox = null;
 
     this._mainCameraName = mainCamera;
     this._viewports = [];
@@ -61,6 +49,44 @@ class React3DInstance {
 
     this.uuid = THREE.Math.generateUUID();
     this.userData = {};
+
+    if (process.env.NODE_ENV !== 'production') {
+      this._highlightScene = new THREE.Scene();
+
+      this._highlightGeometry = new THREE.BoxGeometry(1, 1, 1);
+      this._highlightMaterial = new THREE.MeshBasicMaterial({
+        color: 0x0000ff,
+        transparent: true,
+        opacity: 0.4,
+      });
+
+      this._highlightObjectId = null;
+      this._getHighlightBoundingBox = null;
+
+      this._hideHighlight = () => {
+        this._highlightObjectId = null;
+        this._getHighlightBoundingBox = null;
+      };
+
+      this._objectHighlighted = (info) => {
+        const {uuid, boundingBoxFunc} = info;
+
+        let obj;
+
+        if (this._highlightObjectId) {
+          obj = this._objectsByUUID[this._highlightObjectId];
+
+          obj.userData.events.removeListener('hideHighlight', this._hideHighlight);
+        }
+
+        this._highlightObjectId = uuid;
+        this._getHighlightBoundingBox = boundingBoxFunc;
+
+        obj = this._objectsByUUID[uuid];
+
+        obj.userData.events.once('hideHighlight', this._hideHighlight);
+      };
+    }
   }
 
   _createRenderer() {
@@ -192,7 +218,9 @@ class React3DInstance {
       const objectsWithMainCameraName = this._objectsByName[this._mainCameraName];
 
       if (objectsWithMainCameraName) {
-        warning(objectsWithMainCameraName.count < 2, 'There are multiple objects with name ' + this._mainCameraName);
+        if (process.env.NODE_ENV !== 'production') {
+          warning(objectsWithMainCameraName.count < 2, 'There are multiple objects with name ' + this._mainCameraName);
+        }
 
         if (objectsWithMainCameraName.count > 0) {
           const values = objectsWithMainCameraName.values;
@@ -225,7 +253,9 @@ class React3DInstance {
           const objectsWithViewportCameraName = this._objectsByName[viewport.cameraName];
 
           if (objectsWithViewportCameraName) {
-            warning(objectsWithViewportCameraName.count < 2, 'There are multiple objects with name ' + viewport.cameraName);
+            if (process.env.NODE_ENV !== 'production') {
+              warning(objectsWithViewportCameraName.count < 2, 'There are multiple objects with name ' + viewport.cameraName);
+            }
 
             if (objectsWithViewportCameraName.count > 0) {
               const values = objectsWithViewportCameraName.values;
@@ -253,44 +283,47 @@ class React3DInstance {
 
   _renderScene(camera) {
     this._renderer.render(this._scene, camera);
-    if (this._highlightObjectId !== null) {
-      const boundingBoxes = this._getHighlightBoundingBox();
 
-      const highlightScene = this._highlightScene;
+    if (process.env.NODE_ENV !== 'production') {
+      if (this._highlightObjectId !== null) {
+        const boundingBoxes = this._getHighlightBoundingBox();
 
-      const diff = highlightScene.children.length - boundingBoxes.length;
+        const highlightScene = this._highlightScene;
 
-      if (diff > 0) {
-        for (let i = 0; i < diff; i++) {
-          highlightScene.remove(highlightScene.children[0]);
+        const diff = highlightScene.children.length - boundingBoxes.length;
+
+        if (diff > 0) {
+          for (let i = 0; i < diff; i++) {
+            highlightScene.remove(highlightScene.children[0]);
+          }
+        } else if (diff < 0) {
+          for (let i = 0; i < -diff; i++) {
+            highlightScene.add(new THREE.Mesh(this._highlightGeometry, this._highlightMaterial));
+          }
         }
-      } else if (diff < 0) {
-        for (let i = 0; i < -diff; i++) {
-          highlightScene.add(new THREE.Mesh(this._highlightGeometry, this._highlightMaterial));
-        }
+
+        boundingBoxes.forEach((boundingBox, i) => {
+          const center = boundingBox.min.clone().add(boundingBox.max).multiplyScalar(0.5);
+
+          const size = boundingBox.max.clone().sub(boundingBox.min);
+
+          const highlightCube = highlightScene.children[i];
+
+          highlightCube.position.copy(center);
+          highlightCube.scale.copy(size);
+        });
+
+        const autoClear = this._renderer.autoClear;
+        this._renderer.autoClear = false;
+        this._renderer.render(highlightScene, camera);
+        this._renderer.autoClear = autoClear;
       }
-
-      boundingBoxes.forEach((boundingBox, i) => {
-        const center = boundingBox.min.clone().add(boundingBox.max).multiplyScalar(0.5);
-
-        const size = boundingBox.max.clone().sub(boundingBox.min);
-
-        const highlightCube = highlightScene.children[i];
-
-        highlightCube.position.copy(center);
-        highlightCube.scale.copy(size);
-      });
-
-      const autoClear = this._renderer.autoClear;
-      this._renderer.autoClear = false;
-      this._renderer.render(highlightScene, camera);
-      this._renderer.autoClear = autoClear;
     }
   }
 
   setScene(scene) {
     if (process.env.NODE_ENV !== 'production') {
-      invariant(!(this._scene && scene), 'There can only be one scene in <react3/>')
+      invariant(!(this._scene && scene), 'There can only be one scene in <react3/>');
     }
 
     this._scene = scene;
@@ -303,7 +336,7 @@ class React3DInstance {
   removeViewport(viewport) {
     const index = this._viewports.indexOf(viewport);
     if (process.env.NODE_ENV !== 'production') {
-      invariant(index != -1, 'A viewport has been removed from <react3/> but it was not present in it...');
+      invariant(index !== -1, 'A viewport has been removed from <react3/> but it was not present in it...');
     }
 
     this._viewports.splice(index, 1);
@@ -316,7 +349,7 @@ class React3DInstance {
   removeResourceContainer(resourceContainer) {
     const index = this._resourceContainers.indexOf(resourceContainer);
     if (process.env.NODE_ENV !== 'production') {
-      invariant(index != -1, 'A viewport has been removed from <react3/> but it was not present in it...');
+      invariant(index !== -1, 'A viewport has been removed from <react3/> but it was not present in it...');
     }
 
     this._resourceContainers.splice(index, 1);
@@ -427,7 +460,6 @@ class React3DInstance {
   }
 
   updateGammaInput(gammaInput) {
-    console.log('update gammaInput', gammaInput);
     this._parameters.gammaInput = gammaInput;
 
     if (!this._renderer) {
@@ -439,7 +471,6 @@ class React3DInstance {
   }
 
   updateGammaOutput(gammaOutput) {
-    console.log('update gammaOutput', gammaOutput);
     this._parameters.gammaOutput = gammaOutput;
 
     if (!this._renderer) {
@@ -452,8 +483,6 @@ class React3DInstance {
 
   updateContext(context) {
     this._parameters.context = context;
-
-    console.log('only 3d context is supported for now');
   }
 
   updateMainCamera(mainCamera) {
@@ -539,9 +568,12 @@ class React3DInstance {
     delete this._objectsByUUID;
     delete this._viewports;
     delete this._scene;
-    delete this._highlightScene;
-    delete this._highlightObjectId;
-    delete this._getHighlightBoundingBox;
+
+    if (process.env.NODE_ENV !== 'production') {
+      delete this._highlightScene;
+      delete this._highlightObjectId;
+      delete this._getHighlightBoundingBox;
+    }
   }
 
   objectMounted(object) {
@@ -553,7 +585,9 @@ class React3DInstance {
 
     this._addObjectWithName(object.name, object);
 
-    object.userData.events.on('highlight', this._objectHighlighted);
+    if (process.env.NODE_ENV !== 'production') {
+      object.userData.events.on('highlight', this._objectHighlighted);
+    }
 
     object.userData.events.emit('addedIntoRoot', object);
 
@@ -582,7 +616,6 @@ class React3DInstance {
 
   allMaterialsNeedUpdate(dispose) {
     this._materials.forEach(material => {
-      //console.log('updating material ', material);
       if (dispose) {
         material.dispose();
       } else {
@@ -590,30 +623,6 @@ class React3DInstance {
       }
     });
   }
-
-  _hideHighlight = () => {
-    this._highlightObjectId = null;
-    this._getHighlightBoundingBox = null;
-  };
-
-  _objectHighlighted = (info) => {
-    const {uuid, boundingBoxFunc} = info;
-
-    let obj;
-
-    if (this._highlightObjectId) {
-      obj = this._objectsByUUID[this._highlightObjectId];
-
-      obj.userData.events.removeListener('hideHighlight', this._hideHighlight);
-    }
-
-    this._highlightObjectId = uuid;
-    this._getHighlightBoundingBox = boundingBoxFunc;
-
-    obj = this._objectsByUUID[uuid];
-
-    obj.userData.events.once('hideHighlight', this._hideHighlight);
-  };
 
   objectRenamed(object, oldName, nextName) {
     this._removeObjectWithName(oldName, object);
@@ -646,12 +655,14 @@ class React3DInstance {
   objectRemoved(object) {
     invariant(this._objectsByUUID[object.uuid] === object, 'The removed object does not belong here!?');
 
-    if (this._highlightObjectId === object.uuid) {
-      this._highlightObjectId = null;
-    }
+    if (process.env.NODE_ENV !== 'production') {
+      if (this._highlightObjectId === object.uuid) {
+        this._highlightObjectId = null;
+      }
 
-    object.userData.events.removeListener('highlight', this._objectHighlighted);
-    object.userData.events.removeListener('hideHighlight', this._hideHighlight);
+      object.userData.events.removeListener('highlight', this._objectHighlighted);
+      object.userData.events.removeListener('hideHighlight', this._hideHighlight);
+    }
 
     delete this._objectsByUUID[object.uuid];
 
