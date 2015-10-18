@@ -4,6 +4,8 @@
   "description": "Render into three.js scenes with react.",
   "main": "dist/React3.js",
   "scripts": {
+    "compile": "gulp babel",
+    "prepublish": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
