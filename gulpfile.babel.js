@@ -4,6 +4,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import gutil from 'gulp-util';
 import webpackConfig from './webpack.config.babel';
 import path from 'path';
+import babel from 'gulp-babel';
 
 gulp.task('webpack-dev-server', (callback) => {
   void callback;
@@ -41,6 +42,15 @@ gulp.task('webpack-dev-server', (callback) => {
     // keep the server alive or continue?
     // callback();
   });
+});
+
+gulp.task('babel', () => {
+  return gulp.src('src/React3/**/*.js')
+    .pipe(babel({
+      optional: ['runtime'],
+      stage: 0,
+    }))
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('default', ['webpack-dev-server']);
