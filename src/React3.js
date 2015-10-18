@@ -1,5 +1,5 @@
 import React from 'react';
-import React3Renderer from './lib/React3Renderer';
+import React3Renderer from 'lib/React3Renderer';
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
 class React3 extends React.Component {

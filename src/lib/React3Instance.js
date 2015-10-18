@@ -7,7 +7,7 @@ import ReactUpdates from 'react/lib/ReactUpdates';
 
 import CameraUtils from './utils/CameraUtils';
 
-import React3Renderer from '../lib/React3Renderer';
+import React3Renderer from 'React3Renderer';
 
 const rendererProperties = [
   'gammaInput',

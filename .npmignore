@@ -1,8 +1,6 @@
 /node_modules/
 /src/
 /.idea/
-/build/
 /gulpfile.babel.js
-/webpack.config.babel.js
 /.eslintrc
 /.npmignore
