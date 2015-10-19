@@ -328,6 +328,9 @@ class InternalComponent {
    * node_modules/react/lib/ReactDOMComponent.js:732
    */
   unmountComponent() {
+    if (this._threeObject !== null) {
+      this.threeElementDescriptor.componentWillUnmount(this._threeObject);
+    }
     this.unmountChildren();
     if (this._threeObject !== null) {
       this.threeElementDescriptor.unmount(this._threeObject);

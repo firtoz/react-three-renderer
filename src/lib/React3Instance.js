@@ -27,6 +27,7 @@ class React3DInstance {
     this._rendererInstance = rendererInstance;
 
     this._mounted = false;
+    this._willUnmount = false;
     this._scene = null;
 
     this._mainCameraName = mainCamera;
@@ -543,6 +544,9 @@ class React3DInstance {
     this._renderer.dispose();
   }
 
+  willUnmount() {
+    this._willUnmount = true;
+  }
 
   unmount() {
     this._mounted = false;
