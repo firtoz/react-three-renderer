@@ -25,19 +25,6 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       default: 0.5,
     });
 
-    this.hasProp('shadowCameraVisible', {
-      type: PropTypes.bool,
-      updateInitial: true,
-      update: (threeObject, shadowCameraVisible) => {
-        if (threeObject.shadowCameraVisible && !shadowCameraVisible) {
-          this._removeCameraHelper(threeObject);
-        }
-
-        threeObject.shadowCameraVisible = shadowCameraVisible;
-      },
-      default: false,
-    });
-
     const clearShadowCamera = (threeObject) => {
       if (threeObject.shadowCamera) {
         threeObject.shadowCamera.parent.remove(threeObject.shadowCamera);
@@ -62,7 +49,6 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
 
           clearShadowCamera(threeObject);
         },
-        //simple: true,
         default: 512,
       });
     });
@@ -122,12 +108,6 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       override: true,
       type: PropTypes.bool,
       update: this.triggerRemount,
-      default: false,
-    });
-
-    this.hasProp('onlyShadow', {
-      type: PropTypes.bool,
-      simple: true,
       default: false,
     });
 
