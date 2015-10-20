@@ -334,8 +334,10 @@ class InternalComponent {
     this.unmountChildren();
     if (this._threeObject !== null) {
       this.threeElementDescriptor.unmount(this._threeObject);
+      delete this._threeObject.userData.markup;
     }
 
+    this._markup = null;
     this._rootNodeID = null;
     if (this._nodeWithLegacyProperties) {
       const node = this._nodeWithLegacyProperties;
@@ -489,6 +491,8 @@ class InternalComponent {
 
       if (childMarkup.threeObject === child._threeObject) {
         childrenMarkup.splice(i, 1);
+
+        delete child._threeObject.userData.parentMarkup;
         return;
       }
     }
