@@ -32,8 +32,10 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         updateInitial: true,
-        update(threeObject, value) {
-          threeObject[propName] = value;
+        update(threeObject, value, hasProp) {
+          if (hasProp) {
+            threeObject[propName] = value;
+          }
         },
         default: 512,
       });
@@ -42,8 +44,10 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     this.hasProp('shadowCameraNear', {
       type: PropTypes.number,
       updateInitial: true,
-      update(threeObject, value) {
-        threeObject.shadow.camera.near = value;
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.camera.near = value;
+        }
         // threeObject.shadow.camera.updateProjectionMatrix();
       },
       default: 50,
@@ -52,8 +56,10 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     this.hasProp('shadowCameraFar', {
       type: PropTypes.number,
       updateInitial: true,
-      update(threeObject, value) {
-        threeObject.shadow.camera.far = value;
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.camera.far = value;
+        }
         // threeObject.shadow.camera.updateProjectionMatrix();
       },
       default: 5000,
@@ -66,8 +72,10 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         updateInitial: true,
-        update(threeObject, value) {
-          threeObject[propName] = value;
+        update(threeObject, value, hasProp) {
+          if (hasProp) {
+            threeObject[propName] = value;
+          }
           // threeObject.shadow.camera.updateProjectionMatrix();
         },
         default: -500,
@@ -81,8 +89,10 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         updateInitial: true,
-        update(threeObject, value) {
-          threeObject[propName] = value;
+        update(threeObject, value, hasProp) {
+          if (hasProp) {
+            threeObject[propName] = value;
+          }
           // threeObject.shadow.camera.updateProjectionMatrix();
         },
         default: 500,
