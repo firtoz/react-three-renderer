@@ -34,7 +34,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
   }
 
   construct() {
-    return new THREE.CameraHelper(new THREE.Camera());
+    return new THREE.CameraHelper(new THREE.PerspectiveCamera());
   }
 
   applyInitialProps(cameraHelper:THREE.CameraHelper, props) {
@@ -84,7 +84,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     let camera = null;
 
     if (cameraName) {
-      const camerasByName = rootInstance.getObjectsByName(cameraName).filter(obj => obj instanceof THREE.Camera);
+      const camerasByName = rootInstance.getObjectsByName(cameraName).filter(obj => obj instanceof THREE.PerspectiveCamera);
 
       if (camerasByName.length > 0) {
         camera = camerasByName[0];
@@ -135,7 +135,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
 
     helper.userData._hasCamera = false;
     helper.userData._camera = null;
-    helper.camera = new THREE.Camera();
+    helper.camera = new THREE.PerspectiveCamera();
     helper.visible = false;
 
     const camera = this._getCamera(rootInstance, helper.userData._cameraName);

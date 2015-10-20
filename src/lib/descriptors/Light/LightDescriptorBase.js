@@ -56,7 +56,8 @@ class LightDescriptorBase extends Object3DDescriptor {
   }
 
   updateAllMaterials(threeObject) {
-    if (threeObject.userData.markup._rootInstance) {
+    const rootInstance = threeObject.userData.markup._rootInstance;
+    if (rootInstance && !rootInstance._willUnmount) {
       if (process.env.NODE_ENV !== 'production') {
         if (!this._warnedAboutLightMaterialUpdate && !threeObject.userData._updatesRefreshAllMaterials) {
           const owner = threeObject.userData.react3internalComponent._currentElement._owner;
@@ -88,7 +89,7 @@ class LightDescriptorBase extends Object3DDescriptor {
         }
       }
 
-      threeObject.userData.markup._rootInstance.allMaterialsNeedUpdate();
+      rootInstance.allMaterialsNeedUpdate();
     }
   }
 }

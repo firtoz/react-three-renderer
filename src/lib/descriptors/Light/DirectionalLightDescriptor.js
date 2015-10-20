@@ -25,44 +25,18 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       default: 0.5,
     });
 
-    this.hasProp('shadowCameraVisible', {
-      type: PropTypes.bool,
-      updateInitial: true,
-      update: (threeObject, shadowCameraVisible) => {
-        if (threeObject.shadowCameraVisible && !shadowCameraVisible) {
-          this._removeCameraHelper(threeObject);
-        }
-
-        threeObject.shadowCameraVisible = shadowCameraVisible;
-      },
-      default: false,
-    });
-
-    const clearShadowCamera = (threeObject) => {
-      if (threeObject.shadowCamera) {
-        threeObject.shadowCamera.parent.remove(threeObject.shadowCamera);
-
-        delete threeObject.shadowCamera;
-      }
-
-      this._removeCameraHelper(threeObject);
-    };
-
     [
       'shadowMapWidth',
       'shadowMapHeight',
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number,
-        update(threeObject, value) {
-          threeObject[propName] = value;
-
-          // force a recreate of the shadowMap
-          delete threeObject.shadowMap;
-
-          clearShadowCamera(threeObject);
+        updateInitial: true,
+        update(threeObject, value, hasProp) {
+          if (hasProp) {
+            threeObject[propName] = value;
+          }
         },
-        //simple: true,
         default: 512,
       });
     });
@@ -70,9 +44,11 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     this.hasProp('shadowCameraNear', {
       type: PropTypes.number,
       updateInitial: true,
-      update(threeObject, value) {
-        threeObject.shadowCameraNear = value;
-        clearShadowCamera(threeObject);
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.camera.near = value;
+        }
+        // threeObject.shadow.camera.updateProjectionMatrix();
       },
       default: 50,
     });
@@ -80,10 +56,11 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     this.hasProp('shadowCameraFar', {
       type: PropTypes.number,
       updateInitial: true,
-      update(threeObject, value) {
-        threeObject.shadowCameraFar = value;
-
-        clearShadowCamera(threeObject);
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.camera.far = value;
+        }
+        // threeObject.shadow.camera.updateProjectionMatrix();
       },
       default: 5000,
     });
@@ -95,9 +72,11 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         updateInitial: true,
-        update(threeObject, value) {
-          threeObject[propName] = value;
-          clearShadowCamera(threeObject);
+        update(threeObject, value, hasProp) {
+          if (hasProp) {
+            threeObject[propName] = value;
+          }
+          // threeObject.shadow.camera.updateProjectionMatrix();
         },
         default: -500,
       });
@@ -110,9 +89,11 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         updateInitial: true,
-        update(threeObject, value) {
-          threeObject[propName] = value;
-          clearShadowCamera(threeObject);
+        update(threeObject, value, hasProp) {
+          if (hasProp) {
+            threeObject[propName] = value;
+          }
+          // threeObject.shadow.camera.updateProjectionMatrix();
         },
         default: 500,
       });
@@ -125,13 +106,15 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       default: false,
     });
 
-    this.hasProp('onlyShadow', {
-      type: PropTypes.bool,
-      simple: true,
-      default: false,
-    });
-
     this.hasColor();
+  }
+
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
+
+    if (props.hasOwnProperty('castShadow')) {
+      threeObject.castShadow = props.castShadow;
+    }
   }
 
   construct(props) {
@@ -142,19 +125,7 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
   }
 
   unmount(threeObject) {
-    this._removeCameraHelper(threeObject);
-
     super.unmount(threeObject);
-  }
-
-  _removeCameraHelper(threeObject) {
-    if (threeObject.cameraHelper) {
-      if (threeObject.cameraHelper.parent) {
-        threeObject.cameraHelper.parent.remove(threeObject.cameraHelper);
-      }
-
-      delete threeObject.cameraHelper;
-    }
   }
 }
 

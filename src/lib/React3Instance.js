@@ -7,7 +7,7 @@ import ReactUpdates from 'react/lib/ReactUpdates';
 
 import CameraUtils from './utils/CameraUtils';
 
-import React3Renderer from '../lib/React3Renderer';
+import React3Renderer from './React3Renderer';
 
 const rendererProperties = [
   'gammaInput',
@@ -27,6 +27,7 @@ class React3DInstance {
     this._rendererInstance = rendererInstance;
 
     this._mounted = false;
+    this._willUnmount = false;
     this._scene = null;
 
     this._mainCameraName = mainCamera;
@@ -543,6 +544,9 @@ class React3DInstance {
     this._renderer.dispose();
   }
 
+  willUnmount() {
+    this._willUnmount = true;
+  }
 
   unmount() {
     this._mounted = false;
@@ -552,14 +556,18 @@ class React3DInstance {
     this.userData.events.removeAllListeners();
     delete this._rendererInstance;
 
-    const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
+    if (this._renderer) {
+      const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
 
-    if (contextLossExtension) {
-      // noinspection JSUnresolvedFunction
-      contextLossExtension.loseContext();
+      if (contextLossExtension) {
+        // noinspection JSUnresolvedFunction
+        contextLossExtension.loseContext();
+      }
+
+      this.disposeResourcesAndRenderer();
+
+      delete this._renderer;
     }
-
-    delete this._renderer;
 
     delete this._parameters;
 

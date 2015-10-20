@@ -328,11 +328,16 @@ class InternalComponent {
    * node_modules/react/lib/ReactDOMComponent.js:732
    */
   unmountComponent() {
+    if (this._threeObject !== null) {
+      this.threeElementDescriptor.componentWillUnmount(this._threeObject);
+    }
     this.unmountChildren();
     if (this._threeObject !== null) {
       this.threeElementDescriptor.unmount(this._threeObject);
+      delete this._threeObject.userData.markup;
     }
 
+    this._markup = null;
     this._rootNodeID = null;
     if (this._nodeWithLegacyProperties) {
       const node = this._nodeWithLegacyProperties;
@@ -486,6 +491,8 @@ class InternalComponent {
 
       if (childMarkup.threeObject === child._threeObject) {
         childrenMarkup.splice(i, 1);
+
+        delete child._threeObject.userData.parentMarkup;
         return;
       }
     }

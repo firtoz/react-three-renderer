@@ -45,6 +45,14 @@ class THREEElementDescriptor {
     invariant(!this.propTypes.hasOwnProperty(name) || info.override,
       'The property %s has already been defined', name);
 
+    if (info.override) {
+      // clean up simple prop
+      const simpleIndex = this._simpleProperties.indexOf(name);
+      if (simpleIndex !== -1) {
+        this._simpleProperties.splice(simpleIndex, 1);
+      }
+    }
+
     this.propTypes[name] = info.type;
 
     if (info.hasOwnProperty('simple')) {
@@ -207,6 +215,10 @@ class THREEElementDescriptor {
     if (parentMarkup && parentMarkup._rootInstance) {
       parentMarkup._rootInstance.objectMounted(threeObject);
     }
+  }
+
+  componentWillUnmount(threeObject) {
+
   }
 
   unmount(threeObject) {
