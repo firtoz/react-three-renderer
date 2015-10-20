@@ -556,14 +556,18 @@ class React3DInstance {
     this.userData.events.removeAllListeners();
     delete this._rendererInstance;
 
-    const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
+    if (this._renderer) {
+      const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
 
-    if (contextLossExtension) {
-      // noinspection JSUnresolvedFunction
-      contextLossExtension.loseContext();
+      if (contextLossExtension) {
+        // noinspection JSUnresolvedFunction
+        contextLossExtension.loseContext();
+      }
+
+      this.disposeResourcesAndRenderer();
+
+      delete this._renderer;
     }
-
-    delete this._renderer;
 
     delete this._parameters;
 
