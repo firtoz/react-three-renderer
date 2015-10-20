@@ -289,7 +289,7 @@ class React3Renderer {
       // Inject the runtime into a devtools global hook regardless of browser.
       // Allows for debugging when the hook is injected on the page.
       if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
-        this.rendererDefinition = {
+        this._devToolsRendererDefinition = {
           CurrentOwner: ReactCurrentOwner,
           InstanceHandles: ReactInstanceHandles,
           Mount: this,
@@ -297,21 +297,20 @@ class React3Renderer {
           TextComponent: InternalComponent,
         };
 
-        __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this.rendererDefinition);
+        const rendererListener = (info) => {
+          this._reactDevtoolsRendererId = info.id;
+        };
+
+        __REACT_DEVTOOLS_GLOBAL_HOOK__.sub('renderer', rendererListener);
+        __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this._devToolsRendererDefinition);
 
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent !== 'undefined') {
           const agent = __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent;
           this._hookAgent(agent);
         } else {
-          this._onDevTools = (agent) => {
+          __REACT_DEVTOOLS_GLOBAL_HOOK__.sub('react-devtools', (agent) => {
             this._hookAgent(agent);
-
-            __REACT_DEVTOOLS_GLOBAL_HOOK__.off('react-devtools', this._onDevTools);
-
-            delete this._onDevTools;
-          };
-
-          __REACT_DEVTOOLS_GLOBAL_HOOK__.on('react-devtools', this._onDevTools);
+          });
         }
       }
     }
@@ -756,22 +755,25 @@ class React3Renderer {
     this.nextReactRootIndex = 0;
 
     if (process.env.NODE_ENV !== 'production') {
-      if (this._agent) {
-        this._agent.onUnmounted(this.rendererDefinition);
-        this._agent.removeListener('highlight', this._onHighlightFromInspector);
-        this._agent.removeListener('hideHighlight', this._onHideHighlightFromInspector);
+      if (this._devToolsRendererDefinition) {
+        if (this._agent) {
+          this._agent.onUnmounted(this._devToolsRendererDefinition);
+          this._agent.removeListener('highlight', this._onHighlightFromInspector);
+          this._agent.removeListener('hideHighlight', this._onHideHighlightFromInspector);
+        }
+
+        if (this._reactDevtoolsRendererId) {
+          delete __REACT_DEVTOOLS_GLOBAL_HOOK__._renderers[this._reactDevtoolsRendererId];
+        }
+
+        delete this._devToolsRendererDefinition;
+        delete this._agent;
       }
 
-      delete this._agent;
+
       delete this._onHighlightFromInspector;
       delete this._onHideHighlightFromInspector;
       delete this._hookAgent;
-
-
-      if (this._onDevTools) {
-        __REACT_DEVTOOLS_GLOBAL_HOOK__.off('react-devtools', this._onDevTools);
-        delete this._onDevTools;
-      }
     }
   }
 
