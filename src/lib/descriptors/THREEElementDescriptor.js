@@ -34,7 +34,7 @@ class THREEElementDescriptor {
 
     if (info.override) {
       // clean up simple prop
-      const simpleIndex = this._simpleProperties.indexOf(propName);
+      const simpleIndex = this._simpleProperties.indexOf(name);
       if (simpleIndex !== -1) {
         this._simpleProperties.splice(simpleIndex, 1);
       }
