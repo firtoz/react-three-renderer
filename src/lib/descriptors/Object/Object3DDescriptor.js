@@ -102,6 +102,10 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
     this.hasEvent('onMouseEnter');
     this.hasEvent('onMouseLeave');
+
+    this.hasEvent('onMouseDown');
+    this.hasEvent('onMouseUp');
+    this.hasEvent('onClick');
   }
 
   construct() {
