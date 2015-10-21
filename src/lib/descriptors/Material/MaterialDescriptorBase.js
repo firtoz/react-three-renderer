@@ -55,7 +55,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     });
 
     this.hasProp('visible', {
-      type: PropTypes.number,
+      type: PropTypes.bool,
       simple: true,
       default: true,
     });
