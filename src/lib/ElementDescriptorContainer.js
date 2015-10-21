@@ -16,6 +16,7 @@ import PointsDescriptor from './descriptors/Object/PointsDescriptor';
 
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
+import SpotLightDescriptor from './descriptors/Light/SpotLightDescriptor';
 import PointLightDescriptor from './descriptors/Light/PointLightDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
@@ -136,6 +137,7 @@ class ElementDescriptorContainer {
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
+      spotLight: new SpotLightDescriptor(react3RendererInstance),
       pointLight: new PointLightDescriptor(react3RendererInstance),
 
       resources: new ResourcesDescriptor(react3RendererInstance),

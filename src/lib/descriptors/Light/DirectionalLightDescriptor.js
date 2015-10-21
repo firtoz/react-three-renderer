@@ -13,58 +13,6 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       default: 1,
     });
 
-    this.hasProp('shadowBias', {
-      type: PropTypes.number,
-      simple: true,
-      default: 0,
-    });
-
-    this.hasProp('shadowDarkness', {
-      type: PropTypes.number,
-      simple: true,
-      default: 0.5,
-    });
-
-    [
-      'shadowMapWidth',
-      'shadowMapHeight',
-    ].forEach(propName => {
-      this.hasProp(propName, {
-        type: PropTypes.number,
-        updateInitial: true,
-        update(threeObject, value, hasProp) {
-          if (hasProp) {
-            threeObject[propName] = value;
-          }
-        },
-        default: 512,
-      });
-    });
-
-    this.hasProp('shadowCameraNear', {
-      type: PropTypes.number,
-      updateInitial: true,
-      update(threeObject, value, hasProp) {
-        if (hasProp) {
-          threeObject.shadow.camera.near = value;
-        }
-        // threeObject.shadow.camera.updateProjectionMatrix();
-      },
-      default: 50,
-    });
-
-    this.hasProp('shadowCameraFar', {
-      type: PropTypes.number,
-      updateInitial: true,
-      update(threeObject, value, hasProp) {
-        if (hasProp) {
-          threeObject.shadow.camera.far = value;
-        }
-        // threeObject.shadow.camera.updateProjectionMatrix();
-      },
-      default: 5000,
-    });
-
     [
       'shadowCameraLeft',
       'shadowCameraBottom',
@@ -99,22 +47,7 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
       });
     });
 
-    this.hasProp('castShadow', {
-      override: true,
-      type: PropTypes.bool,
-      update: this.triggerRemount,
-      default: false,
-    });
-
     this.hasColor();
-  }
-
-  applyInitialProps(threeObject, props) {
-    super.applyInitialProps(threeObject, props);
-
-    if (props.hasOwnProperty('castShadow')) {
-      threeObject.castShadow = props.castShadow;
-    }
   }
 
   construct(props) {
