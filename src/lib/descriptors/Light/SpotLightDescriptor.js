@@ -29,6 +29,17 @@ class SpotLightDescriptor extends LightDescriptorBase {
       });
     });
 
+    this.hasProp('shadowCameraFov', {
+      type: PropTypes.number,
+      updateInitial: true,
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.camera.fov = value;
+        }
+      },
+      default: 50,
+    });
+
     this.hasColor();
   }
 
