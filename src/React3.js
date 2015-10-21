@@ -65,6 +65,7 @@ class React3 extends React.Component {
   }
 
   static findTHREEObject = React3Renderer.findTHREEObject;
+  static eventDispatcher = React3Renderer.eventDispatcher;
 
   render() {
     const {
