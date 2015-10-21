@@ -17,6 +17,10 @@ const propProxy = {
     type: PropTypes.bool,
     default: false,
   },
+  sortObjects: {
+    type: PropTypes.bool,
+    default: true,
+  },
   context: {
     type: PropTypes.string.isRequired,
   },

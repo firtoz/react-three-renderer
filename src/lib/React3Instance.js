@@ -101,6 +101,10 @@ class React3DInstance {
       renderer.setPixelRatio(parameters.pixelRatio);
     }
 
+    if (parameters.hasOwnProperty('sortObjects')) {
+      renderer.sortObjects = parameters.sortObjects;
+    }
+
     if (parameters.hasOwnProperty('clearColor')) {
       renderer.setClearColor(parameters.clearColor);
     }
@@ -387,6 +391,16 @@ class React3DInstance {
 
     this._renderer.setPixelRatio(newPixelRatio);
     this._renderer.setSize(this._parameters.width, this._parameters.height);
+  }
+
+  updateSortObjects(sortObjects) {
+    this._parameters.sortObjects = sortObjects;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this._renderer.sortObjects = sortObjects;
   }
 
   updateAntialias(antialias) {
