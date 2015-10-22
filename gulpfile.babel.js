@@ -2,15 +2,21 @@ import gulp from 'gulp';
 import babel from 'gulp-babel';
 import del from 'del';
 
-gulp.task('clean-dist', () => {
-  return del(['dist/']);
+gulp.task('clean-lib', () => {
+  return del(['lib/']);
 });
 
-gulp.task('babel', ['clean-dist'], () => {
-  return gulp.src('src/**/*.js')
+gulp.task('babel', ['clean-lib'], () => {
+  return gulp.src('src/lib/**/*.js')
     .pipe(babel({
       optional: ['runtime'],
       stage: 0,
     }))
-    .pipe(gulp.dest('dist/'));
+    // just put them all here why don't you
+    // it's actually a genius idea
+    // or a horrible one
+    // TIME WILL TELL
+    //
+    //                           or will it
+    .pipe(gulp.dest('lib/'));
 });
