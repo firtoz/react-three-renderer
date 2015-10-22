@@ -225,6 +225,10 @@ class React3Renderer {
     return this.userDataCache[id];
   }
 
+  getElementDescriptor(name) {
+    return this.threeElementDescriptors[name];
+  }
+
   constructor(canvas) {
     this._canvas = canvas;
     this._instancesByReactRootID = {};
@@ -767,6 +771,7 @@ class React3Renderer {
 
         if (this._reactDevtoolsRendererId) {
           delete __REACT_DEVTOOLS_GLOBAL_HOOK__._renderers[this._reactDevtoolsRendererId];
+          delete this._reactDevtoolsRendererId;
         }
 
         delete this._devToolsRendererDefinition;

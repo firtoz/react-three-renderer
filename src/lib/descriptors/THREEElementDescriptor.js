@@ -40,6 +40,26 @@ class THREEElementDescriptor {
     });
   }
 
+  removeProp(name) {
+    invariant(this.propTypes.hasOwnProperty(name), 'The property %s has not been defined', name);
+
+    const simpleIndex = this._simpleProperties.indexOf(name);
+    if (simpleIndex !== -1) {
+      this._simpleProperties.splice(simpleIndex, 1);
+    }
+
+    delete this.propTypes[name];
+    delete this.propDeletes[name];
+    delete this.propUpdates[name];
+
+    const updateInitialIndex = this._updateInitial.indexOf(name);
+    if (updateInitialIndex !== -1) {
+      this._updateInitial.splice(updateInitialIndex, 1);
+    }
+
+    delete this._initialOnly[name];
+  }
+
   hasProp(name, info) {
     invariant(info.hasOwnProperty('type'), 'The information should include a `type` property');
     invariant(!this.propTypes.hasOwnProperty(name) || info.override,

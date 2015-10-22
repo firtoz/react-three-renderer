@@ -1,5 +1,5 @@
 import React from 'react';
-import React3Renderer from './lib/React3Renderer';
+import React3Renderer from './React3Renderer';
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
 class React3 extends React.Component {
@@ -37,6 +37,11 @@ class React3 extends React.Component {
     this._render();
   }
 
+  componentWillUnmount() {
+    this.react3Renderer.dispose();
+    delete this.react3Renderer;
+  }
+
   _onRecreateCanvas = () => {
     this.setState({
       // changing the key will recreate the element
@@ -57,11 +62,6 @@ class React3 extends React.Component {
       canvas={canvas}>
       {this.props.children}
     </react3>);
-  }
-
-  componentWillUnmount() {
-    this.react3Renderer.dispose();
-    delete this.react3Renderer;
   }
 
   static findTHREEObject = React3Renderer.findTHREEObject;

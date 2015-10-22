@@ -1,5 +1,7 @@
 import React3Descriptor from './descriptors/React3Descriptor';
 
+import ModuleDescriptor from './descriptors/ModuleDescriptor';
+
 import ViewportDescriptor from './descriptors/ViewportDescriptor';
 import SceneDescriptor from './descriptors/Object/SceneDescriptor';
 
@@ -80,6 +82,8 @@ class ElementDescriptorContainer {
      */
     this.descriptors = {
       react3: new React3Descriptor(react3RendererInstance),
+
+      module: new ModuleDescriptor(react3RendererInstance),
 
       viewport: new ViewportDescriptor(react3RendererInstance),
       scene: new SceneDescriptor(react3RendererInstance),

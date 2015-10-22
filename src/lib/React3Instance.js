@@ -2,6 +2,7 @@ import THREE from 'three.js';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
 import Viewport from './Viewport';
+import React3Module from './Module';
 import ResourceContainer from './Resources/ResourceContainer';
 import ReactUpdates from 'react/lib/ReactUpdates';
 
@@ -32,6 +33,11 @@ class React3DInstance {
 
     this._mainCameraName = mainCamera;
     this._viewports = [];
+    /**
+     * @type {Array.<React3Module>}
+     */
+    this._modules = [];
+
     this._resourceContainers = [];
     this._recreateCanvasCallback = onRecreateCanvas;
 
@@ -182,6 +188,8 @@ class React3DInstance {
         this.setScene(child);
       } else if (child instanceof Viewport) {
         this.addViewport(child);
+      } else if (child instanceof React3Module) {
+        this.addModule(child);
       } else if (child instanceof ResourceContainer) {
         this.addResourceContainer(child);
       } else {
@@ -201,14 +209,20 @@ class React3DInstance {
       }
     } else if (child instanceof Viewport) {
       this.removeViewport(child);
+    } else if (child instanceof React3Module) {
+      this.removeModule(child);
     } else if (child instanceof ResourceContainer) {
       this.removeResourceContainer(child);
     } else {
-      invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s or <resources/>.');
+      invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s, <module/>s or <resources/>.');
     }
   }
 
   _render = () => {
+    for (let i = 0; i < this._modules.length; ++i) {
+      this._modules[i].update();
+    }
+
     this._renderRequest = requestAnimationFrame(this._render);
     this.userData.events.emit('animate');
 
@@ -354,10 +368,24 @@ class React3DInstance {
   removeResourceContainer(resourceContainer) {
     const index = this._resourceContainers.indexOf(resourceContainer);
     if (process.env.NODE_ENV !== 'production') {
-      invariant(index !== -1, 'A viewport has been removed from <react3/> but it was not present in it...');
+      invariant(index !== -1, 'A resource container has been removed from <react3/> but it was not present in it...');
     }
 
     this._resourceContainers.splice(index, 1);
+  }
+
+  addModule(module:React3Module) {
+    this._modules.push(module);
+  }
+
+  removeModule(module:React3Module) {
+    const index = this._modules.indexOf(module);
+
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(index !== -1, 'A module has been removed from <react3/> but it was not present in it...');
+    }
+
+    this._modules.splice(index, 1);
   }
 
   updateWidth(newWidth) {
