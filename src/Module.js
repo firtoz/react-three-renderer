@@ -1,4 +1,4 @@
-import THREE from 'three';
+import THREE from 'three.js';
 
 class React3Module {
   constructor() {
