@@ -195,10 +195,6 @@ class React3DInstance {
       } else {
         invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s or <resources/>.');
       }
-
-      if (this._mounted) {
-        this.objectMounted(child);
-      }
     });
   }
 
