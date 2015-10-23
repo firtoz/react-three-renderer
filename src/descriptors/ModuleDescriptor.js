@@ -3,6 +3,7 @@ import Module from '../Module';
 import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 
 // Returns class name of the object, if any.
+// Used for the subclass proptype checker
 function getClassName(propValue) {
   if (!propValue.constructor || !propValue.constructor.name) {
     return '<<anonymous>>';
