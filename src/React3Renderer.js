@@ -249,7 +249,7 @@ class React3Renderer {
     this._highlightElement = document.createElement('div');
     this._highlightCache = null;
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       this._agent = null;
 
       this._onHideHighlightFromInspector = () => {
@@ -761,7 +761,7 @@ class React3Renderer {
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       if (this._devToolsRendererDefinition) {
         if (this._agent) {
           this._agent.onUnmounted(this._devToolsRendererDefinition);

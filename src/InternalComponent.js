@@ -70,7 +70,7 @@ class InternalComponent {
       }
     }
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       this.highlightComponent = () => {
         this.threeElementDescriptor.highlight(this._threeObject);
       };

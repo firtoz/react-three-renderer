@@ -57,7 +57,7 @@ class React3DInstance {
     this.uuid = THREE.Math.generateUUID();
     this.userData = {};
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       this._highlightScene = new THREE.Scene();
 
       this._highlightGeometry = new THREE.BoxGeometry(1, 1, 1);
@@ -299,7 +299,7 @@ class React3DInstance {
   _renderScene(camera) {
     this._renderer.render(this._scene, camera);
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       if (this._highlightObjectId !== null) {
         const boundingBoxes = this._getHighlightBoundingBox();
 
@@ -615,7 +615,7 @@ class React3DInstance {
     delete this._viewports;
     delete this._scene;
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       delete this._highlightScene;
       delete this._highlightObjectId;
       delete this._getHighlightBoundingBox;
@@ -631,7 +631,7 @@ class React3DInstance {
 
     this._addObjectWithName(object.name, object);
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       object.userData.events.on('highlight', this._objectHighlighted);
     }
 
@@ -701,7 +701,7 @@ class React3DInstance {
   objectRemoved(object) {
     invariant(this._objectsByUUID[object.uuid] === object, 'The removed object does not belong here!?');
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       if (this._highlightObjectId === object.uuid) {
         this._highlightObjectId = null;
       }
