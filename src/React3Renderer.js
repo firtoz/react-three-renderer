@@ -58,11 +58,8 @@ if (process.env.NODE_ENV !== 'production') {
   };
 }
 
-/**
- * @namespace process.env
- * @type string
- * @name process.env.NODE_ENV
- */
+/* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
+
 class TopLevelWrapper extends ReactComponent {
   render() {
     return this.props;
@@ -113,11 +110,6 @@ function isInternalComponentType(type) {
     && typeof type.prototype.mountComponent === 'function'
     && typeof type.prototype.receiveComponent === 'function';
 }
-
-/**
- * @global
- * @var __REACT_DEVTOOLS_GLOBAL_HOOK__
- */
 
 class React3Renderer {
   static eventDispatcher = new EventDispatcher();
