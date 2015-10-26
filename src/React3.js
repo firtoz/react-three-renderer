@@ -2,13 +2,45 @@ import React from 'react';
 import React3Renderer from './React3Renderer';
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
+import THREE from 'three.js';
+
+const {PropTypes} = React;
+
 class React3 extends React.Component {
   static propTypes = {
-    context: React.PropTypes.string,
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    children: React.PropTypes.any,
-    canvasStyle: React.PropTypes.any,
+    context: PropTypes.string,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    children: PropTypes.any,
+    canvasStyle: PropTypes.any,
+    gammaInput: PropTypes.bool,
+    gammaOutput: PropTypes.bool,
+    sortObjects: PropTypes.bool,
+    mainCamera: PropTypes.string,
+    onAnimate: PropTypes.func,
+    clearColor: PropTypes.oneOfType([
+      PropTypes.instanceOf(THREE.Color),
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+    shadowMapEnabled: PropTypes.bool,
+    shadowMapType: PropTypes.oneOf([
+      THREE.BasicShadowMap,
+      THREE.PCFShadowMap,
+      THREE.PCFSoftShadowMap,
+    ]),
+    shadowMapCullFace: PropTypes.oneOf([
+      THREE.CullFaceNone,
+      THREE.CullFaceBack,
+      THREE.CullFaceFront,
+      THREE.CullFaceFrontBack,
+    ]),
+    shadowMapDebug: PropTypes.bool,
+    pixelRatio: PropTypes.number,
+    antialias: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number,
+    ]),
   };
 
   static defaultProps = {
