@@ -214,8 +214,12 @@ class InternalComponent {
     this._renderedChildren = children;
     const mountImages = [];
     let index = 0;
-    for (const name in children) {
-      if (children.hasOwnProperty(name)) {
+
+    if (!!children) {
+      const childrenNames = Object.keys(children);
+      for (let i = 0; i < childrenNames; ++i) {
+        const name = childrenNames[i];
+
         const child = children[name];
         // Inlined for performance, see `ReactInstanceHandles.createReactID`.
         const rootID = this._rootNodeID + name;
@@ -225,6 +229,7 @@ class InternalComponent {
         index++;
       }
     }
+
     return mountImages;
   }
 
@@ -421,50 +426,60 @@ class InternalComponent {
     // `lastIndex` will be the last index visited in `prevChildren`.
     let lastIndex = 0;
     let nextIndex = 0;
-    for (const childName in nextChildren) {
-      if (!nextChildren.hasOwnProperty(childName)) {
-        continue;
-      }
 
-      if (remountTrigger.wantRemount) {
-        // This component will be remounted, (see extrude geometry)
-        // No need to update children any more as they will also be remounted!
-        continue;
-      }
+    if (!!nextChildren) {
+      const nextChildrenNames = Object.keys(nextChildren);
 
-      const prevChild = prevChildren && prevChildren[childName];
-      const nextChild = nextChildren[childName];
-
-      if (prevChild === nextChild) {
-        this.moveChild(prevChild, nextIndex, lastIndex);
-        lastIndex = Math.max(prevChild._mountIndex, lastIndex);
-        prevChild._mountIndex = nextIndex;
-      } else {
-        if (prevChild) {
-          // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
-          lastIndex = Math.max(prevChild._mountIndex, lastIndex);
-          this._unmountChild(prevChild);
-        }
+      for (let i = 0; i < nextChildrenNames.length; ++i) {
+        const childName = nextChildrenNames[i];
 
         if (remountTrigger.wantRemount) {
-          // The remount can be triggered by unmountChild as well (see extrude geometry)
+          // This component will be remounted, (see extrude geometry)
+          // No need to update children any more as they will also be remounted!
           continue;
         }
 
-        // The child must be instantiated before it's mounted.
-        this._mountChildByNameAtIndex(nextChild, childName, nextIndex, transaction, context);
+        const prevChild = prevChildren && prevChildren[childName];
+        const nextChild = nextChildren[childName];
+
+        if (prevChild === nextChild) {
+          this.moveChild(prevChild, nextIndex, lastIndex);
+          lastIndex = Math.max(prevChild._mountIndex, lastIndex);
+          prevChild._mountIndex = nextIndex;
+        } else {
+          if (prevChild) {
+            // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
+            lastIndex = Math.max(prevChild._mountIndex, lastIndex);
+            this._unmountChild(prevChild);
+          }
+
+          if (remountTrigger.wantRemount) {
+            // The remount can be triggered by unmountChild as well (see extrude geometry)
+            continue;
+          }
+
+          // The child must be instantiated before it's mounted.
+          this._mountChildByNameAtIndex(nextChild, childName, nextIndex, transaction, context);
+        }
+
+        nextIndex++;
       }
-      nextIndex++;
     }
 
-    // Remove children that are no longer present.
-    for (const childName in prevChildren) {
-      if (remountTrigger.wantRemount) {
-        continue;
-      }
+    if (!!prevChildren) {
+      // Remove children that are no longer present.
+      const prevChildrenNames = Object.keys(prevChildren);
 
-      if (prevChildren.hasOwnProperty(childName) && !(nextChildren && nextChildren.hasOwnProperty(childName))) {
-        this._unmountChild(prevChildren[childName]);
+      for (let i = 0; i < prevChildrenNames.length; ++i) {
+        const childName = prevChildrenNames[i];
+
+        if (remountTrigger.wantRemount) {
+          continue;
+        }
+
+        if (!(nextChildren && nextChildren.hasOwnProperty(childName))) {
+          this._unmountChild(prevChildren[childName]);
+        }
       }
     }
 

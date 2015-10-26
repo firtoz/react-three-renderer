@@ -365,16 +365,20 @@ if (process.env.NODE_ENV !== 'production') {
    * @private
    */
   const _checkPropTypes = (componentName, propTypes, props, location, owner) => {
-    for (const propName in props) {
-      if (props.hasOwnProperty(propName)) {
-        if (propName === 'children') {
-          continue;
-        }
+    const propNames = Object.keys(props);
+    for (let i = 0; i < propNames.length; ++i) {
+      const propName = propNames[i];
 
-        const addendum = getDeclarationErrorAddendum(owner);
+      if (propName === 'children') {
+        continue;
+      }
 
+      if (!propTypes.hasOwnProperty(propName)) {
         const errorMessage = `Foreign prop ${propName} found in ${componentName}.`;
-        if (!propTypes.hasOwnProperty(propName) && !(errorMessage in loggedTypeFailures)) {
+
+        if (!(errorMessage in loggedTypeFailures)) {
+          const addendum = getDeclarationErrorAddendum(owner);
+
           // Only monitor this failure once because there tends to be a lot of the
           // same error.
           loggedTypeFailures[errorMessage] = true;
@@ -383,44 +387,46 @@ if (process.env.NODE_ENV !== 'production') {
         }
       }
     }
-    for (const propName in propTypes) {
-      if (propTypes.hasOwnProperty(propName)) {
-        let error;
-        // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
-        try {
-          // This is intentionally an invariant that gets caught. It's the same
-          // behavior as without this statement except with a better message.
-          if (typeof propTypes[propName] !== 'function') {
-            if (process.env.NODE_ENV !== 'production') {
-              invariant(false, '%s: %s type `%s` is invalid; it must be a function, usually from '
-                + 'React.PropTypes.', componentName || 'React class',
-                ReactPropTypeLocationNames[location], propName);
-            } else {
-              invariant(false);
-            }
+
+    const propTypeNames = Object.keys(propTypes);
+    for (let i = 0; i < propTypeNames.length; ++i) {
+      const propName = propTypeNames[i];
+
+      let error;
+      // Prop type validation may throw. In case they do, we don't want to
+      // fail the render phase where it didn't fail before. So we log it.
+      // After these have been cleaned up, we'll let them throw.
+      try {
+        // This is intentionally an invariant that gets caught. It's the same
+        // behavior as without this statement except with a better message.
+        if (typeof propTypes[propName] !== 'function') {
+          if (process.env.NODE_ENV !== 'production') {
+            invariant(false, '%s: %s type `%s` is invalid; it must be a function, usually from '
+              + 'React.PropTypes.', componentName || 'React class',
+              ReactPropTypeLocationNames[location], propName);
+          } else {
+            invariant(false);
           }
-          error = propTypes[propName](props, propName, componentName, location);
-        } catch (ex) {
-          error = ex;
         }
+        error = propTypes[propName](props, propName, componentName, location);
+      } catch (ex) {
+        error = ex;
+      }
 
-        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker '
-          + 'function must return `null` or an `Error` but returned a %s. '
-          + 'You may have forgotten to pass an argument to the type checker '
-          + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and '
-          + 'shape all require an argument).', componentName || 'React class',
-          ReactPropTypeLocationNames[location], propName, typeof error);
+      warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker '
+        + 'function must return `null` or an `Error` but returned a %s. '
+        + 'You may have forgotten to pass an argument to the type checker '
+        + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and '
+        + 'shape all require an argument).', componentName || 'React class',
+        ReactPropTypeLocationNames[location], propName, typeof error);
 
-        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-          // Only monitor this failure once because there tends to be a lot of the
-          // same error.
-          loggedTypeFailures[error.message] = true;
+      if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+        // Only monitor this failure once because there tends to be a lot of the
+        // same error.
+        loggedTypeFailures[error.message] = true;
 
-          const addendum = getDeclarationErrorAddendum(owner);
-          warning(false, 'Failed propType: %s%s', error.message, addendum);
-        }
+        const addendum = getDeclarationErrorAddendum(owner);
+        warning(false, 'Failed propType: %s%s', error.message, addendum);
       }
     }
   };
