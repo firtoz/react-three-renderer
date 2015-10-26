@@ -330,7 +330,9 @@ class React3Renderer {
           const agent = __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent;
           this._hookAgent(agent);
         } else {
-          __REACT_DEVTOOLS_GLOBAL_HOOK__.sub('react-devtools', (agent) => {
+          this._devtoolsCallbackCleanup = __REACT_DEVTOOLS_GLOBAL_HOOK__.sub('react-devtools', (agent) => {
+            this._devtoolsCallbackCleanup();
+
             this._hookAgent(agent);
           });
         }
@@ -777,6 +779,10 @@ class React3Renderer {
     this.nextReactRootIndex = 0;
 
     if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
+      if (this._devtoolsCallbackCleanup) {
+        this._devtoolsCallbackCleanup();
+      }
+
       if (this._devToolsRendererDefinition) {
         if (this._agent) {
           this._agent.onUnmounted(this._devToolsRendererDefinition);
