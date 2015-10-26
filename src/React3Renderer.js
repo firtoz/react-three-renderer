@@ -26,6 +26,8 @@ import THREE from 'three.js';
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
+let getDeclarationErrorAddendum;
+
 if (process.env.NODE_ENV !== 'production') {
   // prop type helpers
   if (!THREE._renamed) {
@@ -44,6 +46,16 @@ if (process.env.NODE_ENV !== 'production') {
     THREE.Fog = class Fog extends THREE.Fog {
     };
   }
+
+  getDeclarationErrorAddendum = (owner) => {
+    if (owner) {
+      const name = owner.getName();
+      if (name) {
+        return ' Check the render method of `' + name + '`.';
+      }
+    }
+    return '';
+  };
 }
 
 /**
@@ -892,7 +904,6 @@ class React3Renderer {
         instance = new React3CompositeComponentWrapper(this);
       }
     } else if (typeof node === 'string' || typeof node === 'number') {
-
       if (process.env.NODE_ENV !== 'production') {
         invariant(false, 'Encountered invalid React node of type %s : %s', typeof node, node);
       } else {
