@@ -217,7 +217,7 @@ class InternalComponent {
 
     if (!!children) {
       const childrenNames = Object.keys(children);
-      for (let i = 0; i < childrenNames; ++i) {
+      for (let i = 0; i < childrenNames.length; ++i) {
         const name = childrenNames[i];
 
         const child = children[name];
