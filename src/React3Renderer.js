@@ -178,36 +178,47 @@ class React3Renderer {
     if (!nextChildren && !prevChildren) {
       return null;
     }
-    for (const childName in nextChildren) {
-      if (!nextChildren.hasOwnProperty(childName)) {
-        continue;
-      }
-      const prevChild = prevChildren && prevChildren[childName];
-      const prevElement = prevChild && prevChild._currentElement;
-      const nextElement = nextChildren[childName];
-      if (prevChild !== null && prevChild !== undefined && shouldUpdateReactComponent(prevElement, nextElement)) {
-        ReactReconciler.receiveComponent(prevChild, nextElement, transaction, context);
 
-        if (prevChild._forceRemountOfComponent) {
-          ReactReconciler.unmountComponent(prevChild, childName);
-          nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
+    if (!!nextChildren) {
+      const nextChildrenKeys = Object.keys(nextChildren);
+
+      for (let i = 0; i < nextChildrenKeys.length; ++i) {
+        const childName = nextChildrenKeys[i];
+
+        const prevChild = prevChildren && prevChildren[childName];
+        const prevElement = prevChild && prevChild._currentElement;
+        const nextElement = nextChildren[childName];
+        if (prevChild !== null && prevChild !== undefined && shouldUpdateReactComponent(prevElement, nextElement)) {
+          ReactReconciler.receiveComponent(prevChild, nextElement, transaction, context);
+
+          if (prevChild._forceRemountOfComponent) {
+            ReactReconciler.unmountComponent(prevChild, childName);
+            nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
+          } else {
+            nextChildren[childName] = prevChild;
+          }
         } else {
-          nextChildren[childName] = prevChild;
+          if (prevChild) {
+            ReactReconciler.unmountComponent(prevChild, childName);
+          }
+          // The child must be instantiated before it's mounted.
+          nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
         }
-      } else {
-        if (prevChild) {
-          ReactReconciler.unmountComponent(prevChild, childName);
-        }
-        // The child must be instantiated before it's mounted.
-        nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
       }
     }
-    // Unmount children that are no longer present.
-    for (const childName in prevChildren) {
-      if (prevChildren.hasOwnProperty(childName) && !(nextChildren && nextChildren.hasOwnProperty(childName))) {
-        ReactReconciler.unmountComponent(prevChildren[childName]);
+
+    if (!!prevChildren) {
+      // Unmount children that are no longer present.
+      const prevChildrenKeys = Object.keys(prevChildren);
+      for (let i = 0; i < prevChildrenKeys.length; ++i) {
+        const childName = prevChildrenKeys[i];
+
+        if (!(nextChildren && nextChildren.hasOwnProperty(childName))) {
+          ReactReconciler.unmountComponent(prevChildren[childName]);
+        }
       }
     }
+
     return nextChildren;
   }
 
