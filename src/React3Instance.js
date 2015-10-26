@@ -183,7 +183,9 @@ class React3DInstance {
   };
 
   addChildren(children) {
-    children.forEach(child => {
+    for (let i = 0; i < children.length; ++i) {
+      const child = children[i];
+
       if (child instanceof THREE.Scene) {
         this.setScene(child);
       } else if (child instanceof Viewport) {
@@ -195,7 +197,7 @@ class React3DInstance {
       } else {
         invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s or <resources/>.');
       }
-    });
+    }
   }
 
   removeChild(child) {
@@ -317,7 +319,9 @@ class React3DInstance {
           }
         }
 
-        boundingBoxes.forEach((boundingBox, i) => {
+        for (let i = 0; i < boundingBoxes.length; ++i) {
+          const boundingBox = boundingBoxes[i];
+
           const center = boundingBox.min.clone().add(boundingBox.max).multiplyScalar(0.5);
 
           const size = boundingBox.max.clone().sub(boundingBox.min);
@@ -326,7 +330,7 @@ class React3DInstance {
 
           highlightCube.position.copy(center);
           highlightCube.scale.copy(size);
-        });
+        }
 
         const autoClear = this._renderer.autoClear;
         this._renderer.autoClear = false;
@@ -567,17 +571,20 @@ class React3DInstance {
   }
 
   disposeResourcesAndRenderer() {
-    this._materials.forEach(material => {
+    for (let i = 0; i < this._materials.length; ++i) {
+      const material = this._materials[i];
       material.dispose();
-    });
+    }
 
-    this._geometries.forEach(geometry => {
+    for (let i = 0; i < this._geometries.length; ++i) {
+      const geometry = this._geometries[i];
       geometry.dispose();
-    });
+    }
 
-    this._textures.forEach(texture => {
+    for (let i = 0; i < this._textures.length; ++i) {
+      const texture = this._textures[i];
       texture.dispose();
-    });
+    }
 
     this._renderer.dispose();
   }
