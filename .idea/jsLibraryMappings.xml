@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{ECMAScript 6, HTML, HTML5 / EcmaScript 5, Node.js Core, WebGL, react-3 node_modules}" />
+    <file url="file://$PROJECT_DIR$" libraries="{ECMAScript 6, HTML, HTML5 / EcmaScript 5, WebGL, react-3 node_modules}" />
     <file url="PROJECT" libraries="{react-3 node_modules}" />
     <includedPredefinedLibrary name="ECMAScript 6" />
   </component>
