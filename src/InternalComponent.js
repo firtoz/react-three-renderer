@@ -21,6 +21,19 @@ function processChildContext(context) {
   return context;
 }
 
+class RemountTrigger {
+  constructor() {
+    this.wantRemount = false;
+    this.onTrigger = () => {
+    };
+
+    this.trigger = () => {
+      this.wantRemount = true;
+
+      this.onTrigger();
+    };
+  }
+}
 
 const registrationNameModules = {};
 
@@ -37,6 +50,8 @@ function enqueuePutListener(rootNodeID, propKey, nextProp, transaction) {
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
 }
+
+const getThreeObjectFromMountImage = img => img.threeObject;
 
 const ReactMultiChildMixin = ReactMultiChild.Mixin;
 
@@ -79,6 +94,12 @@ class InternalComponent {
         this.threeElementDescriptor.hideHighlight(this._threeObject);
       };
     }
+
+    this.remountTrigger = new RemountTrigger();
+
+    this.remountTrigger.onTrigger = () => {
+      this._forceRemountOfComponent = true;
+    };
   }
 
   construct(element) {
@@ -125,16 +146,20 @@ class InternalComponent {
     markup.userData.markup = markup;
     this._threeObject.userData = markup.userData;
 
-    if (mountImages && mountImages.length > 0) {
-      this.threeElementDescriptor.addChildren(this._threeObject, mountImages.map(img => img.threeObject));
+    const threeElementDescriptors = this._react3RendererInstance.threeElementDescriptors;
 
-      mountImages.forEach(mountImage => {
-        const descriptorForChild = this._react3RendererInstance.threeElementDescriptors[mountImage.elementType];
+    if (mountImages && mountImages.length > 0) {
+      this.threeElementDescriptor.addChildren(this._threeObject, mountImages.map(getThreeObjectFromMountImage));
+
+      for (let i = 0; i < mountImages.length; ++i) {
+        const mountImage = mountImages[i];
+
+        const descriptorForChild = threeElementDescriptors[mountImage.elementType];
 
         mountImage.userData.parentMarkup = markup;
 
         descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
-      });
+      }
     }
 
     this._markup = markup;
@@ -247,13 +272,11 @@ class InternalComponent {
   }
 
   _updateObjectProperties(lastProps, nextProps, transaction) {
-    let wantRemount = false;
+    const remountTrigger = this.remountTrigger;
 
-    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject, () => {
-      wantRemount = true;
+    remountTrigger.wantRemount = false;
 
-      this._forceRemountOfComponent = true;
-    });
+    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject, remountTrigger.trigger);
 
     if (process.env.NODE_ENV !== 'production') {
       this.threeElementDescriptor.checkPropTypes(this._currentElement.type, this._currentElement._owner, nextProps);
@@ -273,7 +296,7 @@ class InternalComponent {
         continue;
       }
 
-      if (wantRemount) {
+      if (remountTrigger.wantRemount) {
         break;
       }
 
@@ -298,7 +321,7 @@ class InternalComponent {
         continue;
       }
 
-      if (wantRemount) {
+      if (remountTrigger.wantRemount) {
         break;
       }
 
@@ -388,13 +411,11 @@ class InternalComponent {
       return;
     }
 
-    let wantRemount = false;
+    const remountTrigger = this.remountTrigger;
 
-    this.threeElementDescriptor.beginChildUpdates(this._threeObject, () => {
-      wantRemount = true;
+    remountTrigger.wantRemount = false;
 
-      this._forceRemountOfComponent = true;
-    });
+    this.threeElementDescriptor.beginChildUpdates(this._threeObject, remountTrigger.trigger);
 
     // `nextIndex` will increment for each child in `nextChildren`, but
     // `lastIndex` will be the last index visited in `prevChildren`.
@@ -405,7 +426,7 @@ class InternalComponent {
         continue;
       }
 
-      if (wantRemount) {
+      if (remountTrigger.wantRemount) {
         // This component will be remounted, (see extrude geometry)
         // No need to update children any more as they will also be remounted!
         continue;
@@ -425,7 +446,7 @@ class InternalComponent {
           this._unmountChild(prevChild);
         }
 
-        if (wantRemount) {
+        if (remountTrigger.wantRemount) {
           // The remount can be triggered by unmountChild as well (see extrude geometry)
           continue;
         }
@@ -438,7 +459,7 @@ class InternalComponent {
 
     // Remove children that are no longer present.
     for (const childName in prevChildren) {
-      if (wantRemount) {
+      if (remountTrigger.wantRemount) {
         continue;
       }
 
