@@ -1,7 +1,7 @@
 {
   "name": "react-three-renderer",
   "version": "0.0.1-alpha",
-  "description": "Render into three.js scenes with react.",
+  "description": "Render into a three.js canvas using React.",
   "main": "./lib/React3.js",
   "scripts": {
     "compile": "gulp babel",
