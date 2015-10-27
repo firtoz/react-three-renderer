@@ -5,6 +5,8 @@ Render into a [three.js](http://threejs.org/) canvas using [React](https://githu
 
 WARNING: This is still an experimental and incomplete project, use at your own risk!
 
+WARNING: There's absolutely zero documentation, I will work on that whenever I can!
+
 Influences
 ==========
 
