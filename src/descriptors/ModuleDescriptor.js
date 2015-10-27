@@ -15,22 +15,28 @@ class ModuleDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
+    const moduleSubclassValidator = (props, propName, componentName, location, propFullName) => {
+      const locationName = ReactPropTypeLocationNames[location];
+
+      if (!props[propName]) {
+        return new Error('Required ' + locationName + ' `' + propFullName + '` was not specified in ' + ('`' + componentName + '`.'));
+      }
+
+      if (!(props[propName].prototype instanceof Module)) {
+        const actualClassName = getClassName(props[propName]);
+
+        return new Error('Invalid ' + locationName + ' `' + propFullName +
+          '` of type ' + ('`' + actualClassName + '` supplied to `' +
+          componentName + '`, expected ') + ('subclass of `Module`.'));
+      }
+    };
+
+    moduleSubclassValidator.toString = () => {
+      return `${'```'} subclass of ReactThreeRenderer.Module ${'```'} *${'```'} required ${'```'}*`;
+    };
+
     this.hasProp('descriptor', {
-      type: (props, propName, componentName, location, propFullName) => {
-        const locationName = ReactPropTypeLocationNames[location];
-
-        if (!props[propName]) {
-          return new Error('Required ' + locationName + ' `' + propFullName + '` was not specified in ' + ('`' + componentName + '`.'));
-        }
-
-        if (!(props[propName].prototype instanceof Module)) {
-          const actualClassName = getClassName(props[propName]);
-
-          return new Error('Invalid ' + locationName + ' `' + propFullName +
-            '` of type ' + ('`' + actualClassName + '` supplied to `' +
-            componentName + '`, expected ') + ('subclass of `Module`.'));
-        }
-      },
+      type: moduleSubclassValidator,
       update: this.triggerRemount,
       default: undefined,
     });

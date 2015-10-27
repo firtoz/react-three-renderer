@@ -33,6 +33,10 @@
     "type": "git",
     "url": "git+https://github.com/toxicFork/react-three-renderer.git"
   },
+  "babel": {
+    "stage": 0,
+    "optional": ["runtime"]
+  },
   "bugs": {
     "url": "https://github.com/toxicFork/react-three-renderer/issues"
   },
