@@ -12,11 +12,5 @@ gulp.task('babel', ['clean-lib'], () => {
       optional: ['runtime'],
       stage: 0,
     }))
-    // just put them all here why don't you
-    // it's actually a genius idea
-    // or a horrible one
-    // TIME WILL TELL
-    //
-    //                           or will it
     .pipe(gulp.dest('lib/'));
 });
