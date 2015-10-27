@@ -18,7 +18,6 @@ Installation
 ============
 
 ```
-# you need these in order to be able use the 
 npm install --save react react-dom three.js
 npm install --save react-three-renderer
 ```
@@ -28,7 +27,7 @@ Usage
 The default export of the module is a react component. When mounted, any children of it will be placed into the three.js
 environment.
 
-Here's a simple example, that's implementing the scene from [getting started for three.js](http://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene).
+Here's a simple example that implements the [getting started scene for three.js](http://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene).
 
 ```js
 import React from 'react';
