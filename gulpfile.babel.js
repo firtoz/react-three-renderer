@@ -19,8 +19,7 @@ gulp.task('clean-docs', () => {
   return del(['docs/generated']);
 });
 
-gulp.task('doc', ['clean-docs'], (done) => {
-  require("babel-core/register")({stage: 0});
+gulp.task('doc', (done) => {
   const docGenerator = require('./docs/src/Generator.js');
 
   docGenerator(done);
