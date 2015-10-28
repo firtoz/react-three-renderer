@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class axisHelper extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.AxisHelper](http://threejs.org/docs/#Reference/Extras.Helpers/AxisHelper)';
+  }
+
   getDescription() {
     return ``;
   }

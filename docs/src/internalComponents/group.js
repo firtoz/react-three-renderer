@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class group extends DocInfo {
+  getIntro() {
+    return `Creates a THREE.Group`;
+  }
+
   getDescription() {
     return ``;
   }

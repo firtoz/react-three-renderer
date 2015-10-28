@@ -1,6 +1,6 @@
 import DocInfo from '../DocInfo';
 
-class Viewport extends DocInfo {
+class viewport extends DocInfo {
   getIntro() {
     return `See [THREE.WebGLRenderer.setViewport](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setViewport)`;
   }
@@ -24,4 +24,4 @@ not set, then the scene will be rendered into the viewports.`;
   }
 }
 
-export default Viewport;
+export default viewport;

@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class perspectiveCamera extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.PerspectiveCamera](http://threejs.org/docs/#Reference/Cameras/PerspectiveCamera)';
+  }
+
   getDescription() {
     return ``;
   }

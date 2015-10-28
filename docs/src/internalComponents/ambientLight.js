@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class ambientLight extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.AmbientLight]()';
+  }
+
   getDescription() {
     return ``;
   }

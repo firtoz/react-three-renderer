@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class directionalLight extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.DirectionalLight]()';
+  }
+
   getDescription() {
     return ``;
   }

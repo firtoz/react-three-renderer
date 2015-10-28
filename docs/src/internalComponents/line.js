@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class line extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.Line](http://threejs.org/docs/#Reference/Objects/Line)';
+  }
+
   getDescription() {
     return ``;
   }

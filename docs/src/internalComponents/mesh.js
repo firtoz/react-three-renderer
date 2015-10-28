@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class mesh extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.Mesh](http://threejs.org/docs/#Reference/Objects/Mesh)';
+  }
+
   getDescription() {
     return ``;
   }

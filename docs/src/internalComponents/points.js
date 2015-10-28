@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class points extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.Points](http://threejs.org/docs/#Reference/Objects/Points)';
+  }
+
   getDescription() {
     return ``;
   }
