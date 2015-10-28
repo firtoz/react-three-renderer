@@ -3,10 +3,12 @@ import DocInfo from '../DocInfo';
 class Viewport extends DocInfo {
   getDescription() {
     return `
-Creates a [scene](http://threejs.org/docs/#Reference/Scenes/Scene)
+See [THREE.WebGLRenderer.setViewport](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setViewport)
 
-If the [mainCamera](React3#mainCamera) property of the root component is not set,
-then the scene will be rendered into the viewports.`;
+It can only be placed into the [root component](React3).
+
+If the [mainCamera](React3#mainCamera) property of the root component is
+not set, then the scene will be rendered into the viewports.`;
   }
 
   getAttributesText() {
