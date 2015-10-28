@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import util from 'util';
 
 function mockPropTypes() {
   const ReactPropTypes = require('react/lib/ReactPropTypes');
@@ -67,6 +68,80 @@ function mockPropTypes() {
   };
 }
 
+function buildCategories() {
+  const categoryTree = require('./internalComponentCategories');
+
+  const flatCategories = {};
+
+  const rebuiltTree = {
+    root: {
+      name: null,
+      isRoot: true,
+      children: [],
+    },
+  };
+
+  const queue = [{
+    name: null,
+    parent: null,
+    node: {
+      treeNode: rebuiltTree.root,
+      children: {
+        ...categoryTree,
+      },
+    },
+  }];
+
+  while (queue.length > 0) {
+    const {
+      name: currentName,
+      node: {
+        treeNode,
+        children: nodeChildren,
+        },
+      } = queue.shift();
+
+    if (nodeChildren) {
+      const childNames = Object.keys(nodeChildren);
+
+      for (let i = 0; i < childNames.length; ++i) {
+        const childName = childNames[i];
+
+        const childData = nodeChildren[childName];
+
+        const childTreeNode = {
+          isRoot: false,
+          name: childName,
+          data: childData,
+          children: [],
+        };
+
+        if (flatCategories[childName]) {
+          throw new Error('This category already exists...');
+        }
+
+        flatCategories[childName] = childTreeNode;
+
+        treeNode.children.push(childTreeNode);
+
+        queue.push({
+          parent: currentName,
+          name: childName,
+          node: {
+            ...childData,
+            treeNode: childTreeNode,
+          },
+        });
+      }
+    }
+  }
+
+  return {
+    flat: flatCategories,
+    tree: rebuiltTree,
+  };
+}
+
 export default (done) => {
   // mock global variables for three.js
   GLOBAL.self = {};
@@ -89,7 +164,11 @@ export default (done) => {
 
   mockPropTypes();
 
-  fs.mkdirSync('docs/generated');
+  const allCategories = buildCategories();
+
+  if (!fs.existsSync('docs/generated')) {
+    fs.mkdirSync('docs/generated');
+  }
 
   const EDC = require('../../src/ElementDescriptorContainer');
 
@@ -137,6 +216,13 @@ export default ${componentName};
     const intro = componentInfo.getIntro();
     const description = componentInfo.getDescription();
 
+    const category = allCategories.flat[componentName];
+    if (!category) {
+      console.log('no category found for ', componentName);
+    } else {
+      category.intro = intro;
+    }
+
     let infoString = '';
 
     if (intro.length > 0) {
@@ -180,6 +266,92 @@ ${propTypes[propName].toString()}`;
 
     fs.writeFileSync(`docs/generated/${componentName}.md`, fileContents, 'utf8');
   });
+
+  // write categories
+
+  let fileContents = '';
+
+  const categoryStack = [{
+    node: allCategories.tree.root,
+    indent: -1,
+  }];
+
+  while (categoryStack.length > 0) {
+    const {
+      isTodo,
+      node,
+      indent,
+      } = categoryStack.shift();
+
+    if (node.name !== null) {
+      for (let i = 0; i < indent; ++i) {
+        fileContents += '  ';
+      }
+
+      if (isTodo) {
+        fileContents += `* ${node.name}`;
+      } else {
+        fileContents += `* [[${node.name}]]`;
+      }
+    }
+
+    const nodeData = node.data;
+
+    const children = node.children;
+
+    let needsColon = false;
+
+    if (nodeData) {
+      if (!node.isComponent) {
+        const todo = nodeData.TODO;
+        if (todo && todo.length > 0) {
+          needsColon = true;
+          categoryStack.unshift({
+            isTodo: true,
+            node: {
+              name: 'TODO',
+              children: todo.map(item => {
+                return {
+                  name: item,
+                };
+              }),
+            },
+            indent: indent + 1,
+          });
+        }
+      }
+    }
+
+    if (children && children.length > 0) {
+      needsColon = true;
+
+      for (let i = children.length - 1; i >= 0; --i) {
+        const child = children[i];
+
+        categoryStack.unshift({
+          isTodo,
+          node: child,
+          indent: indent + 1,
+        });
+      }
+    }
+
+    if (node.intro && node.intro.length > 0) {
+      needsColon = true;
+    }
+
+    if (needsColon) {
+      fileContents += `:`;
+    }
+
+    if (node.intro) {
+      fileContents += ` ${node.intro}`;
+    }
+
+    fileContents += `\n`;
+  }
+
+  fs.writeFileSync(`docs/generated/test.md`, fileContents, 'utf8');
 
   done();
 };
