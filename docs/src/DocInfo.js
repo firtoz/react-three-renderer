@@ -1,4 +1,8 @@
 class DocInfo {
+  getIntro() {
+    return ``;
+  }
+
   getDescription() {
     throw new Error(`getDescription not implemented for ${this.constructor.name}`);
   }

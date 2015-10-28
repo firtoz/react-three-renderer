@@ -134,16 +134,27 @@ export default ${componentName};
 
     const componentInfo = new ComponentInfo();
 
-    let descriptionString = componentInfo.getDescription();
+    const intro = componentInfo.getIntro();
+    const description = componentInfo.getDescription();
 
-    if (descriptionString.length > 0) {
-      descriptionString = '\n' + descriptionString + '\n';
+    let infoString = '';
+
+    if (intro.length > 0) {
+      infoString += intro + '\n';
+    }
+
+    if (description.length > 0) {
+      infoString += description + '\n';
+    }
+
+    if (infoString.length > 0) {
+      infoString = '\n' + infoString;
     }
 
     let fileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**
 
 ### ${componentName}
-${descriptionString}
+${infoString}
 `;
 
     const propNames = Object.keys(propTypes);
