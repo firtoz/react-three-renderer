@@ -153,7 +153,7 @@ export default ${componentName};
 
     let fileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**
 
-### ${componentName}
+# ${componentName}
 ${infoString}
 `;
 
@@ -165,7 +165,7 @@ ${infoString}
       fileContents += '## Attributes\n';
 
       propNames.forEach(propName => {
-        fileContents += `###${propName}
+        fileContents += `### ${propName}
 ${propTypes[propName].toString()}`;
 
         const propDescription = attributesText[propName];
