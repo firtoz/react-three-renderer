@@ -520,7 +520,7 @@ ${propTypes[propName].toString()}`;
     if (descriptor.isResource) {
       fileContents += '\n\n';
 
-      fileContents += 'This component can be added into <[[resources]]/>! See [[Resource Types]] for more information.';
+      fileContents += 'This component can be added into &lt;[[resources]]/&gt;! See [[Resource Types]] for more information.';
     }
 
     fileContents += '\n'; // EOF
