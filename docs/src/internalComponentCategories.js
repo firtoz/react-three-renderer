@@ -158,9 +158,7 @@ export default {
   'Resource Types': {
     intro: 'Allows you to reuse entities, these help save a lot of memory',
     getDescription() {
-      return `
-
-## Usage
+      return `## Usage
 
 Place <[[resources]]></[[resources]]> anywhere inside <[[React3]]/>, or any of its children.
 
