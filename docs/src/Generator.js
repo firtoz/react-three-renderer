@@ -146,45 +146,98 @@ function buildCategories() {
   };
 }
 
-export default (done) => {
-  // mock global variables for three.js
-  GLOBAL.self = {};
+function writeCategories(allCategories) {
+  let fileContents = '';
 
-  // mock global variables for internal component proptypes
-  GLOBAL.HTMLCanvasElement = class HTMLCanvasElement {
-  };
+  const categoryStack = [{
+    node: allCategories.tree.root,
+    indent: -1,
+  }];
 
-  const THREE = require('three.js');
+  while (categoryStack.length > 0) {
+    const {
+      isTodo,
+      node,
+      indent,
+      } = categoryStack.shift();
 
-  Object.keys(THREE).forEach(key => {
-    const value = THREE[key];
-    if (value && value.prototype) {
-      value.displayName = `THREE.${key}`;
-      return;
+    if (node.name !== null) {
+      for (let i = 0; i < indent; ++i) {
+        fileContents += '  ';
+      }
+
+      if (isTodo) {
+        fileContents += `* ${node.name}`;
+      } else {
+        fileContents += `* [[${node.name}]]`;
+      }
     }
 
-    THREE[key] = `THREE.${key}`;
-  });
+    const nodeData = node.data;
 
-  mockPropTypes();
+    const children = node.children;
 
-  const allCategories = buildCategories();
+    let needsColon = false;
 
-  if (!fs.existsSync('docs/generated')) {
-    fs.mkdirSync('docs/generated');
+    if (nodeData) {
+      if (!node.isComponent) {
+        const todo = nodeData.TODO;
+        if (todo && todo.length > 0) {
+          needsColon = true;
+          categoryStack.unshift({
+            isTodo: true,
+            node: {
+              name: 'TODO',
+              children: todo.map(item => {
+                return {
+                  name: item,
+                };
+              }),
+            },
+            indent: indent + 1,
+          });
+        }
+      }
+    }
+
+    if (children && children.length > 0) {
+      needsColon = true;
+
+      for (let i = children.length - 1; i >= 0; --i) {
+        const child = children[i];
+
+        categoryStack.unshift({
+          isTodo,
+          node: child,
+          indent: indent + 1,
+        });
+      }
+    }
+
+    if (node.intro && node.intro.length > 0) {
+      needsColon = true;
+    }
+
+    if (needsColon) {
+      fileContents += `:`;
+    }
+
+    if (node.intro) {
+      fileContents += ` ${node.intro}.`;
+    }
+
+    fileContents += `\n`;
   }
 
-  const EDC = require('../../src/ElementDescriptorContainer');
+  fs.writeFileSync(`docs/generated/test.md`, fileContents, 'utf8');
+}
 
-  const edc = new EDC({});
 
-  const descriptors = edc.descriptors;
+function getComponentInfo(componentName, propTypes) {
+  const infoPath = path.join(__dirname, 'internalComponents', `${componentName}.js`);
 
-  function getComponentInfo(componentName, propTypes) {
-    const infoPath = path.join(__dirname, 'internalComponents', `${componentName}.js`);
-
-    if (!fs.existsSync(infoPath)) {
-      fs.writeFileSync(infoPath, `import DocInfo from '../DocInfo';
+  if (!fs.existsSync(infoPath)) {
+    fs.writeFileSync(infoPath, `import DocInfo from '../DocInfo';
 
 class ${componentName} extends DocInfo {
   getDescription() {
@@ -193,40 +246,22 @@ class ${componentName} extends DocInfo {
 
   getAttributesText() {
     return {${Object.keys(propTypes)
-        .map(propName => {
-          return `
+      .map(propName => {
+        return `
       ${propName}: '',`;
-        }).join('')}
+      }).join('')}
     };
   }
 }
 
 export default ${componentName};
 `, 'utf8');
-    }
-
-    return require(infoPath);
   }
 
-  // populate category intros
-  Object.keys(descriptors).forEach((componentName) => {
-    const {propTypes} = descriptors[componentName];
+  return require(infoPath);
+}
 
-    const ComponentInfo = getComponentInfo(componentName, propTypes);
-
-    const componentInfo = new ComponentInfo();
-
-    const intro = componentInfo.getIntro();
-
-    const category = allCategories.flat[componentName];
-
-    if (!category) {
-      console.log('no category found for ', componentName);
-    } else {
-      category.intro = intro;
-    }
-  });
-
+function writeDescriptors(descriptors, allCategories) {
   Object.keys(descriptors).forEach((componentName) => {
     const descriptor = descriptors[componentName];
 
@@ -351,92 +386,65 @@ ${propTypes[propName].toString()}`;
 
     fs.writeFileSync(`docs/generated/${componentName}.md`, fileContents, 'utf8');
   });
+}
+function populateCategoryIntros(descriptors, allCategories) {
+// populate category intros
+  Object.keys(descriptors).forEach((componentName) => {
+    const {propTypes} = descriptors[componentName];
 
-  // write categories
+    const ComponentInfo = getComponentInfo(componentName, propTypes);
 
-  let fileContents = '';
+    const componentInfo = new ComponentInfo();
 
-  const categoryStack = [{
-    node: allCategories.tree.root,
-    indent: -1,
-  }];
+    const intro = componentInfo.getIntro();
 
-  while (categoryStack.length > 0) {
-    const {
-      isTodo,
-      node,
-      indent,
-      } = categoryStack.shift();
+    const category = allCategories.flat[componentName];
 
-    if (node.name !== null) {
-      for (let i = 0; i < indent; ++i) {
-        fileContents += '  ';
-      }
+    if (!category) {
+      console.log('no category found for ', componentName);
+    } else {
+      category.intro = intro;
+    }
+  });
+}
+export default (done) => {
+  // mock global variables for three.js
+  GLOBAL.self = {};
 
-      if (isTodo) {
-        fileContents += `* ${node.name}`;
-      } else {
-        fileContents += `* [[${node.name}]]`;
-      }
+  // mock global variables for internal component proptypes
+  GLOBAL.HTMLCanvasElement = class HTMLCanvasElement {
+  };
+
+  const THREE = require('three.js');
+
+  Object.keys(THREE).forEach(key => {
+    const value = THREE[key];
+    if (value && value.prototype) {
+      value.displayName = `THREE.${key}`;
+      return;
     }
 
-    const nodeData = node.data;
+    THREE[key] = `THREE.${key}`;
+  });
 
-    const children = node.children;
+  mockPropTypes();
 
-    let needsColon = false;
+  const allCategories = buildCategories();
 
-    if (nodeData) {
-      if (!node.isComponent) {
-        const todo = nodeData.TODO;
-        if (todo && todo.length > 0) {
-          needsColon = true;
-          categoryStack.unshift({
-            isTodo: true,
-            node: {
-              name: 'TODO',
-              children: todo.map(item => {
-                return {
-                  name: item,
-                };
-              }),
-            },
-            indent: indent + 1,
-          });
-        }
-      }
-    }
-
-    if (children && children.length > 0) {
-      needsColon = true;
-
-      for (let i = children.length - 1; i >= 0; --i) {
-        const child = children[i];
-
-        categoryStack.unshift({
-          isTodo,
-          node: child,
-          indent: indent + 1,
-        });
-      }
-    }
-
-    if (node.intro && node.intro.length > 0) {
-      needsColon = true;
-    }
-
-    if (needsColon) {
-      fileContents += `:`;
-    }
-
-    if (node.intro) {
-      fileContents += ` ${node.intro}.`;
-    }
-
-    fileContents += `\n`;
+  if (!fs.existsSync('docs/generated')) {
+    fs.mkdirSync('docs/generated');
   }
 
-  fs.writeFileSync(`docs/generated/test.md`, fileContents, 'utf8');
+  const EDC = require('../../src/ElementDescriptorContainer');
+
+  const {descriptors} = new EDC({});
+
+  populateCategoryIntros(descriptors, allCategories);
+
+  writeDescriptors(descriptors, allCategories);
+
+  // write categories
+  writeCategories(allCategories);
 
   done();
 };
