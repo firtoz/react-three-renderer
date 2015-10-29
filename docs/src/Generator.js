@@ -5,6 +5,22 @@ import path from 'path';
 // OH MY GOD YOU ARE A GENIUS
 //   I KISS YOU
 
+function getLineage(category) {
+  const lineage = [];
+  let parent = category.parent;
+
+  while (parent) {
+    if (parent.name) {
+      lineage.push(parent.name);
+    }
+
+    parent = parent.parent;
+  }
+
+  lineage.reverse();
+  return lineage;
+}
+
 function addFileToWrite(files, filename, contents) {
   const lowercaseFilename = filename.toLowerCase();
   if (files[lowercaseFilename]) {
@@ -213,7 +229,15 @@ ${'```'}
     const nodeData = node.data;
 
     if (!node.isComponent && !node.isTodo && !node.isRoot) {
-      let nodeFileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ ${node.name}`;
+      let nodeFileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
+
+      const lineage = getLineage(node);
+
+      nodeFileContents += lineage.map(name => {
+        return `[[${name}]] ▸ `;
+      }).join('');
+
+      nodeFileContents += `**${node.name}**`;
 
       if (nodeData) {
         const description = nodeData.description || (nodeData.getDescription && nodeData.getDescription.call(nodeData)) || undefined;
@@ -337,18 +361,7 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
 
       category.isComponent = true;
 
-      const lineage = [];
-      let parent = category.parent;
-
-      while (parent) {
-        if (parent.name) {
-          lineage.push(parent.name);
-        }
-
-        parent = parent.parent;
-      }
-
-      lineage.reverse();
+      const lineage = getLineage(category);
 
       fileContents += lineage.map(name => {
         return `[[${name}]] ▸ `;
@@ -504,8 +517,8 @@ export default (done) => {
 
   const allCategories = buildCategories();
 
-  if (!fs.existsSync('docs/generated')) {
-    fs.mkdirSync('docs/generated');
+  if (!fs.existsSync('wiki')) {
+    throw new Error('Please load the wiki submodule!');
   }
 
   const EDC = require('../../src/ElementDescriptorContainer');
