@@ -241,7 +241,7 @@ export default ${componentName};
     if (!category) {
       console.log('no category found for ', componentName);
 
-      fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**`
+      fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**`;
     } else {
       fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
 
