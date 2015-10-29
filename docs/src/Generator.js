@@ -204,6 +204,25 @@ export default ${componentName};
     return require(infoPath);
   }
 
+  // populate category intros
+  Object.keys(descriptors).forEach((componentName) => {
+    const {propTypes} = descriptors[componentName];
+
+    const ComponentInfo = getComponentInfo(componentName, propTypes);
+
+    const componentInfo = new ComponentInfo();
+
+    const intro = componentInfo.getIntro();
+
+    const category = allCategories.flat[componentName];
+
+    if (!category) {
+      console.log('no category found for ', componentName);
+    } else {
+      category.intro = intro;
+    }
+  });
+
   Object.keys(descriptors).forEach((componentName) => {
     const descriptor = descriptors[componentName];
 
@@ -224,8 +243,6 @@ export default ${componentName};
 
       fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**`
     } else {
-      category.intro = intro;
-
       fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
 
       const lineage = [];
@@ -306,6 +323,24 @@ ${propTypes[propName].toString()}`;
           fileContents += `: ${propDescription}`;
         }
       });
+    }
+
+    if (category) {
+      const children = category.children;
+
+      if (children && children.length > 0) {
+        fileContents += '\n\n## Children:'; // EOF
+
+        for (let i = 0; i < children.length; ++i) {
+          const child = children[i];
+
+          fileContents += `\n  * [[${child.name}]]`;
+
+          if (child.intro) {
+            fileContents += `: ${child.intro}`;
+          }
+        }
+      }
     }
 
     fileContents += '\n'; // EOF
