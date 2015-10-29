@@ -160,7 +160,7 @@ export default {
     getDescription() {
       return `## Usage
 
-Place <[[resources]]></[[resources]]> anywhere inside <[[React3]]/>, or any of its children.
+Place [&lt;resources&gt;&lt;/resources&gt](resources); anywhere inside [&lt;React3/&gt;](Entry-Point), or any of its children.
 
 > The preferred place is before any other component, since it's expensive to replace, but it's up to you.
 
