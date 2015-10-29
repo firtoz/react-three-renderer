@@ -185,9 +185,9 @@ function buildCategories() {
 }
 
 function writeCategories(allCategories, filesToWrite, prefix) {
-  let fileContents = ` > [Wiki](Home) ▸ **Native Components**
+  let fileContents = ` > [Wiki](Home) ▸ **Internal Components**
 
-# Native Components
+# Internal Components
 
 These components can be used without needing to require any modules, e.g.
 
@@ -241,7 +241,7 @@ ${'```'}
 
     const intro = node.intro;
     if (!node.isComponent && !node.isTodo && !node.isRoot) {
-      let nodeFileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
+      let nodeFileContents = `> [Wiki](Home) ▸ [[Internal Components]] ▸ `;
 
       const lineage = getLineage(node);
 
@@ -364,7 +364,7 @@ ${'```'}
     fileContents += nodeContents;
   }
 
-  addFileToWrite(filesToWrite, `${prefix}Native-Components.md`, fileContents);
+  addFileToWrite(filesToWrite, `${prefix}Internal-Components.md`, fileContents);
 }
 
 function getComponentInfo(componentName, propTypes) {
@@ -414,9 +414,9 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
     if (!category) {
       console.log('no category found for ', componentName); // eslint-disable-line
 
-      fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**`;
+      fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ **${componentName}**`;
     } else {
-      fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
+      fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ `;
 
       category.isComponent = true;
 
