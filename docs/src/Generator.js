@@ -6,11 +6,15 @@ import path from 'path';
 //   I KISS YOU
 
 function addFileToWrite(files, filename, contents) {
-  if (files[filename]) {
+  const lowercaseFilename = filename.toLowerCase();
+  if (files[lowercaseFilename]) {
     throw new Error(`The filename ${filename} will already be written into!`);
   }
 
-  files[filename] = contents;
+  files[lowercaseFilename] = {
+    filename: filename.replace(/\s+/, '-'),
+    contents,
+  };
 }
 
 function mockPropTypes() {
@@ -520,8 +524,8 @@ export default (done) => {
   const fileNames = Object.keys(filesToWrite);
 
   for (let i = 0; i < fileNames.length; ++i) {
-    const fileName = fileNames[i];
-    fs.writeFileSync(fileName.replace(/\s+/, '-'), filesToWrite[fileName], 'utf8');
+    const {filename, contents} = filesToWrite[fileNames[i]];
+    fs.writeFileSync(filename, contents, 'utf8');
   }
 
   done();
