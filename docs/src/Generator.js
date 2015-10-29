@@ -5,6 +5,14 @@ import path from 'path';
 // OH MY GOD YOU ARE A GENIUS
 //   I KISS YOU
 
+function addFileToWrite(files, filename, contents) {
+  if (files[filename]) {
+    throw new Error(`The filename ${filename} will already be written into!`);
+  }
+
+  files[filename] = contents;
+}
+
 function mockPropTypes() {
   const ReactPropTypes = require('react/lib/ReactPropTypes');
 
@@ -147,7 +155,7 @@ function buildCategories() {
   };
 }
 
-function writeNativeComponents(allCategories) {
+function writeCategories(allCategories, filesToWrite) {
   let fileContents = ` > [Wiki](Home) ▸ **Native Components**
 
 # Native Components
@@ -200,6 +208,19 @@ ${'```'}
 
     const nodeData = node.data;
 
+    if (!node.isComponent && !node.isTodo && !node.isRoot) {
+      let nodeFileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ ${node.name}`;
+
+      if (nodeData) {
+        const description = nodeData.description || (nodeData.getDescription && nodeData.getDescription.call(nodeData)) || undefined;
+        if (description) {
+          nodeFileContents += '\n' + description;
+        }
+      }
+
+      addFileToWrite(filesToWrite, `docs/generated/${node.name}.md`, nodeFileContents);
+    }
+
     const children = node.children;
 
     let needsColon = false;
@@ -213,8 +234,10 @@ ${'```'}
             isTodo: true,
             node: {
               name: 'TODO',
+              isTodo: true,
               children: todo.map(item => {
                 return {
+                  isTodo: true,
                   name: item,
                 };
               }),
@@ -254,7 +277,7 @@ ${'```'}
     fileContents += `\n`;
   }
 
-  fs.writeFileSync(`docs/generated/Native-Components.md`, fileContents, 'utf8');
+  addFileToWrite(filesToWrite, `docs/generated/Native-Components.md`, fileContents);
 }
 
 function getComponentInfo(componentName, propTypes) {
@@ -285,7 +308,7 @@ export default ${componentName};
   return require(infoPath);
 }
 
-function writeDescriptors(descriptors, allCategories) {
+function writeDescriptors(descriptors, allCategories, filesToWrite) {
   Object.keys(descriptors).forEach((componentName) => {
     const descriptor = descriptors[componentName];
 
@@ -307,6 +330,8 @@ function writeDescriptors(descriptors, allCategories) {
       fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**`;
     } else {
       fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
+
+      category.isComponent = true;
 
       const lineage = [];
       let parent = category.parent;
@@ -347,6 +372,16 @@ function writeDescriptors(descriptors, allCategories) {
 # ${componentName}
 ${infoString}
 `;
+
+    if (descriptor.isResource) {
+      // move resourceId prop to the end
+
+      const resourceIdProp = propTypes.resourceId;
+
+      delete propTypes.resourceId;
+
+      propTypes.resourceId = resourceIdProp;
+    }
 
     const propNames = Object.keys(propTypes);
 
@@ -409,18 +444,18 @@ ${propTypes[propName].toString()}`;
     if (descriptor.isResource) {
       fileContents += '\n\n';
 
-      fileContents += 'This component can be added into <[[resources]]/>! See [[Resources]] for more information.';
+      fileContents += 'This component can be added into <[[resources]]/>! See [[Resource Types]] for more information.';
     }
 
     fileContents += '\n'; // EOF
 
-    fs.writeFileSync(`docs/generated/${componentName}.md`, fileContents, 'utf8');
+    addFileToWrite(filesToWrite, `docs/generated/${componentName}.md`, fileContents);
   });
 }
 function populateCategoryIntros(descriptors, allCategories) {
 // populate category intros
   Object.keys(descriptors).forEach((componentName) => {
-    const {propTypes} = descriptors[componentName];
+    const {propTypes, isResource} = descriptors[componentName];
 
     const ComponentInfo = getComponentInfo(componentName, propTypes);
 
@@ -434,6 +469,10 @@ function populateCategoryIntros(descriptors, allCategories) {
       console.log('no category found for ', componentName); // eslint-disable-line
     } else {
       category.intro = intro;
+    }
+
+    if (isResource) {
+      allCategories.flat['Resource Types'].data.resourceTypes.push(category);
     }
   });
 }
@@ -471,10 +510,19 @@ export default (done) => {
 
   populateCategoryIntros(descriptors, allCategories);
 
-  writeDescriptors(descriptors, allCategories);
+  const filesToWrite = {};
+
+  writeDescriptors(descriptors, allCategories, filesToWrite);
 
   // write categories
-  writeNativeComponents(allCategories);
+  writeCategories(allCategories, filesToWrite);
+
+  const fileNames = Object.keys(filesToWrite);
+
+  for (let i = 0; i < fileNames.length; ++i) {
+    const fileName = fileNames[i];
+    fs.writeFileSync(fileName.replace(/\s+/, '-'), filesToWrite[fileName], 'utf8');
+  }
 
   done();
 };

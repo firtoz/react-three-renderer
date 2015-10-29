@@ -155,17 +155,33 @@ export default {
       'Path',
     ],
   },
-  Resources: {
+  'Resource Types': {
     intro: 'Allows you to reuse entities, these help save a lot of memory',
-    description: `
+    getDescription() {
+      return `
 
 ## Usage
 
-Place <[[resources]]></[[resources]]> anywhere inside <[[React3]]/>.
+Place <[[resources]]></[[resources]]> anywhere inside <[[React3]]/>, or any of its children.
 
-Then place any one of [[material], [[texture]], [[geometry]], [[shape]] inside.
+> The preferred place is before any other component, since it's expensive to replace, but it's up to you.
 
-`,
+Then you can place these components inside:
+
+${this.resourceTypes
+        .map(({name, intro}) => {
+          let item = `* [[${name}]]`;
+
+          if (intro && intro.length > 0) {
+            item += `: ${intro}.`;
+          }
+
+          return item;
+        }).join('\n')}
+
+`;
+    },
+    resourceTypes: [],
     children: {
       resources: true,
       materialResource: true,
