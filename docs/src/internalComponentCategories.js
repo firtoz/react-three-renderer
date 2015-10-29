@@ -157,6 +157,15 @@ export default {
   },
   Resources: {
     intro: 'Allows you to reuse entities, these help save a lot of memory',
+    description: `
+
+## Usage
+
+Place <[[resources]]></[[resources]]> anywhere inside <[[React3]]/>.
+
+Then place any one of [[material], [[texture]], [[geometry]], [[shape]] inside.
+
+`,
     children: {
       resources: true,
       materialResource: true,

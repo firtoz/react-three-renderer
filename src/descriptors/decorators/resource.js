@@ -16,6 +16,9 @@ function resource(descriptor) {
   class ResourceDescriptor extends descriptor {
     static displayName = `${descriptor.displayName || descriptor.name}`;
 
+    // used for docs
+    isResource = true;
+
     constructor(react3RendererInstance) {
       super(react3RendererInstance);
 

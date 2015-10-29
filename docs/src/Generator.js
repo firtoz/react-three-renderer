@@ -406,6 +406,12 @@ ${propTypes[propName].toString()}`;
       }
     }
 
+    if (descriptor.isResource) {
+      fileContents += '\n\n';
+
+      fileContents += 'This component can be added into <[[resources]]/>! See [[Resources]] for more information.';
+    }
+
     fileContents += '\n'; // EOF
 
     fs.writeFileSync(`docs/generated/${componentName}.md`, fileContents, 'utf8');
