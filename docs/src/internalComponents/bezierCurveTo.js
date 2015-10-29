@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class bezierCurveTo extends DocInfo {
+  getIntro() {
+    return 'Calls [THREE.Path#bezierCurveTo](http://threejs.org/docs/#Reference/Extras.Core/Path.bezierCurveTo) on the parent shape';
+  }
+
   getDescription() {
     return ``;
   }

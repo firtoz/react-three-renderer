@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class uniform extends DocInfo {
+  getIntro() {
+    return 'A single uniform value for a shader material';
+  }
+
   getDescription() {
     return ``;
   }

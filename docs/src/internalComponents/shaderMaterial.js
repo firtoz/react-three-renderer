@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class shaderMaterial extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial)';
+  }
+
   getDescription() {
     return ``;
   }

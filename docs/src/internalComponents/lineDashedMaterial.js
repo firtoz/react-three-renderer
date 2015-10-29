@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class lineDashedMaterial extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.LineDashedMaterial](http://threejs.org/docs/#Reference/Materials/LineDashedMaterial)';
+  }
+
   getDescription() {
     return ``;
   }

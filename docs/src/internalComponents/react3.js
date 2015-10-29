@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class react3 extends DocInfo {
+  getIntro() {
+    return 'Handles renderer and canvas configuration.';
+  }
+
   getDescription() {
     return ``;
   }

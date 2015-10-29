@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class cylinderGeometry extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.CylinderGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/CylinderGeometry)';
+  }
+
   getDescription() {
     return ``;
   }

@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import util from 'util';
 
 function mockPropTypes() {
   const ReactPropTypes = require('react/lib/ReactPropTypes');
@@ -111,6 +110,7 @@ function buildCategories() {
 
         const childTreeNode = {
           isRoot: false,
+          parent: treeNode,
           name: childName,
           data: childData,
           children: [],
@@ -216,28 +216,53 @@ export default ${componentName};
     const intro = componentInfo.getIntro();
     const description = componentInfo.getDescription();
 
+    let fileContents = '';
+
     const category = allCategories.flat[componentName];
     if (!category) {
       console.log('no category found for ', componentName);
+
+      fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**`
     } else {
       category.intro = intro;
+
+      fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
+
+      const lineage = [];
+      let parent = category.parent;
+
+      while (parent) {
+        if (parent.name) {
+          lineage.push(parent.name);
+        }
+
+        parent = parent.parent;
+      }
+
+      lineage.reverse();
+
+      fileContents += lineage.map(name => {
+        return `[[${name}]] ▸ `;
+      }).join('');
+
+      fileContents += `**${componentName}**`;
     }
 
     let infoString = '';
 
     if (intro.length > 0) {
-      infoString += intro + '\n';
+      infoString += intro + '.\n';
     }
 
     if (description.length > 0) {
-      infoString += description + '\n';
+      infoString += description + '.\n';
     }
 
     if (infoString.length > 0) {
       infoString = '\n' + infoString;
     }
 
-    let fileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**
+    fileContents += `
 
 # ${componentName}
 ${infoString}
@@ -245,12 +270,33 @@ ${infoString}
 
     const propNames = Object.keys(propTypes);
 
+    propNames.sort((a, b) => {
+      // have required properties go before the optional ones
+
+      const firstProp = propTypes[a];
+      const secondProp = propTypes[b];
+
+      if (firstProp._isRequired === secondProp._isRequired) {
+        return 0;
+      }
+
+      if (firstProp._isRequired) {
+        return -1;
+      }
+
+      return 1;
+    });
+
     const attributesText = componentInfo.getAttributesText();
 
     if (propNames.length > 0) {
       fileContents += '## Attributes\n';
 
-      propNames.forEach(propName => {
+      propNames.forEach((propName, i) => {
+        if (i > 0) {
+          fileContents += '\n\n';
+        }
+
         fileContents += `### ${propName}
 ${propTypes[propName].toString()}`;
 
@@ -259,10 +305,10 @@ ${propTypes[propName].toString()}`;
         if (propDescription && propDescription.length > 0) {
           fileContents += `: ${propDescription}`;
         }
-
-        fileContents += '\n\n';
       });
     }
+
+    fileContents += '\n'; // EOF
 
     fs.writeFileSync(`docs/generated/${componentName}.md`, fileContents, 'utf8');
   });
@@ -345,7 +391,7 @@ ${propTypes[propName].toString()}`;
     }
 
     if (node.intro) {
-      fileContents += ` ${node.intro}`;
+      fileContents += ` ${node.intro}.`;
     }
 
     fileContents += `\n`;

@@ -67,26 +67,16 @@ export default {
       },
     },
   },
-  Resources: {
-    children: {
-      resources: true,
-      materialResource: true,
-      textureResource: true,
-      geometryResource: true,
-      shapeResource: true,
-      shapeGeometryResource: true,
-    },
-  },
   Materials: {
     children: {
       meshBasicMaterial: true,
       meshPhongMaterial: true,
       meshLambertMaterial: true,
+      meshDepthMaterial: true,
+      meshNormalMaterial: true,
       pointsMaterial: true,
       lineBasicMaterial: true,
       lineDashedMaterial: true,
-      meshDepthMaterial: true,
-      meshNormalMaterial: true,
       spriteMaterial: true,
       shaderMaterial: {
         children: {
@@ -164,10 +154,20 @@ export default {
       'Path',
     ],
   },
+  Resources: {
+    children: {
+      resources: true,
+      materialResource: true,
+      textureResource: true,
+      geometryResource: true,
+      shapeResource: true,
+      shapeGeometryResource: true,
+    },
+  },
   Advanced: {
     children: {
       react3: true,
       module: true,
-    }
+    },
   },
 };

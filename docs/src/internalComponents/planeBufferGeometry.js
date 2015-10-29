@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class planeBufferGeometry extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.PlaneBufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PlaneBufferGeometry)';
+  }
+
   getDescription() {
     return ``;
   }

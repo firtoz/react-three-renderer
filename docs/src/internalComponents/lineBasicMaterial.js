@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class lineBasicMaterial extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.LineBasicMaterial](http://threejs.org/docs/#Reference/Materials/LineBasicMaterial)';
+  }
+
   getDescription() {
     return ``;
   }

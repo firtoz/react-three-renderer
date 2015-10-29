@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class octahedronGeometry extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.OctahedronGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/OctahedronGeometry)';
+  }
+
   getDescription() {
     return ``;
   }

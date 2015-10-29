@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class sphereGeometry extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.SphereGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/SphereGeometry)';
+  }
+
   getDescription() {
     return ``;
   }

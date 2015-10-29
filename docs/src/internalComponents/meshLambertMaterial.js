@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class meshLambertMaterial extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.MeshLambertMaterial](http://threejs.org/docs/#Reference/Materials/MeshLambertMaterial)';
+  }
+
   getDescription() {
     return ``;
   }

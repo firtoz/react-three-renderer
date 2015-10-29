@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class meshPhongMaterial extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.MeshPhongMaterial](http://threejs.org/docs/#Reference/Materials/MeshPhongMaterial)';
+  }
+
   getDescription() {
     return ``;
   }

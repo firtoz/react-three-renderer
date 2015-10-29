@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class circleGeometry extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.CircleGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/CircleGeometry)';
+  }
+
   getDescription() {
     return ``;
   }

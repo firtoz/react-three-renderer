@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class meshNormalMaterial extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.MeshNormalMaterial](http://threejs.org/docs/#Reference/Materials/MeshNormalMaterial)';
+  }
+
   getDescription() {
     return ``;
   }

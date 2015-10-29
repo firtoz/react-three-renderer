@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class latheGeometry extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.LatheGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/LatheGeometry)';
+  }
+
   getDescription() {
     return ``;
   }
