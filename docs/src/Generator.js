@@ -33,6 +33,15 @@ function addFileToWrite(files, filename, contents) {
   };
 }
 
+function appendToFileToWrite(files, filename, contents) {
+  const lowercaseFilename = filename.toLowerCase();
+  if (!files[lowercaseFilename]) {
+    throw new Error(`The filename ${filename} does not exist!`);
+  }
+
+  files[lowercaseFilename].contents += contents;
+}
+
 function mockPropTypes() {
   const ReactPropTypes = require('react/lib/ReactPropTypes');
 
@@ -203,31 +212,34 @@ ${'```'}
 `;
 
   const categoryStack = [{
+    stackParent: null,
     node: allCategories.tree.root,
     indent: -1,
   }];
 
   while (categoryStack.length > 0) {
+    const stackItem = categoryStack.shift();
+
     const {
       isTodo,
       node,
       indent,
-      } = categoryStack.shift();
+      stackParent,
+      } = stackItem;
+
+    let nodeContents = '';
 
     if (node.name !== null) {
-      for (let i = 0; i < indent; ++i) {
-        fileContents += '  ';
-      }
-
       if (isTodo) {
-        fileContents += `* ${node.name}`;
+        nodeContents += `* ${node.name}`;
       } else {
-        fileContents += `* [[${node.name}]]`;
+        nodeContents += `* [[${node.name}]]`;
       }
     }
 
     const nodeData = node.data;
 
+    const intro = node.intro;
     if (!node.isComponent && !node.isTodo && !node.isRoot) {
       let nodeFileContents = `> [Wiki](Home) ▸ [[Native Components]] ▸ `;
 
@@ -239,14 +251,21 @@ ${'```'}
 
       nodeFileContents += `**${node.name}**`;
 
+      if (intro) {
+        nodeFileContents += `\n\n${intro}.`;
+      }
+
       if (nodeData) {
         const description = nodeData.description || (nodeData.getDescription && nodeData.getDescription.call(nodeData)) || undefined;
         if (description) {
-          nodeFileContents += '\n' + description;
+          nodeFileContents += '\n\n' + `${description}.`;
         }
       }
 
-      addFileToWrite(filesToWrite, `${prefix}${node.name}.md`, nodeFileContents);
+      node.filename = `${prefix}${node.name}.md`;
+      node.hasChildren = false;
+
+      addFileToWrite(filesToWrite, node.filename, nodeFileContents);
     }
 
     const children = node.children;
@@ -260,8 +279,10 @@ ${'```'}
           needsColon = true;
           categoryStack.unshift({
             isTodo: true,
+            stackParent: stackItem,
             node: {
               name: 'TODO',
+              stackParent: stackItem,
               isTodo: true,
               children: todo.map(item => {
                 return {
@@ -284,25 +305,63 @@ ${'```'}
 
         categoryStack.unshift({
           isTodo,
+          stackParent: stackItem,
           node: child,
           indent: indent + 1,
         });
       }
     }
 
-    if (node.intro && node.intro.length > 0) {
+    if (intro && intro.length > 0) {
       needsColon = true;
     }
 
     if (node.name !== null && needsColon) {
-      fileContents += `:`;
+      nodeContents += `:`;
     }
 
-    if (node.intro) {
-      fileContents += ` ${node.intro}.`;
+    if (intro) {
+      nodeContents += ` ${intro}.`;
     }
 
-    fileContents += `\n`;
+    nodeContents += `\n`;
+
+    const ancestry = [];
+
+    let currentParent = stackParent;
+    while (currentParent) {
+      ancestry.push(currentParent.node);
+
+      currentParent = currentParent.stackParent;
+    }
+
+    for (let depth = 0; depth < ancestry.length; ++depth) {
+      const ancestor = ancestry[depth];
+
+      if (ancestor.filename) {
+        let textToAppendToAncestor = '';
+
+        if (!ancestor.hasChildren) {
+          ancestor.hasChildren = true;
+
+          textToAppendToAncestor += '\n\n## Components\n';
+        }
+
+        for (let i = 0; i < depth; ++i) {
+          textToAppendToAncestor += '  ';
+        }
+
+        textToAppendToAncestor += nodeContents;
+
+        appendToFileToWrite(filesToWrite, ancestor.filename, textToAppendToAncestor);
+      }
+    }
+
+    for (let i = 0; i < indent; ++i) {
+      fileContents += '  ';
+    }
+
+    fileContents += nodeContents;
   }
 
   addFileToWrite(filesToWrite, `${prefix}Native-Components.md`, fileContents);
