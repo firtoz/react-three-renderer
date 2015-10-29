@@ -252,13 +252,13 @@ ${'```'}
       nodeFileContents += `**${node.name}**`;
 
       if (intro) {
-        nodeFileContents += `\n\n${intro}.`;
+        nodeFileContents += `\n\n${intro}`;
       }
 
       if (nodeData) {
         const description = nodeData.description || (nodeData.getDescription && nodeData.getDescription.call(nodeData)) || undefined;
         if (description) {
-          nodeFileContents += '\n\n' + `${description}.`;
+          nodeFileContents += '\n\n' + `${description}`;
         }
       }
 
@@ -321,7 +321,7 @@ ${'```'}
     }
 
     if (intro) {
-      nodeContents += ` ${intro}.`;
+      nodeContents += ` ${intro}`;
     }
 
     nodeContents += `\n`;
@@ -432,11 +432,11 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
     let infoString = '';
 
     if (intro.length > 0) {
-      infoString += intro + '.\n';
+      infoString += intro + '\n';
     }
 
     if (description.length > 0) {
-      infoString += description + '.\n';
+      infoString += description + '\n';
     }
 
     if (infoString.length > 0) {
@@ -511,7 +511,7 @@ ${propTypes[propName].toString()}`;
           fileContents += `\n  * [[${child.name}]]`;
 
           if (child.intro) {
-            fileContents += `: ${child.intro}.`;
+            fileContents += `: ${child.intro}`;
           }
         }
       }
