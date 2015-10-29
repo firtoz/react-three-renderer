@@ -159,7 +159,7 @@ function buildCategories() {
   };
 }
 
-function writeCategories(allCategories, filesToWrite) {
+function writeCategories(allCategories, filesToWrite, prefix) {
   let fileContents = ` > [Wiki](Home) ▸ **Native Components**
 
 # Native Components
@@ -222,7 +222,7 @@ ${'```'}
         }
       }
 
-      addFileToWrite(filesToWrite, `docs/generated/${node.name}.md`, nodeFileContents);
+      addFileToWrite(filesToWrite, `${prefix}${node.name}.md`, nodeFileContents);
     }
 
     const children = node.children;
@@ -281,7 +281,7 @@ ${'```'}
     fileContents += `\n`;
   }
 
-  addFileToWrite(filesToWrite, `docs/generated/Native-Components.md`, fileContents);
+  addFileToWrite(filesToWrite, `${prefix}Native-Components.md`, fileContents);
 }
 
 function getComponentInfo(componentName, propTypes) {
@@ -312,7 +312,7 @@ export default ${componentName};
   return require(infoPath);
 }
 
-function writeDescriptors(descriptors, allCategories, filesToWrite) {
+function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
   Object.keys(descriptors).forEach((componentName) => {
     const descriptor = descriptors[componentName];
 
@@ -453,7 +453,7 @@ ${propTypes[propName].toString()}`;
 
     fileContents += '\n'; // EOF
 
-    addFileToWrite(filesToWrite, `docs/generated/${componentName}.md`, fileContents);
+    addFileToWrite(filesToWrite, `${prefix}${componentName}.md`, fileContents);
   });
 }
 function populateCategoryIntros(descriptors, allCategories) {
@@ -516,10 +516,12 @@ export default (done) => {
 
   const filesToWrite = {};
 
-  writeDescriptors(descriptors, allCategories, filesToWrite);
+  const prefix = 'wiki/';
+
+  writeDescriptors(descriptors, allCategories, filesToWrite, prefix);
 
   // write categories
-  writeCategories(allCategories, filesToWrite);
+  writeCategories(allCategories, filesToWrite, prefix);
 
   const fileNames = Object.keys(filesToWrite);
 
