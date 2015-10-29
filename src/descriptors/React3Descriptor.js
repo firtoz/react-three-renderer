@@ -22,7 +22,10 @@ const propProxy = {
     default: true,
   },
   context: {
-    type: PropTypes.string.isRequired,
+    type: PropTypes.oneOf([
+      '2d',
+      '3d',
+    ]).isRequired,
   },
   mainCamera: {
     type: PropTypes.string,
