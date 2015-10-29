@@ -5,6 +5,7 @@ export default {
     },
   },
   Objects: {
+    intro: 'Entities that can be added into a [[scene]]',
     children: {
       scene: true,
       object3D: true,
@@ -155,6 +156,7 @@ export default {
     ],
   },
   Resources: {
+    intro: 'Allows you to reuse entities, these help save a lot of memory',
     children: {
       resources: true,
       materialResource: true,
@@ -165,6 +167,7 @@ export default {
     },
   },
   Advanced: {
+    intro: 'If you feel like having custom experiences, this one is for you',
     children: {
       react3: true,
       module: true,

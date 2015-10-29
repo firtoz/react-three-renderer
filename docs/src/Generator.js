@@ -116,6 +116,7 @@ function buildCategories() {
           isRoot: false,
           parent: treeNode,
           name: childName,
+          intro: childData.intro,
           data: childData,
           children: [],
         };
@@ -146,8 +147,32 @@ function buildCategories() {
   };
 }
 
-function writeCategories(allCategories) {
-  let fileContents = '';
+function writeNativeComponents(allCategories) {
+  let fileContents = ` > [Wiki](Home) ▸ **Native Components**
+
+# Native Components
+
+These components can be used without needing to require any modules, e.g.
+
+${'```'}js
+import React from 'react';
+
+class SomeClass extends React.Component{
+  render() {
+    return(
+      <group>
+        <mesh>
+          <boxGeometry/>
+          <meshBasicMaterial/>
+        </mesh>
+      </group>
+    );
+  }
+}
+${'```'}
+
+## Components
+`;
 
   const categoryStack = [{
     node: allCategories.tree.root,
@@ -218,7 +243,7 @@ function writeCategories(allCategories) {
       needsColon = true;
     }
 
-    if (needsColon) {
+    if (node.name !== null && needsColon) {
       fileContents += `:`;
     }
 
@@ -229,9 +254,8 @@ function writeCategories(allCategories) {
     fileContents += `\n`;
   }
 
-  fs.writeFileSync(`docs/generated/test.md`, fileContents, 'utf8');
+  fs.writeFileSync(`docs/generated/Native-Components.md`, fileContents, 'utf8');
 }
-
 
 function getComponentInfo(componentName, propTypes) {
   const infoPath = path.join(__dirname, 'internalComponents', `${componentName}.js`);
@@ -444,7 +468,7 @@ export default (done) => {
   writeDescriptors(descriptors, allCategories);
 
   // write categories
-  writeCategories(allCategories);
+  writeNativeComponents(allCategories);
 
   done();
 };
