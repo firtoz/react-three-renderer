@@ -278,7 +278,7 @@ function writeDescriptors(descriptors, allCategories) {
 
     const category = allCategories.flat[componentName];
     if (!category) {
-      console.log('no category found for ', componentName);
+      console.log('no category found for ', componentName); // eslint-disable-line
 
       fileContents += `> [Wiki](Home) ▸ [[Native Components]] ▸ **${componentName}**`;
     } else {
@@ -401,7 +401,7 @@ function populateCategoryIntros(descriptors, allCategories) {
     const category = allCategories.flat[componentName];
 
     if (!category) {
-      console.log('no category found for ', componentName);
+      console.log('no category found for ', componentName); // eslint-disable-line
     } else {
       category.intro = intro;
     }
@@ -411,7 +411,7 @@ export default (done) => {
   // mock global variables for three.js
   GLOBAL.self = {};
 
-  // mock global variables for internal component proptypes
+  // mock global variables for internal component propTypes
   GLOBAL.HTMLCanvasElement = class HTMLCanvasElement {
   };
 
