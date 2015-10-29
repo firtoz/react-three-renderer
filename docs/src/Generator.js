@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
+// TODO: WRITE A REACTJS RENDERER TO GENERATE DOCUMENTATION
+// OH MY GOD YOU ARE A GENIUS
+//   I KISS YOU
+
 function mockPropTypes() {
   const ReactPropTypes = require('react/lib/ReactPropTypes');
 
@@ -337,7 +341,7 @@ ${propTypes[propName].toString()}`;
           fileContents += `\n  * [[${child.name}]]`;
 
           if (child.intro) {
-            fileContents += `: ${child.intro}`;
+            fileContents += `: ${child.intro}.`;
           }
         }
       }
