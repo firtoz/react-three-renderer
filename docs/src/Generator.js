@@ -21,6 +21,10 @@ function getLineage(category) {
   return lineage;
 }
 
+function normalizeFilename(filename) {
+  return filename.replace(/\s+/, '-');
+}
+
 function addFileToWrite(files, filename, contents) {
   const lowercaseFilename = filename.toLowerCase();
   if (files[lowercaseFilename]) {
@@ -28,7 +32,7 @@ function addFileToWrite(files, filename, contents) {
   }
 
   files[lowercaseFilename] = {
-    filename: filename.replace(/\s+/, '-'),
+    filename: normalizeFilename(filename),
     contents,
   };
 }
@@ -154,6 +158,7 @@ function buildCategories() {
           parent: treeNode,
           name: childName,
           intro: childData.intro,
+          fileIntro: childData.fileIntro,
           data: childData,
           children: [],
         };
@@ -184,7 +189,7 @@ function buildCategories() {
   };
 }
 
-function writeCategories(allCategories, filesToWrite, prefix) {
+function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
   let fileContents = `> [Wiki](Home) ▸ **API Reference**
 
 # API Reference
@@ -210,15 +215,20 @@ function writeCategories(allCategories, filesToWrite, prefix) {
 
     let nodeContents = '';
 
-    if (node.name !== null) {
+    const nodeData = node.data;
+    const nodeName = node.name;
+
+    if (nodeName !== null) {
       if (isTodo) {
-        nodeContents += `* ${node.name}`;
+        nodeContents += `* ${nodeName}`;
       } else {
-        nodeContents += `* [[${node.name}]]`;
+        if (nodeData && nodeData.filename) {
+          nodeContents += `* [${nodeName}](${normalizeFilename(nodeData.filename)})`;
+        } else {
+          nodeContents += `* [[${nodeName}]]`;
+        }
       }
     }
-
-    const nodeData = node.data;
 
     const intro = node.intro;
     if (!node.isComponent && !node.isTodo && !node.isRoot) {
@@ -230,12 +240,13 @@ function writeCategories(allCategories, filesToWrite, prefix) {
         return `[[${name}]] ▸ `;
       }).join('');
 
-      nodeFileContents += `**${node.name}**`;
+      nodeFileContents += `**${nodeName}**`;
 
-      nodeFileContents += '\n\n' + `# ${node.name}`;
+      nodeFileContents += '\n\n' + `# ${nodeName}`;
 
-      if (intro) {
-        nodeFileContents += `\n\n${intro}`;
+      const fileIntro = node.fileIntro || intro;
+      if (fileIntro) {
+        nodeFileContents += `\n\n${fileIntro}`;
       }
 
       if (nodeData) {
@@ -245,8 +256,68 @@ function writeCategories(allCategories, filesToWrite, prefix) {
         }
       }
 
-      node.filename = `${prefix}${node.name}.md`;
+      node.filename = `${prefix}${nodeData && nodeData.filename || nodeName}.md`;
       node.hasChildren = false;
+
+      if (nodeData) {
+        const descriptorNameToCopyAttributesFrom = nodeData.copyAttributesFrom;
+        if (descriptorNameToCopyAttributesFrom) {
+          const descriptor = descriptors[descriptorNameToCopyAttributesFrom];
+
+          const attributesContents = descriptor._attributesContents;
+          let attributesToCopy = Object.keys(attributesContents);
+
+          const excludeAttributesFromCopying = nodeData.excludeAttributesFromCopying;
+          if (excludeAttributesFromCopying) {
+            attributesToCopy = attributesToCopy.filter(attributeName => !excludeAttributesFromCopying[attributeName]);
+          }
+
+          if (attributesToCopy.length > 0) {
+            nodeFileContents += '\n\n## Attributes';
+
+            for (let i = 0; i < attributesToCopy.length; ++i) {
+              const attributeName = attributesToCopy[i];
+
+              nodeFileContents += '\n\n' + attributesContents[attributeName];
+            }
+          }
+        }
+
+        const subHeadings = nodeData.subHeadings;
+        if (subHeadings) {
+          const subheadingNames = Object.keys(subHeadings);
+          for (let i = 0; i < subheadingNames.length; ++i) {
+            const subHeadingName = subheadingNames[i];
+
+
+            const attributes = subHeadings[subHeadingName];
+
+            const attributeNames = Object.keys(attributes);
+
+            if (attributeNames.length > 0) {
+              nodeFileContents += '\n\n' + `## ${subHeadingName}:`;
+
+              for (let j = 0; j < attributeNames.length; ++j) {
+                const attributeName = attributeNames[j];
+
+                const attributeInfo = attributes[attributeName];
+
+                nodeFileContents += '\n\n' + `### ${attributeName}
+${attributeInfo.description}`;
+              }
+            }
+          }
+        }
+
+        if (nodeData.sourceLink) {
+          nodeFileContents += '\n\n' + `===
+
+|**[View Source](${nodeData.sourceLink})**|
+ ---|`;
+        }
+      }
+
+      nodeFileContents += '\n';
 
       addFileToWrite(filesToWrite, node.filename, nodeFileContents);
     }
@@ -299,7 +370,7 @@ function writeCategories(allCategories, filesToWrite, prefix) {
       needsColon = true;
     }
 
-    if (node.name !== null && needsColon) {
+    if (nodeName !== null && needsColon) {
       nodeContents += `:`;
     }
 
@@ -329,7 +400,7 @@ function writeCategories(allCategories, filesToWrite, prefix) {
 
           const childrenName = ancestor.childrenName || 'Components';
 
-          textToAppendToAncestor += '\n\n' + `## ${childrenName}\n`;
+          textToAppendToAncestor += '\n' + `## ${childrenName}\n`;
         }
 
         for (let i = 0; i < depth; ++i) {
@@ -456,6 +527,8 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
 
         const attributesText = componentInfo.getAttributesText(descriptor, componentName);
 
+        let attributesContents = {};
+
         if (propNames.length > 0) {
           fileContents += '\n\n## Attributes\n';
 
@@ -464,16 +537,24 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
               fileContents += '\n\n';
             }
 
-            fileContents += `### ${propName}
+            let textForAttributes = '';
+
+            textForAttributes += `### ${propName}
 ${propTypes[propName].toString()}`;
 
             const propDescription = attributesText[propName];
 
             if (propDescription && propDescription.length > 0) {
-              fileContents += `: ${propDescription}`;
+              textForAttributes += `: ${propDescription}`;
             }
+
+            fileContents += textForAttributes;
+
+            attributesContents[propName] = textForAttributes;
           });
         }
+
+        descriptor._attributesContents = attributesContents;
 
         if (category) {
           const children = category.children;
@@ -603,7 +684,7 @@ export default (done) => {
   writeDescriptors(descriptors, allCategories, filesToWrite, prefix);
 
   // write categories
-  writeCategories(allCategories, filesToWrite, prefix);
+  writeCategories(allCategories, descriptors, filesToWrite, prefix);
 
   const fileNames = Object.keys(filesToWrite);
 
