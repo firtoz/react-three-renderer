@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import object3D from './object3D';
 
-class scene extends DocInfo {
+class scene extends object3D {
   getIntro() {
     return `Creates a [THREE.Scene](http://threejs.org/docs/#Reference/Scenes/Scene)`;
   }
@@ -11,18 +11,7 @@ class scene extends DocInfo {
 
   getAttributesText() {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-      fog: '',
+      fog: 'The [fog]() variable for the scene.',
     };
   }
 }

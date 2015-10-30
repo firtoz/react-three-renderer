@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import camera from './camera';
 
-class perspectiveCamera extends DocInfo {
+class perspectiveCamera extends camera {
   getIntro() {
     return 'Creates a [THREE.PerspectiveCamera](http://threejs.org/docs/#Reference/Cameras/PerspectiveCamera)';
   }
@@ -11,17 +11,7 @@ class perspectiveCamera extends DocInfo {
 
   getAttributesText() {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
+      ...super.getAttributesText(),
       fov: '',
       aspect: '',
       near: '',

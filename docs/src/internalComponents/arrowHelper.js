@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import object3D from './object3D';
 
-class arrowHelper extends DocInfo {
+class arrowHelper extends object3D {
   getIntro() {
     return 'Creates a [THREE.ArrowHelper](http://threejs.org/docs/#Reference/Extras.Helpers/ArrowHelper)';
   }
@@ -11,17 +11,7 @@ class arrowHelper extends DocInfo {
 
   getAttributesText() {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
+      ...super.getAttributesText(),
       dir: '',
       origin: '',
       length: '',

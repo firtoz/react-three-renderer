@@ -5,8 +5,6 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
 import warning from 'fbjs/lib/warning';
 
-import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
-
 class LightDescriptorBase extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
@@ -133,9 +131,20 @@ class LightDescriptorBase extends Object3DDescriptor {
           const elementType = threeObject.userData.react3internalComponent._elementType;
 
           warning(this._warnedAboutLightMaterialUpdate,
-            `<${elementType}/> has been updated which triggered a refresh of all materials.
+            LightDescriptorBase.getDynamicWarningMessage(elementType, owner));
+          this._warnedAboutLightMaterialUpdate = true;
+        }
+      }
+
+      rootInstance.allMaterialsNeedUpdate();
+    }
+  }
+
+  static getDynamicWarningMessage(elementType, owner) {
+    return `<${elementType}/> has been updated which triggered a refresh of all materials.
   This is a potentially expensive operation.
-  This can happen when you add or remove a light, or add or remove any component before any lights without keys e.g.
+  This can happen when you add or remove a light, or add or remove any component
+  before any lights without keys e.g.
   <object3d>
     {/* new or removed component here */}
     <ambientLight/>
@@ -152,13 +161,7 @@ class LightDescriptorBase extends Object3DDescriptor {
   If you have modified a light's properties e.g. toggled castShadow, the materials need to be rebuilt as well.
   To acknowledge and remove this message, please add the property 'updatesRefreshAllMaterials'
     to <${elementType}/> inside the render() of ${owner && owner.getName() || 'a component'}.
-  For more information, visit https://github.com/mrdoob/threejs/wiki/Updates .`);
-          this._warnedAboutLightMaterialUpdate = true;
-        }
-      }
-
-      rootInstance.allMaterialsNeedUpdate();
-    }
+  For more information, visit https://github.com/mrdoob/threejs/wiki/Updates .`;
   }
 }
 

@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import object3D from './object3D';
 
-class cameraHelper extends DocInfo {
+class cameraHelper extends object3D {
   getIntro() {
     return 'Creates a [THREE.CameraHelper](http://threejs.org/docs/#Reference/Extras.Helpers/CameraHelper)';
   }
@@ -11,18 +11,8 @@ class cameraHelper extends DocInfo {
 
   getAttributesText() {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-      cameraName: '',
+      ...super.getAttributesText(),
+      cameraName: 'The [name](perspectiveCamera#name) of the camera to visualize.',
     };
   }
 }

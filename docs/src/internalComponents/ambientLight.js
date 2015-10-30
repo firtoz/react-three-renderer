@@ -1,36 +1,12 @@
-import DocInfo from '../DocInfo';
+import LightInfo from './shared/LightInfo';
 
-class ambientLight extends DocInfo {
+class ambientLight extends LightInfo {
   getIntro() {
     return 'Creates a [THREE.AmbientLight](http://threejs.org/docs/#Reference/Lights/AmbientLight)';
   }
 
   getDescription() {
     return ``;
-  }
-
-  getAttributesText() {
-    return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-      updatesRefreshAllMaterials: '',
-      shadowBias: '',
-      shadowDarkness: '',
-      shadowMapWidth: '',
-      shadowMapHeight: '',
-      shadowCameraNear: '',
-      shadowCameraFar: '',
-      color: '',
-    };
   }
 }
 

@@ -469,7 +469,7 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
 
         propNames = requiredProps.concat(optionalProps);
 
-        const attributesText = componentInfo.getAttributesText();
+        const attributesText = componentInfo.getAttributesText(descriptor, componentName);
 
         if (propNames.length > 0) {
           fileContents += '\n\n## Attributes\n';

@@ -21,6 +21,26 @@ class Object3DDescriptor extends THREEElementDescriptor {
       };
     }
 
+    this.hasProp('position', {
+      type: PropTypes.instanceOf(THREE.Vector3),
+      update(threeObject, position) {
+        threeObject.position.copy(position);
+
+        if (threeObject.userData._lookAt) {
+          threeObject.lookAt(threeObject.userData._lookAt);
+        }
+      },
+      default: new THREE.Vector3(),
+    });
+
+    this.hasProp('rotation', {
+      type: PropTypes.instanceOf(THREE.Euler),
+      update(threeObject, rotation) {
+        threeObject.rotation.copy(rotation);
+      },
+      default: new THREE.Euler(),
+    });
+
     this.hasProp('quaternion', {
       type: PropTypes.instanceOf(THREE.Quaternion),
       update: copyUpdate('quaternion'),
@@ -78,26 +98,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
         }
       },
       default: false,
-    });
-
-    this.hasProp('position', {
-      type: PropTypes.instanceOf(THREE.Vector3),
-      update(threeObject, position) {
-        threeObject.position.copy(position);
-
-        if (threeObject.userData._lookAt) {
-          threeObject.lookAt(threeObject.userData._lookAt);
-        }
-      },
-      default: new THREE.Vector3(),
-    });
-
-    this.hasProp('rotation', {
-      type: PropTypes.instanceOf(THREE.Euler),
-      update(threeObject, rotation) {
-        threeObject.rotation.copy(rotation);
-      },
-      default: new THREE.Euler(),
     });
   }
 

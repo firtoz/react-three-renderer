@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import camera from './camera';
 
-class orthographicCamera extends DocInfo {
+class orthographicCamera extends camera {
   getIntro() {
     return `Creates a [THREE.OrthographicCamera](http://threejs.org/docs/#Reference/Cameras/OrthographicCamera)`;
   }
@@ -11,17 +11,7 @@ class orthographicCamera extends DocInfo {
 
   getAttributesText() {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
+      ...super.getAttributesText(),
       left: '',
       right: '',
       top: '',

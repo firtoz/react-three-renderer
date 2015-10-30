@@ -1,28 +1,12 @@
-import DocInfo from '../DocInfo';
+import object3D from './object3D';
 
-class mesh extends DocInfo {
+class mesh extends object3D {
   getIntro() {
     return 'Creates a [THREE.Mesh](http://threejs.org/docs/#Reference/Objects/Mesh)';
   }
 
   getDescription() {
-    return ``;
-  }
-
-  getAttributesText() {
-    return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-    };
+    return `This object can contain [[Materials]] and [[Geometries]].`;
   }
 }
 

@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import camera from './camera';
 
-class cubeCamera extends DocInfo {
+class cubeCamera extends camera {
   getIntro() {
     return 'Creates a [THREE.CubeCamera](http://threejs.org/docs/#Reference/Cameras/CubeCamera)';
   }
@@ -11,19 +11,9 @@ class cubeCamera extends DocInfo {
 
   getAttributesText() {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-      near: '',
-      far: '',
+      ...super.getAttributesText(),
+      near: 'The [near]() property of the cube camera.',
+      far: 'The [far]() property of the cube camera.',
       cubeResolution: '',
     };
   }

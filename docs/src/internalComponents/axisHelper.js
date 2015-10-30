@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import object3D from './object3D';
 
-class axisHelper extends DocInfo {
+class axisHelper extends object3D {
   getIntro() {
     return 'Creates a [THREE.AxisHelper](http://threejs.org/docs/#Reference/Extras.Helpers/AxisHelper)';
   }
@@ -11,17 +11,7 @@ class axisHelper extends DocInfo {
 
   getAttributesText() {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
+      ...super.getAttributesText(),
       size: '',
     };
   }

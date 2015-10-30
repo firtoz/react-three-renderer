@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import LightInfo from './shared/LightInfo';
 
-class spotLight extends DocInfo {
+class spotLight extends LightInfo {
   getIntro() {
     return 'Creates a [THREE.SpotLight](http://threejs.org/docs/#Reference/Lights/SpotLight)';
   }
@@ -9,33 +9,14 @@ class spotLight extends DocInfo {
     return ``;
   }
 
-  getAttributesText() {
+  getAttributesText(descriptor, componentName) {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-      updatesRefreshAllMaterials: '',
-      shadowBias: '',
-      shadowDarkness: '',
-      shadowMapWidth: '',
-      shadowMapHeight: '',
-      shadowCameraNear: '',
-      shadowCameraFar: '',
+      ...super.getAttributesText(descriptor, componentName),
       intensity: '',
       distance: '',
       angle: '',
       exponent: '',
       decay: '',
-      shadowCameraFov: '',
-      color: '',
     };
   }
 }

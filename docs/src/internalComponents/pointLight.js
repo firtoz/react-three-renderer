@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import LightInfo from './shared/LightInfo';
 
-class pointLight extends DocInfo {
+class pointLight extends LightInfo {
   getIntro() {
     return 'Creates a [THREE.PointLight](http://threejs.org/docs/#Reference/Lights/PointLight)';
   }
@@ -9,27 +9,9 @@ class pointLight extends DocInfo {
     return ``;
   }
 
-  getAttributesText() {
+  getAttributesText(descriptor, componentName) {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-      updatesRefreshAllMaterials: '',
-      shadowBias: '',
-      shadowDarkness: '',
-      shadowMapWidth: '',
-      shadowMapHeight: '',
-      shadowCameraNear: '',
-      shadowCameraFar: '',
-      color: '',
+      ...super.getAttributesText(descriptor, componentName),
       intensity: '',
       decay: '',
       distance: '',

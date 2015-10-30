@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import LightInfo from './shared/LightInfo';
 
-class directionalLight extends DocInfo {
+class directionalLight extends LightInfo {
   getIntro() {
     return 'Creates a [THREE.DirectionalLight](http://threejs.org/docs/#Reference/Lights/DirectionalLight)';
   }
@@ -9,32 +9,14 @@ class directionalLight extends DocInfo {
     return ``;
   }
 
-  getAttributesText() {
+  getAttributesText(descriptor, componentName) {
     return {
-      quaternion: '',
-      scale: '',
-      lookAt: '',
-      frustumCulled: '',
-      visible: '',
-      renderOrder: '',
-      castShadow: '',
-      receiveShadow: '',
-      position: '',
-      rotation: '',
-      name: '',
-      updatesRefreshAllMaterials: '',
-      shadowBias: '',
-      shadowDarkness: '',
-      shadowMapWidth: '',
-      shadowMapHeight: '',
-      shadowCameraNear: '',
-      shadowCameraFar: '',
+      ...super.getAttributesText(descriptor, componentName),
       intensity: '',
       shadowCameraLeft: '',
       shadowCameraBottom: '',
       shadowCameraRight: '',
       shadowCameraTop: '',
-      color: '',
     };
   }
 }
