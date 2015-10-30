@@ -523,6 +523,13 @@ ${propTypes[propName].toString()}`;
       fileContents += 'This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.';
     }
 
+    fileContents += `
+
+===
+
+|**[View Source](${`../blob/master/src/${descriptor.constructor.__modulePath}`.replace('/./', '/')}.js)**|
+ ---|`;
+
     fileContents += '\n'; // EOF
 
     addFileToWrite(filesToWrite, `${prefix}${componentName}.md`, fileContents);
@@ -580,7 +587,31 @@ export default (done) => {
     throw new Error('Please load the wiki submodule!');
   }
 
-  const EDC = require('../../src/ElementDescriptorContainer');
+  const Module = require('module');
+
+  const oldRequire = Module.prototype.require;
+
+  function fakeRequire(path) {
+    Module.prototype.require = oldRequire;
+
+    const oldValue = oldRequire.call(this, `${path}`);
+
+    Module.prototype.require = fakeRequire;
+
+    if (this.exports.__esModule) {
+      // babel runtime loaded
+
+      oldValue.__modulePath = path;
+    }
+
+    return oldValue;
+  }
+
+  Module.prototype.require = fakeRequire;
+
+  const EDC = oldRequire.call(module, '../../src/ElementDescriptorContainer');
+
+  Module.prototype.require = oldRequire;
 
   const {descriptors} = new EDC({});
 
