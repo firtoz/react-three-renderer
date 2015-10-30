@@ -2,12 +2,11 @@ import DocInfo from '../DocInfo';
 
 class uniforms extends DocInfo {
   getIntro() {
-    return 'A container for uniforms. Controls the ' +
-      '[uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms) property for a ShaderMaterial';
+    return 'A container for [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms).';
   }
 
   getDescription() {
-    return `See [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial).`;
+    return `Any modifications to uniforms will result in the recompilation of the shader.`;
   }
 
   getAttributesText() {
