@@ -185,30 +185,11 @@ function buildCategories() {
 }
 
 function writeCategories(allCategories, filesToWrite, prefix) {
-  let fileContents = ` > [Wiki](Home) ▸ **Internal Components**
+  let fileContents = `> [Wiki](Home) ▸ **API Reference**
 
-# Internal Components
+# API Reference
 
-These components can be used without needing to require any modules, e.g.
-
-${'```'}js
-import React from 'react';
-
-class SomeClass extends React.Component{
-  render() {
-    return(
-      <group>
-        <mesh>
-          <boxGeometry/>
-          <meshBasicMaterial/>
-        </mesh>
-      </group>
-    );
-  }
-}
-${'```'}
-
-## Components
+## Categories
 `;
 
   const categoryStack = [{
@@ -241,7 +222,7 @@ ${'```'}
 
     const intro = node.intro;
     if (!node.isComponent && !node.isTodo && !node.isRoot) {
-      let nodeFileContents = `> [Wiki](Home) ▸ [[Internal Components]] ▸ `;
+      let nodeFileContents = `> [Wiki](Home) ▸ `;
 
       const lineage = getLineage(node);
 
@@ -250,6 +231,8 @@ ${'```'}
       }).join('');
 
       nodeFileContents += `**${node.name}**`;
+
+      nodeFileContents += '\n\n' + `# ${node.name}`;
 
       if (intro) {
         nodeFileContents += `\n\n${intro}`;
@@ -344,7 +327,9 @@ ${'```'}
         if (!ancestor.hasChildren) {
           ancestor.hasChildren = true;
 
-          textToAppendToAncestor += '\n\n## Components\n';
+          const childrenName = ancestor.childrenName || 'Components';
+
+          textToAppendToAncestor += '\n\n' + `## ${childrenName}\n`;
         }
 
         for (let i = 0; i < depth; ++i) {
@@ -364,7 +349,7 @@ ${'```'}
     fileContents += nodeContents;
   }
 
-  addFileToWrite(filesToWrite, `${prefix}Internal-Components.md`, fileContents);
+  addFileToWrite(filesToWrite, `${prefix}API-Reference.md`, fileContents);
 }
 
 function getComponentInfo(componentName, propTypes) {
@@ -417,9 +402,9 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
         if (!category) {
           console.log('no category found for ', componentName); // eslint-disable-line
 
-          fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ **${componentName}**`;
+          fileContents += `> [Wiki](Home) ▸ **${componentName}**`;
         } else {
-          fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ `;
+          fileContents += `> [Wiki](Home) ▸ `;
 
           category.isComponent = true;
 
