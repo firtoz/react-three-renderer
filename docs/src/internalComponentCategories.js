@@ -142,8 +142,11 @@ ${'```'}`,
           spriteMaterial: true,
           shaderMaterial: {
             children: {
-              uniforms: true,
-              uniform: true,
+              uniforms: {
+                children: {
+                  uniform: true,
+                }
+              },
             },
           },
         },

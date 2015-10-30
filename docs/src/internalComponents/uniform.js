@@ -2,11 +2,11 @@ import DocInfo from '../DocInfo';
 
 class uniform extends DocInfo {
   getIntro() {
-    return 'A single uniform value for a shader material';
+    return 'A single uniform value for a shader material.';
   }
 
   getDescription() {
-    return ``;
+    return `See [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial).`;
   }
 
   getAttributesText() {

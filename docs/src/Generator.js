@@ -194,7 +194,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
 
 # API Reference
 
-## Categories
+## Contents
 `;
 
   const categoryStack = [{
@@ -527,7 +527,7 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
 
         const attributesText = componentInfo.getAttributesText(descriptor, componentName);
 
-        let attributesContents = {};
+        const attributesContents = {};
 
         if (propNames.length > 0) {
           fileContents += '\n\n## Attributes\n';
