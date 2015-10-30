@@ -13,8 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "fbjs": "^0.4.0",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "react": "^0.14.1",
+    "react-dom": "^0.14.1",
     "three.js": "^0.73.0"
   },
   "devDependencies": {
