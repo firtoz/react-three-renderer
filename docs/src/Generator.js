@@ -396,144 +396,137 @@ export default ${componentName};
 }
 
 function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
-  Object.keys(descriptors).forEach((componentName) => {
-    const descriptor = descriptors[componentName];
+  Object
+    .keys(descriptors)
+    .forEach(
+      (componentName) => {
+        const descriptor = descriptors[componentName];
 
-    const propTypes = descriptor.propTypes;
+        const propTypes = descriptor.propTypes;
 
-    const ComponentInfo = getComponentInfo(componentName, propTypes);
+        const ComponentInfo = getComponentInfo(componentName, propTypes);
 
-    const componentInfo = new ComponentInfo();
+        const componentInfo = new ComponentInfo();
 
-    const intro = componentInfo.getIntro();
-    const description = componentInfo.getDescription();
+        const intro = componentInfo.getIntro();
+        const description = componentInfo.getDescription();
 
-    let fileContents = '';
+        let fileContents = '';
 
-    const category = allCategories.flat[componentName];
-    if (!category) {
-      console.log('no category found for ', componentName); // eslint-disable-line
+        const category = allCategories.flat[componentName];
+        if (!category) {
+          console.log('no category found for ', componentName); // eslint-disable-line
 
-      fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ **${componentName}**`;
-    } else {
-      fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ `;
+          fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ **${componentName}**`;
+        } else {
+          fileContents += `> [Wiki](Home) ▸ [[Internal Components]] ▸ `;
 
-      category.isComponent = true;
+          category.isComponent = true;
 
-      const lineage = getLineage(category);
+          const lineage = getLineage(category);
 
-      fileContents += lineage.map(name => {
-        return `[[${name}]] ▸ `;
-      }).join('');
+          fileContents += lineage.map(name => {
+            return `[[${name}]] ▸ `;
+          }).join('');
 
-      fileContents += `**${componentName}**`;
-    }
-
-    let infoString = '';
-
-    if (intro.length > 0) {
-      infoString += intro + '\n';
-    }
-
-    if (description.length > 0) {
-      infoString += description + '\n';
-    }
-
-    if (infoString.length > 0) {
-      infoString = '\n' + infoString;
-    }
-
-    fileContents += `
-
-# ${componentName}
-${infoString}
-`;
-
-    if (descriptor.isResource) {
-      // move resourceId prop to the end
-
-      const resourceIdProp = propTypes.resourceId;
-
-      delete propTypes.resourceId;
-
-      propTypes.resourceId = resourceIdProp;
-    }
-
-    const propNames = Object.keys(propTypes);
-
-    propNames.sort((a, b) => {
-      // have required properties go before the optional ones
-
-      const firstProp = propTypes[a];
-      const secondProp = propTypes[b];
-
-      if (firstProp._isRequired === secondProp._isRequired) {
-        return 0;
-      }
-
-      if (firstProp._isRequired) {
-        return -1;
-      }
-
-      return 1;
-    });
-
-    const attributesText = componentInfo.getAttributesText();
-
-    if (propNames.length > 0) {
-      fileContents += '## Attributes\n';
-
-      propNames.forEach((propName, i) => {
-        if (i > 0) {
-          fileContents += '\n\n';
+          fileContents += `**${componentName}**`;
         }
 
-        fileContents += `### ${propName}
-${propTypes[propName].toString()}`;
+        fileContents += '\n\n' + `# ${componentName}`;
 
-        const propDescription = attributesText[propName];
-
-        if (propDescription && propDescription.length > 0) {
-          fileContents += `: ${propDescription}`;
+        if (intro.length > 0) {
+          fileContents += '\n\n' + `${intro}`;
         }
-      });
-    }
 
-    if (category) {
-      const children = category.children;
+        if (description.length > 0) {
+          fileContents += '\n\n' + `${description}`;
+        }
 
-      if (children && children.length > 0) {
-        fileContents += '\n\n## Children:'; // EOF
+        if (descriptor.isResource) {
+          // move resourceId prop to the end
 
-        for (let i = 0; i < children.length; ++i) {
-          const child = children[i];
+          const resourceIdProp = propTypes.resourceId;
 
-          fileContents += `\n  * [[${child.name}]]`;
+          delete propTypes.resourceId;
 
-          if (child.intro) {
-            fileContents += `: ${child.intro}`;
+          propTypes.resourceId = resourceIdProp;
+        }
+
+        let propNames = Object.keys(propTypes);
+
+        const requiredProps = [];
+        const optionalProps = [];
+
+        for (let i = 0; i < propNames.length; ++i) {
+          const propName = propNames[i];
+
+          if (propTypes[propName]._isRequired) {
+            requiredProps.push(propName);
+          } else {
+            optionalProps.push(propName);
           }
         }
-      }
-    }
 
-    if (descriptor.isResource) {
-      fileContents += '\n\n';
+        propNames = requiredProps.concat(optionalProps);
 
-      fileContents += 'This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.';
-    }
+        const attributesText = componentInfo.getAttributesText();
 
-    fileContents += `
+        if (propNames.length > 0) {
+          fileContents += '\n\n## Attributes\n';
+
+          propNames.forEach((propName, i) => {
+            if (i > 0) {
+              fileContents += '\n\n';
+            }
+
+            fileContents += `### ${propName}
+${propTypes[propName].toString()}`;
+
+            const propDescription = attributesText[propName];
+
+            if (propDescription && propDescription.length > 0) {
+              fileContents += `: ${propDescription}`;
+            }
+          });
+        }
+
+        if (category) {
+          const children = category.children;
+
+          if (children && children.length > 0) {
+            fileContents += '\n\n## Children:'; // EOF
+
+            for (let i = 0; i < children.length; ++i) {
+              const child = children[i];
+
+              fileContents += `\n  * [[${child.name}]]`;
+
+              if (child.intro) {
+                fileContents += `: ${child.intro}`;
+              }
+            }
+          }
+        }
+
+        if (descriptor.isResource) {
+          fileContents += '\n\n';
+
+          fileContents += 'This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.';
+        }
+
+        fileContents += `
 
 ===
 
 |**[View Source](${`../blob/master/src/${descriptor.constructor.__modulePath}`.replace('/./', '/')}.js)**|
  ---|`;
 
-    fileContents += '\n'; // EOF
+        fileContents += '\n'; // EOF
 
-    addFileToWrite(filesToWrite, `${prefix}${componentName}.md`, fileContents);
-  });
+        addFileToWrite(filesToWrite, `${prefix}${componentName}.md`, fileContents);
+      }
+    )
+  ;
 }
 function populateCategoryIntros(descriptors, allCategories) {
 // populate category intros
@@ -587,21 +580,22 @@ export default (done) => {
     throw new Error('Please load the wiki submodule!');
   }
 
+  // noinspection NodeRequireContents
   const Module = require('module');
 
   const oldRequire = Module.prototype.require;
 
-  function fakeRequire(path) {
+  function fakeRequire(requirePath) {
     Module.prototype.require = oldRequire;
 
-    const oldValue = oldRequire.call(this, `${path}`);
+    const oldValue = oldRequire.call(this, `${requirePath}`);
 
     Module.prototype.require = fakeRequire;
 
     if (this.exports.__esModule) {
       // babel runtime loaded
 
-      oldValue.__modulePath = path;
+      oldValue.__modulePath = requirePath;
     }
 
     return oldValue;

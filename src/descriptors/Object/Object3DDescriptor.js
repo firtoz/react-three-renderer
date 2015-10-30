@@ -13,6 +13,8 @@ class Object3DDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
+    this.hasName();
+
     function copyUpdate(propName) {
       return (threeObject, value) => {
         threeObject[propName].copy(value);
@@ -97,8 +99,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
       },
       default: new THREE.Euler(),
     });
-
-    this.hasName();
   }
 
   construct() {

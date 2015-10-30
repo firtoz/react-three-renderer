@@ -6,8 +6,7 @@ class viewport extends DocInfo {
   }
 
   getDescription() {
-    return `
-It can only be placed into the [root component](React3).
+    return `It can only be placed into the [root component](React3).
 
 If the [mainCamera](react3#maincamera) property of the root component is
 not set, then the scene will be rendered into the viewports.`;
