@@ -12,6 +12,9 @@ class camera extends object3D {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
+      name: 'The [name]() property of the camera.\n\n' +
+      'This gets used by [&lt;react3/&gt;](react3), [&lt;viewport/&gt;](viewport), or' +
+      ' [&lt;cameraHelper&gt;](cameraHelper).',
       near: 'The [near]() property of the camera.',
       far: 'The [far]() property of the camera.',
     };
