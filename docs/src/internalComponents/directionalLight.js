@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class directionalLight extends DocInfo {
   getIntro() {
-    return 'Creates a [THREE.DirectionalLight]()';
+    return 'Creates a [THREE.DirectionalLight](http://threejs.org/docs/#Reference/Lights/DirectionalLight)';
   }
 
   getDescription() {

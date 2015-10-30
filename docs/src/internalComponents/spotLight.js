@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class spotLight extends DocInfo {
   getIntro() {
-    return 'Creates a [THREE.PointLight]()';
+    return 'Creates a [THREE.SpotLight](http://threejs.org/docs/#Reference/Lights/SpotLight)';
   }
 
   getDescription() {

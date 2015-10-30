@@ -1,6 +1,10 @@
 import DocInfo from '../DocInfo';
 
 class pointLight extends DocInfo {
+  getIntro() {
+    return 'Creates a [THREE.PointLight](http://threejs.org/docs/#Reference/Lights/PointLight)';
+  }
+
   getDescription() {
     return ``;
   }
