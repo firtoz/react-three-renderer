@@ -214,9 +214,31 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
       } = stackItem;
 
     let nodeContents = '';
-
-    const nodeData = node.data;
     const nodeName = node.name;
+
+    let nodeData = node.data;
+    if (!node.isComponent && nodeName !== null && !node.isTodo) {
+      const normalizedNodeName = normalizeFilename(nodeName);
+      try {
+        if (nodeData === true) {
+          // noinspection NodeRequireContents
+          nodeData = require(`./categories/${normalizedNodeName}`);
+        } else {
+          // noinspection NodeRequireContents
+          nodeData = {
+            nodeData,
+            ...require(`./categories/${normalizedNodeName}`),
+          };
+        }
+
+        node.data = nodeData;
+        node.intro = nodeData.intro || node.intro;
+        node.fileIntro = nodeData.fileIntro || node.fileIntro;
+      } catch (e) {
+        // do nothing
+        console.log(`Missing category info file for ${normalizedNodeName}`); // eslint-disable-line
+      }
+    }
 
     if (nodeName !== null) {
       if (isTodo) {
@@ -595,7 +617,7 @@ ${propTypes[propName].toString()}`;
   ;
 }
 function populateCategoryIntros(descriptors, allCategories) {
-// populate category intros
+  // populate category intros for descriptors
   Object.keys(descriptors).forEach((componentName) => {
     const {propTypes, isResource} = descriptors[componentName];
 
