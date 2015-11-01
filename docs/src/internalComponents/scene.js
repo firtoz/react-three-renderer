@@ -11,6 +11,7 @@ class scene extends object3D {
 
   getAttributesText() {
     return {
+      ...super.getAttributesText(),
       fog: 'The [fog]() variable for the scene.',
     };
   }
