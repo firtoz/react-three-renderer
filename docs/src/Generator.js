@@ -151,7 +151,26 @@ function buildCategories() {
       for (let i = 0; i < childNames.length; ++i) {
         const childName = childNames[i];
 
-        const childData = nodeChildren[childName];
+        let childData = nodeChildren[childName];
+        if (!childData.isComponent) {
+          const normalizedNodeName = normalizeFilename(childName);
+          try {
+            const moduleName = `./categories/${normalizedNodeName}`;
+            if (childData === true) {
+              // noinspection NodeRequireContents
+              childData = require(moduleName);
+            } else {
+              // noinspection NodeRequireContents
+              childData = {
+                ...childData,
+                ...require(moduleName),
+              };
+            }
+          } catch (e) {
+            // do nothing
+            console.log(`Missing category info file for ${normalizedNodeName}`); // eslint-disable-line
+          }
+        }
 
         const childTreeNode = {
           isRoot: false,
@@ -216,29 +235,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
     let nodeContents = '';
     const nodeName = node.name;
 
-    let nodeData = node.data;
-    if (!node.isComponent && nodeName !== null && !node.isTodo) {
-      const normalizedNodeName = normalizeFilename(nodeName);
-      try {
-        if (nodeData === true) {
-          // noinspection NodeRequireContents
-          nodeData = require(`./categories/${normalizedNodeName}`);
-        } else {
-          // noinspection NodeRequireContents
-          nodeData = {
-            nodeData,
-            ...require(`./categories/${normalizedNodeName}`),
-          };
-        }
-
-        node.data = nodeData;
-        node.intro = nodeData.intro || node.intro;
-        node.fileIntro = nodeData.fileIntro || node.fileIntro;
-      } catch (e) {
-        // do nothing
-        console.log(`Missing category info file for ${normalizedNodeName}`); // eslint-disable-line
-      }
-    }
+    const nodeData = node.data;
 
     if (nodeName !== null) {
       if (isTodo) {

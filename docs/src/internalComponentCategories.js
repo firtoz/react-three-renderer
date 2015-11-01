@@ -4,27 +4,46 @@ export default {
     children: {
       Views: {
         children: {
-          viewport: true,
+          viewport: {
+            isComponent: true,
+          },
         },
       },
       Objects: {
-        intro: 'Entities that can be added into a [[scene]]',
         children: {
-          scene: true,
-          object3D: true,
-          group: true,
+          scene: {
+            isComponent: true,
+          },
+          object3D: {
+            isComponent: true,
+          },
+          group: {
+            isComponent: true,
+          },
           Cameras: {
             children: {
-              orthographicCamera: true,
-              perspectiveCamera: true,
-              cubeCamera: true,
+              orthographicCamera: {
+                isComponent: true,
+              },
+              perspectiveCamera: {
+                isComponent: true,
+              },
+              cubeCamera: {
+                isComponent: true,
+              },
             },
           },
           Meshes: {
             children: {
-              mesh: true,
-              line: true,
-              points: true,
+              mesh: {
+                isComponent: true,
+              },
+              line: {
+                isComponent: true,
+              },
+              points: {
+                isComponent: true,
+              },
             },
             TODO: [
               'Bone',
@@ -39,10 +58,18 @@ export default {
           },
           Lights: {
             children: {
-              ambientLight: true,
-              directionalLight: true,
-              spotLight: true,
-              pointLight: true,
+              ambientLight: {
+                isComponent: true,
+              },
+              directionalLight: {
+                isComponent: true,
+              },
+              spotLight: {
+                isComponent: true,
+              },
+              pointLight: {
+                isComponent: true,
+              },
             },
             TODO: [
               'HemisphereLight',
@@ -51,9 +78,15 @@ export default {
           },
           Helpers: {
             children: {
-              cameraHelper: true,
-              axisHelper: true,
-              arrowHelper: true,
+              cameraHelper: {
+                isComponent: true,
+              },
+              axisHelper: {
+                isComponent: true,
+              },
+              arrowHelper: {
+                isComponent: true,
+              },
             },
             TODO: [
               'BoundingBoxHelper',
@@ -73,21 +106,43 @@ export default {
       },
       Materials: {
         children: {
-          meshBasicMaterial: true,
-          meshPhongMaterial: true,
-          meshLambertMaterial: true,
-          meshDepthMaterial: true,
-          meshNormalMaterial: true,
-          pointsMaterial: true,
-          lineBasicMaterial: true,
-          lineDashedMaterial: true,
-          spriteMaterial: true,
+          meshBasicMaterial: {
+            isComponent: true,
+          },
+          meshPhongMaterial: {
+            isComponent: true,
+          },
+          meshLambertMaterial: {
+            isComponent: true,
+          },
+          meshDepthMaterial: {
+            isComponent: true,
+          },
+          meshNormalMaterial: {
+            isComponent: true,
+          },
+          pointsMaterial: {
+            isComponent: true,
+          },
+          lineBasicMaterial: {
+            isComponent: true,
+          },
+          lineDashedMaterial: {
+            isComponent: true,
+          },
+          spriteMaterial: {
+            isComponent: true,
+          },
           shaderMaterial: {
+            isComponent: true,
             children: {
               uniforms: {
+                isComponent: true,
                 children: {
-                  uniform: true,
-                }
+                  uniform: {
+                    isComponent: true,
+                  },
+                },
               },
             },
           },
@@ -102,7 +157,9 @@ export default {
       },
       Textures: {
         children: {
-          texture: true,
+          texture: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeTexture',
@@ -112,22 +169,54 @@ export default {
       },
       Geometries: {
         children: {
-          geometry: true,
-          boxGeometry: true,
-          sphereGeometry: true,
-          parametricGeometry: true,
-          planeBufferGeometry: true,
-          icosahedronGeometry: true,
-          octahedronGeometry: true,
-          tetrahedronGeometry: true,
-          circleGeometry: true,
-          circleBufferGeometry: true,
-          ringGeometry: true,
-          cylinderGeometry: true,
-          latheGeometry: true,
-          torusGeometry: true,
-          torusKnotGeometry: true,
-          extrudeGeometry: true,
+          geometry: {
+            isComponent: true,
+          },
+          boxGeometry: {
+            isComponent: true,
+          },
+          sphereGeometry: {
+            isComponent: true,
+          },
+          parametricGeometry: {
+            isComponent: true,
+          },
+          planeBufferGeometry: {
+            isComponent: true,
+          },
+          icosahedronGeometry: {
+            isComponent: true,
+          },
+          octahedronGeometry: {
+            isComponent: true,
+          },
+          tetrahedronGeometry: {
+            isComponent: true,
+          },
+          circleGeometry: {
+            isComponent: true,
+          },
+          circleBufferGeometry: {
+            isComponent: true,
+          },
+          ringGeometry: {
+            isComponent: true,
+          },
+          cylinderGeometry: {
+            isComponent: true,
+          },
+          latheGeometry: {
+            isComponent: true,
+          },
+          torusGeometry: {
+            isComponent: true,
+          },
+          torusKnotGeometry: {
+            isComponent: true,
+          },
+          extrudeGeometry: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeGeometry',
@@ -142,15 +231,32 @@ export default {
       Shapes: {
         children: {
           shape: {
+            isComponent: true,
             children: {
-              moveTo: true,
-              lineTo: true,
-              bezierCurveTo: true,
-              quadraticCurveTo: true,
-              absArc: true,
-              absEllipse: true,
-              splineThru: true,
-              hole: true,
+              moveTo: {
+                isComponent: true,
+              },
+              lineTo: {
+                isComponent: true,
+              },
+              bezierCurveTo: {
+                isComponent: true,
+              },
+              quadraticCurveTo: {
+                isComponent: true,
+              },
+              absArc: {
+                isComponent: true,
+              },
+              absEllipse: {
+                isComponent: true,
+              },
+              splineThru: {
+                isComponent: true,
+              },
+              hole: {
+                isComponent: true,
+              },
             },
           },
         },
@@ -162,44 +268,35 @@ export default {
         ],
       },
       'Resource Types': {
-        intro: 'Allows you to reuse entities, these help save a lot of memory',
-        getDescription() {
-          return `## Usage
-
-Place [&lt;resources&gt;&lt;/resources&gt;](resources); anywhere inside [&lt;React3/&gt;](Entry-Point), or any of its children.
-
-> The preferred place is before any other component, since it's expensive to replace, but it's up to you.
-
-Then you can place these components inside:
-
-${this.resourceTypes
-            .map(({name, intro}) => {
-              let item = `* [[${name}]]`;
-
-              if (intro && intro.length > 0) {
-                item += `: ${intro}.`;
-              }
-
-              return item;
-            }).join('\n')}
-
-`;
-        },
-        resourceTypes: [],
         children: {
-          resources: true,
-          materialResource: true,
-          textureResource: true,
-          geometryResource: true,
-          shapeResource: true,
-          shapeGeometryResource: true,
+          resources: {
+            isComponent: true,
+          },
+          materialResource: {
+            isComponent: true,
+          },
+          textureResource: {
+            isComponent: true,
+          },
+          geometryResource: {
+            isComponent: true,
+          },
+          shapeResource: {
+            isComponent: true,
+          },
+          shapeGeometryResource: {
+            isComponent: true,
+          },
         },
       },
       Advanced: {
-        intro: 'If you feel like having custom experiences, this one is for you',
         children: {
-          react3: true,
-          module: true,
+          react3: {
+            isComponent: true,
+          },
+          module: {
+            isComponent: true,
+          },
         },
       },
     },
