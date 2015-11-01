@@ -308,18 +308,27 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
           for (let i = 0; i < subheadingNames.length; ++i) {
             const subHeadingName = subheadingNames[i];
 
+            const subHeading = subHeadings[subHeadingName];
 
-            const attributes = subHeadings[subHeadingName];
+            const subHeadingDescription = subHeading.description;
 
-            const attributeNames = Object.keys(attributes);
+            const grandchildren = subHeading.children;
 
-            if (attributeNames.length > 0) {
+            const grandchildrenNames = grandchildren && Object.keys(grandchildren) || [];
+
+            if (grandchildrenNames.length > 0 || subHeadingDescription) {
               nodeFileContents += '\n\n' + `## ${subHeadingName}:`;
+            }
 
-              for (let j = 0; j < attributeNames.length; ++j) {
-                const attributeName = attributeNames[j];
+            if (subHeadingDescription) {
+              nodeFileContents += '\n\n' + subHeadingDescription;
+            }
 
-                const attributeInfo = attributes[attributeName];
+            if (grandchildrenNames.length > 0) {
+              for (let j = 0; j < grandchildrenNames.length; ++j) {
+                const attributeName = grandchildrenNames[j];
+
+                const attributeInfo = grandchildren[attributeName];
 
                 nodeFileContents += '\n\n' + `### ${attributeName}
 ${attributeInfo.description}`;

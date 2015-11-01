@@ -297,6 +297,7 @@ export default {
           module: {
             isComponent: true,
           },
+          React3Renderer: true,
         },
       },
     },
