@@ -3,9 +3,14 @@ react-three-renderer
 
 Render into a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
-WARNING: This is still an experimental and incomplete project, use at your own risk!
+> This is still an experimental and incomplete project, use at your own risk!
 
-WARNING: There's absolutely zero documentation, I will work on that whenever I can!
+Documentation
+=============
+
+[Wiki is now live!](wiki)
+
+> Work in progress!
 
 Influences
 ==========
