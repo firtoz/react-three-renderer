@@ -8,7 +8,7 @@ Render into a [three.js](http://threejs.org/) canvas using [React](https://githu
 Documentation
 =============
 
-[Wiki is now live!](wiki)
+[Wiki is now live!](../../wiki)
 
 > Work in progress!
 
