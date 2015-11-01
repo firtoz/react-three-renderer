@@ -121,7 +121,7 @@ class React3Renderer {
   static eventDispatcher = new EventDispatcher();
 
   /**
-   * Returns the DOM node rendered by this element.
+   * Returns the THREE.js object rendered by this element.
    *
    * @param {React.Component|THREE.Object3D} componentOrElement
    * @return {?THREE.Object3D} The root node of this element.
@@ -250,8 +250,7 @@ class React3Renderer {
     return this.threeElementDescriptors[name];
   }
 
-  constructor(canvas) {
-    this._canvas = canvas;
+  constructor() {
     this._instancesByReactRootID = {};
     this.object3DsByReactRootID = {};
     if (process.env.NODE_ENV !== 'production') {
@@ -771,7 +770,6 @@ class React3Renderer {
     delete this._root.instance;
     delete this._root;
 
-    delete this._canvas;
     delete this._instancesByReactRootID;
     delete this.object3DsByReactRootID;
     if (process.env.NODE_ENV !== 'production') {
