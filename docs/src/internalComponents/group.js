@@ -6,7 +6,7 @@ class group extends object3D {
   }
 
   getDescription() {
-    return ``;
+    return `This is identical to a [object3d], except it calls THREE.Group instead.`;
   }
 }
 

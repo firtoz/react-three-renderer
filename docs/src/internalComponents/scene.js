@@ -12,7 +12,7 @@ class scene extends object3D {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
-      fog: 'The [fog]() variable for the scene.',
+      fog: 'The [fog](http://threejs.org/docs/#Reference/Scenes/Scene.fog) variable for the scene.',
     };
   }
 }

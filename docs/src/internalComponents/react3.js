@@ -6,7 +6,7 @@ class react3 extends DocInfo {
   }
 
   getDescription() {
-    return `Creates a [THREE.WebGLRenderer]().`;
+    return `Creates a [THREE.WebGLRenderer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer).`;
   }
 
   getAttributesText() {

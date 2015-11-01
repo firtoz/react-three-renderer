@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class geometryResource extends DocInfo {
   getIntro() {
-    return 'Reference to a geometry resource';
+    return 'Reference to a geometry resource.';
   }
 
   getDescription() {
@@ -11,7 +11,7 @@ class geometryResource extends DocInfo {
 
   getAttributesText() {
     return {
-      resourceId: '',
+      resourceId: 'The resourceId for the [geometry](Geometries).',
     };
   }
 }

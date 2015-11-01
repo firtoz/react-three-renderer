@@ -12,8 +12,8 @@ class cubeCamera extends camera {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
-      near: 'The [near]() property of the cube camera.',
-      far: 'The [far]() property of the cube camera.',
+      near: 'The near clipping distance.',
+      far: 'The far clipping distance.',
       cubeResolution: '',
     };
   }

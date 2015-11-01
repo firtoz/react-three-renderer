@@ -6,7 +6,9 @@ class hole extends DocInfo {
   }
 
   getDescription() {
-    return `It creates a path and accepts path actions e.g. [[moveTo]], [[lineTo]].`;
+    return `It creates a path and accepts path actions e.g. [[moveTo]], [[lineTo]], and so on.
+
+See [[shape#children]].`;
   }
 
   getAttributesText() {

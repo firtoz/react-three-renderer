@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class extrudeGeometry extends DocInfo {
+class extrudeGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.ExtrudeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ExtrudeGeometry)';
   }
@@ -11,9 +11,7 @@ class extrudeGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
       shapes: '',
       settings: '',
       amount: '',

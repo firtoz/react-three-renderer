@@ -6,7 +6,7 @@ class bezierCurveTo extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return `This creates a bezier curve from the last offset to x and y with cp1X, cp1Y and cp1X, cp1Y as control points and updates the offset to x and y.`;
   }
 
   getAttributesText() {

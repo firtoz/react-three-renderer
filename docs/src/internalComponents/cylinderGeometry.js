@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class cylinderGeometry extends DocInfo {
+class cylinderGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.CylinderGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/CylinderGeometry)';
   }
@@ -11,9 +11,7 @@ class cylinderGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
       radiusTop: '',
       radiusBottom: '',
       height: '',
