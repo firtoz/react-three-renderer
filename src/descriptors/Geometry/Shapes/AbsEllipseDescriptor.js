@@ -23,14 +23,14 @@ class AbsEllipseDescriptor extends ShapeActionDescriptorBase {
       });
     });
 
-    this.hasProp('rotation', {
-      type: PropTypes.number,
+    this.hasProp('clockwise', {
+      type: PropTypes.bool,
       update: this.triggerRemount,
       default: false,
     });
 
-    this.hasProp('clockwise', {
-      type: PropTypes.bool.isRequired,
+    this.hasProp('rotation', {
+      type: PropTypes.number,
       update: this.triggerRemount,
       default: false,
     });
