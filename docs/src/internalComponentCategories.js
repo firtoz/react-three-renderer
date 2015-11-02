@@ -72,8 +72,8 @@ export default {
               },
             },
             TODO: [
-              'HemisphereLight',
-              'Light',
+              'HemisphereLight', // SEE lights demo
+              'Light', // SEE lights demo
             ],
           },
           Helpers: {
@@ -149,10 +149,11 @@ export default {
         },
         TODO: [
           'Material',
-          'MeshFaceMaterial',
-          'RawShaderMaterial',
-          'SpriteCanvasMaterial',
-          'SpriteMaterial',
+          'MeshFaceMaterial', // == MultiMaterial
+          'MultiMaterial',
+          'RawShaderMaterial', // extends ShaderMaterial
+          'SpriteCanvasMaterial', // doesn't seem to exist?
+          'SpriteMaterial', // to come with sprites!
         ],
       },
       Textures: {
@@ -182,6 +183,9 @@ export default {
             isComponent: true,
           },
           planeBufferGeometry: {
+            isComponent: true,
+          },
+          polyhedronGeometry: {
             isComponent: true,
           },
           icosahedronGeometry: {
@@ -219,12 +223,11 @@ export default {
           },
         },
         TODO: [
-          'CubeGeometry',
+          'CubeGeometry', // BoxGeometry
           'DodecahedronGeometry',
-          'PlaneGeometry',
-          'PolyhedronGeometry',
-          'ShapeGeometry',
-          'TextGeometry',
+          'PlaneGeometry', // almost like a PlaneBufferGeometry... shall I ... yes.
+          'ShapeGeometry', // hmmm
+          'TextGeometry', // see example, can even use raw text strings for this one? would be cool!
           'TubeGeometry',
         ],
       },
