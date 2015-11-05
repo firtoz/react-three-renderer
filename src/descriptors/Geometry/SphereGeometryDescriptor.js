@@ -7,18 +7,10 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
   constructor(react3Instance) {
     super(react3Instance);
 
-    [
-      'radius',
-      'phiStart',
-      'phiLength',
-      'thetaStart',
-      'thetaLength',
-    ].forEach(propName => {
-      this.hasProp(propName, {
-        type: PropTypes.number,
-        update: this.updateCacheAndReplace.bind(this, propName),
-        default: undefined,
-      });
+    this.hasProp('radius', {
+      type: PropTypes.number,
+      update: this.updateCacheAndReplace.bind(this, 'radius'),
+      default: undefined,
     });
 
     [
@@ -28,6 +20,19 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
+        default: undefined,
+      });
+    });
+
+    [
+      'phiStart',
+      'phiLength',
+      'thetaStart',
+      'thetaLength',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number,
+        update: this.updateCacheAndReplace.bind(this, propName),
         default: undefined,
       });
     });
