@@ -84,7 +84,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     let camera = null;
 
     if (cameraName) {
-      const camerasByName = rootInstance.getObjectsByName(cameraName).filter(obj => obj instanceof THREE.PerspectiveCamera);
+      const camerasByName = rootInstance.getObjectsByName(cameraName).filter(obj => obj instanceof THREE.Camera);
 
       if (camerasByName.length > 0) {
         camera = camerasByName[0];
