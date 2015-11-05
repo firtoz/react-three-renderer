@@ -5,7 +5,7 @@ Render into a [three.js](http://threejs.org/) canvas using [React](https://githu
 
 > This is still an experimental and incomplete project, use at your own risk!
 
-[![npm version](https://badge.fury.io/js/react-three-renderer.svg)](https://badge.fury.io/js/react-three-renderer)
+[![npm](https://nodei.co/npm/react-three-renderer.svg?downloads=true)](https://nodei.co/npm/react-three-renderer/)
 
 WIKI
 =============
