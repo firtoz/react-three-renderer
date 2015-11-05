@@ -331,7 +331,8 @@ class React3Renderer {
         __REACT_DEVTOOLS_GLOBAL_HOOK__.sub('renderer', rendererListener);
         __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this._devToolsRendererDefinition);
 
-        if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent !== 'undefined') {
+        if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent !== 'undefined'
+          && __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent) {
           const agent = __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent;
           this._hookAgent(agent);
         } else {
