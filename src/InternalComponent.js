@@ -120,6 +120,8 @@ class InternalComponent {
     this._threeObject = this.threeElementDescriptor.construct(element.props);
     this.threeElementDescriptor.applyInitialProps(this._threeObject, element.props);
 
+    this.threeElementDescriptor.placeRemountTrigger(this._threeObject, this.remountTrigger.trigger);
+
     const childrenToUse = element.props.children;
 
     const mountImages = this.mountChildren(childrenToUse, transaction, processChildContext(context, this));
@@ -281,7 +283,7 @@ class InternalComponent {
 
     remountTrigger.wantRemount = false;
 
-    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject, remountTrigger.trigger);
+    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
 
     if (process.env.NODE_ENV !== 'production') {
       this.threeElementDescriptor.checkPropTypes(this._currentElement.type, this._currentElement._owner, nextProps);
@@ -420,7 +422,7 @@ class InternalComponent {
 
     remountTrigger.wantRemount = false;
 
-    this.threeElementDescriptor.beginChildUpdates(this._threeObject, remountTrigger.trigger);
+    this.threeElementDescriptor.beginChildUpdates(this._threeObject);
 
     // `nextIndex` will increment for each child in `nextChildren`, but
     // `lastIndex` will be the last index visited in `prevChildren`.

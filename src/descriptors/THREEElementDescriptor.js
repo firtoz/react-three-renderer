@@ -152,6 +152,10 @@ class THREEElementDescriptor {
     }
   }
 
+  placeRemountTrigger(threeObject, triggerRemount) {
+    threeObject.userData._triggerRemount = triggerRemount;
+  }
+
   applyInitialProps(threeObject, props) {
     // do nothing for now
 
@@ -237,7 +241,7 @@ class THREEElementDescriptor {
     }
   }
 
-  componentWillUnmount(threeObject) {
+  componentWillUnmount(threeObject) { // eslint-disable-line no-unused-vars
 
   }
 
@@ -328,20 +332,16 @@ class THREEElementDescriptor {
     delete threeObject.userData._triggerRemount;
   }
 
-  beginPropertyUpdates(threeObject, triggerRemount) {
-    threeObject.userData._triggerRemount = triggerRemount;
+  beginPropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
   }
 
-  completePropertyUpdates(threeObject) {
-    delete threeObject.userData._triggerRemount;
+  completePropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
   }
 
-  beginChildUpdates(threeObject, triggerRemount) {
-    threeObject.userData._triggerRemount = triggerRemount;
+  beginChildUpdates(threeObject) { // eslint-disable-line no-unused-vars
   }
 
-  completeChildUpdates(threeObject) {
-    delete threeObject.userData._triggerRemount;
+  completeChildUpdates(threeObject) { // eslint-disable-line no-unused-vars
   }
 }
 
