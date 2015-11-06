@@ -1,8 +1,6 @@
 import Object3DDescriptor from '../Object3DDescriptor';
 import THREE from 'three.js';
 
-import getRoot from '../../../getRoot';
-
 class CameraDescriptorBase extends Object3DDescriptor {
   applyInitialProps(threeObject, props) {
     super.applyInitialProps(threeObject, props);
