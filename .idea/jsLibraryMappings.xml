@@ -3,7 +3,6 @@
   <component name="JavaScriptLibraryMappings">
     <file url="PROJECT" libraries="{react-3 node_modules}" />
     <includedPredefinedLibrary name="ECMAScript 6" />
-    <includedPredefinedLibrary name="Node.js Core" />
     <includedPredefinedLibrary name="WebGL" />
   </component>
 </project>
