@@ -172,7 +172,7 @@ class THREEElementDescriptor {
     // pass down resources
 
     eventsForObject.on('resource.added', (data) => {
-      const childrenMarkup = threeObject.userData.childrenMarkup;
+      const childrenMarkup = threeObject.userData.markup.childrenMarkup;
 
       const increasedDistance = {
         ...data,
@@ -183,7 +183,7 @@ class THREEElementDescriptor {
     });
 
     eventsForObject.on('resource.removed', (data) => {
-      const childrenMarkup = threeObject.userData.childrenMarkup;
+      const childrenMarkup = threeObject.userData.markup.childrenMarkup;
 
       const increasedDistance = {
         ...data,

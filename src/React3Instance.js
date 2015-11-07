@@ -646,7 +646,7 @@ class React3DInstance {
 
     const current:THREE.Object3D = object;
 
-    const childrenMarkup = current.userData.childrenMarkup;
+    const childrenMarkup = current.userData.markup.childrenMarkup;
 
     if (object instanceof THREE.Material) {
       this._materials.push(object);

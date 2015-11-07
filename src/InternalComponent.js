@@ -130,6 +130,8 @@ class InternalComponent {
       _rootInstance: null,
       elementType: element.type,
       threeObject: this._threeObject,
+      parentMarkup: null,
+      childrenMarkup: mountImages,
       toJSON: () => {
         return '---MARKUP---';
       },
@@ -143,7 +145,6 @@ class InternalComponent {
 
     Object.assign(this._threeObject.userData, {
       [ID_ATTR_NAME]: rootID,
-      childrenMarkup: mountImages,
       object3D: this._threeObject,
       react3internalComponent: this, // used for highlighting etc
       toJSON: () => {
@@ -252,7 +253,7 @@ class InternalComponent {
 
     const markup = this._markup;
 
-    _arrayMove(markup.threeObject.userData.childrenMarkup, lastIndex, toIndex);
+    _arrayMove(markup.childrenMarkup, lastIndex, toIndex);
   }
 
   receiveComponent(nextElement, transaction, context) {
@@ -499,7 +500,7 @@ class InternalComponent {
   createChild(child, mountImage) {
     const mountIndex = child._mountIndex;
 
-    this._markup.threeObject.userData.childrenMarkup.splice(mountIndex, 0, mountImage);
+    this._markup.childrenMarkup.splice(mountIndex, 0, mountImage);
     mountImage.parentMarkup = this._markup;
 
     this.threeElementDescriptor.addChild(this._threeObject, mountImage.threeObject, mountIndex);
@@ -530,7 +531,7 @@ class InternalComponent {
       }
     }
 
-    const childrenMarkup = this._markup.threeObject.userData.childrenMarkup;
+    const childrenMarkup = this._markup.childrenMarkup;
 
     for (let i = 0; i < childrenMarkup.length; i++) {
       const childMarkup = childrenMarkup[i];

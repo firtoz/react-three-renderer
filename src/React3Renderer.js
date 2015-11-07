@@ -104,7 +104,7 @@ function getReactRootMarkupInThreeObject(threeObject) {
     return null;
   }
 
-  return threeObject.userData && threeObject.userData.childrenMarkup && threeObject.userData.childrenMarkup[0] || null;
+  return threeObject.userData && threeObject.userData.markup && threeObject.userData.markup.childrenMarkup[0] || null;
 }
 
 /**
@@ -401,9 +401,9 @@ class React3Renderer {
   }
 
   containsChild(threeObject, userData) {
-    const childrenMarkup = threeObject.userData.childrenMarkup;
+    const childrenMarkup = threeObject.userData.markup.childrenMarkup;
     for (let i = 0; i < childrenMarkup.length; i++) {
-      if (childrenMarkup[i].userData === userData) {
+      if (childrenMarkup[i].threeObject.userData === userData) {
         return true;
       }
     }
@@ -455,16 +455,16 @@ class React3Renderer {
             warning(
               // Call internalGetID here because getID calls isValid which calls
               // findThreeObjectForID (this function).
-              internalGetID(rootMarkup) === reactRootID, 'React3Renderer: Root element ID differed from reactRootID.');
+              internalGetID(rootMarkup.threeObject.userData) === reactRootID, 'React3Renderer: Root element ID differed from reactRootID.');
           }
 
-          const containerChild = object3D.userData.childrenMarkup[0];// firstChild;
-          if (containerChild && reactRootID === internalGetID(containerChild)) {
+          const containerChildMarkup = object3D.userData.markup.childrenMarkup[0];// firstChild;
+          if (containerChildMarkup && reactRootID === internalGetID(containerChildMarkup.threeObject.userData)) {
             // If the object3D has a new child with the same ID as the old
             // root element, then rootUserDatasByReactRootID[reactRootID] is
             // just stale and needs to be updated. The case that deserves a
             // warning is when the object3D is empty.
-            this.rootMarkupsByReactRootID[reactRootID] = containerChild;
+            this.rootMarkupsByReactRootID[reactRootID] = containerChildMarkup;
           } else {
             if (process.env.NODE_ENV !== 'production') {
               warning(false, 'React3Renderer: Root element has been removed from its original ' + 'object3D. New object3D: %s', rootMarkup.parentNode);
@@ -515,7 +515,7 @@ class React3Renderer {
 
     const deepestAncestor = this.findDeepestCachedAncestor(targetID) || ancestorNode;
 
-    firstUserDataList[0] = deepestAncestor.userData.childrenMarkup[0].threeObject.userData;
+    firstUserDataList[0] = deepestAncestor.userData.markup.childrenMarkup[0].threeObject.userData;
     firstUserDataList.length = 1;
 
     while (childIndex < firstUserDataList.length) {
@@ -538,23 +538,24 @@ class React3Renderer {
             // rooted at this child, so we can throw out the rest of the
             // search state.
             firstUserDataList.length = childIndex = 0;
-            firstUserDataList.push(childUserData.childrenMarkup[0].threeObject.userData);
+            firstUserDataList.push(childUserData.markup.childrenMarkup[0].threeObject.userData);
           }
         } else {
-          debugger;
+          invariant(false);
+          // debugger;
           // If this child had no ID, then there's a chance that it was
           // injected automatically by the browser, as when a `<table>`
           // element sprouts an extra `<tbody>` child as a side effect of
           // `.innerHTML` parsing. Optimistically continue down this
           // branch, but not before examining the other siblings.
-          firstUserDataList.push(childUserData.childrenMarkup[0].threeObject.userData);
+          firstUserDataList.push(childUserData.markup.childrenMarkup[0].threeObject.userData);
         }
 
         const childMarkup = childUserData.markup;
         // if childMarkup doesn't exist it may have been unmounted
         const childParentMarkup = childMarkup && childMarkup.parentMarkup;
         // if parentMarkup doesn't exist it could be a root (or unmounted)
-        const ownerChildrenMarkups = childParentMarkup && childParentMarkup.threeObject.userData.childrenMarkup;
+        const ownerChildrenMarkups = childParentMarkup && childParentMarkup.threeObject.userData.markup.childrenMarkup;
 
         childUserData = null;
 
@@ -662,6 +663,7 @@ class React3Renderer {
     const rootMarkup = {
       threeObject: threeObject,
       parentMarkup: null,
+      childrenMarkup: [markup],
       toJSON: () => {
         return '---MARKUP---';
       },
@@ -675,7 +677,6 @@ class React3Renderer {
     }
 
     Object.assign(threeObject.userData, {
-      childrenMarkup: [markup],
       object3D: threeObject,
       toJSON: () => {
         return '---USERDATA---';
@@ -749,12 +750,12 @@ class React3Renderer {
       this.unmountComponentAtNode(root);
     }
 
-    const reactRootUserData = getReactRootMarkupInThreeObject(root);
-    const containerHasReactMarkup = reactRootUserData && internalGetID(reactRootUserData);
+    const reactRootMarkup = getReactRootMarkupInThreeObject(root);
+    const containerHasReactMarkup = reactRootMarkup && internalGetID(reactRootMarkup.threeObject.userData);
 
     // if (process.env.NODE_ENV !== 'production') {
-    //   if (!containerHasReactMarkup || reactRootUserData.nextSibling) {
-    //     let rootElementSibling = reactRootUserData;
+    //   if (!containerHasReactMarkup || reactRootMarkup.nextSibling) {
+    //     let rootElementSibling = reactRootMarkup;
     //     while (rootElementSibling) {
     //       if (this.isRenderedByReact(rootElementSibling)) {
     //         if (process.env.NODE_ENV !== 'production') {
@@ -1053,8 +1054,8 @@ class React3Renderer {
   getID(userData) {
     const id = internalGetID(userData);
     if (id) {
-      if (this.userDataCache.hasOwnProperty(id)) {
-        const cached = this.userDataCache[id];
+      const cached = this.userDataCache[id];
+      if (!!cached) {
         if (cached !== userData) {
           if (!!this.isValid(cached, id)) {
             if (process.env.NODE_ENV !== 'production') {
