@@ -40,7 +40,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     let distance = 0;
 
     while (currentParentMarkup) {
-      const parentResources = currentParentMarkup.userData._resources;
+      const parentResources = currentParentMarkup.threeObject.userData._resources;
 
       if (parentResources) {
         const resourceId = threeObject.resourceId;
@@ -56,7 +56,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
       }
 
       distance++;
-      currentParentMarkup = currentParentMarkup.userData.parentMarkup;
+      currentParentMarkup = currentParentMarkup.threeObject.userData.parentMarkup;
     }
 
     this._updateResource(threeObject);
@@ -96,7 +96,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     const onResourceAdded = this._onResourceAdded.bind(this, threeObject);
     const onResourceRemoved = this._onResourceRemoved.bind(this, threeObject);
 
-    const parentEvents = currentParentMarkup.userData.events;
+    const parentEvents = currentParentMarkup.threeObject.userData.events;
     parentEvents.on('resource.added', onResourceAdded);
     parentEvents.on('resource.removed', onResourceRemoved);
 

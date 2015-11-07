@@ -179,7 +179,7 @@ class THREEElementDescriptor {
         distance: data.distance + 1,
       };
 
-      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.added', increasedDistance));
+      childrenMarkup.forEach(childMarkup => childMarkup.threeObject.userData.events.emit('resource.added', increasedDistance));
     });
 
     eventsForObject.on('resource.removed', (data) => {
@@ -190,7 +190,7 @@ class THREEElementDescriptor {
         distance: data.distance + 1,
       };
 
-      childrenMarkup.forEach(childMarkup => childMarkup.userData.events.emit('resource.removed', increasedDistance));
+      childrenMarkup.forEach(childMarkup => childMarkup.threeObject.userData.events.emit('resource.removed', increasedDistance));
     });
 
     threeObject.userData.events = eventsForObject;

@@ -127,16 +127,6 @@ class InternalComponent {
     const mountImages = this.mountChildren(childrenToUse, transaction, processChildContext(context, this));
 
     const markup = {
-      userData: {
-        ...this._threeObject.userData,
-        [ID_ATTR_NAME]: rootID,
-        childrenMarkup: mountImages,
-        object3D: this._threeObject,
-        react3internalComponent: this, // used for highlighting etc
-        toJSON: () => {
-          return '---USERDATA---';
-        },
-      },
       _rootInstance: null,
       elementType: element.type,
       threeObject: this._threeObject,
@@ -145,8 +135,17 @@ class InternalComponent {
       },
     };
 
-    markup.userData.markup = markup;
-    this._threeObject.userData = markup.userData;
+    this._threeObject.userData = {
+      ...this._threeObject.userData,
+      [ID_ATTR_NAME]: rootID,
+      childrenMarkup: mountImages,
+      object3D: this._threeObject,
+      react3internalComponent: this, // used for highlighting etc
+      toJSON: () => {
+        return '---USERDATA---';
+      },
+      markup,
+    };
 
     const threeElementDescriptors = this._react3RendererInstance.threeElementDescriptors;
 
@@ -158,7 +157,7 @@ class InternalComponent {
 
         const descriptorForChild = threeElementDescriptors[mountImage.elementType];
 
-        mountImage.userData.parentMarkup = markup;
+        mountImage.threeObject.userData.parentMarkup = markup;
 
         descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
       }
@@ -172,13 +171,15 @@ class InternalComponent {
   _reconcilerInstantiateChildren(nestedChildren, transaction, context) {
     if (process.env.NODE_ENV !== 'production') {
       if (this._currentElement) {
+        const previousCurrent = ReactCurrentOwner.current;
+
         try {
           ReactCurrentOwner.current = this._currentElement._owner;
           return this._react3RendererInstance.instantiateChildren(
             nestedChildren, transaction, context
           );
         } finally {
-          ReactCurrentOwner.current = null;
+          ReactCurrentOwner.current = previousCurrent;
         }
       }
     }
@@ -191,11 +192,13 @@ class InternalComponent {
     let nextChildren;
     if (process.env.NODE_ENV !== 'production') {
       if (this._currentElement) {
+        const previousCurrent = ReactCurrentOwner.current;
+
         try {
           ReactCurrentOwner.current = this._currentElement._owner;
           nextChildren = flattenChildren(nextNestedChildrenElements);
         } finally {
-          ReactCurrentOwner.current = null;
+          ReactCurrentOwner.current = previousCurrent;
         }
 
         return this._react3RendererInstance.updateChildren(
@@ -244,7 +247,7 @@ class InternalComponent {
 
     const markup = this._markup;
 
-    _arrayMove(markup.userData.childrenMarkup, lastIndex, toIndex);
+    _arrayMove(markup.threeObject.userData.childrenMarkup, lastIndex, toIndex);
   }
 
   receiveComponent(nextElement, transaction, context) {
@@ -491,8 +494,8 @@ class InternalComponent {
   createChild(child, mountImage) {
     const mountIndex = child._mountIndex;
 
-    this._markup.userData.childrenMarkup.splice(mountIndex, 0, mountImage);
-    mountImage.userData.parentMarkup = this._markup;
+    this._markup.threeObject.userData.childrenMarkup.splice(mountIndex, 0, mountImage);
+    mountImage.threeObject.userData.parentMarkup = this._markup;
 
     this.threeElementDescriptor.addChild(this._threeObject, mountImage.threeObject, mountIndex);
 
@@ -522,7 +525,7 @@ class InternalComponent {
       }
     }
 
-    const childrenMarkup = this._markup.userData.childrenMarkup;
+    const childrenMarkup = this._markup.threeObject.userData.childrenMarkup;
 
     for (let i = 0; i < childrenMarkup.length; i++) {
       const childMarkup = childrenMarkup[i];

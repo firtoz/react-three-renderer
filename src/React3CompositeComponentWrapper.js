@@ -74,12 +74,15 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 
     if (canInstantiate) {
       if (process.env.NODE_ENV !== 'production') {
+        const previousCurrent = ReactCurrentOwner.current;
+
         // noinspection JSValidateTypes
         ReactCurrentOwner.current = this;
+
         try {
           inst = new Component(publicProps, publicContext, ReactUpdateQueue);
         } finally {
-          ReactCurrentOwner.current = null;
+          ReactCurrentOwner.current = previousCurrent;
         }
       } else {
         inst = new Component(publicProps, publicContext, ReactUpdateQueue);

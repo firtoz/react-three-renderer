@@ -11,7 +11,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
   unmount(threeObject) {
     const parentMarkup = threeObject.userData.parentMarkup;
-    const parentEvents = parentMarkup.userData.events;
+    const parentEvents = parentMarkup.threeObject.userData.events;
 
     threeObject.resourceIds.forEach(id => {
       parentEvents.emit('resource.removed', {
@@ -36,7 +36,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
       const parentMarkup = threeObject.userData.parentMarkup;
       if (parentMarkup) {
-        parentMarkup.userData.events.emit('resource.added', {
+        parentMarkup.threeObject.userData.events.emit('resource.added', {
           id: resourceId,
           distance: 0,
           resource: child,
@@ -56,7 +56,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
     const parentMarkup = threeObject.userData.parentMarkup;
     if (parentMarkup) {
-      parentMarkup.userData.events.emit('resource.removed', {
+      parentMarkup.threeObject.userData.events.emit('resource.removed', {
         id: resourceId,
         distance: 0,
         resource: child,
