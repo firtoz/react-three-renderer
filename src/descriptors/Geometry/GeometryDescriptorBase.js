@@ -50,7 +50,7 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
   }
 
   unmount(geometry) {
-    const parent = geometry.userData.parentMarkup.threeObject;
+    const parent = geometry.userData.markup.parentMarkup.threeObject;
 
     // could either be a resource description or an actual geometry
     if (parent instanceof THREE.Mesh || parent instanceof THREE.Points) {
@@ -65,7 +65,7 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
   }
 
   highlight(threeObject) {
-    const ownerMesh = threeObject.userData.parentMarkup.threeObject;
+    const ownerMesh = threeObject.userData.markup.parentMarkup.threeObject;
     threeObject.userData.events.emit('highlight', {
       uuid: threeObject.uuid,
       boundingBoxFunc: () => {
@@ -79,7 +79,7 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
   }
 
   getBoundingBoxes(threeObject) {
-    const ownerMesh = threeObject.userData.parentMarkup.threeObject;
+    const ownerMesh = threeObject.userData.markup.parentMarkup.threeObject;
 
     const boundingBox = new THREE.Box3();
 

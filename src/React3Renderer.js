@@ -268,7 +268,9 @@ class React3Renderer {
 
     this.threeElementDescriptors = new ElementDescriptorContainer(this).descriptors;
 
-    this._root = {};
+    this._root = {
+      userData: {},
+    };
 
     this._highlightElement = document.createElement('div');
     this._highlightCache = null;
@@ -448,8 +450,7 @@ class React3Renderer {
     if (process.env.NODE_ENV !== 'production') {
       const rootMarkup = this.rootMarkupsByReactRootID[reactRootID];
       if (rootMarkup) {
-        const rootMarkupUserData = rootMarkup.threeObject.userData;
-        if ((!rootMarkupUserData.parentMarkup) || rootMarkupUserData.parentMarkup.threeObject !== object3D) {
+        if ((!rootMarkup.parentMarkup) || rootMarkup.parentMarkup.threeObject !== object3D) {
           if (process.env.NODE_ENV !== 'production') {
             warning(
               // Call internalGetID here because getID calls isValid which calls
@@ -549,18 +550,24 @@ class React3Renderer {
           firstUserDataList.push(childUserData.childrenMarkup[0].threeObject.userData);
         }
 
-        const ownerChildrenMarkups = childUserData.parentMarkup && childUserData.parentMarkup.threeObject.userData.childrenMarkup || [];
+        const childMarkup = childUserData.markup;
+        // if childMarkup doesn't exist it may have been unmounted
+        const childParentMarkup = childMarkup && childMarkup.parentMarkup;
+        // if parentMarkup doesn't exist it could be a root (or unmounted)
+        const ownerChildrenMarkups = childParentMarkup && childParentMarkup.threeObject.userData.childrenMarkup;
 
         childUserData = null;
 
-        // child = child.nextSibling;
-        for (let i = 0; i < ownerChildrenMarkups.length - 1; i++) {
-          const ownerChildId = this.getID(ownerChildrenMarkups[i].threeObject.userData);
+        if (ownerChildrenMarkups) {
+          // child = child.nextSibling;
+          for (let i = 0; i < ownerChildrenMarkups.length - 1; i++) {
+            const ownerChildId = this.getID(ownerChildrenMarkups[i].threeObject.userData);
 
-          if (ownerChildId === childID) {
-            // if the owner's child's id is the same as my id, then the next sibling userData is:
-            childUserData = ownerChildrenMarkups[i + 1].threeObject.userData;
-            break;
+            if (ownerChildId === childID) {
+              // if the owner's child's id is the same as my id, then the next sibling userData is:
+              childUserData = ownerChildrenMarkups[i + 1].threeObject.userData;
+              break;
+            }
           }
         }
       }
@@ -654,23 +661,29 @@ class React3Renderer {
 
     const rootMarkup = {
       threeObject: threeObject,
+      parentMarkup: null,
       toJSON: () => {
         return '---MARKUP---';
       },
     };
 
-    threeObject.userData = {
-      ...threeObject.userData,
+
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(!!threeObject.userData, 'No userdata present in threeobject for %s', 'root image');
+    } else {
+      invariant(!!threeObject.userData);
+    }
+
+    Object.assign(threeObject.userData, {
       childrenMarkup: [markup],
-      parentMarkup: null,
       object3D: threeObject,
       toJSON: () => {
         return '---USERDATA---';
       },
       markup: rootMarkup,
-    };
+    });
 
-    markup.threeObject.userData.parentMarkup = rootMarkup;
+    markup.parentMarkup = rootMarkup;
 
     // all objects now added can be marked as added to scene now!
 

@@ -10,7 +10,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
   }
 
   unmount(threeObject) {
-    const parentMarkup = threeObject.userData.parentMarkup;
+    const parentMarkup = threeObject.userData.markup.parentMarkup;
     const parentEvents = parentMarkup.threeObject.userData.events;
 
     threeObject.resourceIds.forEach(id => {
@@ -34,7 +34,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
       threeObject.resourceMap[resourceId] = child;
 
-      const parentMarkup = threeObject.userData.parentMarkup;
+      const parentMarkup = threeObject.userData.markup.parentMarkup;
       if (parentMarkup) {
         parentMarkup.threeObject.userData.events.emit('resource.added', {
           id: resourceId,
@@ -54,7 +54,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
     delete threeObject.resourceIds[resourceId];
 
-    const parentMarkup = threeObject.userData.parentMarkup;
+    const parentMarkup = threeObject.userData.markup.parentMarkup;
     if (parentMarkup) {
       parentMarkup.threeObject.userData.events.emit('resource.removed', {
         id: resourceId,
@@ -81,7 +81,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
   }
 
   highlight(threeObject) {
-    const ownerObject = threeObject.userData.parentMarkup.threeObject;
+    const ownerObject = threeObject.userData.markup.parentMarkup.threeObject;
 
     if (!(ownerObject.updateMatrixWorld && ownerObject.traverse)) {
       return;

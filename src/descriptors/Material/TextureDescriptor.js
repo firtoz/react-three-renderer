@@ -105,7 +105,7 @@ class TextureDescriptor extends THREEElementDescriptor {
   }
 
   unmount(texture) {
-    const parent = texture.userData.parentMarkup.threeObject;
+    const parent = texture.userData.markup.parentMarkup.threeObject;
 
     // could either be a resource description or an actual texture
     if (parent instanceof THREE.Material) {
@@ -126,12 +126,12 @@ class TextureDescriptor extends THREEElementDescriptor {
   }
 
   highlight(threeObject) {
-    const parent = threeObject.userData.parentMarkup.threeObject;
+    const parent = threeObject.userData.markup.parentMarkup.threeObject;
     parent.userData._descriptor.highlight(parent);
   }
 
   hideHighlight(threeObject) {
-    const parent = threeObject.userData.parentMarkup.threeObject;
+    const parent = threeObject.userData.markup.parentMarkup.threeObject;
     parent.userData._descriptor.hideHighlight(parent);
   }
 }

@@ -137,7 +137,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   unmount(material) {
-    const parent = material.userData.parentMarkup.threeObject;
+    const parent = material.userData.markup.parentMarkup.threeObject;
 
     // could either be a resource description or an actual material
     if (parent instanceof THREE.Mesh || parent instanceof THREE.Points) {
@@ -156,7 +156,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   highlight(threeObject) {
-    const ownerMesh = threeObject.userData.parentMarkup.threeObject;
+    const ownerMesh = threeObject.userData.markup.parentMarkup.threeObject;
     threeObject.userData.events.emit('highlight', {
       uuid: threeObject.uuid,
       boundingBoxFunc: () => {
@@ -172,7 +172,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   getBoundingBoxes(threeObject) {
     const boundingBox = new THREE.Box3();
 
-    boundingBox.setFromObject(threeObject.userData.parentMarkup.threeObject);
+    boundingBox.setFromObject(threeObject.userData.markup.parentMarkup.threeObject);
 
     return [boundingBox];
   }

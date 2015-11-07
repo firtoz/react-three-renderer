@@ -32,17 +32,17 @@ class UniformsDescriptor extends THREEElementDescriptor {
   }
 
   highlight(threeObject) {
-    const parent = threeObject.userData.parentMarkup.threeObject;
+    const parent = threeObject.userData.markup.parentMarkup.threeObject;
     parent.userData._descriptor.highlight(parent);
   }
 
   getBoundingBoxes(threeObject) {
-    const parent = threeObject.userData.parentMarkup.threeObject;
+    const parent = threeObject.userData.markup.parentMarkup.threeObject;
     return parent.userData._descriptor.getBoundingBoxes(parent);
   }
 
   hideHighlight(threeObject) {
-    const parent = threeObject.userData.parentMarkup.threeObject;
+    const parent = threeObject.userData.markup.parentMarkup.threeObject;
     parent.userData._descriptor.hideHighlight(parent);
   }
 }

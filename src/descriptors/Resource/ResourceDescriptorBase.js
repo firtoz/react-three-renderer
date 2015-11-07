@@ -35,7 +35,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   }
 
   _addedIntoRoot = (threeObject) => {
-    let currentParentMarkup = threeObject.userData.parentMarkup;
+    let currentParentMarkup = threeObject.userData.markup.parentMarkup;
 
     let distance = 0;
 
@@ -56,7 +56,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
       }
 
       distance++;
-      currentParentMarkup = currentParentMarkup.threeObject.userData.parentMarkup;
+      currentParentMarkup = currentParentMarkup.threeObject.userData.markup.parentMarkup;
     }
 
     this._updateResource(threeObject);
@@ -168,7 +168,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   }
 
   resourceUpdated(threeObject, newResource, oldResource) {
-    const parentObject = threeObject.userData.parentMarkup && threeObject.userData.parentMarkup.threeObject || undefined;
+    const parentObject = threeObject.userData.markup.parentMarkup && threeObject.userData.markup.parentMarkup.threeObject || undefined;
 
     if (parentObject) {
       this.applyToSlot(threeObject, parentObject, newResource);
@@ -202,12 +202,12 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   }
 
   highlight(threeObject) {
-    const ownerObject = threeObject.userData.parentMarkup.threeObject;
+    const ownerObject = threeObject.userData.markup.parentMarkup.threeObject;
     ownerObject.userData._descriptor.highlight(ownerObject);
   }
 
   hideHighlight(threeObject) {
-    const ownerObject = threeObject.userData.parentMarkup.threeObject;
+    const ownerObject = threeObject.userData.markup.parentMarkup.threeObject;
     ownerObject.userData._descriptor.hideHighlight(ownerObject);
   }
 }

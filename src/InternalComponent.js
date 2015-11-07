@@ -135,8 +135,13 @@ class InternalComponent {
       },
     };
 
-    this._threeObject.userData = {
-      ...this._threeObject.userData,
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(!!this._threeObject.userData, 'No userdata present in threeobject for %s', element.type);
+    } else {
+      invariant(!!this._threeObject.userData);
+    }
+
+    Object.assign(this._threeObject.userData, {
       [ID_ATTR_NAME]: rootID,
       childrenMarkup: mountImages,
       object3D: this._threeObject,
@@ -145,7 +150,7 @@ class InternalComponent {
         return '---USERDATA---';
       },
       markup,
-    };
+    });
 
     const threeElementDescriptors = this._react3RendererInstance.threeElementDescriptors;
 
@@ -157,7 +162,7 @@ class InternalComponent {
 
         const descriptorForChild = threeElementDescriptors[mountImage.elementType];
 
-        mountImage.threeObject.userData.parentMarkup = markup;
+        mountImage.parentMarkup = markup;
 
         descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
       }
@@ -367,7 +372,7 @@ class InternalComponent {
     this.unmountChildren();
     if (this._threeObject !== null) {
       this.threeElementDescriptor.unmount(this._threeObject);
-      delete this._threeObject.userData.markup;
+      // delete this._threeObject.userData.markup;
     }
 
     this._markup = null;
@@ -495,7 +500,7 @@ class InternalComponent {
     const mountIndex = child._mountIndex;
 
     this._markup.threeObject.userData.childrenMarkup.splice(mountIndex, 0, mountImage);
-    mountImage.threeObject.userData.parentMarkup = this._markup;
+    mountImage.parentMarkup = this._markup;
 
     this.threeElementDescriptor.addChild(this._threeObject, mountImage.threeObject, mountIndex);
 
@@ -533,7 +538,7 @@ class InternalComponent {
       if (childMarkup.threeObject === child._threeObject) {
         childrenMarkup.splice(i, 1);
 
-        delete child._threeObject.userData.parentMarkup;
+        delete childMarkup.parentMarkup;
         return;
       }
     }
