@@ -127,6 +127,7 @@ class InternalComponent {
     const mountImages = this.mountChildren(childrenToUse, transaction, processChildContext(context, this));
 
     const markup = {
+      [ID_ATTR_NAME]: rootID,
       _rootInstance: null,
       elementType: element.type,
       threeObject: this._threeObject,
@@ -144,7 +145,6 @@ class InternalComponent {
     }
 
     Object.assign(this._threeObject.userData, {
-      [ID_ATTR_NAME]: rootID,
       object3D: this._threeObject,
       react3internalComponent: this, // used for highlighting etc
       toJSON: () => {
@@ -392,15 +392,15 @@ class InternalComponent {
   }
 
   getPublicInstance() {
-    const node = this._react3RendererInstance.getUserData(this._rootNodeID);
+    const markup = this._react3RendererInstance.getMarkup(this._rootNodeID);
 
-    if (node.object3D) {
-      node.object3D.toJSON = this.emptyJson;
-      return node.object3D;
+    if (markup.threeObject) {
+      markup.threeObject.toJSON = this.emptyJson;
+      return markup.threeObject;
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(false, 'Node has no object3d?');
+      invariant(false, 'Node has no threeObject?');
     } else {
       invariant(false);
     }

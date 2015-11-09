@@ -152,7 +152,7 @@ class React3Renderer {
     if (ReactInstanceMap.has(componentOrElement)) {
       const instance = ReactInstanceMap.get(componentOrElement);
 
-      return instance._react3RendererInstance.getUserDataFromInstance(componentOrElement).object3D;
+      return instance._react3RendererInstance.getMarkupFromInstance(componentOrElement).threeObject;
     }
 
     if (!(componentOrElement.render === null || typeof componentOrElement.render !== 'function')) {
@@ -236,7 +236,7 @@ class React3Renderer {
     return nextChildren;
   }
 
-  getUserDataFromInstance(instance) {
+  getMarkupFromInstance(instance) {
     const id = ReactInstanceMap.get(instance)._rootNodeID;
 
     if (ReactEmptyComponentRegistry.isNullComponentID(id)) {
@@ -350,9 +350,9 @@ class React3Renderer {
 
 
   findDeepestCachedAncestorImpl = (ancestorID) => {
-    const ancestorUserData = this.markupCache[ancestorID];
-    if (ancestorUserData && this.isValid(ancestorUserData, ancestorID)) {
-      this.deepestObject3DSoFar = ancestorUserData.object3D;
+    const ancestorMarkup = this.markupCache[ancestorID];
+    if (ancestorMarkup && this.isValid(ancestorMarkup, ancestorID)) {
+      this.deepestObject3DSoFar = ancestorMarkup.threeObject;
     } else {
       // This node isn't populated in the cache, so presumably none of its
       // descendants are. Break out of the loop.
@@ -396,10 +396,10 @@ class React3Renderer {
     return childInstances;
   }
 
-  containsChild(threeObject, userData) {
-    const childrenMarkup = threeObject.userData.markup.childrenMarkup;
+  containsChild(container, markup) {
+    const childrenMarkup = container.userData.markup.childrenMarkup;
     for (let i = 0; i < childrenMarkup.length; i++) {
-      if (childrenMarkup[i].threeObject.userData === userData) {
+      if (childrenMarkup[i] === markup) {
         return true;
       }
     }
@@ -407,9 +407,9 @@ class React3Renderer {
     return false;
   }
 
-  isValid(userData, id) {
-    if (userData) {
-      if (internalGetID(userData) !== id) {
+  isValid(markup, id) {
+    if (markup) {
+      if (internalGetID(markup) !== id) {
         if (process.env.NODE_ENV !== 'production') {
           invariant(false, 'React3Renderer: Unexpected modification of `%s`', ID_ATTR_NAME);
         } else {
@@ -417,13 +417,13 @@ class React3Renderer {
         }
       }
 
-      const threeObject = this.findContainerForID(id);
+      const container = this.findContainerForID(id);
 
-      // if (threeObject && threeObject.userData === userData) {
+      // if (container && container.markup === markup) {
       //  return true;
       // }
 
-      if (threeObject && this.containsChild(threeObject, userData)) {
+      if (container && this.containsChild(container, markup)) {
         return true;
       }
     }
@@ -451,11 +451,11 @@ class React3Renderer {
             warning(
               // Call internalGetID here because getID calls isValid which calls
               // findThreeObjectForID (this function).
-              internalGetID(rootMarkup.threeObject.userData) === reactRootID, 'React3Renderer: Root element ID differed from reactRootID.');
+              internalGetID(rootMarkup) === reactRootID, 'React3Renderer: Root element ID differed from reactRootID.');
           }
 
           const containerChildMarkup = container.userData && container.userData.markup && container.userData.markup.childrenMarkup[0];// firstChild;
-          if (containerChildMarkup && reactRootID === internalGetID(containerChildMarkup.threeObject.userData)) {
+          if (containerChildMarkup && reactRootID === internalGetID(containerChildMarkup)) {
             // If the container has a new child with the same ID as the old
             // root element, then rootUserDatasByReactRootID[reactRootID] is
             // just stale and needs to be updated. The case that deserves a
@@ -473,7 +473,7 @@ class React3Renderer {
     return container;
   }
 
-  getUserData(id) {
+  getMarkup(id) {
     if (!this.markupCache.hasOwnProperty(id) || !this.isValid(this.markupCache[id], id)) {
       this.markupCache[id] = this.findMarkupByID(id);
     }
@@ -481,7 +481,7 @@ class React3Renderer {
   }
 
   findNodeHandle = (instance) => {
-    const userData = this.getUserData(instance._rootNodeID);
+    const userData = this.getMarkup(instance._rootNodeID);
 
     this._highlightCache = userData;
     return this._highlightElement;
@@ -501,25 +501,25 @@ class React3Renderer {
    * @return {THREE.Object3D} Root THREE.Object3D of the React component.
    */
   findMarkupByID(id) {
-    const reactRoot = this.findContainerForID(id);
-    return this.findComponentRoot(reactRoot, id);
+    const container = this.findContainerForID(id);
+    return this.findComponentRoot(container, id);
   }
 
-  findComponentRoot(ancestorNode, targetID) {
-    const firstUserDataList = this.findComponentRootReusableArray;
+  findComponentRoot(ancestorContainer, targetID) {
+    const firstMarkupList = this.findComponentRootReusableArray;
     let childIndex = 0;
 
-    const deepestAncestor = this.findDeepestCachedAncestor(targetID) || ancestorNode;
+    const deepestAncestorContainer = this.findDeepestCachedAncestor(targetID) || ancestorContainer;
 
-    firstUserDataList[0] = deepestAncestor.userData.markup.childrenMarkup[0].threeObject.userData;
-    firstUserDataList.length = 1;
+    firstMarkupList[0] = deepestAncestorContainer.userData.markup.childrenMarkup[0];
+    firstMarkupList.length = 1;
 
-    while (childIndex < firstUserDataList.length) {
-      let childUserData = firstUserDataList[childIndex++];
+    while (childIndex < firstMarkupList.length) {
+      let childMarkup = firstMarkupList[childIndex++];
       let targetChildUserData;
 
-      while (childUserData) {
-        const childID = this.getID(childUserData);
+      while (childMarkup) {
+        const childID = this.getID(childMarkup);
         if (childID) {
           // Even if we find the node we're looking for, we finish looping
           // through its siblings to ensure they're cached so that we don't have
@@ -527,14 +527,14 @@ class React3Renderer {
           // when visiting the many children of a single node in order.
 
           if (targetID === childID) {
-            targetChildUserData = childUserData;
+            targetChildUserData = childMarkup;
           } else if (ReactInstanceHandles.isAncestorIDOf(childID, targetID)) {
             // If we find a child whose ID is an ancestor of the given ID,
             // then we can be sure that we only want to search the subtree
             // rooted at this child, so we can throw out the rest of the
             // search state.
-            firstUserDataList.length = childIndex = 0;
-            firstUserDataList.push(childUserData.markup.childrenMarkup[0].threeObject.userData);
+            firstMarkupList.length = childIndex = 0;
+            firstMarkupList.push(childMarkup.childrenMarkup[0]);
           }
         } else {
           invariant(false);
@@ -544,25 +544,24 @@ class React3Renderer {
           // element sprouts an extra `<tbody>` child as a side effect of
           // `.innerHTML` parsing. Optimistically continue down this
           // branch, but not before examining the other siblings.
-          firstUserDataList.push(childUserData.markup.childrenMarkup[0].threeObject.userData);
+          firstMarkupList.push(childMarkup.childrenMarkup[0]);
         }
 
-        const childMarkup = childUserData.markup;
         // if childMarkup doesn't exist it may have been unmounted
         const childParentMarkup = childMarkup && childMarkup.parentMarkup;
         // if parentMarkup doesn't exist it could be a root (or unmounted)
-        const ownerChildrenMarkups = childParentMarkup && childParentMarkup.threeObject.userData.markup.childrenMarkup;
+        const ownerChildrenMarkups = childParentMarkup && childParentMarkup.childrenMarkup;
 
-        childUserData = null;
+        childMarkup = null;
 
         if (ownerChildrenMarkups) {
           // child = child.nextSibling;
           for (let i = 0; i < ownerChildrenMarkups.length - 1; i++) {
-            const ownerChildId = this.getID(ownerChildrenMarkups[i].threeObject.userData);
+            const ownerChildId = this.getID(ownerChildrenMarkups[i]);
 
             if (ownerChildId === childID) {
               // if the owner's child's id is the same as my id, then the next sibling userData is:
-              childUserData = ownerChildrenMarkups[i + 1].threeObject.userData;
+              childMarkup = ownerChildrenMarkups[i + 1];
               break;
             }
           }
@@ -570,19 +569,24 @@ class React3Renderer {
       }
 
       if (targetChildUserData) {
-        // Emptying firstUserDataList/findComponentRootReusableArray is
+        // Emptying firstMarkupList/findComponentRootReusableArray is
         // not necessary for correctness, but it helps the GC reclaim
         // any nodes that were left at the end of the search.
-        firstUserDataList.length = 0;
+        firstMarkupList.length = 0;
 
         return targetChildUserData;
       }
     }
 
-    firstUserDataList.length = 0;
+    firstMarkupList.length = 0;
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(false, 'findComponentRoot(..., %s): Unable to find element. This probably ' + 'means the DOM was unexpectedly mutated (e.g., by the browser), ' + 'usually due to forgetting a <tbody> when using tables, nesting tags ' + 'like <form>, <p>, or <a>, or using non-SVG elements in an <svg> ' + 'parent. ' + 'Try inspecting the child nodes of the element with React ID `%s`.', targetID, this.getID(ancestorNode));
+      invariant(false, 'findComponentRoot(..., %s): Unable to find element. This probably ' +
+        'means the DOM was unexpectedly mutated (e.g., by the browser), ' +
+        'usually due to forgetting a <tbody> when using tables, nesting tags ' +
+        'like <form>, <p>, or <a>, or using non-SVG elements in an <svg> ' +
+        'parent. ' +
+        'Try inspecting the child nodes of the element with React ID `%s`.', targetID, this.getID(ancestorContainer.userData.markup));
     } else {
       invariant(false);
     }
@@ -760,7 +764,7 @@ class React3Renderer {
 
     // aka first child
     const reactRootMarkup = getReactRootMarkupInContainer(container);
-    const containerHasReactMarkup = reactRootMarkup && internalGetID(reactRootMarkup.threeObject.userData);
+    const containerHasReactMarkup = reactRootMarkup && internalGetID(reactRootMarkup);
 
     // if (process.env.NODE_ENV !== 'production') {
     //   if (!containerHasReactMarkup || reactRootMarkup.nextSibling) {
@@ -847,8 +851,8 @@ class React3Renderer {
     }
   }
 
-  _updateRootComponent(prevComponent, nextElement, threeObject, callback) {
-    // this.scrollMonitor(threeObject, function () {
+  _updateRootComponent(prevComponent, nextElement, container, callback) {
+    // this.scrollMonitor(container, function () {
     ReactUpdateQueue.enqueueElementInternal(prevComponent, nextElement);
     if (callback) {
       ReactUpdateQueue.enqueueCallbackInternal(prevComponent, callback);
@@ -857,7 +861,7 @@ class React3Renderer {
 
     if (process.env.NODE_ENV !== 'production') {
       // Record the root element in case it later gets transplanted.
-      this.rootMarkupsByReactRootID[this.getReactRootID(threeObject)] = getReactRootMarkupInContainer(threeObject);
+      this.rootMarkupsByReactRootID[this.getReactRootID(container)] = getReactRootMarkupInContainer(container);
     }
 
     return prevComponent;
@@ -900,7 +904,7 @@ class React3Renderer {
    */
   getReactRootID(container) {
     const rootMarkup = getReactRootMarkupInContainer(container);
-    return rootMarkup && this.getID(rootMarkup.threeObject.userData);
+    return rootMarkup && this.getID(rootMarkup);
   }
 
   instantiateReactComponent(elementToInstantiate) {
