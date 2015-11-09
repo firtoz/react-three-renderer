@@ -93,7 +93,7 @@ class React3 extends React.Component {
       onRecreateCanvas={this._onRecreateCanvas}
       canvas={canvas}>
       {this.props.children}
-    </react3>);
+    </react3>, canvas);
   }
 
   static findTHREEObject = React3Renderer.findTHREEObject;
