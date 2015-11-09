@@ -328,9 +328,12 @@ class React3Renderer {
 
         const rendererListener = (info) => {
           this._reactDevtoolsRendererId = info.id;
+          this._rendererListenerCleanup();
+
+          delete this._rendererListenerCleanup;
         };
 
-        __REACT_DEVTOOLS_GLOBAL_HOOK__.sub('renderer', rendererListener);
+        this._rendererListenerCleanup = __REACT_DEVTOOLS_GLOBAL_HOOK__.sub('renderer', rendererListener);
         __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(this._devToolsRendererDefinition);
 
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.reactDevtoolsAgent !== 'undefined'
@@ -621,7 +624,6 @@ class React3Renderer {
   };
 
   _mountRootImage(rootImage, container) {
-    // container was container
     // if (!(container && (container.nodeType === ELEMENT_NODE_TYPE || container.nodeType === DOC_NODE_TYPE || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
     //   if (process.env.NODE_ENV !== 'production') {
     //     invariant(false, 'mountRootComponent(...): Target container is not valid.');
@@ -697,8 +699,6 @@ class React3Renderer {
     invariant(instance instanceof React3DInstance, 'Invalid root component type found');
 
     instance.mountedIntoRoot();
-
-    container.instance = instance;
   }
 
   /**
@@ -829,6 +829,14 @@ class React3Renderer {
     if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       if (this._devtoolsCallbackCleanup) {
         this._devtoolsCallbackCleanup();
+
+        delete this._devtoolsCallbackCleanup;
+      }
+
+      if (this._rendererListenerCleanup) {
+        this._rendererListenerCleanup();
+
+        delete this._rendererListenerCleanup;
       }
 
       if (this._devToolsRendererDefinition) {
