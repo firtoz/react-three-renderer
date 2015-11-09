@@ -275,8 +275,8 @@ class React3Renderer {
       this._agent = null;
 
       this._onHideHighlightFromInspector = () => {
-        if (this._highlightCache && this._highlightCache.react3internalComponent) {
-          const internalComponent = this._highlightCache.react3internalComponent;
+        if (this._highlightCache && this._highlightCache.threeObject.userData.react3internalComponent) {
+          const internalComponent = this._highlightCache.threeObject.userData.react3internalComponent;
 
           internalComponent.hideHighlight();
 
@@ -286,8 +286,8 @@ class React3Renderer {
 
       this._onHighlightFromInspector = (highlightInfo) => {
         if (highlightInfo.node === this._highlightElement) {
-          if (this._highlightCache && this._highlightCache.react3internalComponent) {
-            const internalComponent = this._highlightCache.react3internalComponent;
+          if (this._highlightCache && this._highlightCache.threeObject.userData.react3internalComponent) {
+            const internalComponent = this._highlightCache.threeObject.userData.react3internalComponent;
 
             internalComponent.highlightComponent();
           }
@@ -480,10 +480,12 @@ class React3Renderer {
     return this.markupCache[id];
   }
 
+  // DO NOT RENAME
+  // used by react devtools!
   findNodeHandle = (instance) => {
-    const userData = this.getMarkup(instance._rootNodeID);
+    const markup = this.getMarkup(instance._rootNodeID);
 
-    this._highlightCache = userData;
+    this._highlightCache = markup;
     return this._highlightElement;
   };
 
