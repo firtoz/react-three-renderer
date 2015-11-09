@@ -801,16 +801,11 @@ class React3Renderer {
   }
 
   dispose() {
-    /*
+    const rootIds = Object.keys(this.containersByReactRootID);
 
-    this.unmountComponentAtNode(this._root);
-
-    delete this._root.instance;
-    delete this._root;
-    TODO: Unmount from ALL root containers
-    */
-
-    debugger;
+    for (let i = 0; i < rootIds.length; ++i) {
+      this.unmountComponentAtNode(this.containersByReactRootID[rootIds[i]]);
+    }
 
     delete this._instancesByReactRootID;
     delete this.containersByReactRootID;
