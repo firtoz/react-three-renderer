@@ -887,6 +887,10 @@ class React3Renderer {
       delete this.rootMarkupsByReactRootID[reactRootID];
     }
 
+    if (container && container.userData && container.userData._createdByReact3) {
+      delete container.userData;
+    }
+
     return true;
   }
 
