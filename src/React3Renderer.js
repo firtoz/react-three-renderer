@@ -262,7 +262,7 @@ class React3Renderer {
     }
     this.findComponentRootReusableArray = [];
     this.markupCache = {};
-    this.deepestObject3DSoFar = null;
+    this.deepestContainerSoFar = null;
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
 
@@ -352,7 +352,7 @@ class React3Renderer {
   findDeepestCachedAncestorImpl = (ancestorID) => {
     const ancestorMarkup = this.markupCache[ancestorID];
     if (ancestorMarkup && this.isValid(ancestorMarkup, ancestorID)) {
-      this.deepestObject3DSoFar = ancestorMarkup.threeObject;
+      this.deepestContainerSoFar = ancestorMarkup.threeObject;
     } else {
       // This node isn't populated in the cache, so presumably none of its
       // descendants are. Break out of the loop.
@@ -364,13 +364,13 @@ class React3Renderer {
    * Return the deepest cached node whose ID is a prefix of `targetID`.
    */
   findDeepestCachedAncestor(targetID) {
-    this.deepestObject3DSoFar = null;
+    this.deepestContainerSoFar = null;
 
     ReactInstanceHandles.traverseAncestors(targetID, this.findDeepestCachedAncestorImpl);
 
-    const foundUserData = this.deepestObject3DSoFar;
-    this.deepestObject3DSoFar = null;
-    return foundUserData;
+    const foundAncestor = this.deepestContainerSoFar;
+    this.deepestContainerSoFar = null;
+    return foundAncestor;
   }
 
   instantiateChild = (childInstances, child, name) => {
@@ -518,7 +518,7 @@ class React3Renderer {
 
     while (childIndex < firstMarkupList.length) {
       let childMarkup = firstMarkupList[childIndex++];
-      let targetChildUserData;
+      let targetChildMarkup;
 
       while (childMarkup) {
         const childID = this.getID(childMarkup);
@@ -529,7 +529,7 @@ class React3Renderer {
           // when visiting the many children of a single node in order.
 
           if (targetID === childID) {
-            targetChildUserData = childMarkup;
+            targetChildMarkup = childMarkup;
           } else if (ReactInstanceHandles.isAncestorIDOf(childID, targetID)) {
             // If we find a child whose ID is an ancestor of the given ID,
             // then we can be sure that we only want to search the subtree
@@ -562,7 +562,7 @@ class React3Renderer {
             const ownerChildId = this.getID(ownerChildrenMarkups[i]);
 
             if (ownerChildId === childID) {
-              // if the owner's child's id is the same as my id, then the next sibling userData is:
+              // if the owner's child's id is the same as my id, then the next sibling markup is:
               childMarkup = ownerChildrenMarkups[i + 1];
               break;
             }
@@ -570,13 +570,13 @@ class React3Renderer {
         }
       }
 
-      if (targetChildUserData) {
+      if (targetChildMarkup) {
         // Emptying firstMarkupList/findComponentRootReusableArray is
         // not necessary for correctness, but it helps the GC reclaim
         // any nodes that were left at the end of the search.
         firstMarkupList.length = 0;
 
-        return targetChildUserData;
+        return targetChildMarkup;
       }
     }
 
@@ -588,7 +588,8 @@ class React3Renderer {
         'usually due to forgetting a <tbody> when using tables, nesting tags ' +
         'like <form>, <p>, or <a>, or using non-SVG elements in an <svg> ' +
         'parent. ' +
-        'Try inspecting the child nodes of the element with React ID `%s`.', targetID, this.getID(ancestorContainer.userData.markup));
+        'Try inspecting the child nodes of the element with React ID `%s`.', targetID,
+        this.getID(ancestorContainer.userData.markup));
     } else {
       invariant(false);
     }
@@ -820,7 +821,7 @@ class React3Renderer {
     }
     delete this.findComponentRootReusableArray;
     delete this.markupCache;
-    delete this.deepestObject3DSoFar;
+    delete this.deepestContainerSoFar;
     delete this._highlightElement;
     this.nextMountID = 1;
     this.nextReactRootIndex = 0;
