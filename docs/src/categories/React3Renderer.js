@@ -72,7 +72,7 @@ react3Renderer.render(<react3
         />
       </mesh>
     </scene>
-  </react3>);
+  </react3>, canvas);
 ${'```'}
 
 * react3Renderer.render(react3):
@@ -83,7 +83,7 @@ ${'```'}
 
   Cleanup function. Call this if you want to get rid of everything done by react3Renderer.
 
-  After calling this function you should not use this instance, instead create a new React3Renderer().
+  After calling this function you should not use this instance, instead create a new React3Renderer.
 `,
         },
       },
