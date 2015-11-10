@@ -1,5 +1,4 @@
 import ReactReconciler from 'react/lib/ReactReconciler';
-import DOMProperty from 'react/lib/DOMProperty';
 import ReactMultiChild from 'react/lib/ReactMultiChild';
 
 import invariant from 'fbjs/lib/invariant';
@@ -7,7 +6,7 @@ import invariant from 'fbjs/lib/invariant';
 import flattenChildren from 'react/lib/flattenChildren';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 
-const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
+import ID_PROPERTY_NAME from './utils/idPropertyName';
 
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
@@ -127,7 +126,7 @@ class InternalComponent {
     const mountImages = this.mountChildren(childrenToUse, transaction, processChildContext(context, this));
 
     const markup = {
-      [ID_ATTR_NAME]: rootID,
+      [ID_PROPERTY_NAME]: rootID,
       _rootInstance: null,
       elementType: element.type,
       threeObject: this._threeObject,

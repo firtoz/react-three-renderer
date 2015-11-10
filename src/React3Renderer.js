@@ -1,4 +1,5 @@
-import DOMProperty from 'react/lib/DOMProperty';
+import THREE from 'three.js';
+
 import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
 import ReactElement from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
@@ -12,21 +13,20 @@ import ReactComponent from 'react/lib/ReactComponent';
 import ReactInjection from 'react/lib/ReactInjection';
 import ReactReconcileTransaction from 'react/lib/ReactReconcileTransaction';
 import ReactDefaultBatchingStrategy from 'react/lib/ReactDefaultBatchingStrategy';
+import traverseAllChildren from 'react/lib/traverseAllChildren';
+import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 
 import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-import traverseAllChildren from 'react/lib/traverseAllChildren';
-import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
+
 import React3DInstance from './React3Instance';
 import EventDispatcher from './utils/EventDispatcher';
-
 import InternalComponent from './InternalComponent';
 import ElementDescriptorContainer from './ElementDescriptorContainer';
-
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
-import THREE from 'three.js';
+import ID_PROPERTY_NAME from './utils/idPropertyName';
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
@@ -83,14 +83,13 @@ function unmountComponentInternal(instance) {
   ReactReconciler.unmountComponent(instance);
 }
 
-const ID_ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 
 function internalGetID(markup) {
-  return markup && markup[ID_ATTR_NAME] || '';
+  return markup && markup[ID_PROPERTY_NAME] || '';
   // If markup is something like a window, document, or text markup, none of
   // which support attributes or a .getAttribute method, gracefully return
   // the empty string, as if the attribute were missing.
-  // return markup && markup.getAttribute && markup.getAttribute(ID_ATTR_NAME) || '';
+  // return markup && markup.getAttribute && markup.getAttribute(ID_PROPERTY_NAME) || '';
 }
 
 
@@ -135,7 +134,11 @@ class React3Renderer {
       const owner = ReactCurrentOwner.current;
       if (owner !== null) {
         if (process.env.NODE_ENV !== 'production') {
-          warning(owner._warnedAboutRefsInRender, '%s is accessing getDOMNode or findDOMNode inside its render(). ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as refs. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', owner.getName() || 'A component');
+          warning(owner._warnedAboutRefsInRender, '%s is accessing findTHREEObject inside its render(). ' +
+            'render() should be a pure function of props and state. It should ' +
+            'never access something that requires stale data from the previous ' +
+            'render, such as refs. Move this logic to componentDidMount and ' +
+            'componentDidUpdate instead.', owner.getName() || 'A component');
         }
         owner._warnedAboutRefsInRender = true;
       }
@@ -145,7 +148,8 @@ class React3Renderer {
       return null;
     }
 
-    if (componentOrElement instanceof THREE.Object3D) {
+    if (componentOrElement instanceof THREE.Object3D ||
+      componentOrElement instanceof HTMLCanvasElement) {
       return componentOrElement;
     }
 
@@ -157,14 +161,16 @@ class React3Renderer {
 
     if (!(componentOrElement.render === null || typeof componentOrElement.render !== 'function')) {
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Component (with keys: %s) contains `render` method ' + 'but is not mounted in the DOM', Object.keys(componentOrElement));
+        invariant(false, 'Component (with keys: %s) contains `render` method ' +
+          'but is not mounted', Object.keys(componentOrElement));
       } else {
         invariant(false);
       }
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(false, 'Element appears to be neither ReactComponent nor DOMNode (keys: %s)', Object.keys(componentOrElement));
+      invariant(false, 'Element appears to be neither ReactComponent, a THREE.js object, nor a HTMLCanvasElement (keys: %s)',
+        Object.keys(componentOrElement));
     } else {
       invariant(false);
     }
@@ -414,7 +420,7 @@ class React3Renderer {
     if (markup) {
       if (internalGetID(markup) !== id) {
         if (process.env.NODE_ENV !== 'production') {
-          invariant(false, 'React3Renderer: Unexpected modification of `%s`', ID_ATTR_NAME);
+          invariant(false, 'React3Renderer: Unexpected modification of `%s`', ID_PROPERTY_NAME);
         } else {
           invariant(false);
         }
@@ -437,7 +443,7 @@ class React3Renderer {
 
   /**
    * Finds the container that contains React component to which the
-   * supplied DOM `id` belongs.
+   * supplied `id` belongs.
    *
    * @param {string} id The ID of an element rendered by a React component.
    * @return {?THREE.Object3D} The 3d object that contains the `id`.
@@ -502,7 +508,7 @@ class React3Renderer {
   /**
    * Finds an element rendered by React with the supplied ID.
    *
-   * @param {string} id ID of a DOM node in the React component.
+   * @param {string} id ID of a markup in the React component.
    * @return {THREE.Object3D} Root THREE.Object3D of the React component.
    */
   findMarkupByID(id) {
@@ -587,7 +593,7 @@ class React3Renderer {
 
     if (process.env.NODE_ENV !== 'production') {
       invariant(false, 'findComponentRoot(..., %s): Unable to find element. This probably ' +
-        'means the DOM was unexpectedly mutated (e.g., by the browser), ' +
+        'means the THREE.js environment was unexpectedly mutated (e.g., by a plugin), ' +
         'usually due to forgetting a <tbody> when using tables, nesting tags ' +
         'like <form>, <p>, or <a>, or using non-SVG elements in an <svg> ' +
         'parent. ' +
@@ -600,11 +606,11 @@ class React3Renderer {
 
 
   /**
-   * Mounts this component and inserts it into the DOM.
+   * Mounts this component and inserts it into the THREE.js environment.
    *
    * @param {ReactComponent} componentInstance The instance to mount.
-   * @param {string} rootID DOM ID of the root node.
-   * @param {THREE.Object3D|HTMLCanvasElement} container DOM element to mount into.
+   * @param {string} rootID markup ID of the root node.
+   * @param {THREE.Object3D|HTMLCanvasElement} container to mount into.
    * @param {ReactReconcileTransaction} transaction
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
    * @param {any} context
@@ -708,7 +714,7 @@ class React3Renderer {
    * Batched mount.
    *
    * @param {ReactComponent} componentInstance The instance to mount.
-   * @param {string} rootID DOM ID of the root node.
+   * @param {string} rootID markup ID of the root node.
    * @param {THREE.Object3D|HTMLCanvasElement} container THREE Object or HTMLCanvasElement to mount into.
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
    * @param {any} context
@@ -1074,7 +1080,7 @@ class React3Renderer {
    * This also creates the "reactRoot" ID that will be assigned to the element
    * rendered within.
    *
-   * @param {THREE.Object3D} container DOM element to register as a container.
+   * @param {THREE.Object3D|HTMLCanvasElement} container to register as a container.
    * @return {string} The "reactRoot" ID of elements rendered within.
    */
   registerContainer(container) {
@@ -1103,7 +1109,7 @@ class React3Renderer {
         if (cached !== markup) {
           if (!!this.isValid(cached, id)) {
             if (process.env.NODE_ENV !== 'production') {
-              invariant(false, 'React3Renderer: Two valid but unequal nodes with the same `%s`: %s', ID_ATTR_NAME, id);
+              invariant(false, 'React3Renderer: Two valid but unequal nodes with the same `%s`: %s', ID_PROPERTY_NAME, id);
             } else {
               invariant(false);
             }
