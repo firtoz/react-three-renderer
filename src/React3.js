@@ -56,9 +56,7 @@ class React3 extends React.Component {
   }
 
   componentDidMount() {
-    const canvas = this.refs.canvas;
-
-    this.react3Renderer = new React3Renderer(canvas);
+    this.react3Renderer = new React3Renderer();
 
     this._render();
   }
@@ -90,8 +88,7 @@ class React3 extends React.Component {
 
     this.react3Renderer.render(<react3
       {...propsToClone}
-      onRecreateCanvas={this._onRecreateCanvas}
-      canvas={canvas}>
+      onRecreateCanvas={this._onRecreateCanvas}>
       {this.props.children}
     </react3>, canvas);
   }

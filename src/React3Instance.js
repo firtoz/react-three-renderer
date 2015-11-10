@@ -41,7 +41,9 @@ class React3DInstance {
     this._resourceContainers = [];
     this._recreateCanvasCallback = onRecreateCanvas;
 
-    this._createRenderer();
+    this._canvas = null;
+
+    //this._createRenderer();
 
     this._onAnimate = onAnimate;
     this._objectsByUUID = {};
@@ -97,9 +99,13 @@ class React3DInstance {
   }
 
   _createRenderer() {
+    if (!this._canvas) {
+      return;
+    }
+
     const parameters = this._parameters;
 
-    this._renderer = new THREE.WebGLRenderer({canvas: parameters.canvas, antialias: parameters.antialias});
+    this._renderer = new THREE.WebGLRenderer({canvas: this._canvas, antialias: parameters.antialias});
 
     const renderer = this._renderer;
 
@@ -487,7 +493,7 @@ class React3DInstance {
   }
 
   updateCanvas(canvas) {
-    this._parameters.canvas = canvas;
+    this._canvas = canvas;
 
     if (this._renderer) {
       this.disposeResourcesAndRenderer();
@@ -499,7 +505,7 @@ class React3DInstance {
       }
     }
 
-    this._createRenderer(this._parameters);
+    this._createRenderer();
   }
 
   updateGammaInput(gammaInput) {
@@ -557,8 +563,8 @@ class React3DInstance {
 
     delete this._renderer;
 
-    if (contextLossExtension) {
-      this._parameters.canvas.addEventListener('webglcontextlost', () => {
+    if (contextLossExtension && this._canvas) {
+      this._canvas.addEventListener('webglcontextlost', () => {
         // this should recreate the canvas
         this._recreateCanvasCallback();
       }, false);

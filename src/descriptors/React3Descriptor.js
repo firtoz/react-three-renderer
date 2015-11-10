@@ -7,6 +7,7 @@ import THREE from 'three.js';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import warning from 'fbjs/lib/warning';
+import invariant from 'fbjs/lib/invariant';
 
 const propProxy = {
   gammaInput: {
@@ -30,9 +31,6 @@ const propProxy = {
   mainCamera: {
     type: PropTypes.string,
     default: undefined,
-  },
-  canvas: {
-    type: PropTypes.instanceOf(HTMLCanvasElement).isRequired,
   },
   onAnimate: {
     type: PropTypes.func,
@@ -123,6 +121,14 @@ class React3Descriptor extends THREEElementDescriptor {
     });
   }
 
+  setParent(threeObject, parentObject3D) {
+    invariant(parentObject3D instanceof HTMLCanvasElement, 'The `react3` element can only be rendered into a canvas.');
+
+    super.setParent(threeObject, parentObject3D);
+
+    threeObject.updateCanvas(parentObject3D);
+  }
+
   construct(props) {
     return new React3DInstance(props, this.react3RendererInstance);
   }
@@ -153,10 +159,6 @@ class React3Descriptor extends THREEElementDescriptor {
 
   _updateOnRecreateCanvas(threeObject, callback) {
     threeObject.updateOnRecreateCanvas(callback);
-  }
-
-  _updateCanvas(threeObject, canvas) {
-    threeObject.updateCanvas(canvas);
   }
 
   _updateHeight(threeObject, newHeight) {

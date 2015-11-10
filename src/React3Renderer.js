@@ -692,6 +692,9 @@ class React3Renderer {
 
     rootImage.parentMarkup = rootMarkup;
 
+    const descriptorForChild = this.threeElementDescriptors[rootImage.elementType];
+    descriptorForChild.setParent(rootImage.threeObject, rootMarkup.threeObject);
+
     // all objects now added can be marked as added to scene now!
 
     const instance:React3DInstance = rootImage.threeObject;
