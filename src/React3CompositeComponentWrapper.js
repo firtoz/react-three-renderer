@@ -52,6 +52,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     return this._react3RendererInstance.instantiateReactComponent(element);
   }
 
+  // See ReactCompositeComponent.mountComponent
   mountComponent(rootID, transaction, context) {
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;

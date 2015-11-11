@@ -34,6 +34,10 @@ let getDeclarationErrorAddendum;
 
 if (process.env.NODE_ENV !== 'production') {
   // prop type helpers
+  // the warnings for propTypes will not say <anonymous>.
+  // Some performance is sacrificed for this.
+
+  // TODO: could have an env variable to disable this?
   if (!THREE._renamed) {
     THREE._renamed = true;
 
@@ -86,10 +90,6 @@ function unmountComponentInternal(instance) {
 
 function internalGetID(markup) {
   return markup && markup[ID_PROPERTY_NAME] || '';
-  // If markup is something like a window, document, or text markup, none of
-  // which support attributes or a .getAttribute method, gracefully return
-  // the empty string, as if the attribute were missing.
-  // return markup && markup.getAttribute && markup.getAttribute(ID_PROPERTY_NAME) || '';
 }
 
 
@@ -102,6 +102,8 @@ function getReactRootMarkupInContainer(container) {
   if (!container) {
     return null;
   }
+
+  // in ReactMount this is container.firstChild.
 
   return container.userData && container.userData.markup && container.userData.markup.childrenMarkup[0] || null;
 }
@@ -121,12 +123,13 @@ function isInternalComponentType(type) {
 }
 
 class React3Renderer {
+  // to be used by modules e.g. mouse input ( see examples )
   static eventDispatcher = new EventDispatcher();
 
   /**
    * Returns the THREE.js object rendered by this element.
    *
-   * @param {React.Component|THREE.Object3D} componentOrElement
+   * @param {React.Component|THREE.Object3D|HTMLCanvasElement} componentOrElement
    * @return {?THREE.Object3D} The root node of this element.
    */
   static findTHREEObject(componentOrElement) {
@@ -194,7 +197,7 @@ class React3Renderer {
     // instead of for..in we can zip the iterators and check if an item has
     // moved.
     // TODO: If nothing has changed, return the prevChildren object so that we
-    // can quickly bailout if nothing has changed.
+    // can quickly bailout.
     if (!nextChildren && !prevChildren) {
       return null;
     }
@@ -242,6 +245,10 @@ class React3Renderer {
     return nextChildren;
   }
 
+  /**
+   * @param instance
+   * @returns {*} Markup
+   */
   getMarkupFromInstance(instance) {
     const id = ReactInstanceMap.get(instance)._rootNodeID;
 
@@ -357,7 +364,6 @@ class React3Renderer {
     }
   }
 
-
   findDeepestCachedAncestorImpl = (ancestorID) => {
     const ancestorMarkup = this.markupCache[ancestorID];
     if (ancestorMarkup && this.isValid(ancestorMarkup, ancestorID)) {
@@ -446,7 +452,7 @@ class React3Renderer {
    * supplied `id` belongs.
    *
    * @param {string} id The ID of an element rendered by a React component.
-   * @return {?THREE.Object3D} The 3d object that contains the `id`.
+   * @return {?THREE.Object3D|HTMLCanvasElement} The container that contains the `id`.
    */
   findContainerForID(id) {
     const reactRootID = ReactInstanceHandles.getReactRootIDFromNodeID(id);
@@ -498,6 +504,7 @@ class React3Renderer {
     return this._highlightElement;
   };
 
+  // used by react devtools
   nativeTagToRootNodeID = () => {
     // console.log('wat');
     // debugger;
@@ -593,10 +600,7 @@ class React3Renderer {
 
     if (process.env.NODE_ENV !== 'production') {
       invariant(false, 'findComponentRoot(..., %s): Unable to find element. This probably ' +
-        'means the THREE.js environment was unexpectedly mutated (e.g., by a plugin), ' +
-        'usually due to forgetting a <tbody> when using tables, nesting tags ' +
-        'like <form>, <p>, or <a>, or using non-SVG elements in an <svg> ' +
-        'parent. ' +
+        'means the THREE.js environment was unexpectedly mutated (e.g., by a plugin). ' +
         'Try inspecting the child nodes of the element with React ID `%s`.', targetID,
         this.getID(ancestorContainer.userData.markup));
     } else {
