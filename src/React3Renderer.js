@@ -570,19 +570,14 @@ class React3Renderer {
         // if parentMarkup doesn't exist it could be a root (or unmounted)
         const ownerChildrenMarkups = childParentMarkup && childParentMarkup.childrenMarkup;
 
-        childMarkup = null;
-
         if (ownerChildrenMarkups) {
-          // child = child.nextSibling;
-          for (let i = 0; i < ownerChildrenMarkups.length - 1; i++) {
-            const ownerChildId = this.getID(ownerChildrenMarkups[i]);
+          const indexInParent = ownerChildrenMarkups.indexOf(childMarkup);
 
-            if (ownerChildId === childID) {
-              // if the owner's child's id is the same as my id, then the next sibling markup is:
-              childMarkup = ownerChildrenMarkups[i + 1];
-              break;
-            }
-          }
+          invariant(indexInParent !== -1, 'Could not find child markup`s index in parent');
+
+          childMarkup = ownerChildrenMarkups.length > indexInParent && ownerChildrenMarkups[indexInParent + 1] || null;
+        } else {
+          childMarkup = null;
         }
       }
 
