@@ -1,6 +1,6 @@
 {
   "name": "react-three-renderer",
-  "version": "0.0.10-alpha",
+  "version": "0.0.11-alpha",
   "description": "Render into a three.js canvas using React.",
   "main": "./lib/React3.js",
   "scripts": {
@@ -35,7 +35,9 @@
   },
   "babel": {
     "stage": 0,
-    "optional": ["runtime"]
+    "optional": [
+      "runtime"
+    ]
   },
   "bugs": {
     "url": "https://github.com/toxicFork/react-three-renderer/issues"
