@@ -5,7 +5,7 @@
   "main": "./lib/React3.js",
   "scripts": {
     "compile": "gulp babel",
-    "prepublish": "npm run compile",
+    "prepublish": "not-in-install && npm run compile || in-install",
     "test": "cd ./tests && npm test"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
@@ -27,7 +27,8 @@
     "eslint-plugin-react": "^3.6.3",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.3.0",
-    "gulp-util": "^3.0.7"
+    "gulp-util": "^3.0.7",
+    "in-publish": "^2.0.0"
   },
   "repository": {
     "type": "git",
