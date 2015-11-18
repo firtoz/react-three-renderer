@@ -4,10 +4,6 @@ node_js:
 # Handle git submodules yourself
 git:
     submodules: false
-env:
-  - DISPLAY=:99.0 CHROME_BIN=chromium-browser
-before_script:
-  - sh -e /etc/init.d/xvfb start
 before_install:
 #remove wiki submodule
   - git submodule deinit wiki
@@ -19,3 +15,5 @@ before_install:
   - cd tests
   - npm install
   - cd .. # back up to original directory so that npm install can succeed there!
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+  - sleep 3 # give xvfb some time to start
