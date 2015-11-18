@@ -3,4 +3,5 @@
 /.eslintrc
 /.npmignore
 /docs
+/tests
 /wiki

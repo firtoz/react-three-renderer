@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "gulp babel",
     "prepublish": "npm run compile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd ./tests && npm test"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
   "keywords": "react, three.js",

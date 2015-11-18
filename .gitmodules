@@ -1,3 +1,6 @@
 [submodule "wiki"]
 	path = wiki
 	url = git@github.com:toxicFork/react-three-renderer.wiki.git
+[submodule "tests"]
+	path = tests
+	url = git@github.com:toxicFork/react-three-renderer-tests.git
