@@ -7,5 +7,5 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-  - git submodule deinit wiki
+  - git submodule deinit wiki -f
   - git submodule update --init --recursive
