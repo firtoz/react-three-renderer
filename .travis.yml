@@ -1,3 +1,4 @@
+language: node_js
 # Handle git submodules yourself
 git:
     submodules: false
@@ -6,6 +7,7 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - git submodule deinit wiki
+  - git rm wiki
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules 
   - git submodule update --init --recursive
