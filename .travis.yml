@@ -26,10 +26,9 @@ before_install:
   - cd tests
   - npm install
   - cd .. # back up to original directory so that npm install can succeed there!
-  - export CHROME_BIN=google-chrome-stable
+  - export CHROME_BIN="xvfb-run -f ~/.Xauthority --server-num=0 --server-args='-screen 0, 1024x768x24' google-chrome-stable"
   - export DISPLAY=:99.0
 #  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-  - xvfb-run -f ~/.Xauthority --server-num=0 --server-args='-screen 0, 1024x768x24'
   - sleep 3 # give xvfb some time to start
   - chromium-browser --version
   - google-chrome-stable --version
