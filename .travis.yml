@@ -4,6 +4,11 @@ node_js:
 # Handle git submodules yourself
 git:
     submodules: false
+addons:
+  apt:
+    packages:
+      - libosmesa6-dev
+      - libosmesa6
 before_install:
 #remove wiki submodule
   - git submodule deinit wiki
