@@ -5,9 +5,11 @@ node_js:
 git:
     submodules: false
 addons:
+  firefox: '42.0'
   apt:
     sources:
-      - deb http://dl.google.com/linux/chrome/deb/ stable main
+      - "deb http://dl.google.com/linux/chrome/deb/ stable main"
+      - google-chrome
     packages:
       - libosmesa6-dev
       - libosmesa6
@@ -30,3 +32,4 @@ before_install:
   - sleep 3 # give xvfb some time to start
   - chromium-browser --version
   - google-chrome-stable --version
+  - google-chrome --version
