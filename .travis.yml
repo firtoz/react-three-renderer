@@ -7,7 +7,7 @@ git:
 addons:
   apt:
     sources:
-      - google-chrome
+      - deb http://dl.google.com/linux/chrome/deb/ stable main
     packages:
       - libosmesa6-dev
       - libosmesa6
