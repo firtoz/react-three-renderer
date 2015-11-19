@@ -7,11 +7,12 @@ git:
 addons:
   apt:
     sources:
-      - chromium-daily/stable
+      - google-chrome
     packages:
       - libosmesa6-dev
       - libosmesa6
       - chromium-browser # hopefully this will get the latest chromium browser?
+      - google-chrome
 before_install:
 #remove wiki submodule
   - git submodule deinit wiki
@@ -28,3 +29,4 @@ before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
   - sleep 3 # give xvfb some time to start
   - chromium-browser --version
+  - google-chrome--version
