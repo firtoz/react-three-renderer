@@ -6,9 +6,10 @@ git:
     submodules: false
 addons:
   apt:
+    sources:
+      - google-chrome
     packages:
-      - libosmesa6-dev
-      - libosmesa6
+      - google-chrome-stable
 before_install:
 #remove wiki submodule
   - git submodule deinit wiki
@@ -20,7 +21,7 @@ before_install:
   - cd tests
   - npm install
   - cd .. # back up to original directory so that npm install can succeed there!
-  - export CHROME_BIN=chromium-browser
+  - export CHROME_BIN=google-chrome-stable
   - export DISPLAY=:99.0
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-  - sleep 3 # give xvfb some time to start
+  - Xvfb :99.0 -extension RANDR -ac -screen 0 1280x1024x16 > /dev/null &
+  - google-chrome-stable --version
