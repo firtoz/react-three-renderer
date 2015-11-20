@@ -5,7 +5,7 @@ Render into a [three.js](http://threejs.org/) canvas using [React](https://githu
 
 > This is still an experimental and incomplete project, use at your own risk!
 
-[![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg?branch=testing)](https://travis-ci.org/toxicFork/react-three-renderer)
+[![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg)](https://travis-ci.org/toxicFork/react-three-renderer)
 
 [![npm](https://nodei.co/npm/react-three-renderer.svg?downloads=true)](https://nodei.co/npm/react-three-renderer/)
 
