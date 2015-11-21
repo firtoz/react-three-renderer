@@ -4,6 +4,7 @@ import THREEElementDescriptor from '../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
 import PropTypes from 'react/lib/ReactPropTypes';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
@@ -22,7 +23,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     }
 
     this.hasProp('position', {
-      type: PropTypes.instanceOf(THREE.Vector3),
+      type: propTypeInstanceOf(THREE.Vector3),
       update(threeObject, position) {
         threeObject.position.copy(position);
 
@@ -34,7 +35,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     });
 
     this.hasProp('rotation', {
-      type: PropTypes.instanceOf(THREE.Euler),
+      type: propTypeInstanceOf(THREE.Euler),
       update(threeObject, rotation) {
         threeObject.rotation.copy(rotation);
       },
@@ -42,19 +43,19 @@ class Object3DDescriptor extends THREEElementDescriptor {
     });
 
     this.hasProp('quaternion', {
-      type: PropTypes.instanceOf(THREE.Quaternion),
+      type: propTypeInstanceOf(THREE.Quaternion),
       update: copyUpdate('quaternion'),
       default: new THREE.Quaternion(),
     });
 
     this.hasProp('scale', {
-      type: PropTypes.instanceOf(THREE.Vector3),
+      type: propTypeInstanceOf(THREE.Vector3),
       update: copyUpdate('scale'),
       default: new THREE.Vector3(1, 1, 1),
     });
 
     this.hasProp('lookAt', {
-      type: PropTypes.instanceOf(THREE.Vector3),
+      type: propTypeInstanceOf(THREE.Vector3),
       update(threeObject, lookAt) {
         threeObject.userData._lookAt = lookAt;
 

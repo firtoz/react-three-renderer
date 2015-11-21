@@ -8,13 +8,14 @@ import resource from '../../decorators/resource';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import ShapeAction from '../../../Shapes/ShapeAction';
+import propTypeInstanceOf from '../../../utils/propTypeInstanceOf';
 
 class PathDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
     this.hasProp('points', {
-      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector2)),
+      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector2)),
       update: this.triggerRemount,
       default: [],
     });

@@ -2,6 +2,7 @@ import THREE from 'three.js';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class LatheGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -20,7 +21,7 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
     });
 
     this.hasProp('points', {
-      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
+      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)).isRequired,
       update: this.triggerRemount,
       default: undefined,
     });

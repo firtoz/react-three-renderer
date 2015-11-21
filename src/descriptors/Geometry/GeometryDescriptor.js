@@ -2,13 +2,14 @@ import THREE from 'three.js';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class GeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
     this.hasProp('vertices', {
-      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Vector3)).isRequired,
+      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)).isRequired,
       update(threeObject, vertices) {
         if (threeObject.vertices !== vertices) {
           threeObject.vertices = vertices;
@@ -21,7 +22,7 @@ class GeometryDescriptor extends GeometryDescriptorBase {
     });
 
     this.hasProp('colors', {
-      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Color)),
+      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Color)),
       update(threeObject, colors, hasProp) {
         if (hasProp) {
           if (threeObject.colors !== colors) {
@@ -36,7 +37,7 @@ class GeometryDescriptor extends GeometryDescriptorBase {
     });
 
     this.hasProp('faces', {
-      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Face3)),
+      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Face3)),
       update(threeObject, faces) {
         if (threeObject.faces !== faces) {
           threeObject.faces = faces;

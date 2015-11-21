@@ -6,6 +6,8 @@ import THREE from 'three.js';
 
 const {PropTypes} = React;
 
+import propTypeInstanceOf from './utils/propTypeInstanceOf';
+
 class React3 extends React.Component {
   static propTypes = {
     context: PropTypes.string,
@@ -19,7 +21,7 @@ class React3 extends React.Component {
     mainCamera: PropTypes.string,
     onAnimate: PropTypes.func,
     clearColor: PropTypes.oneOfType([
-      PropTypes.instanceOf(THREE.Color),
+      propTypeInstanceOf(THREE.Color),
       PropTypes.number,
       PropTypes.string,
     ]),

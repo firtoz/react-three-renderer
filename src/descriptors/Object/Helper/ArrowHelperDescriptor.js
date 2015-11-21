@@ -2,6 +2,7 @@ import THREE from 'three.js';
 import Object3DDescriptor from '../Object3DDescriptor';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+import propTypeInstanceOf from '../../../utils/propTypeInstanceOf';
 
 class ArrowHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
@@ -10,8 +11,8 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
     this.propTypes = {
       ...this.propTypes,
 
-      dir: PropTypes.instanceOf(THREE.Vector3),
-      origin: PropTypes.instanceOf(THREE.Vector3),
+      dir: propTypeInstanceOf(THREE.Vector3),
+      origin: propTypeInstanceOf(THREE.Vector3),
       length: PropTypes.number,
       color: PropTypes.number,
       headLength: PropTypes.number,

@@ -2,13 +2,14 @@ import THREE from 'three.js';
 import Object3DDescriptor from './Object3DDescriptor';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class SceneDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
     this.hasProp('fog', {
-      type: PropTypes.instanceOf(THREE.Fog),
+      type: propTypeInstanceOf(THREE.Fog),
       simple: true,
       default: undefined,
     });

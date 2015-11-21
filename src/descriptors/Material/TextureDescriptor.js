@@ -12,6 +12,7 @@ import Uniform from '../../Uniform';
 const textureLoader = new THREE.TextureLoader();
 
 import React3Renderer from '../../React3Renderer';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 @resource
 class TextureDescriptor extends THREEElementDescriptor {
@@ -19,7 +20,7 @@ class TextureDescriptor extends THREEElementDescriptor {
     super(react3RendererInstance);
 
     this.hasProp('repeat', {
-      type: PropTypes.instanceOf(THREE.Vector2),
+      type: propTypeInstanceOf(THREE.Vector2),
       updateInitial: true,
       update(threeObject, repeat) {
         if (repeat) {

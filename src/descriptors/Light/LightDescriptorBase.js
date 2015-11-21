@@ -4,6 +4,7 @@ import Object3DDescriptor from '../Object/Object3DDescriptor';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import warning from 'fbjs/lib/warning';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class LightDescriptorBase extends Object3DDescriptor {
   constructor(react3Instance) {
@@ -90,7 +91,7 @@ class LightDescriptorBase extends Object3DDescriptor {
 
     this.hasProp('color', {
       type: PropTypes.oneOfType([
-        PropTypes.instanceOf(THREE.Color),
+        propTypeInstanceOf(THREE.Color),
         PropTypes.number,
         PropTypes.string,
       ]),

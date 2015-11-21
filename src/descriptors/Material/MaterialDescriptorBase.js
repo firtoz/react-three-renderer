@@ -7,6 +7,7 @@ import resource from '../decorators/resource';
 import ResourceReference from '../../Resources/ResourceReference';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 @resource
 class MaterialDescriptorBase extends THREEElementDescriptor {
@@ -88,7 +89,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
 
     this.hasProp(propName, {
       type: PropTypes.oneOfType([
-        PropTypes.instanceOf(THREE.Color),
+        propTypeInstanceOf(THREE.Color),
         PropTypes.number,
         PropTypes.string,
       ]),

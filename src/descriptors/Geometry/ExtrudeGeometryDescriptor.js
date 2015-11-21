@@ -6,12 +6,14 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
 import invariant from 'fbjs/lib/invariant';
 
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
+
 class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
     this.hasProp('shapes', {
-      type: PropTypes.arrayOf(PropTypes.instanceOf(THREE.Shape)),
+      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Shape)),
       updateInitial: true,
       update: (threeObject, shapes) => {
         threeObject.userData._shapesFromProps = shapes || [];

@@ -9,6 +9,8 @@ import PropTypes from 'react/lib/ReactPropTypes';
 import warning from 'fbjs/lib/warning';
 import invariant from 'fbjs/lib/invariant';
 
+import propTypeInstanceOf from '../utils/propTypeInstanceOf';
+
 const propProxy = {
   gammaInput: {
     type: PropTypes.bool,
@@ -38,7 +40,7 @@ const propProxy = {
   },
   clearColor: {
     type: PropTypes.oneOfType([
-      PropTypes.instanceOf(THREE.Color),
+      propTypeInstanceOf(THREE.Color),
       PropTypes.number,
       PropTypes.string,
     ]),

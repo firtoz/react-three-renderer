@@ -41,24 +41,13 @@ if (process.env.NODE_ENV !== 'production') {
   if (!THREE._renamed) {
     THREE._renamed = true;
 
-    THREE.Vector2 = class Vector2 extends THREE.Vector2 {
-      displayName = 'THREE.Vector2';
-    };
-    THREE.Vector3 = class Vector3 extends THREE.Vector3 {
-      displayName = 'THREE.Vector3';
-    };
-    THREE.Quaternion = class Quaternion extends THREE.Quaternion {
-      displayName = 'THREE.Quaternion';
-    };
-    THREE.Color = class Color extends THREE.Color {
-      displayName = 'THREE.Color';
-    };
-    THREE.Euler = class Euler extends THREE.Euler {
-      displayName = 'THREE.Euler';
-    };
-    THREE.Fog = class Fog extends THREE.Fog {
-      displayName = 'THREE.Fog';
-    };
+    THREE.Vector2.displayName = 'THREE.Vector2';
+    THREE.Vector3.displayName = 'THREE.Vector3';
+    THREE.Quaternion.displayName = 'THREE.Quaternion';
+    THREE.Color.displayName = 'THREE.Color';
+    THREE.Shape.displayName = 'THREE.Shape';
+    THREE.Euler.displayName = 'THREE.Euler';
+    THREE.Fog.displayName = 'THREE.Fog';
   }
 
   getDeclarationErrorAddendum = (owner) => {
