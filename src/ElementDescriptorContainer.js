@@ -32,6 +32,7 @@ import BoxGeometryDescriptor from './descriptors/Geometry/BoxGeometryDescriptor'
 import SphereGeometryDescriptor from './descriptors/Geometry/SphereGeometryDescriptor';
 import ParametricGeometryDescriptor from './descriptors/Geometry/ParametricGeometryDescriptor';
 import PlaneBufferGeometryDescriptor from './descriptors/Geometry/PlaneBufferGeometryDescriptor';
+import PlaneGeometryDescriptor from './descriptors/Geometry/PlaneGeometryDescriptor';
 import PolyhedronGeometryDescriptor from './descriptors/Geometry/PolyhedronGeometryDescriptor';
 import IcosahedronGeometryDescriptor from './descriptors/Geometry/IcosahedronGeometryDescriptor';
 import OctahedronGeometryDescriptor from './descriptors/Geometry/OctahedronGeometryDescriptor';
@@ -118,6 +119,7 @@ class ElementDescriptorContainer {
       sphereGeometry: new SphereGeometryDescriptor(react3RendererInstance),
       parametricGeometry: new ParametricGeometryDescriptor(react3RendererInstance),
       planeBufferGeometry: new PlaneBufferGeometryDescriptor(react3RendererInstance),
+      planeGeometry: new PlaneGeometryDescriptor(react3RendererInstance),
       polyhedronGeometry: new PolyhedronGeometryDescriptor(react3RendererInstance),
       icosahedronGeometry: new IcosahedronGeometryDescriptor(react3RendererInstance),
       octahedronGeometry: new OctahedronGeometryDescriptor(react3RendererInstance),
