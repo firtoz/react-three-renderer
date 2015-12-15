@@ -185,6 +185,9 @@ export default {
           planeBufferGeometry: {
             isComponent: true,
           },
+          planeGeometry: {
+            isComponent: true,
+          },
           polyhedronGeometry: {
             isComponent: true,
           },

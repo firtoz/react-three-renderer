@@ -9,7 +9,7 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
 
     [
       'width',
-      'height'
+      'height',
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
@@ -20,7 +20,7 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
 
     [
       'widthSegments',
-      'heightSegments'
+      'heightSegments',
     ].forEach(propName => {
       this.hasProp(propName, {
         type: PropTypes.number,
@@ -35,7 +35,7 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
       width,
       height,
       widthSegments,
-      heightSegments
+      heightSegments,
       } = props;
 
     return new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
