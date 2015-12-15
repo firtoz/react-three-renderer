@@ -1,6 +1,6 @@
 {
   "name": "react-three-renderer",
-  "version": "0.0.13-alpha",
+  "version": "0.0.14-alpha",
   "description": "Render into a three.js canvas using React.",
   "main": "./lib/React3.js",
   "scripts": {
@@ -11,11 +11,11 @@
   "author": "Firtina \"toxicFork\" Ozbalikci",
   "keywords": "react, three.js",
   "license": "MIT",
-  "peerDependencies": {
-    "fbjs": ">=0.4.0",
-    "react": ">=0.14.1",
-    "react-dom": ">=0.14.1",
-    "three.js": ">=0.73.0"
+  "dependencies": {
+    "fbjs": "^0.4.0",
+    "react": "^0.14.1",
+    "react-dom": "^0.14.1",
+    "three.js": "^0.73.0"
   },
   "devDependencies": {
     "fbjs": ">=0.4.0",
