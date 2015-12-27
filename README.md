@@ -1,6 +1,8 @@
 react-three-renderer
 ====================
 
+[![Join the chat at https://gitter.im/toxicFork/react-three-renderer](https://badges.gitter.im/toxicFork/react-three-renderer.svg)](https://gitter.im/toxicFork/react-three-renderer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Render into a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
 > This is still an experimental and incomplete project, use at your own risk!
