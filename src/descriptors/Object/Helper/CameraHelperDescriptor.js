@@ -1,4 +1,4 @@
-import THREE from 'three.js';
+import THREE from 'three';
 import CameraUtils from '../../../utils/CameraUtils.js';
 import Object3DDescriptor from '../Object3DDescriptor';
 

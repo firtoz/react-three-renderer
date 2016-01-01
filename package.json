@@ -15,13 +15,13 @@
     "fbjs": "^0.4.0",
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
-    "three.js": "^0.73.0"
+    "three": "^0.73.0"
   },
   "devDependencies": {
     "fbjs": ">=0.4.0",
     "react": ">=0.14.1",
     "react-dom": ">=0.14.1",
-    "three.js": ">=0.73.0",
+    "three": ">=0.73.0",
     "babel-core": "^5.8.29",
     "babel-eslint": "^4.1.3",
     "babel-runtime": "^5.8.29",

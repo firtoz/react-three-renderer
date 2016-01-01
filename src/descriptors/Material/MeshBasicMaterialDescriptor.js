@@ -1,4 +1,4 @@
-import THREE from 'three.js';
+import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';

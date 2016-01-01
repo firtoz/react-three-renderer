@@ -1,5 +1,5 @@
 import Object3DDescriptor from '../Object3DDescriptor';
-import THREE from 'three.js';
+import THREE from 'three';
 
 class CameraDescriptorBase extends Object3DDescriptor {
   applyInitialProps(threeObject, props) {

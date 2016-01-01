@@ -1,4 +1,4 @@
-import THREE from 'three.js';
+import THREE from 'three';
 
 import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
 import ReactElement from 'react/lib/ReactElement';

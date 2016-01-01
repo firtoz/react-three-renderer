@@ -1,4 +1,4 @@
-import THREE from 'three.js';
+import THREE from 'three';
 import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';

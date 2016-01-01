@@ -654,7 +654,7 @@ export default (done) => {
   GLOBAL.HTMLCanvasElement = class HTMLCanvasElement {
   };
 
-  const THREE = require('three.js');
+  const THREE = require('three');
 
   Object.keys(THREE).forEach(key => {
     const value = THREE[key];

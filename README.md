@@ -31,7 +31,7 @@ Installation
 ============
 
 ```
-npm install --save react react-dom three.js
+npm install --save react react-dom three
 npm install --save react-three-renderer
 ```
 
@@ -45,7 +45,7 @@ Here's a simple example that implements the [getting started scene for three.js]
 ```js
 import React from 'react';
 import React3 from 'react-three-renderer';
-import THREE from 'three.js';
+import THREE from 'three';
 import ReactDOM from 'react-dom';
 
 class Simple extends React.Component {
