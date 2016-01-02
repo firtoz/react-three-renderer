@@ -9,8 +9,8 @@ gulp.task('clean-lib', () => {
 gulp.task('babel', ['clean-lib'], () => {
   return gulp.src('src/**/*.js')
     .pipe(babel({
-      optional: ['runtime'],
-      stage: 0,
+      plugins: ['transform-runtime', 'transform-decorators-legacy'],
+      presets: ['es2015', 'stage-0', 'react']
     }))
     .pipe(gulp.dest('lib/'));
 });

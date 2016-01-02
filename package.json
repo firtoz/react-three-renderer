@@ -18,30 +18,40 @@
     "three.js": "^0.73.0"
   },
   "devDependencies": {
-    "fbjs": ">=0.4.0",
-    "react": ">=0.14.1",
-    "react-dom": ">=0.14.1",
-    "three.js": ">=0.73.0",
-    "babel-core": "^5.8.29",
-    "babel-eslint": "^4.1.3",
-    "babel-runtime": "^5.8.29",
+    "babel-cli": "^6.3.17",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.3.13",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
     "del": "^2.0.2",
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
+    "fbjs": ">=0.4.0",
     "gulp": "^3.9.0",
-    "gulp-babel": "^5.3.0",
+    "gulp-babel": "^6.1.1",
     "gulp-util": "^3.0.7",
-    "in-publish": "^2.0.0"
+    "in-publish": "^2.0.0",
+    "react": ">=0.14.1",
+    "react-dom": ">=0.14.1",
+    "three": ">=0.73.0",
+    "webpack": "^1.12.9"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toxicFork/react-three-renderer.git"
   },
   "babel": {
-    "stage": 0,
-    "optional": [
-      "runtime"
+    "presets": [
+      "es2015",
+      "stage-0",
+      "react"
+    ],
+    "plugins": [
+      "transform-runtime",
+      "transform-decorators-legacy"
     ]
   },
   "bugs": {

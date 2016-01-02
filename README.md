@@ -113,9 +113,7 @@ ReactDOM.render(<Simple/>, document.body);
 Building
 ========
 
-Fork and clone this repository, then do a npm install. 
-
-You also need to have webpack, gulp, and babel installed globally.
+Fork and clone this repository, then do a npm install.
 
 ``` gulp babel ``` produces es5 compatible code in the 'lib' directory.
 
