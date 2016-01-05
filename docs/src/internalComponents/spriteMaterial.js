@@ -25,4 +25,4 @@ class spriteMaterial extends DocInfo {
   }
 }
 
-export default spriteMaterial;
+module.exports = spriteMaterial;

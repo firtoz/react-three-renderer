@@ -31,4 +31,4 @@ class lineDashedMaterial extends DocInfo {
   }
 }
 
-export default lineDashedMaterial;
+module.exports = lineDashedMaterial;

@@ -25,4 +25,4 @@ class sphereGeometry extends DocInfo {
   }
 }
 
-export default sphereGeometry;
+module.exports = sphereGeometry;

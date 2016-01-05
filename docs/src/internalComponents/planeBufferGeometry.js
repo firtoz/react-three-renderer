@@ -22,4 +22,4 @@ class planeBufferGeometry extends DocInfo {
   }
 }
 
-export default planeBufferGeometry;
+module.exports = planeBufferGeometry;

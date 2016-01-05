@@ -26,4 +26,4 @@ class shaderMaterial extends DocInfo {
   }
 }
 
-export default shaderMaterial;
+module.exports = shaderMaterial;

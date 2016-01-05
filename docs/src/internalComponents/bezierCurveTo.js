@@ -21,4 +21,4 @@ class bezierCurveTo extends DocInfo {
   }
 }
 
-export default bezierCurveTo;
+module.exports = bezierCurveTo;

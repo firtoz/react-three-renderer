@@ -53,4 +53,4 @@ class react3 extends DocInfo {
   }
 }
 
-export default react3;
+module.exports = react3;

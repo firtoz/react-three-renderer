@@ -16,4 +16,4 @@ class geometryResource extends DocInfo {
   }
 }
 
-export default geometryResource;
+module.exports = geometryResource;

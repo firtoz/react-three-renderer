@@ -10,4 +10,4 @@ class group extends object3D {
   }
 }
 
-export default group;
+module.exports = group;

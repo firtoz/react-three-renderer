@@ -15,4 +15,4 @@ class ShapeAction {
   }
 }
 
-export default ShapeAction;
+module.exports = ShapeAction;

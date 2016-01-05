@@ -10,4 +10,4 @@ class ambientLight extends LightInfo {
   }
 }
 
-export default ambientLight;
+module.exports = ambientLight;

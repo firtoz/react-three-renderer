@@ -14,4 +14,4 @@ class IcosahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
   }
 }
 
-export default IcosahedronGeometryDescriptor;
+module.exports = IcosahedronGeometryDescriptor;

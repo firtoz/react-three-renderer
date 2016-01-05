@@ -115,4 +115,4 @@ class UniformDescriptor extends THREEElementDescriptor {
   }
 }
 
-export default UniformDescriptor;
+module.exports = UniformDescriptor;

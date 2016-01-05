@@ -17,4 +17,4 @@ class shape extends DocInfo {
   }
 }
 
-export default shape;
+module.exports = shape;

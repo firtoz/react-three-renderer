@@ -117,4 +117,4 @@ class React3 extends React.Component {
   }
 }
 
-export default React3;
+module.exports = React3;

@@ -165,4 +165,4 @@ class ElementDescriptorContainer {
   }
 }
 
-export default ElementDescriptorContainer;
+module.exports = ElementDescriptorContainer;

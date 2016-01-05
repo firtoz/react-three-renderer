@@ -18,4 +18,4 @@ class shapeGeometryResource extends DocInfo {
   }
 }
 
-export default shapeGeometryResource;
+module.exports = shapeGeometryResource;

@@ -10,4 +10,4 @@ class object3D extends Object3DInfo {
   }
 }
 
-export default object3D;
+module.exports = object3D;

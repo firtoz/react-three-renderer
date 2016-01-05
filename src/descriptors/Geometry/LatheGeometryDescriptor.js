@@ -39,4 +39,4 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default LatheGeometryDescriptor;
+module.exports = LatheGeometryDescriptor;

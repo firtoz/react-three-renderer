@@ -39,4 +39,4 @@ class QuadraticCurveToDescriptor extends ShapeActionDescriptorBase {
   }
 }
 
-export default QuadraticCurveToDescriptor;
+module.exports = QuadraticCurveToDescriptor;

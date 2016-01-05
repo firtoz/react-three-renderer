@@ -19,4 +19,4 @@ class cubeCamera extends camera {
   }
 }
 
-export default cubeCamera;
+module.exports = cubeCamera;

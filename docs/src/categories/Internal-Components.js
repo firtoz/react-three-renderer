@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   description: `These components can be used without needing to require any modules, e.g.
 
 ${'```'}js

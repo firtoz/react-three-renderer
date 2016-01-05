@@ -21,4 +21,4 @@ class camera extends object3D {
   }
 }
 
-export default camera;
+module.exports = camera;

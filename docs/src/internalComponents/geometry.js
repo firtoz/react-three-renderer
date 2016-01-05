@@ -29,4 +29,4 @@ Default is an empty string.`,
   }
 }
 
-export default geometry;
+module.exports = geometry;

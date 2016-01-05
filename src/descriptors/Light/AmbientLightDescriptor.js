@@ -19,4 +19,4 @@ class AmbientLightDescriptor extends LightDescriptorBase {
   }
 }
 
-export default AmbientLightDescriptor;
+module.exports = AmbientLightDescriptor;

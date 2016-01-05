@@ -29,4 +29,4 @@ class meshPhongMaterial extends DocInfo {
   }
 }
 
-export default meshPhongMaterial;
+module.exports = meshPhongMaterial;

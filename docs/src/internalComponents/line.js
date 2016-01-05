@@ -10,4 +10,4 @@ class line extends object3D {
   }
 }
 
-export default line;
+module.exports = line;

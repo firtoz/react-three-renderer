@@ -10,4 +10,4 @@ class mesh extends object3D {
   }
 }
 
-export default mesh;
+module.exports = mesh;

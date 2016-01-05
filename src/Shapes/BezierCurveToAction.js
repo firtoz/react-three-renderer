@@ -25,4 +25,4 @@ class BezierCurveToAction extends ShapeAction {
   }
 }
 
-export default BezierCurveToAction;
+module.exports = BezierCurveToAction;

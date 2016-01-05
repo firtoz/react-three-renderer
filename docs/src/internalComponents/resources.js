@@ -15,4 +15,4 @@ class resources extends DocInfo {
   }
 }
 
-export default resources;
+module.exports = resources;

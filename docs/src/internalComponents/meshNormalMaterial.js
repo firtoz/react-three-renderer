@@ -24,4 +24,4 @@ class meshNormalMaterial extends DocInfo {
   }
 }
 
-export default meshNormalMaterial;
+module.exports = meshNormalMaterial;

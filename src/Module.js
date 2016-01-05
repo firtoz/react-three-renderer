@@ -19,4 +19,4 @@ class React3Module {
   }
 }
 
-export default React3Module;
+module.exports = React3Module;

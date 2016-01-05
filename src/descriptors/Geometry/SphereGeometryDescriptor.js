@@ -53,4 +53,4 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
   }
 }
 
-export default SphereGeometryDescriptor;
+module.exports = SphereGeometryDescriptor;

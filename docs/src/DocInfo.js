@@ -12,4 +12,4 @@ class DocInfo {
   }
 }
 
-export default DocInfo;
+module.exports = DocInfo;

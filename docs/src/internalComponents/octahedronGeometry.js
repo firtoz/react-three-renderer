@@ -20,4 +20,4 @@ class octahedronGeometry extends DocInfo {
   }
 }
 
-export default octahedronGeometry;
+module.exports = octahedronGeometry;

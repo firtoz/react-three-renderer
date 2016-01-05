@@ -53,4 +53,4 @@ class OrthographicCameraDescriptor extends CameraDescriptorBase {
   }
 }
 
-export default OrthographicCameraDescriptor;
+module.exports = OrthographicCameraDescriptor;

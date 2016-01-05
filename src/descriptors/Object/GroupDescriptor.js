@@ -8,4 +8,4 @@ class GroupDescriptor extends Object3DDescriptor {
   }
 }
 
-export default GroupDescriptor;
+module.exports = GroupDescriptor;

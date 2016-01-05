@@ -1,1 +1,1 @@
-export default 'data-reactid';
+module.exports = 'data-reactid';

@@ -93,4 +93,4 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
   }
 }
 
-export default GeometryDescriptorBase;
+module.exports = GeometryDescriptorBase;

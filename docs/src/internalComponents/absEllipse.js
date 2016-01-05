@@ -25,4 +25,4 @@ class absEllipse extends DocInfo {
   }
 }
 
-export default absEllipse;
+module.exports = absEllipse;

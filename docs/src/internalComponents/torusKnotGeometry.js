@@ -25,4 +25,4 @@ class torusKnotGeometry extends DocInfo {
   }
 }
 
-export default torusKnotGeometry;
+module.exports = torusKnotGeometry;

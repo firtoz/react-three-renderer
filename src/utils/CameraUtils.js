@@ -7,4 +7,4 @@ class CameraUtils {
   static current:THREE.Camera = null;
 }
 
-export default CameraUtils;
+module.exports = CameraUtils;

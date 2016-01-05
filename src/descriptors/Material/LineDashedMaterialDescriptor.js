@@ -71,4 +71,4 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
   }
 }
 
-export default LineDashedMaterialDescriptor;
+module.exports = LineDashedMaterialDescriptor;

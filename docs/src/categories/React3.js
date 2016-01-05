@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   intro: ` ${'`'} require('react-three-renderer') ${'`'} - Module Entry Point`,
   fileIntro: `${'```'}js
 import React3 from 'react-three-renderer';

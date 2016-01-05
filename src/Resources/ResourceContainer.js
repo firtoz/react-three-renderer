@@ -11,4 +11,4 @@ class ResourceContainer extends THREE.Object3D {
   }
 }
 
-export default ResourceContainer;
+module.exports = ResourceContainer;

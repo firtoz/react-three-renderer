@@ -22,4 +22,4 @@ class absArc extends DocInfo {
   }
 }
 
-export default absArc;
+module.exports = absArc;

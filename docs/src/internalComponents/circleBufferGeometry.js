@@ -21,4 +21,4 @@ class circleBufferGeometry extends geometry {
   }
 }
 
-export default circleBufferGeometry;
+module.exports = circleBufferGeometry;

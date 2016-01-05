@@ -20,4 +20,4 @@ Any modifications to uniforms will result in the recompilation of the shader.`;
   }
 }
 
-export default uniform;
+module.exports = uniform;

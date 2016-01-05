@@ -37,4 +37,4 @@ class RingGeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default RingGeometryDescriptor;
+module.exports = RingGeometryDescriptor;

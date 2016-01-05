@@ -28,4 +28,4 @@ class boxGeometry extends geometry {
   }
 }
 
-export default boxGeometry;
+module.exports = boxGeometry;

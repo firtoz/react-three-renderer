@@ -19,4 +19,4 @@ class quadraticCurveTo extends DocInfo {
   }
 }
 
-export default quadraticCurveTo;
+module.exports = quadraticCurveTo;

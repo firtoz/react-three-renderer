@@ -39,4 +39,4 @@ class PointLightDescriptor extends LightDescriptorBase {
   }
 }
 
-export default PointLightDescriptor;
+module.exports = PointLightDescriptor;

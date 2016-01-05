@@ -20,4 +20,4 @@ class polyhedronGeometry extends geometry {
   }
 }
 
-export default polyhedronGeometry;
+module.exports = polyhedronGeometry;

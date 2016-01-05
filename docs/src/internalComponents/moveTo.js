@@ -17,4 +17,4 @@ class moveTo extends DocInfo {
   }
 }
 
-export default moveTo;
+module.exports = moveTo;

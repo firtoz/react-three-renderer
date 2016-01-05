@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   intro: 'Equivalent to [react-dom](https://www.npmjs.com/package/react-dom).',
   description: 'For example usage see [React3](Entry-Point).',
   subHeadings: {

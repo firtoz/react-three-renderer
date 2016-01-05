@@ -35,4 +35,4 @@ class CameraDescriptorBase extends Object3DDescriptor {
   }
 }
 
-export default CameraDescriptorBase;
+module.exports = CameraDescriptorBase;

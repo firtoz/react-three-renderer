@@ -31,4 +31,4 @@ class ViewportDescriptor extends THREEElementDescriptor {
   }
 }
 
-export default ViewportDescriptor;
+module.exports = ViewportDescriptor;

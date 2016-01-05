@@ -19,4 +19,4 @@ class pointLight extends LightInfo {
   }
 }
 
-export default pointLight;
+module.exports = pointLight;

@@ -1115,4 +1115,4 @@ class React3Renderer {
 }
 
 
-export default React3Renderer;
+module.exports = React3Renderer;

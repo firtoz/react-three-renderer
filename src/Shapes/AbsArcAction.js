@@ -29,4 +29,4 @@ class AbsArcAction extends ShapeAction {
   }
 }
 
-export default AbsArcAction;
+module.exports = AbsArcAction;

@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   React3: true,
   'Internal Components': {
     children: {

@@ -28,4 +28,4 @@ class extrudeGeometry extends geometry {
   }
 }
 
-export default extrudeGeometry;
+module.exports = extrudeGeometry;

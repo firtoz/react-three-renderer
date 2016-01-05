@@ -213,4 +213,4 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   };
 }
 
-export default MaterialDescriptorBase;
+module.exports = MaterialDescriptorBase;

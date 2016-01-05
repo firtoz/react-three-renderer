@@ -25,4 +25,4 @@ create regular polygons, where the number of segments determines the number of s
   }
 }
 
-export default circleGeometry;
+module.exports = circleGeometry;

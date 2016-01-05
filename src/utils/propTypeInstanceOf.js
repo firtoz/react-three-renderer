@@ -70,4 +70,4 @@ function createInstanceTypeChecker(expectedClass) {
   return typeChecker;
 }
 
-export default createInstanceTypeChecker;
+module.exports = createInstanceTypeChecker;

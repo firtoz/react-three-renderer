@@ -21,4 +21,4 @@ class directionalLight extends LightInfo {
   }
 }
 
-export default directionalLight;
+module.exports = directionalLight;

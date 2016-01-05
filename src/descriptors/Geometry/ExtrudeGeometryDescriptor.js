@@ -197,4 +197,4 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default ExtrudeGeometryDescriptor;
+module.exports = ExtrudeGeometryDescriptor;

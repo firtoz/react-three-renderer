@@ -23,4 +23,4 @@ not set, then the scene will be rendered into the viewports.`;
   }
 }
 
-export default viewport;
+module.exports = viewport;

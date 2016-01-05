@@ -19,4 +19,4 @@ class GeometryResourceDescriptor extends ResourceDescriptorBase {
   }
 }
 
-export default GeometryResourceDescriptor;
+module.exports = GeometryResourceDescriptor;

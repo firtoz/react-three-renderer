@@ -746,4 +746,4 @@ class React3DInstance {
   }
 }
 
-export default React3DInstance;
+module.exports = React3DInstance;

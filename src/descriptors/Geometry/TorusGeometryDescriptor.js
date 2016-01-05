@@ -35,4 +35,4 @@ class TorusGeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default TorusGeometryDescriptor;
+module.exports = TorusGeometryDescriptor;

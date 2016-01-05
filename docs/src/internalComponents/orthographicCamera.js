@@ -22,4 +22,4 @@ class orthographicCamera extends camera {
   }
 }
 
-export default orthographicCamera;
+module.exports = orthographicCamera;

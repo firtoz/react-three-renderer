@@ -21,4 +21,4 @@ class perspectiveCamera extends camera {
   }
 }
 
-export default perspectiveCamera;
+module.exports = perspectiveCamera;

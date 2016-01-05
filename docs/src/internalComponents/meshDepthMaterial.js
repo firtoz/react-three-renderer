@@ -24,4 +24,4 @@ class meshDepthMaterial extends DocInfo {
   }
 }
 
-export default meshDepthMaterial;
+module.exports = meshDepthMaterial;

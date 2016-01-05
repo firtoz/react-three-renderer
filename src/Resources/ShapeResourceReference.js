@@ -6,4 +6,4 @@ class ShapeResourceReference extends ResourceReference {
   }
 }
 
-export default ShapeResourceReference;
+module.exports = ShapeResourceReference;

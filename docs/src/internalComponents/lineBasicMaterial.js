@@ -28,4 +28,4 @@ class lineBasicMaterial extends DocInfo {
   }
 }
 
-export default lineBasicMaterial;
+module.exports = lineBasicMaterial;

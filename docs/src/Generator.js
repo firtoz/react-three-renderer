@@ -87,15 +87,18 @@ function mockPropTypes() {
   ReactPropTypes.func = new PropType('function');
 
   ReactPropTypes.arrayOf = (instanceType) => {
-    return new PropType(`array of ${instanceType.displayName || instanceType.name || instanceType._type || instanceType}`);
+    return new PropType(`array of ${instanceType.displayName || instanceType.name
+    || instanceType._type || instanceType}`);
   };
 
   ReactPropTypes.instanceOf = (instanceType) => {
-    return new PropType(`${instanceType.displayName || instanceType.name || instanceType._type || instanceType}`);
+    return new PropType(`${instanceType.displayName || instanceType.name
+    || instanceType._type || instanceType}`);
   };
 
   ReactPropTypes.objectOf = (instanceType) => {
-    return new PropType(`object of ${instanceType.displayName || instanceType.name || instanceType._type || instanceType}`);
+    return new PropType(`object of ${instanceType.displayName || instanceType.name
+    || instanceType._type || instanceType}`);
   };
 
   ReactPropTypes.oneOf = (values) => {
@@ -103,7 +106,8 @@ function mockPropTypes() {
   };
 
   ReactPropTypes.oneOfType = (values) => {
-    return new PropType(`one of types [${values.map(value => value.displayName || value.name || value._type || value
+    return new PropType(`one of types [${values.map(value => value.displayName
+      || value.name || value._type || value
     ).join(', ')}]`);
   };
 
@@ -156,14 +160,15 @@ function buildCategories() {
           const normalizedNodeName = normalizeFilename(childName);
           try {
             const moduleName = `./categories/${normalizedNodeName}`;
+            const loadedModule = require(moduleName);
             if (childData === true) {
               // noinspection NodeRequireContents
-              childData = require(moduleName);
+              childData = loadedModule;
             } else {
               // noinspection NodeRequireContents
               childData = {
                 ...childData,
-                ...require(moduleName),
+                ...loadedModule,
               };
             }
           } catch (e) {
@@ -269,7 +274,8 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
       }
 
       if (nodeData) {
-        const description = nodeData.description || (nodeData.getDescription && nodeData.getDescription.call(nodeData)) || undefined;
+        const description = nodeData.description ||
+          (nodeData.getDescription && nodeData.getDescription.call(nodeData)) || undefined;
         if (description) {
           nodeFileContents += '\n\n' + `${description}`;
         }
@@ -288,7 +294,8 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
 
           const excludeAttributesFromCopying = nodeData.excludeAttributesFromCopying;
           if (excludeAttributesFromCopying) {
-            attributesToCopy = attributesToCopy.filter(attributeName => !excludeAttributesFromCopying[attributeName]);
+            attributesToCopy = attributesToCopy.filter(attributeName =>
+              !excludeAttributesFromCopying[attributeName]);
           }
 
           if (attributesToCopy.length > 0) {
@@ -452,6 +459,7 @@ ${attributeInfo.description}`;
 }
 
 function getComponentInfo(componentName, propTypes) {
+  // noinspection JSUnresolvedFunction
   const infoPath = path.join(__dirname, 'internalComponents', `${componentName}.js`);
 
   if (!fs.existsSync(infoPath)) {
@@ -472,7 +480,7 @@ class ${componentName} extends DocInfo {
   }
 }
 
-export default ${componentName};
+module.exports = ${componentName};
 `, 'utf8');
   }
 
@@ -605,14 +613,16 @@ ${propTypes[propName].toString()}`;
         if (descriptor.isResource) {
           fileContents += '\n\n';
 
-          fileContents += 'This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.';
+          fileContents += 'This component can be added into [&lt;resources/&gt;](resources)!' +
+            ' See [[Resource Types]] for more information.';
         }
 
         fileContents += `
 
 ===
 
-|**[View Source](${`../blob/master/src/${descriptor.constructor.__modulePath}`.replace('/./', '/')}.js)**|
+|**[View Source](${`../blob/master/src/${
+          descriptor.constructor.__modulePath}`.replace('/./', '/')}.js)**|
  ---|`;
 
         fileContents += '\n'; // EOF
@@ -625,7 +635,7 @@ ${propTypes[propName].toString()}`;
 function populateCategoryIntros(descriptors, allCategories) {
   // populate category intros for descriptors
   Object.keys(descriptors).forEach((componentName) => {
-    const {propTypes, isResource} = descriptors[componentName];
+    const { propTypes, isResource } = descriptors[componentName];
 
     const ComponentInfo = getComponentInfo(componentName, propTypes);
 
@@ -646,7 +656,7 @@ function populateCategoryIntros(descriptors, allCategories) {
     }
   });
 }
-export default (done) => {
+module.exports = (done) => {
   // mock global variables for three.js
   GLOBAL.self = {};
 
@@ -686,7 +696,7 @@ export default (done) => {
 
     Module.prototype.require = fakeRequire;
 
-    if (this.exports.__esModule) {
+    if (requirePath.match(/\.\/descriptors\//)) {
       // babel runtime loaded
 
       oldValue.__modulePath = requirePath;
@@ -701,7 +711,7 @@ export default (done) => {
 
   Module.prototype.require = oldRequire;
 
-  const {descriptors} = new EDC({});
+  const { descriptors } = new EDC({});
 
   populateCategoryIntros(descriptors, allCategories);
 
@@ -717,7 +727,7 @@ export default (done) => {
   const fileNames = Object.keys(filesToWrite);
 
   for (let i = 0; i < fileNames.length; ++i) {
-    const {filename, contents} = filesToWrite[fileNames[i]];
+    const { filename, contents } = filesToWrite[fileNames[i]];
     fs.writeFileSync(filename, contents, 'utf8');
   }
 

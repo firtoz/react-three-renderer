@@ -1,8 +1,9 @@
 import DocInfo from '../DocInfo';
 
-class module extends DocInfo {
+class Module extends DocInfo {
   getIntro() {
-    return '**experimental** Can inject a system that needs to perform actions every frame, e.g. input or physics.';
+    return '**experimental** Can inject a system that needs to perform actions every frame, ' +
+      'e.g. input or physics.';
   }
 
   getDescription() {
@@ -16,4 +17,4 @@ class module extends DocInfo {
   }
 }
 
-export default module;
+module.exports = Module;

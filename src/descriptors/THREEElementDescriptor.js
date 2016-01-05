@@ -6,7 +6,7 @@ import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 import warning from 'fbjs/lib/warning';
 
 import events from 'events';
-const {EventEmitter} = events;
+const { EventEmitter } = events;
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -36,7 +36,7 @@ class THREEElementDescriptor {
       update(threeObject, callback) {
         threeObject.userData._eventCallbacks[name] = callback;
       },
-      default: null,
+      'default': null,
     });
   }
 
@@ -89,8 +89,9 @@ class THREEElementDescriptor {
       }
 
       if (info.hasOwnProperty('default')) {
-        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a'
-          + '`default` property');
+        invariant(info.hasOwnProperty('update'),
+          'The information should include a `update` property ' +
+          'if it has a `default` property');
 
         this.propDeletes[name] = (threeObject) => {
           info.update(threeObject, info.default, true);
@@ -106,8 +107,8 @@ class THREEElementDescriptor {
       }
 
       if (info.hasOwnProperty('updateInitial')) {
-        invariant(info.hasOwnProperty('update'), 'The information should include a `update` property if it has a'
-          + '`updateInitial` property');
+        invariant(info.hasOwnProperty('update'), 'The information should include a ' +
+          '`update` property if it has a`updateInitial` property');
 
         if (this._updateInitial.indexOf(name) === -1) {
           this._updateInitial.push(name);
@@ -115,8 +116,8 @@ class THREEElementDescriptor {
       }
 
       if (!!info.initialOnly) {
-        invariant(info.hasOwnProperty('updateInitial'), 'The information should include a `updateInitial` property'
-          + ' if it has an `initialOnly` property');
+        invariant(info.hasOwnProperty('updateInitial'), 'The information should include a ' +
+          '`updateInitial` property if it has an `initialOnly` property');
       }
 
       this._initialOnly[name] = info.initialOnly;
@@ -131,7 +132,7 @@ class THREEElementDescriptor {
       update: (threeObject, name) => {
         this._updateName(threeObject, name);
       },
-      default: '',
+      'default': '',
     });
   }
 
@@ -179,7 +180,8 @@ class THREEElementDescriptor {
         distance: data.distance + 1,
       };
 
-      childrenMarkup.forEach(childMarkup => childMarkup.threeObject.userData.events.emit('resource.added', increasedDistance));
+      childrenMarkup.forEach(childMarkup => childMarkup.threeObject.userData
+        .events.emit('resource.added', increasedDistance));
     });
 
     eventsForObject.on('resource.removed', (data) => {
@@ -190,7 +192,8 @@ class THREEElementDescriptor {
         distance: data.distance + 1,
       };
 
-      childrenMarkup.forEach(childMarkup => childMarkup.threeObject.userData.events.emit('resource.removed', increasedDistance));
+      childrenMarkup.forEach(childMarkup => childMarkup.threeObject.userData
+        .events.emit('resource.removed', increasedDistance));
     });
 
     threeObject.userData.events = eventsForObject;
@@ -413,7 +416,8 @@ if (process.env.NODE_ENV !== 'production') {
         error = ex;
       }
 
-      warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker '
+      warning(!error || error instanceof Error,
+        '%s: type specification of %s `%s` is invalid; the type checker '
         + 'function must return `null` or an `Error` but returned a %s. '
         + 'You may have forgotten to pass an argument to the type checker '
         + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and '
@@ -436,4 +440,4 @@ if (process.env.NODE_ENV !== 'production') {
   };
 }
 
-export default THREEElementDescriptor;
+module.exports = THREEElementDescriptor;

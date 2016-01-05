@@ -21,4 +21,4 @@ class texture extends DocInfo {
   }
 }
 
-export default texture;
+module.exports = texture;

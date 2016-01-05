@@ -25,4 +25,4 @@ This creates an arrow starting in origin in the direction dir for a certain leng
   }
 }
 
-export default arrowHelper;
+module.exports = arrowHelper;

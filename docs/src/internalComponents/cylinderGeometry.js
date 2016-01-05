@@ -24,4 +24,4 @@ class cylinderGeometry extends geometry {
   }
 }
 
-export default cylinderGeometry;
+module.exports = cylinderGeometry;

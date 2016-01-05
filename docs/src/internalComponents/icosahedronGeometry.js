@@ -20,4 +20,4 @@ class icosahedronGeometry extends DocInfo {
   }
 }
 
-export default icosahedronGeometry;
+module.exports = icosahedronGeometry;

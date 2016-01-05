@@ -24,4 +24,4 @@ class SceneDescriptor extends Object3DDescriptor {
   }
 }
 
-export default SceneDescriptor;
+module.exports = SceneDescriptor;

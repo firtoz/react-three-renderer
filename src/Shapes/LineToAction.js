@@ -15,4 +15,4 @@ class LineToAction extends ShapeAction {
   }
 }
 
-export default LineToAction;
+module.exports = LineToAction;

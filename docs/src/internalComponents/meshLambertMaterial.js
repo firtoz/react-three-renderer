@@ -26,4 +26,4 @@ class meshLambertMaterial extends DocInfo {
   }
 }
 
-export default meshLambertMaterial;
+module.exports = meshLambertMaterial;

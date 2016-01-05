@@ -14,4 +14,4 @@ class uniforms extends DocInfo {
   }
 }
 
-export default uniforms;
+module.exports = uniforms;

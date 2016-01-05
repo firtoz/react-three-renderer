@@ -16,4 +16,4 @@ class materialResource extends DocInfo {
   }
 }
 
-export default materialResource;
+module.exports = materialResource;

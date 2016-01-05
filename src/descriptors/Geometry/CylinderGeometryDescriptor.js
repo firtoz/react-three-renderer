@@ -41,4 +41,4 @@ class CylinderGeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default CylinderGeometryDescriptor;
+module.exports = CylinderGeometryDescriptor;

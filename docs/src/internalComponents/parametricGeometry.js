@@ -21,4 +21,4 @@ class parametricGeometry extends DocInfo {
   }
 }
 
-export default parametricGeometry;
+module.exports = parametricGeometry;

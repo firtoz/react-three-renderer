@@ -42,4 +42,4 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default PlaneGeometryDescriptor;
+module.exports = PlaneGeometryDescriptor;

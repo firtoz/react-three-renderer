@@ -21,4 +21,4 @@ class spotLight extends LightInfo {
   }
 }
 
-export default spotLight;
+module.exports = spotLight;

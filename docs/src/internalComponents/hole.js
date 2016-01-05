@@ -18,4 +18,4 @@ See [[shape#children]].`;
   }
 }
 
-export default hole;
+module.exports = hole;

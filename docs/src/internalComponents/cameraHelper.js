@@ -17,4 +17,4 @@ class cameraHelper extends object3D {
   }
 }
 
-export default cameraHelper;
+module.exports = cameraHelper;

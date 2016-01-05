@@ -10,4 +10,4 @@ class points extends object3D {
   }
 }
 
-export default points;
+module.exports = points;

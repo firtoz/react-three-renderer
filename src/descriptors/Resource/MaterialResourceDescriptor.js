@@ -23,4 +23,4 @@ class MaterialResourceDescriptor extends ResourceDescriptorBase {
   }
 }
 
-export default MaterialResourceDescriptor;
+module.exports = MaterialResourceDescriptor;

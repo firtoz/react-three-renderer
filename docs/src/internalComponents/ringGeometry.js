@@ -24,4 +24,4 @@ class ringGeometry extends DocInfo {
   }
 }
 
-export default ringGeometry;
+module.exports = ringGeometry;

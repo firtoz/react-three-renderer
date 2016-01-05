@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   resourceTypes: [],
   intro: 'Allows you to reuse entities, these help save a lot of memory',
   _getResourceTypesString() {

@@ -14,4 +14,4 @@ class SplineThruAction extends ShapeAction {
   }
 }
 
-export default SplineThruAction;
+module.exports = SplineThruAction;

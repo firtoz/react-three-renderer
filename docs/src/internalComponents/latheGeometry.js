@@ -22,4 +22,4 @@ class latheGeometry extends DocInfo {
   }
 }
 
-export default latheGeometry;
+module.exports = latheGeometry;

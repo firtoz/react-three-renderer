@@ -27,4 +27,4 @@ class pointsMaterial extends DocInfo {
   }
 }
 
-export default pointsMaterial;
+module.exports = pointsMaterial;

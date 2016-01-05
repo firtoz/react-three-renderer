@@ -22,4 +22,4 @@ class planeGeometry extends DocInfo {
   }
 }
 
-export default planeGeometry;
+module.exports = planeGeometry;

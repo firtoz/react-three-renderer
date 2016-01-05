@@ -93,4 +93,4 @@ function resource(descriptor) {
   return ResourceDescriptor;
 }
 
-export default resource;
+module.exports = resource;

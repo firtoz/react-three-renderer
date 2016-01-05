@@ -166,4 +166,4 @@ class LightDescriptorBase extends Object3DDescriptor {
   }
 }
 
-export default LightDescriptorBase;
+module.exports = LightDescriptorBase;

@@ -35,4 +35,4 @@ class TextureResourceDescriptor extends ResourceDescriptorBase {
   }
 }
 
-export default TextureResourceDescriptor;
+module.exports = TextureResourceDescriptor;

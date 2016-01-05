@@ -16,4 +16,4 @@ class splineThru extends DocInfo {
   }
 }
 
-export default splineThru;
+module.exports = splineThru;

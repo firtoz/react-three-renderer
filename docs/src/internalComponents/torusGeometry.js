@@ -23,4 +23,4 @@ class torusGeometry extends DocInfo {
   }
 }
 
-export default torusGeometry;
+module.exports = torusGeometry;

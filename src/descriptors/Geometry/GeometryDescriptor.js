@@ -56,4 +56,4 @@ class GeometryDescriptor extends GeometryDescriptorBase {
   }
 }
 
-export default GeometryDescriptor;
+module.exports = GeometryDescriptor;

@@ -16,4 +16,4 @@ class textureResource extends DocInfo {
   }
 }
 
-export default textureResource;
+module.exports = textureResource;

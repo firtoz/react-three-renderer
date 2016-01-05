@@ -61,4 +61,4 @@ class LightInfo extends Object3DInfo {
   }
 }
 
-export default LightInfo;
+module.exports = LightInfo;

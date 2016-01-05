@@ -16,4 +16,4 @@ class shapeResource extends DocInfo {
   }
 }
 
-export default shapeResource;
+module.exports = shapeResource;

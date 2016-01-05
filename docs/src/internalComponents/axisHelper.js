@@ -19,4 +19,4 @@ The X axis is red. The Y axis is green. The Z axis is blue.`;
   }
 }
 
-export default axisHelper;
+module.exports = axisHelper;

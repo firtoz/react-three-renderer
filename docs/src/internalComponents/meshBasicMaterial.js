@@ -25,4 +25,4 @@ class meshBasicMaterial extends DocInfo {
   }
 }
 
-export default meshBasicMaterial;
+module.exports = meshBasicMaterial;

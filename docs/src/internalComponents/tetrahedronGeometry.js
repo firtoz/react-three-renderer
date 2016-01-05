@@ -20,4 +20,4 @@ class tetrahedronGeometry extends DocInfo {
   }
 }
 
-export default tetrahedronGeometry;
+module.exports = tetrahedronGeometry;

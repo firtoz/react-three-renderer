@@ -17,4 +17,4 @@ class scene extends object3D {
   }
 }
 
-export default scene;
+module.exports = scene;

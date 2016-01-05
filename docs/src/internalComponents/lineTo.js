@@ -17,4 +17,4 @@ class lineTo extends DocInfo {
   }
 }
 
-export default lineTo;
+module.exports = lineTo;

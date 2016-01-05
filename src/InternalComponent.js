@@ -556,4 +556,4 @@ class InternalComponent {
   unmountChildren = ReactMultiChildMixin.unmountChildren.bind(this);
 }
 
-export default InternalComponent;
+module.exports = InternalComponent;

@@ -23,4 +23,4 @@ class Object3DInfo extends DocInfo {
   }
 }
 
-export default Object3DInfo;
+module.exports = Object3DInfo;

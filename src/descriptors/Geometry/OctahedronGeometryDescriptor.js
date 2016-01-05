@@ -12,4 +12,4 @@ class OctahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
   }
 }
 
-export default OctahedronGeometryDescriptor;
+module.exports = OctahedronGeometryDescriptor;
