@@ -49,7 +49,7 @@ class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
       // TODO shapeGeometryDescriptor
       geometry = new THREE.ShapeGeometry(shape);
       break;
-    'default':
+    default:
       debugger;
       break;
     }
