@@ -10,6 +10,8 @@ import PropTypes from 'react/lib/ReactPropTypes';
 import Uniform from '../../Uniform';
 
 const textureLoader = new THREE.TextureLoader();
+// Allow for cross origin image loading
+textureLoader.crossOrigin = '';
 
 import React3Renderer from '../../React3Renderer';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
