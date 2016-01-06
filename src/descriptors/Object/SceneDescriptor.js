@@ -11,7 +11,7 @@ class SceneDescriptor extends Object3DDescriptor {
     this.hasProp('fog', {
       type: propTypeInstanceOf(THREE.Fog),
       simple: true,
-      default: undefined,
+      'default': undefined,
     });
   }
 

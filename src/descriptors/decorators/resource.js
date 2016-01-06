@@ -36,7 +36,7 @@ function resource(descriptor) {
             }
           }
         },
-        default: '',
+        'default': '',
       });
     }
 

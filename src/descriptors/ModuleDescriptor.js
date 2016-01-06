@@ -38,7 +38,7 @@ class ModuleDescriptor extends THREEElementDescriptor {
     this.hasProp('descriptor', {
       type: moduleSubclassValidator,
       update: this.triggerRemount,
-      default: undefined,
+      'default': undefined,
     });
   }
 

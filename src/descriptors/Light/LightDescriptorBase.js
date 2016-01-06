@@ -22,20 +22,20 @@ class LightDescriptorBase extends Object3DDescriptor {
       update(threeObject, updatesRefreshAllMaterials) {
         threeObject.userData._updatesRefreshAllMaterials = updatesRefreshAllMaterials;
       },
-      default: false,
+      'default': false,
     });
 
 
     this.hasProp('shadowBias', {
       type: PropTypes.number,
       simple: true,
-      default: 0,
+      'default': 0,
     });
 
     this.hasProp('shadowDarkness', {
       type: PropTypes.number,
       simple: true,
-      default: 0.5,
+      'default': 0.5,
     });
 
     [
@@ -50,7 +50,7 @@ class LightDescriptorBase extends Object3DDescriptor {
             threeObject[propName] = value;
           }
         },
-        default: 512,
+        'default': 512,
       });
     });
 
@@ -63,7 +63,7 @@ class LightDescriptorBase extends Object3DDescriptor {
         }
         // threeObject.shadow.camera.updateProjectionMatrix();
       },
-      default: 50,
+      'default': 50,
     });
 
     this.hasProp('shadowCameraFar', {
@@ -75,14 +75,14 @@ class LightDescriptorBase extends Object3DDescriptor {
         }
         // threeObject.shadow.camera.updateProjectionMatrix();
       },
-      default: 5000,
+      'default': 5000,
     });
 
     this.hasProp('castShadow', {
       override: true,
       type: PropTypes.bool,
       update: this.triggerRemount,
-      default: false,
+      'default': false,
     });
   }
 
@@ -98,7 +98,7 @@ class LightDescriptorBase extends Object3DDescriptor {
       update(threeObject, newColor) {
         threeObject.color.set(newColor);
       },
-      default: 0xffffff,
+      'default': 0xffffff,
     });
   }
 

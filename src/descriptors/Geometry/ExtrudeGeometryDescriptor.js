@@ -23,7 +23,7 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
           this._refreshGeometry(threeObject);
         }
       },
-      default: [],
+      'default': [],
     });
 
     this.hasProp('settings', {
@@ -32,7 +32,7 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
         threeObject.userData._settings = settings;
       },
       updateInitial: true,
-      default: undefined,
+      'default': undefined,
     });
 
     [
@@ -58,7 +58,7 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
 
           this._refreshGeometry(threeObject);
         },
-        default: undefined,
+        'default': undefined,
       });
     });
   }

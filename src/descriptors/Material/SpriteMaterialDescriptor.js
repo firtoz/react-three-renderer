@@ -12,7 +12,7 @@ class SpriteMaterialDescriptor extends MaterialDescriptorBase {
     this.hasProp('rotation', {
       type: PropTypes.number,
       simple: true,
-      default: 0,
+      'default': 0,
     });
 
     this.hasProp('fog', {
@@ -24,7 +24,7 @@ class SpriteMaterialDescriptor extends MaterialDescriptorBase {
         threeObject.needsUpdate = true;
       },
       updateInitial: true,
-      default: false,
+      'default': false,
     });
   }
 

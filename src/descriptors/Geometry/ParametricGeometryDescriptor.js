@@ -14,14 +14,14 @@ class ParametricGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
-        default: undefined,
+        'default': undefined,
       });
     });
 
     this.hasProp('parametricFunction', {
       type: PropTypes.func.isRequired,
       update: this.triggerRemount,
-      default: undefined,
+      'default': undefined,
     });
   }
 

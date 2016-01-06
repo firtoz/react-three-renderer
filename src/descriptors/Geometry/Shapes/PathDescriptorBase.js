@@ -17,7 +17,7 @@ class PathDescriptorBase extends THREEElementDescriptor {
     this.hasProp('points', {
       type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector2)),
       update: this.triggerRemount,
-      default: [],
+      'default': [],
     });
   }
 

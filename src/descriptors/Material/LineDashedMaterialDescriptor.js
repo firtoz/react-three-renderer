@@ -17,14 +17,14 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         simple: true,
-        default: 1,
+        'default': 1,
       });
     });
 
     this.hasProp('dashSize', {
       type: PropTypes.number,
       simple: true,
-      default: 3,
+      'default': 3,
     });
 
     // what are these properties used for?
@@ -37,7 +37,7 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
           'round',
         ]),
         simple: true,
-        default: 'round',
+        'default': 'round',
       });
     });
 
@@ -48,7 +48,7 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
         THREE.VertexColors,
       ]),
       simple: true,
-      default: THREE.NoColors,
+      'default': THREE.NoColors,
     });
 
     this.hasProp('fog', {
@@ -60,7 +60,7 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
         threeObject.needsUpdate = true;
       },
       updateInitial: true,
-      default: true,
+      'default': true,
     });
   }
 

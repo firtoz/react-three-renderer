@@ -17,7 +17,7 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
       update(threeObject, dynamic) {
         threeObject.dynamic = !!dynamic;
       },
-      default: false,
+      'default': false,
     });
 
     this.hasName();

@@ -13,13 +13,13 @@ class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
         'shape',
       ]).isRequired,
       update: this.triggerRemount,
-      default: '',
+      'default': '',
     });
 
     this.hasProp('divisions', {
       type: PropTypes.number,
       update: this.triggerRemount,
-      default: 5,
+      'default': 5,
     });
   }
 
@@ -49,7 +49,7 @@ class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
       // TODO shapeGeometryDescriptor
       geometry = new THREE.ShapeGeometry(shape);
       break;
-    default:
+    'default':
       debugger;
       break;
     }

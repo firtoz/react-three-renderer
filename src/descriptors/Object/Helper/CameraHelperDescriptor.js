@@ -17,7 +17,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
         threeObject.visible = threeObject.userData._hasCamera && visible;
       },
       updateInitial: true,
-      default: true,
+      'default': true,
     });
 
     this.hasProp('cameraName', {
@@ -29,7 +29,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
 
         this._startCameraFinder(threeObject);
       },
-      default: undefined,
+      'default': undefined,
     });
   }
 

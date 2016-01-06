@@ -24,7 +24,7 @@ class UniformDescriptor extends THREEElementDescriptor {
       update(threeObject, value) {
         threeObject.setValue(value);
       },
-      default: null,
+      'default': null,
     });
 
     this.hasProp('name', {

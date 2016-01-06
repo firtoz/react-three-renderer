@@ -14,7 +14,7 @@ class PolyhedronGeometryDescriptorBase extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
-        default: undefined,
+        'default': undefined,
       });
     });
   }

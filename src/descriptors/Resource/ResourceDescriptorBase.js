@@ -13,7 +13,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     this.hasProp('resourceId', {
       type: PropTypes.string.isRequired,
       update: this.triggerRemount,
-      default: '',
+      'default': '',
     });
   }
 

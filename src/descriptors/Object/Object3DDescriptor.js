@@ -31,7 +31,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
           threeObject.lookAt(threeObject.userData._lookAt);
         }
       },
-      default: new THREE.Vector3(),
+      'default': new THREE.Vector3(),
     });
 
     this.hasProp('rotation', {
@@ -39,19 +39,19 @@ class Object3DDescriptor extends THREEElementDescriptor {
       update(threeObject, rotation) {
         threeObject.rotation.copy(rotation);
       },
-      default: new THREE.Euler(),
+      'default': new THREE.Euler(),
     });
 
     this.hasProp('quaternion', {
       type: propTypeInstanceOf(THREE.Quaternion),
       update: copyUpdate('quaternion'),
-      default: new THREE.Quaternion(),
+      'default': new THREE.Quaternion(),
     });
 
     this.hasProp('scale', {
       type: propTypeInstanceOf(THREE.Vector3),
       update: copyUpdate('scale'),
-      default: new THREE.Vector3(1, 1, 1),
+      'default': new THREE.Vector3(1, 1, 1),
     });
 
     this.hasProp('lookAt', {
@@ -63,7 +63,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
           threeObject.lookAt(lookAt);
         }
       },
-      default: undefined,
+      'default': undefined,
     });
 
     [
@@ -73,7 +73,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
       this.hasProp(propName, {
         type: PropTypes.bool,
         simple: true,
-        default: true,
+        'default': true,
       });
     });
 
@@ -85,7 +85,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     this.hasProp('castShadow', {
       type: PropTypes.bool,
       simple: true,
-      default: false,
+      'default': false,
     });
 
     this.hasProp('receiveShadow', {
@@ -98,7 +98,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
           threeObject.material.needsUpdate = true;
         }
       },
-      default: false,
+      'default': false,
     });
   }
 

@@ -10,7 +10,7 @@ class EdgesGeometryDescriptor extends BufferGeometryDescriptorBase {
     this.hasProp('thresholdAngle', {
       type: PropTypes.number,
       update: this.updateCacheAndReplace.bind(this, 'thresholdAngle'),
-      default: undefined,
+      'default': undefined,
     });
 
     this.hasProp('geometry', {
@@ -19,7 +19,7 @@ class EdgesGeometryDescriptor extends BufferGeometryDescriptorBase {
         THREE.BufferGeometry,
       ]).isRequired,
       update: this.updateCacheAndReplace.bind(this, 'geometry'),
-      default: undefined,
+      'default': undefined,
     });
   }
 

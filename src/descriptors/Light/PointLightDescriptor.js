@@ -16,14 +16,14 @@ class PointLightDescriptor extends LightDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         simple: true,
-        default: 1,
+        'default': 1,
       });
     });
 
     this.hasProp('distance', {
       type: PropTypes.number,
       simple: true,
-      default: 0,
+      'default': 0,
     });
   }
 

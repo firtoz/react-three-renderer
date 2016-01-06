@@ -24,7 +24,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
           threeObject.userData._materialSlot = 'material';
         }
       },
-      default: 'material',
+      'default': 'material',
     });
 
     this.hasProp('transparent', {
@@ -47,7 +47,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       update: (threeObject, side) => {
         threeObject.side = side;
       },
-      default: undefined,
+      'default': undefined,
     });
 
     this.hasProp('opacity', {
@@ -58,7 +58,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     this.hasProp('visible', {
       type: PropTypes.bool,
       simple: true,
-      default: true,
+      'default': true,
     });
 
     this._colors = [];
@@ -96,7 +96,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       update: (threeObject, value) => {
         threeObject[propName].set(value);
       },
-      default: defaultVal,
+      'default': defaultVal,
     });
   }
 
@@ -104,13 +104,13 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     this.hasProp('wireframe', {
       type: PropTypes.bool,
       simple: true,
-      default: false,
+      'default': false,
     });
 
     this.hasProp('wireframeLinewidth', {
       type: PropTypes.number,
       simple: true,
-      default: 1,
+      'default': 1,
     });
   }
 

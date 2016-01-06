@@ -16,7 +16,7 @@ class CircleBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.updateCacheAndReplace.bind(this, propName),
-        default: undefined,
+        'default': undefined,
       });
     });
   }

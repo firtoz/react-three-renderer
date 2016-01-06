@@ -25,7 +25,7 @@ class SpotLightDescriptor extends LightDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         simple: true,
-        default: defaults[i],
+        'default': defaults[i],
       });
     });
 
@@ -37,7 +37,7 @@ class SpotLightDescriptor extends LightDescriptorBase {
           threeObject.shadow.camera.fov = value;
         }
       },
-      default: 50,
+      'default': 50,
     });
 
     this.hasColor();

@@ -19,7 +19,7 @@ class MoveToDescriptor extends ShapeActionDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
-        default: 0,
+        'default': 0,
       });
     });
   }

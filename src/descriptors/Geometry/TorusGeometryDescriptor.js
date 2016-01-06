@@ -17,7 +17,7 @@ class TorusGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        default: undefined,
+        'default': undefined,
       });
     });
   }
