@@ -707,7 +707,7 @@ module.exports = (done) => {
 
   Module.prototype.require = fakeRequire;
 
-  const EDC = oldRequire.call(module, '../../src/ElementDescriptorContainer');
+  const EDC = oldRequire.call(module, '../../src/lib/ElementDescriptorContainer');
 
   Module.prototype.require = oldRequire;
 
@@ -732,4 +732,6 @@ module.exports = (done) => {
   }
 
   done();
+
+  return true;
 };

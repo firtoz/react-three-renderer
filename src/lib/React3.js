@@ -4,7 +4,7 @@ import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
 import THREE from 'three.js';
 
-const {PropTypes} = React;
+const { PropTypes } = React;
 
 import propTypeInstanceOf from './utils/propTypeInstanceOf';
 
@@ -84,7 +84,7 @@ class React3 extends React.Component {
   _render() {
     const canvas = this.refs.canvas;
 
-    const propsToClone = {...this.props};
+    const propsToClone = { ...this.props };
 
     delete propsToClone.canvasStyle;
 

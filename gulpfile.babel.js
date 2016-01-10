@@ -7,7 +7,7 @@ gulp.task('clean-lib', () => {
 });
 
 gulp.task('babel', ['clean-lib'], () => {
-  return gulp.src('src/**/*.js')
+  return gulp.src('src/lib/**/*.js')
     .pipe(babel(require('./package.json').babel))
     .pipe(gulp.dest('lib/'));
 });
