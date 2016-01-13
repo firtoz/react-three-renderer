@@ -9,8 +9,6 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
 import Uniform from '../../Uniform';
 
-const textureLoader = new THREE.TextureLoader();
-
 import React3Renderer from '../../React3Renderer';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
@@ -70,11 +68,49 @@ class TextureDescriptor extends THREEElementDescriptor {
       update: this.triggerRemount,
       'default': '',
     });
+
+    this.hasProp('crossOrigin', {
+      type: PropTypes.string,
+      update: this.triggerRemount,
+      'default': undefined,
+    });
+
+    [
+      'onLoad',
+      'onProgress',
+      'onError',
+    ].forEach(eventName => {
+      this.hasProp(eventName, {
+        type: PropTypes.func,
+      });
+    });
   }
 
   construct(props) {
     if (props.hasOwnProperty('url')) {
-      return textureLoader.load(props.url);
+      const textureLoader = new THREE.TextureLoader();
+
+      if (props.hasOwnProperty('crossOrigin')) {
+        textureLoader.crossOrigin = props.crossOrigin;
+      }
+
+      let onLoad = undefined;
+      let onProgress = undefined;
+      let onError = undefined;
+
+      if (props.hasOwnProperty('onLoad')) {
+        onLoad = props.onLoad;
+      }
+
+      if (props.hasOwnProperty('onProgress')) {
+        onProgress = props.onProgress;
+      }
+
+      if (props.hasOwnProperty('onError')) {
+        onError = props.onError;
+      }
+
+      return textureLoader.load(props.url, onLoad, onProgress, onError);
     }
 
     invariant(false, 'The texture needs a url property.');
