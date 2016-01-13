@@ -1,5 +1,6 @@
 import ResourceContainer from '../../Resources/ResourceContainer';
 import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 
 import THREEElementDescriptor from '../THREEElementDescriptor';
 
@@ -47,7 +48,9 @@ function resource(descriptor) {
     setParent(threeObject, parentObject3D) {
       if (parentObject3D instanceof ResourceContainer) {
         if (process.env.NODE_ENV !== 'production') {
-          invariant(!!threeObject.userData._resourceId, 'All resources inside <resources> should have the "resourceId" property.');
+          invariant(!!threeObject.userData._resourceId,
+            'All resources inside <resources> should have the "resourceId" property. ' +
+            'Current resource: <${threeObject.userData.react3internalComponent._elementType}>');
         } else {
           invariant(!!threeObject.userData._resourceId);
         }
@@ -55,6 +58,11 @@ function resource(descriptor) {
         // still let it be mounted to root
         THREEElementDescriptor.prototype.setParent.call(this, threeObject, parentObject3D);
       } else {
+        if (process.env.NODE_ENV !== 'production') {
+          warning(!threeObject.userData._resourceId,
+            `Found <${threeObject.userData.react3internalComponent._elementType}> with a resourceId property, ` +
+            `but it was not placed within a <resources/> element.`);
+        }
         super.setParent(threeObject, parentObject3D);
       }
     }

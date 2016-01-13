@@ -28,7 +28,15 @@ class ResourcesDescriptor extends THREEElementDescriptor {
     children.forEach(child => {
       const resourceId = child.userData._resourceId;
 
-      invariant(resourceId, 'Resource container can only hold resources');
+      if (process.env.NODE_ENV !== 'production') {
+        invariant(!!resourceId, 'Resource container can only hold resources.' +
+          ' Found children without `resourceId` properties: ' +
+          children.filter(currentChild => !currentChild.userData._resourceId).map(currentChild => {
+            return `<${currentChild.userData.react3internalComponent._elementType}/>`;
+          }).join(', ') + '.');
+      } else {
+        invariant(!!resourceId);
+      }
 
       threeObject.resourceIds.push(resourceId);
 
