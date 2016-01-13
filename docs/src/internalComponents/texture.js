@@ -17,6 +17,11 @@ class texture extends DocInfo {
       anisotropy: '',
       url: '',
       resourceId: '',
+      crossOrigin: 'Sets the [crossOrigin property of the ' +
+      'TextureLoader](http://threejs.org/docs/#Reference/Loaders/TextureLoader.crossOrigin).',
+      onLoad: 'Callback to be called when the texture was loaded.',
+      onProgress: 'Callback to be called while the texture is loading.',
+      onError: 'Callback to be called when the texture was not loaded.',
     };
   }
 }
