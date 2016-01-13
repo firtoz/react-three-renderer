@@ -81,11 +81,13 @@ class TextureDescriptor extends THREEElementDescriptor {
   }
 
   setParent(texture, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Material || parentObject3D instanceof Uniform,
+    invariant(parentObject3D instanceof THREE.Material
+      || parentObject3D instanceof Uniform,
       'Parent is not a material or a uniform');
 
     if (parentObject3D instanceof THREE.Material) {
-      invariant(parentObject3D.map === null || parentObject3D.map === undefined, 'Parent already has a texture');
+      invariant(parentObject3D.map === null || parentObject3D.map === undefined,
+        'Parent already has a texture');
       parentObject3D.map = texture;
       // dispose to force a recreate
       parentObject3D.needsUpdate = true;
