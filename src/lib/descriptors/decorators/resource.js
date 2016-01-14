@@ -37,7 +37,7 @@ function resource(descriptor) {
             }
           }
         },
-        'default': '',
+        default: '',
       });
     }
 
@@ -60,7 +60,8 @@ function resource(descriptor) {
       } else {
         if (process.env.NODE_ENV !== 'production') {
           warning(!threeObject.userData._resourceId,
-            `Found <${threeObject.userData.react3internalComponent._elementType}> with a resourceId property, ` +
+            `Found <${threeObject.userData.react3internalComponent._elementType}> `
+            + `with a resourceId property, ` +
             `but it was not placed within a <resources/> element.`);
         }
         super.setParent(threeObject, parentObject3D);
@@ -74,7 +75,9 @@ function resource(descriptor) {
           uuid: threeObject.uuid,
           boundingBoxFunc: () => {
             return threeObject.userData._references.reduce((boxes, objectWithReference) => {
-              const boxesForReference = objectWithReference.userData._descriptor.getBoundingBoxes(objectWithReference);
+              const boxesForReference =
+                objectWithReference.userData._descriptor
+                  .getBoundingBoxes(objectWithReference);
               if (process.env.NODE_ENV !== 'production') {
                 invariant(boxesForReference.length > 0, 'No boxes found for resource.');
               } else {

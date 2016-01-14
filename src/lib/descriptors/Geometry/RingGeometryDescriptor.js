@@ -18,7 +18,7 @@ class RingGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        'default': undefined,
+        default: undefined,
       });
     });
   }
@@ -33,7 +33,13 @@ class RingGeometryDescriptor extends GeometryDescriptorBase {
       thetaLength,
       } = props;
 
-    return new THREE.RingGeometry(innerRadius, outerRadius, thetaSegments, phiSegments, thetaStart, thetaLength);
+    return new THREE.RingGeometry(
+      innerRadius,
+      outerRadius,
+      thetaSegments,
+      phiSegments,
+      thetaStart,
+      thetaLength);
   }
 }
 

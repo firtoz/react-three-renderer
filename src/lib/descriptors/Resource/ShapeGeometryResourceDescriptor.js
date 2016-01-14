@@ -13,13 +13,13 @@ class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
         'shape',
       ]).isRequired,
       update: this.triggerRemount,
-      'default': '',
+      default: '',
     });
 
     this.hasProp('divisions', {
       type: PropTypes.number,
       update: this.triggerRemount,
-      'default': 5,
+      default: 5,
     });
   }
 
@@ -39,19 +39,18 @@ class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
     let geometry;
 
     switch (threeObject.userData._type) {
-    case 'points':
-      geometry = shape.createPointsGeometry();
-      break;
-    case 'spacedPoints':
-      geometry = shape.createSpacedPointsGeometry(threeObject.userData._divisions);
-      break;
-    case 'shape':
-      // TODO shapeGeometryDescriptor
-      geometry = new THREE.ShapeGeometry(shape);
-      break;
-    default:
-      debugger;
-      break;
+      case 'points':
+        geometry = shape.createPointsGeometry();
+        break;
+      case 'spacedPoints':
+        geometry = shape.createSpacedPointsGeometry(threeObject.userData._divisions);
+        break;
+      case 'shape':
+        // TODO shapeGeometryDescriptor
+        geometry = new THREE.ShapeGeometry(shape);
+        break;
+      default:
+        break;
     }
 
     return super.applyToSlot(threeObject, parentObject, geometry);

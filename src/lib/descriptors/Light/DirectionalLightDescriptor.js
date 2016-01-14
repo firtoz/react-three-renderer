@@ -10,7 +10,7 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     this.hasProp('intensity', {
       type: PropTypes.number,
       simple: true,
-      'default': 1,
+      default: 1,
     });
 
     [
@@ -26,7 +26,7 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
           }
           // threeObject.shadow.camera.updateProjectionMatrix();
         },
-        'default': -500,
+        default: -500,
       });
     });
 
@@ -43,7 +43,7 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
           }
           // threeObject.shadow.camera.updateProjectionMatrix();
         },
-        'default': 500,
+        default: 500,
       });
     });
 

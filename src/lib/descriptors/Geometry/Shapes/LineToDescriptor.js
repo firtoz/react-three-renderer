@@ -1,5 +1,3 @@
-import THREEElementDescriptor from '../../THREEElementDescriptor';
-
 import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
@@ -17,7 +15,7 @@ class LineToDescriptor extends ShapeActionDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
-        'default': 0,
+        default: 0,
       });
     });
   }

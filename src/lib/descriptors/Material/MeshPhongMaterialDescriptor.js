@@ -21,7 +21,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     this.hasProp('shininess', {
       type: PropTypes.number,
       simple: true,
-      'default': 30,
+      default: 30,
     });
 
     this.hasProp('metal', {
@@ -30,7 +30,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
         threeObject.metal = metal;
         threeObject.needsUpdate = true;
       },
-      'default': false,
+      default: false,
     });
   }
 

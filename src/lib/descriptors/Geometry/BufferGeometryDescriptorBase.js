@@ -1,7 +1,5 @@
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 
-import PropTypes from 'react/lib/ReactPropTypes';
-
 class BufferGeometryDescriptorBase extends GeometryDescriptorBase {
   updateCacheAndReplace = (propName, threeObject, newValue) => {
     threeObject.userData._propsCache[propName] = newValue;

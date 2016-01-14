@@ -15,7 +15,8 @@ function processChildContext(context) {
   //   // // Pass down our tag name to child components for validation purposes
   //   // context = assign({}, context);
   //   // const info = context[validateDOMNesting.ancestorInfoContextKey];
-  //   // context[validateDOMNesting.ancestorInfoContextKey] = validateDOMNesting.updatedAncestorInfo(info, inst._tag, inst);
+  //   // context[validateDOMNesting.ancestorInfoContextKey] =
+  //        validateDOMNesting.updatedAncestorInfo(info, inst._tag, inst);
   // }
   return context;
 }
@@ -37,13 +38,13 @@ class RemountTrigger {
 const registrationNameModules = {};
 
 function deleteListener(rootNodeID, propKey) {
-  console.log('deleteListener', rootNodeID, propKey);
-  debugger;
+  console.log('deleteListener', rootNodeID, propKey); // eslint-disable-line
+  debugger; // eslint-disable-line
 }
 
 function enqueuePutListener(rootNodeID, propKey, nextProp, transaction) {
-  console.log('enqueuePutListener', rootNodeID, propKey, nextProp, transaction);
-  debugger;
+  console.log('enqueuePutListener', rootNodeID, propKey, nextProp, transaction); // eslint-disable-line
+  debugger; // eslint-disable-line
 }
 
 function _arrayMove(array, oldIndex, newIndex) {
@@ -113,7 +114,8 @@ class InternalComponent {
     this._rootNodeID = rootID;
 
     if (process.env.NODE_ENV !== 'production') {
-      this.threeElementDescriptor.checkPropTypes(element.type, this._currentElement._owner, element.props);
+      this.threeElementDescriptor.checkPropTypes(element.type,
+        this._currentElement._owner, element.props);
     }
 
     this._threeObject = this.threeElementDescriptor.construct(element.props);
@@ -123,7 +125,8 @@ class InternalComponent {
 
     const childrenToUse = element.props.children;
 
-    const mountImages = this.mountChildren(childrenToUse, transaction, processChildContext(context, this));
+    const mountImages = this.mountChildren(childrenToUse, transaction,
+      processChildContext(context, this));
 
     const markup = {
       [ID_PROPERTY_NAME]: rootID,
@@ -138,7 +141,8 @@ class InternalComponent {
     };
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(!!this._threeObject.userData, 'No userdata present in threeobject for %s', element.type);
+      invariant(!!this._threeObject.userData,
+        'No userdata present in threeobject for %s', element.type);
     } else {
       invariant(!!this._threeObject.userData);
     }
@@ -155,7 +159,8 @@ class InternalComponent {
     const threeElementDescriptors = this._react3RendererInstance.threeElementDescriptors;
 
     if (mountImages && mountImages.length > 0) {
-      this.threeElementDescriptor.addChildren(this._threeObject, mountImages.map(getThreeObjectFromMountImage));
+      this.threeElementDescriptor.addChildren(this._threeObject,
+        mountImages.map(getThreeObjectFromMountImage));
 
       for (let i = 0; i < mountImages.length; ++i) {
         const mountImage = mountImages[i];
@@ -248,7 +253,8 @@ class InternalComponent {
       return;
     }
 
-    this.threeElementDescriptor.moveChild(this._threeObject, child._threeObject, toIndex, child._mountIndex);
+    this.threeElementDescriptor.moveChild(this._threeObject,
+      child._threeObject, toIndex, child._mountIndex);
 
     const markup = this._markup;
 
@@ -294,7 +300,8 @@ class InternalComponent {
     this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
 
     if (process.env.NODE_ENV !== 'production') {
-      this.threeElementDescriptor.checkPropTypes(this._currentElement.type, this._currentElement._owner, nextProps);
+      this.threeElementDescriptor.checkPropTypes(this._currentElement.type,
+        this._currentElement._owner, nextProps);
     }
 
     const lastPropKeys = Object.keys(lastProps);
@@ -386,7 +393,7 @@ class InternalComponent {
 
 
   emptyJson() {
-    debugger;
+    debugger; // eslint-disable-line
     return '...';
   }
 
@@ -419,7 +426,8 @@ class InternalComponent {
    */
   _updateChildren(nextNestedChildren, transaction, context) {
     const prevChildren = this._renderedChildren;
-    const nextChildren = this._reconcilerUpdateChildren(prevChildren, nextNestedChildren, transaction, context);
+    const nextChildren = this._reconcilerUpdateChildren(prevChildren,
+      nextNestedChildren, transaction, context);
 
     this._renderedChildren = nextChildren;
     if (!nextChildren && !prevChildren) {
@@ -504,7 +512,8 @@ class InternalComponent {
 
     this.threeElementDescriptor.addChild(this._threeObject, mountImage.threeObject, mountIndex);
 
-    const descriptorForChild = this._react3RendererInstance.threeElementDescriptors[mountImage.elementType];
+    const descriptorForChild = this._react3RendererInstance
+      .threeElementDescriptors[mountImage.elementType];
 
     descriptorForChild.setParent(mountImage.threeObject, this._threeObject);
   }
@@ -521,7 +530,9 @@ class InternalComponent {
     if (child instanceof InternalComponent) {
       child.threeElementDescriptor.removedFromParent(child._threeObject);
     } else if (child instanceof React3CompositeComponentWrapper) {
-      child._threeObject.userData.react3internalComponent.threeElementDescriptor.removedFromParent(child._threeObject);
+      child._threeObject.userData
+        .react3internalComponent
+        .threeElementDescriptor.removedFromParent(child._threeObject);
     } else {
       if (process.env.NODE_ENV !== 'production') {
         invariant(false, 'Cannot remove child because it is not a known component type');

@@ -10,7 +10,7 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
     this.hasProp('radius', {
       type: PropTypes.number,
       update: this.updateCacheAndReplace.bind(this, 'radius'),
-      'default': undefined,
+      default: undefined,
     });
 
     [
@@ -20,7 +20,7 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        'default': undefined,
+        default: undefined,
       });
     });
 
@@ -33,7 +33,7 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.updateCacheAndReplace.bind(this, propName),
-        'default': undefined,
+        default: undefined,
       });
     });
   }
@@ -49,7 +49,14 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
       thetaLength,
       } = props;
 
-    return new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength);
+    return new THREE.SphereBufferGeometry(
+      radius,
+      widthSegments,
+      heightSegments,
+      phiStart,
+      phiLength,
+      thetaStart,
+      thetaLength);
   }
 }
 

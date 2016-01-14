@@ -19,7 +19,7 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        'default': undefined,
+        default: undefined,
       });
     });
   }
@@ -35,7 +35,14 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
       heightScale,
       } = props;
 
-    return new THREE.TorusKnotGeometry(radius, tube, radialSegments, tubularSegments, p, q, heightScale);
+    return new THREE.TorusKnotGeometry(
+      radius,
+      tube,
+      radialSegments,
+      tubularSegments,
+      p,
+      q,
+      heightScale);
   }
 }
 

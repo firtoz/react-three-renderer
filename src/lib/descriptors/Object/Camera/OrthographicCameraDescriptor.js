@@ -43,7 +43,13 @@ class OrthographicCameraDescriptor extends CameraDescriptorBase {
   }
 
   construct(props) {
-    return new THREE.OrthographicCamera(props.left, props.right, props.top, props.bottom, props.near, props.far);
+    return new THREE.OrthographicCamera(
+      props.left,
+      props.right,
+      props.top,
+      props.bottom,
+      props.near,
+      props.far);
   }
 
   _updateAndRefreshProjection(propName, camera, value) {

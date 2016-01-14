@@ -36,7 +36,7 @@ class THREEElementDescriptor {
       update(threeObject, callback) {
         threeObject.userData._eventCallbacks[name] = callback;
       },
-      'default': null,
+      default: null,
     });
   }
 
@@ -132,7 +132,7 @@ class THREEElementDescriptor {
       update: (threeObject, name) => {
         this._updateName(threeObject, name);
       },
-      'default': '',
+      default: '',
     });
   }
 

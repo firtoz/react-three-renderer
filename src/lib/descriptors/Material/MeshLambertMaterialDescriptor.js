@@ -1,8 +1,6 @@
 import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
-import PropTypes from 'react/lib/ReactPropTypes';
-
 class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
 
   constructor(react3RendererInstance) {

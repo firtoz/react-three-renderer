@@ -19,7 +19,8 @@ class ModuleDescriptor extends THREEElementDescriptor {
       const locationName = ReactPropTypeLocationNames[location];
 
       if (!props[propName]) {
-        return new Error('Required ' + locationName + ' `' + propFullName + '` was not specified in ' + ('`' + componentName + '`.'));
+        return new Error('Required ' + locationName + ' `' +
+          propFullName + '` was not specified in ' + ('`' + componentName + '`.'));
       }
 
       if (!(props[propName].prototype instanceof Module)) {
@@ -38,7 +39,7 @@ class ModuleDescriptor extends THREEElementDescriptor {
     this.hasProp('descriptor', {
       type: moduleSubclassValidator,
       update: this.triggerRemount,
-      'default': undefined,
+      default: undefined,
     });
   }
 

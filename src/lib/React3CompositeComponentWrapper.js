@@ -101,14 +101,21 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       // warning now to help debugging
       if (inst.render === null) {
         if (process.env.NODE_ENV !== 'production') {
-          warning(false, '%s(...): No `render` method found on the returned component ' + 'instance: you may have forgotten to define `render`, returned ' + 'null/false from a stateless component, or tried to render an ' + 'element whose type is a function that isn\'t a React component.', Component.displayName || Component.name || 'Component');
+          warning(false,
+            '%s(...): No `render` method found on the returned component '
+            + 'instance: you may have forgotten to define `render`, returned '
+            + 'null/false from a stateless component, or tried to render an '
+            + 'element whose type is a function that isn\'t a React component.',
+            Component.displayName || Component.name || 'Component');
         }
       } else {
         // We support ES6 inheriting from React.Component, the module pattern,
         // and stateless components, but not ES6 classes that don't extend
         if (process.env.NODE_ENV !== 'production') {
-          const allOK = Component.prototype && Component.prototype.isReactComponent || !canInstantiate || !(inst instanceof Component);
-          warning(allOK, '%s(...): React component classes must extend React.Component.', Component.displayName || Component.name || 'Component');
+          const allOK = Component.prototype && Component.prototype.isReactComponent
+            || !canInstantiate || !(inst instanceof Component);
+          warning(allOK, '%s(...): React component classes must extend React.Component.',
+            Component.displayName || Component.name || 'Component');
         }
       }
     }
@@ -130,13 +137,33 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       // logic, we can not catch common errors early. Therefore, we have to
       // catch them here, at initialization time, instead.
       if (process.env.NODE_ENV !== 'production') {
-        warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component');
-        warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', this.getName() || 'a component');
-        warning(!inst.propTypes, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', this.getName() || 'a component');
-        warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component');
-        warning(typeof inst.componentShouldUpdate !== 'function', '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', this.getName() || 'A component');
-        warning(typeof inst.componentDidUnmount !== 'function', '%s has a method called ' + 'componentDidUnmount(). But there is no such lifecycle method. ' + 'Did you mean componentWillUnmount()?', this.getName() || 'A component');
-        warning(typeof inst.componentWillRecieveProps !== 'function', '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', this.getName() || 'A component');
+        warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved,
+          'getInitialState was defined on %s, a plain JavaScript class. '
+          + 'This is only supported for classes created using React.createClass. '
+          + 'Did you mean to define a state property instead?', this.getName() || 'a component');
+        warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved,
+          'getDefaultProps was defined on %s, a plain JavaScript class. '
+          + 'This is only supported for classes created using React.createClass. '
+          + 'Use a static property to define defaultProps instead.',
+          this.getName() || 'a component');
+        warning(!inst.propTypes,
+          'propTypes was defined as an instance property on %s. Use a static '
+          + 'property to define propTypes instead.', this.getName() || 'a component');
+        warning(!inst.contextTypes,
+          'contextTypes was defined as an instance property on %s. Use a '
+          + 'static property to define contextTypes instead.', this.getName() || 'a component');
+        warning(typeof inst.componentShouldUpdate !== 'function',
+          '%s has a method called '
+          + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? '
+          + 'The name is phrased as a question because the function is '
+          + 'expected to return a value.', this.getName() || 'A component');
+        warning(typeof inst.componentDidUnmount !== 'function',
+          '%s has a method called '
+          + 'componentDidUnmount(). But there is no such lifecycle method. '
+          + 'Did you mean componentWillUnmount()?', this.getName() || 'A component');
+        warning(typeof inst.componentWillRecieveProps !== 'function', '%s has a method called '
+          + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?',
+          this.getName() || 'A component');
       }
     }
 
@@ -146,7 +173,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     }
     if (!(typeof initialState === 'object' && !Array.isArray(initialState))) {
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, '%s.state: must be set to an object or null', this.getName() || 'ReactCompositeComponent');
+        invariant(false,
+          '%s.state: must be set to an object or null',
+          this.getName() || 'ReactCompositeComponent');
       } else {
         invariant(false);
       }
@@ -172,7 +201,8 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 
     this._renderedComponent = this._instantiateReactComponent(renderedElement);
 
-    const markup = ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, this._processChildContext(context));
+    const markup = ReactReconciler.mountComponent(this._renderedComponent,
+      rootID, transaction, this._processChildContext(context));
     this._threeObject = this._renderedComponent._threeObject;
     if (inst.componentDidMount) {
       transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);

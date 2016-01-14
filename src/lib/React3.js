@@ -88,11 +88,13 @@ class React3 extends React.Component {
 
     delete propsToClone.canvasStyle;
 
-    this.react3Renderer.render(<react3
-      {...propsToClone}
-      onRecreateCanvas={this._onRecreateCanvas}>
-      {this.props.children}
-    </react3>, canvas);
+    this.react3Renderer.render(
+      <react3
+        {...propsToClone}
+        onRecreateCanvas={this._onRecreateCanvas}
+      >
+        {this.props.children}
+      </react3>, canvas);
   }
 
   static findTHREEObject = React3Renderer.findTHREEObject;

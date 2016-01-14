@@ -14,7 +14,7 @@ class SplineThruDescriptor extends ShapeActionDescriptorBase {
     this.hasProp('points', {
       type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector2)).isRequired,
       update: this.triggerRemount,
-      'default': [],
+      default: [],
     });
   }
 

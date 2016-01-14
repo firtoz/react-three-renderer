@@ -24,7 +24,7 @@ class UniformDescriptor extends THREEElementDescriptor {
       update(threeObject, value) {
         threeObject.setValue(value);
       },
-      'default': null,
+      default: null,
     });
 
     this.hasProp('name', {
@@ -45,7 +45,8 @@ class UniformDescriptor extends THREEElementDescriptor {
   }
 
   setParent(threeObject:Uniform, parentObject3D) {
-    invariant(parentObject3D instanceof UniformContainer, 'Parent is not a Uniform Container (<uniforms/>)');
+    invariant(parentObject3D instanceof UniformContainer,
+      'Parent is not a Uniform Container (<uniforms/>)');
 
     const name = threeObject.name;
 
@@ -66,23 +67,20 @@ class UniformDescriptor extends THREEElementDescriptor {
   }
 
   addChildren(threeObject, children) {
-    invariant(children.filter(this._invalidChild).length === 0, 'Uniform children can only be textures or resource references');
+    invariant(children.filter(this._invalidChild).length === 0,
+      'Uniform children can only be textures or resource references');
   }
 
   addChild(threeObject, child) {
     this.addChildren(threeObject, [child]);
   }
 
-  removeChild(threeObject, child) {
+  removeChild() {
     // do nothing
   }
 
   invalidChildInternal(child) {
-    const invalid = !(child instanceof THREE.Texture || child instanceof ResourceReference );
-
-    if (invalid) {
-      debugger;
-    }
+    const invalid = !(child instanceof THREE.Texture || child instanceof ResourceReference);
 
     return invalid;
   }
@@ -92,7 +90,8 @@ class UniformDescriptor extends THREEElementDescriptor {
   };
 
   unmount(threeObject) {
-    threeObject.userData.events.removeListener('valueChanged', threeObject.userData._onValueChanged);
+    threeObject.userData.events.removeListener('valueChanged',
+      threeObject.userData._onValueChanged);
 
     delete threeObject.userData._onValueChanged;
 

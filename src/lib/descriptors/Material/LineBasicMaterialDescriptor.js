@@ -12,7 +12,7 @@ class LineBasicMaterialDescriptor extends MaterialDescriptorBase {
     this.hasProp('linewidth', {
       type: PropTypes.number,
       simple: true,
-      'default': 1,
+      default: 1,
     });
 
     // what are these properties used for?
@@ -25,7 +25,7 @@ class LineBasicMaterialDescriptor extends MaterialDescriptorBase {
           'round',
         ]),
         simple: true,
-        'default': 'round',
+        default: 'round',
       });
     });
 
@@ -36,7 +36,7 @@ class LineBasicMaterialDescriptor extends MaterialDescriptorBase {
         THREE.VertexColors,
       ]),
       simple: true,
-      'default': THREE.NoColors,
+      default: THREE.NoColors,
     });
 
     this.hasProp('fog', {
@@ -48,7 +48,7 @@ class LineBasicMaterialDescriptor extends MaterialDescriptorBase {
         threeObject.needsUpdate = true;
       },
       updateInitial: true,
-      'default': true,
+      default: true,
     });
   }
 

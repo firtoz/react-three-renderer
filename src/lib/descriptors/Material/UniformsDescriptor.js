@@ -17,7 +17,8 @@ class UniformsDescriptor extends THREEElementDescriptor {
   }
 
   setParent(threeObject:UniformContainer, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.ShaderMaterial, 'Parent of <uniforms/> is not a shader material');
+    invariant(parentObject3D instanceof THREE.ShaderMaterial,
+      'Parent of <uniforms/> is not a shader material');
     invariant(parentObject3D.uniforms === undefined, 'Parent already has uniforms');
 
     super.setParent(threeObject, parentObject3D);
@@ -27,7 +28,8 @@ class UniformsDescriptor extends THREEElementDescriptor {
 
   addChildren(threeObject, children) {
     children.forEach(child => {
-      invariant(child instanceof Uniform, 'The <uniforms/> component can only have <uniform/> elements as children.');
+      invariant(child instanceof Uniform,
+        'The <uniforms/> component can only have <uniform/> elements as children.');
     });
   }
 

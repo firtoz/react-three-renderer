@@ -10,7 +10,7 @@ class ShapeAction {
     this.userData = {};
   }
 
-  performAction(shape:THREE.Shape) {
+  performAction(shape:THREE.Shape) { // eslint-disable-line no-unused-vars
     // to be done by subclasses
   }
 }

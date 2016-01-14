@@ -27,7 +27,7 @@ class TextureDescriptor extends THREEElementDescriptor {
           threeObject.repeat.set(1, 1);
         }
       },
-      'default': new THREE.Vector2(1, 1),
+      default: new THREE.Vector2(1, 1),
     });
 
     [
@@ -47,7 +47,7 @@ class TextureDescriptor extends THREEElementDescriptor {
             threeObject.needsUpdate = true;
           }
         },
-        'default': THREE.ClampToEdgeWrapping,
+        default: THREE.ClampToEdgeWrapping,
       });
     });
 
@@ -60,19 +60,19 @@ class TextureDescriptor extends THREEElementDescriptor {
           threeObject.needsUpdate = true;
         }
       },
-      'default': 1,
+      default: 1,
     });
 
     this.hasProp('url', {
       type: PropTypes.string.isRequired,
       update: this.triggerRemount,
-      'default': '',
+      default: '',
     });
 
     this.hasProp('crossOrigin', {
       type: PropTypes.string,
       update: this.triggerRemount,
-      'default': undefined,
+      default: undefined,
     });
 
     [

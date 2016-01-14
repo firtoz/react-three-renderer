@@ -18,7 +18,7 @@ class GeometryDescriptor extends GeometryDescriptorBase {
         }
       },
       updateInitial: true,
-      'default': [],
+      default: [],
     });
 
     this.hasProp('colors', {
@@ -33,7 +33,7 @@ class GeometryDescriptor extends GeometryDescriptorBase {
         }
       },
       updateInitial: true,
-      'default': [],
+      default: [],
     });
 
     this.hasProp('faces', {
@@ -47,11 +47,11 @@ class GeometryDescriptor extends GeometryDescriptorBase {
         }
       },
       updateInitial: true,
-      'default': [],
+      default: [],
     });
   }
 
-  construct(props) {
+  construct() {
     return new THREE.Geometry();
   }
 }

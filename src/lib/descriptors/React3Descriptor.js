@@ -14,15 +14,15 @@ import propTypeInstanceOf from '../utils/propTypeInstanceOf';
 const propProxy = {
   gammaInput: {
     type: PropTypes.bool,
-    'default': false,
+    default: false,
   },
   gammaOutput: {
     type: PropTypes.bool,
-    'default': false,
+    default: false,
   },
   sortObjects: {
     type: PropTypes.bool,
-    'default': true,
+    default: true,
   },
   context: {
     type: PropTypes.oneOf([
@@ -32,11 +32,11 @@ const propProxy = {
   },
   mainCamera: {
     type: PropTypes.string,
-    'default': undefined,
+    default: undefined,
   },
   onAnimate: {
     type: PropTypes.func,
-    'default': undefined,
+    default: undefined,
   },
   clearColor: {
     type: PropTypes.oneOfType([
@@ -44,11 +44,11 @@ const propProxy = {
       PropTypes.number,
       PropTypes.string,
     ]),
-    'default': 0,
+    default: 0,
   },
   shadowMapEnabled: {
     type: PropTypes.bool,
-    'default': false,
+    default: false,
   },
   shadowMapType: {
     type: PropTypes.oneOf([
@@ -56,7 +56,7 @@ const propProxy = {
       THREE.PCFShadowMap,
       THREE.PCFSoftShadowMap,
     ]),
-    'default': THREE.PCFShadowMap,
+    default: THREE.PCFShadowMap,
   },
   shadowMapCullFace: {
     type: PropTypes.oneOf([
@@ -65,19 +65,19 @@ const propProxy = {
       THREE.CullFaceFront,
       THREE.CullFaceFrontBack,
     ]),
-    'default': THREE.CullFaceFront,
+    default: THREE.CullFaceFront,
   },
   shadowMapDebug: {
     type: PropTypes.bool,
-    'default': false,
+    default: false,
   },
   onRecreateCanvas: {
     type: PropTypes.func.isRequired,
-    'default': undefined,
+    default: undefined,
   },
   pixelRatio: {
     type: PropTypes.number,
-    'default': 1,
+    default: 1,
   },
   width: {
     type: PropTypes.number.isRequired,
@@ -90,7 +90,7 @@ const propProxy = {
       PropTypes.bool,
       PropTypes.number,
     ]),
-    'default': false,
+    default: false,
   },
 };
 

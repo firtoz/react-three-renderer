@@ -13,12 +13,13 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     this.hasProp('resourceId', {
       type: PropTypes.string.isRequired,
       update: this.triggerRemount,
-      'default': '',
+      default: '',
     });
   }
 
   construct(props) {
-    invariant(props.hasOwnProperty('resourceId'), 'A resource type must have a property named "resourceId"!');
+    invariant(props.hasOwnProperty('resourceId'),
+      'A resource type must have a property named "resourceId"!');
 
     return new ResourceReference(props.resourceId);
   }
@@ -86,7 +87,10 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
 
   setParent(threeObject, parentObject3D) {
     const existingValueInSlot = parentObject3D[threeObject.userData._propertySlot];
-    invariant(existingValueInSlot === undefined || existingValueInSlot === null, 'Parent already has a ' + threeObject.userData._propertySlot + ' defined');
+    invariant(existingValueInSlot === undefined
+      || existingValueInSlot === null,
+      'Parent already has a '
+      + threeObject.userData._propertySlot + ' defined');
     invariant(threeObject.userData._eventCleanupQueue.length === 0, 'Changing parents?');
 
     super.setParent(threeObject, parentObject3D);
@@ -168,7 +172,9 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   }
 
   resourceUpdated(threeObject, newResource, oldResource) {
-    const parentObject = threeObject.userData.markup.parentMarkup && threeObject.userData.markup.parentMarkup.threeObject || undefined;
+    const parentObject = threeObject.userData.markup.parentMarkup
+      && threeObject.userData.markup.parentMarkup.threeObject
+      || undefined;
 
     if (parentObject) {
       this.applyToSlot(threeObject, parentObject, newResource);

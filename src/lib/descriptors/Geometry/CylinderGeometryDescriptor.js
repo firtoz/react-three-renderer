@@ -20,7 +20,7 @@ class CylinderGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        'default': undefined,
+        default: undefined,
       });
     });
   }
@@ -37,7 +37,15 @@ class CylinderGeometryDescriptor extends GeometryDescriptorBase {
       thetaLength,
       } = props;
 
-    return new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength);
+    return new THREE.CylinderGeometry(
+      radiusTop,
+      radiusBottom,
+      height,
+      radialSegments,
+      heightSegments,
+      openEnded,
+      thetaStart,
+      thetaLength);
   }
 }
 

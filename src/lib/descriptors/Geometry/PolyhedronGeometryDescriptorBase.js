@@ -1,4 +1,3 @@
-import THREE from 'three';
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
@@ -14,7 +13,7 @@ class PolyhedronGeometryDescriptorBase extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
-        'default': undefined,
+        default: undefined,
       });
     });
   }

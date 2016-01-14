@@ -12,7 +12,7 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
     this.hasProp('size', {
       type: PropTypes.number,
       simple: true,
-      'default': 1,
+      default: 1,
     });
 
     this.hasProp('sizeAttenuation', {
@@ -24,7 +24,7 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
         threeObject.needsUpdate = true;
       },
       updateInitial: true,
-      'default': true,
+      default: true,
     });
 
     this.hasProp('fog', {
@@ -36,7 +36,7 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
         threeObject.needsUpdate = true;
       },
       updateInitial: true,
-      'default': true,
+      default: true,
     });
 
     this.hasProp('vertexColors', {
@@ -46,7 +46,7 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
         THREE.VertexColors,
       ]),
       simple: true,
-      'default': THREE.NoColors,
+      default: THREE.NoColors,
     });
   }
 

@@ -23,7 +23,7 @@ class React3DInstance {
       onRecreateCanvas,
       } = props;
 
-    this._parameters = {...props};
+    this._parameters = { ...props };
 
     this._rendererInstance = rendererInstance;
 
@@ -42,8 +42,6 @@ class React3DInstance {
     this._recreateCanvasCallback = onRecreateCanvas;
 
     this._canvas = null;
-
-    //this._createRenderer();
 
     this._onAnimate = onAnimate;
     this._objectsByUUID = {};
@@ -78,7 +76,7 @@ class React3DInstance {
       };
 
       this._objectHighlighted = (info) => {
-        const {uuid, boundingBoxFunc} = info;
+        const { uuid, boundingBoxFunc } = info;
 
         let obj;
 
@@ -105,7 +103,10 @@ class React3DInstance {
 
     const parameters = this._parameters;
 
-    this._renderer = new THREE.WebGLRenderer({canvas: this._canvas, antialias: parameters.antialias});
+    this._renderer = new THREE.WebGLRenderer({
+      canvas: this._canvas,
+      antialias: parameters.antialias,
+    });
 
     const renderer = this._renderer;
 
@@ -201,7 +202,9 @@ class React3DInstance {
       } else if (child instanceof ResourceContainer) {
         this.addResourceContainer(child);
       } else {
-        invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s or <resources/>.');
+        invariant(false,
+          'The react3 component should only contain ' +
+          '<viewport/>s or <scene/>s or <resources/>.');
       }
     }
   }
@@ -218,7 +221,9 @@ class React3DInstance {
     } else if (child instanceof ResourceContainer) {
       this.removeResourceContainer(child);
     } else {
-      invariant(false, 'The react3 component should only contain <viewport/>s or <scene/>s, <module/>s or <resources/>.');
+      invariant(false,
+        'The react3 component should only contain ' +
+        '<viewport/>s or <scene/>s, <module/>s or <resources/>.');
     }
   }
 
@@ -242,7 +247,9 @@ class React3DInstance {
 
       if (objectsWithMainCameraName) {
         if (process.env.NODE_ENV !== 'production') {
-          warning(objectsWithMainCameraName.count < 2, 'There are multiple objects with name ' + this._mainCameraName);
+          warning(objectsWithMainCameraName.count < 2,
+            'There are multiple objects with name '
+            + this._mainCameraName);
         }
 
         if (objectsWithMainCameraName.count > 0) {
@@ -277,7 +284,9 @@ class React3DInstance {
 
           if (objectsWithViewportCameraName) {
             if (process.env.NODE_ENV !== 'production') {
-              warning(objectsWithViewportCameraName.count < 2, 'There are multiple objects with name ' + viewport.cameraName);
+              warning(objectsWithViewportCameraName.count < 2,
+                'There are multiple objects with name '
+                + viewport.cameraName);
             }
 
             if (objectsWithViewportCameraName.count > 0) {
@@ -361,7 +370,9 @@ class React3DInstance {
   removeViewport(viewport) {
     const index = this._viewports.indexOf(viewport);
     if (process.env.NODE_ENV !== 'production') {
-      invariant(index !== -1, 'A viewport has been removed from <react3/> but it was not present in it...');
+      invariant(index !== -1,
+        'A viewport has been removed from ' +
+        '<react3/> but it was not present in it...');
     }
 
     this._viewports.splice(index, 1);
@@ -374,7 +385,9 @@ class React3DInstance {
   removeResourceContainer(resourceContainer) {
     const index = this._resourceContainers.indexOf(resourceContainer);
     if (process.env.NODE_ENV !== 'production') {
-      invariant(index !== -1, 'A resource container has been removed from <react3/> but it was not present in it...');
+      invariant(index !== -1,
+        'A resource container has been removed ' +
+        'from <react3/> but it was not present in it...');
     }
 
     this._resourceContainers.splice(index, 1);
@@ -388,7 +401,9 @@ class React3DInstance {
     const index = this._modules.indexOf(module);
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(index !== -1, 'A module has been removed from <react3/> but it was not present in it...');
+      invariant(index !== -1,
+        'A module has been removed from ' +
+        '<react3/> but it was not present in it...');
     }
 
     this._modules.splice(index, 1);
@@ -622,7 +637,8 @@ class React3DInstance {
 
     delete this._parameters;
 
-    invariant(Object.keys(this._objectsByUUID).length === 0, 'Failed to cleanup some child objects for React3DInstance');
+    invariant(Object.keys(this._objectsByUUID).length === 0,
+      'Failed to cleanup some child objects for React3DInstance');
 
     delete this._objectsByUUID;
     delete this._viewports;
@@ -636,7 +652,8 @@ class React3DInstance {
   }
 
   objectMounted(object) {
-    invariant(!this._objectsByUUID[object.uuid], 'There already is an object with this uuid in the react 3d instance.');
+    invariant(!this._objectsByUUID[object.uuid],
+      'There already is an object with this uuid in the react 3d instance.');
 
     this._objectsByUUID[object.uuid] = object;
 
@@ -701,7 +718,9 @@ class React3DInstance {
   }
 
   _removeObjectWithName(objectName, object) {
-    invariant(this._objectsByName[objectName] && this._objectsByName[objectName].values[object.uuid] === object, 'The object\'s name changed somehow?\'');
+    invariant(this._objectsByName[objectName]
+      && this._objectsByName[objectName].values[object.uuid] === object,
+      'The object\'s name changed somehow?\'');
 
     delete this._objectsByName[objectName].values[object.uuid];
     this._objectsByName[objectName].count--;
@@ -712,7 +731,8 @@ class React3DInstance {
   }
 
   objectRemoved(object) {
-    invariant(this._objectsByUUID[object.uuid] === object, 'The removed object does not belong here!?');
+    invariant(this._objectsByUUID[object.uuid] === object,
+      'The removed object does not belong here!?');
 
     if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       if (this._highlightObjectId === object.uuid) {

@@ -24,7 +24,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
           threeObject.userData._materialSlot = 'material';
         }
       },
-      'default': 'material',
+      default: 'material',
     });
 
     this.hasProp('transparent', {
@@ -47,7 +47,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       update: (threeObject, side) => {
         threeObject.side = side;
       },
-      'default': undefined,
+      default: undefined,
     });
 
     this.hasProp('opacity', {
@@ -58,7 +58,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     this.hasProp('visible', {
       type: PropTypes.bool,
       simple: true,
-      'default': true,
+      default: true,
     });
 
     this._colors = [];
@@ -82,7 +82,9 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
 
   hasColor(propName = 'color', defaultVal = 0xffffff) {
     if (process.env.NODE_ENV !== 'production') {
-      invariant(this._colors.indexOf(propName) === -1, 'This color is already defined for %s.', this.constructor.name);
+      invariant(this._colors.indexOf(propName) === -1,
+        'This color is already defined for %s.',
+        this.constructor.name);
     }
 
     this._colors.push(propName);
@@ -96,7 +98,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       update: (threeObject, value) => {
         threeObject[propName].set(value);
       },
-      'default': defaultVal,
+      default: defaultVal,
     });
   }
 
@@ -104,13 +106,13 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     this.hasProp('wireframe', {
       type: PropTypes.bool,
       simple: true,
-      'default': false,
+      default: false,
     });
 
     this.hasProp('wireframeLinewidth', {
       type: PropTypes.number,
       simple: true,
-      'default': 1,
+      default: 1,
     });
   }
 
@@ -131,7 +133,8 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       || parentObject3D instanceof THREE.Points
       || parentObject3D instanceof THREE.Line, 'Parent is not a mesh');
     invariant(parentObject3D[material.userData._materialSlot] === undefined
-      || parentObject3D[material.userData._materialSlot] === null, 'Parent already has a ' + material.userData._materialSlot + ' defined');
+      || parentObject3D[material.userData._materialSlot] === null,
+      'Parent already has a ' + material.userData._materialSlot + ' defined');
     super.setParent(material, parentObject3D);
 
     parentObject3D[material.userData._materialSlot] = material;
@@ -183,7 +186,8 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   addChildren(threeObject, children) {
-    invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
+    invariant(children.filter(this._invalidChild).length === 0,
+      'Mesh children can only be materials or geometries!');
   }
 
   addChild(threeObject, child) {
@@ -199,11 +203,8 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   invalidChildInternal(child) {
-    const invalid = !(child instanceof THREE.Texture || child instanceof ResourceReference );
-
-    if (invalid) {
-      debugger;
-    }
+    const invalid = !(child instanceof THREE.Texture
+    || child instanceof ResourceReference);
 
     return invalid;
   }

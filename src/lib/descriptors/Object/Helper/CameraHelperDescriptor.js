@@ -17,7 +17,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
         threeObject.visible = threeObject.userData._hasCamera && visible;
       },
       updateInitial: true,
-      'default': true,
+      default: true,
     });
 
     this.hasProp('cameraName', {
@@ -29,7 +29,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
 
         this._startCameraFinder(threeObject);
       },
-      'default': undefined,
+      default: undefined,
     });
   }
 
@@ -84,7 +84,8 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     let camera = null;
 
     if (cameraName) {
-      const camerasByName = rootInstance.getObjectsByName(cameraName).filter(obj => obj instanceof THREE.Camera);
+      const camerasByName = rootInstance.getObjectsByName(cameraName)
+        .filter(obj => obj instanceof THREE.Camera);
 
       if (camerasByName.length > 0) {
         camera = camerasByName[0];
@@ -96,9 +97,13 @@ class CameraHelperDescriptor extends Object3DDescriptor {
 
   _clearCameraEvents(helper) {
     if (helper.userData._hasCamera) {
-      helper.userData._camera.userData.events.removeListener('updateProjectionMatrix', helper.userData._onCameraProjectionUpdate);
-      helper.userData._camera.userData.events.removeListener('dispose', helper.userData._onCameraDispose);
-      helper.userData._camera.userData.events.removeListener('rename', helper.userData._onCameraRename);
+      helper.userData._camera.userData.events
+        .removeListener('updateProjectionMatrix',
+          helper.userData._onCameraProjectionUpdate);
+      helper.userData._camera.userData.events
+        .removeListener('dispose', helper.userData._onCameraDispose);
+      helper.userData._camera.userData.events
+        .removeListener('rename', helper.userData._onCameraRename);
     }
   }
 

@@ -41,11 +41,7 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
   }
 
   invalidChildInternal(child) {
-    const invalid = !(child instanceof UniformContainer || super.invalidChildInternal(child) );
-
-    if (invalid) {
-      debugger;
-    }
+    const invalid = !(child instanceof UniformContainer || super.invalidChildInternal(child));
 
     return invalid;
   }

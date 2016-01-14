@@ -3,7 +3,8 @@ import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 
 // Returns class name of the object, if any.
 function getClassName(propValue) {
-  if (!(propValue.constructor && (propValue.constructor.name || propValue.constructor.displayName) )) {
+  if (!(propValue.constructor
+    && (propValue.constructor.name || propValue.constructor.displayName))) {
     return '<<anonymous>>';
   }
   return propValue.constructor.name || propValue.constructor.displayName;
@@ -37,7 +38,8 @@ function createInstanceTypeChecker(expectedClass) {
   const originalInstanceOf = PropTypes.instanceOf(expectedClass);
 
   function validate(props, propName, componentName, location, propFullName) {
-    const originalResult = originalInstanceOf(props, propName, componentName, location, propFullName);
+    const originalResult = originalInstanceOf(props, propName,
+      componentName, location, propFullName);
 
     if (originalResult !== null) {
       const locationName = ReactPropTypeLocationNames[location];
@@ -54,7 +56,8 @@ function createInstanceTypeChecker(expectedClass) {
 
   const typeChecker = createChainableTypeChecker(validate);
 
-  const _type = `${expectedClass.displayName || expectedClass.name || expectedClass._type || expectedClass}`;
+  const _type = `${expectedClass.displayName || expectedClass.name
+  || expectedClass._type || expectedClass}`;
 
   typeChecker.toString = () => {
     return `${'```'} ${_type} ${'```'}`;

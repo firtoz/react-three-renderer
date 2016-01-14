@@ -23,7 +23,7 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
           this._refreshGeometry(threeObject);
         }
       },
-      'default': [],
+      default: [],
     });
 
     this.hasProp('settings', {
@@ -32,7 +32,7 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
         threeObject.userData._settings = settings;
       },
       updateInitial: true,
-      'default': undefined,
+      default: undefined,
     });
 
     [
@@ -58,7 +58,7 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
 
           this._refreshGeometry(threeObject);
         },
-        'default': undefined,
+        default: undefined,
       });
     });
   }
@@ -136,7 +136,8 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
           child.userData.events.removeListener('resource.set', resourceListener);
 
           threeObject.userData._resourceListenerCleanupFunctions
-            .splice(threeObject.userData._resourceListenerCleanupFunctions.indexOf(cleanupFunction), 1);
+            .splice(threeObject.userData
+              ._resourceListenerCleanupFunctions.indexOf(cleanupFunction), 1);
         };
 
         threeObject.userData._resourceListenerCleanupFunctions.push(cleanupFunction);
@@ -176,10 +177,6 @@ class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {
       child instanceof THREE.Shape ||
       child instanceof ShapeResourceReference
     );
-
-    if (invalid) {
-      debugger;
-    }
 
     return invalid;
   };

@@ -1,8 +1,4 @@
-import THREE from 'three';
-
 import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
-
-import invariant from 'fbjs/lib/invariant';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -19,7 +15,7 @@ class MoveToDescriptor extends ShapeActionDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
-        'default': 0,
+        default: 0,
       });
     });
   }

@@ -22,20 +22,20 @@ class LightDescriptorBase extends Object3DDescriptor {
       update(threeObject, updatesRefreshAllMaterials) {
         threeObject.userData._updatesRefreshAllMaterials = updatesRefreshAllMaterials;
       },
-      'default': false,
+      default: false,
     });
 
 
     this.hasProp('shadowBias', {
       type: PropTypes.number,
       simple: true,
-      'default': 0,
+      default: 0,
     });
 
     this.hasProp('shadowDarkness', {
       type: PropTypes.number,
       simple: true,
-      'default': 0.5,
+      default: 0.5,
     });
 
     [
@@ -50,7 +50,7 @@ class LightDescriptorBase extends Object3DDescriptor {
             threeObject[propName] = value;
           }
         },
-        'default': 512,
+        default: 512,
       });
     });
 
@@ -63,7 +63,7 @@ class LightDescriptorBase extends Object3DDescriptor {
         }
         // threeObject.shadow.camera.updateProjectionMatrix();
       },
-      'default': 50,
+      default: 50,
     });
 
     this.hasProp('shadowCameraFar', {
@@ -75,14 +75,14 @@ class LightDescriptorBase extends Object3DDescriptor {
         }
         // threeObject.shadow.camera.updateProjectionMatrix();
       },
-      'default': 5000,
+      default: 5000,
     });
 
     this.hasProp('castShadow', {
       override: true,
       type: PropTypes.bool,
       update: this.triggerRemount,
-      'default': false,
+      default: false,
     });
   }
 
@@ -98,7 +98,7 @@ class LightDescriptorBase extends Object3DDescriptor {
       update(threeObject, newColor) {
         threeObject.color.set(newColor);
       },
-      'default': 0xffffff,
+      default: 0xffffff,
     });
   }
 
@@ -126,7 +126,8 @@ class LightDescriptorBase extends Object3DDescriptor {
     const rootInstance = threeObject.userData.markup._rootInstance;
     if (rootInstance && !rootInstance._willUnmount) {
       if (process.env.NODE_ENV !== 'production') {
-        if (!this._warnedAboutLightMaterialUpdate && !threeObject.userData._updatesRefreshAllMaterials) {
+        if (!this._warnedAboutLightMaterialUpdate
+          && !threeObject.userData._updatesRefreshAllMaterials) {
           const owner = threeObject.userData.react3internalComponent._currentElement._owner;
 
           const elementType = threeObject.userData.react3internalComponent._elementType;
@@ -150,7 +151,9 @@ class LightDescriptorBase extends Object3DDescriptor {
     {/* new or removed component here */}
     <ambientLight/>
   </object3d>, or update some properties of lights.
-  If you would like to add components you should either add the components after the lights (recommended), e.g.
+
+  If you would like to add components, you should either add the components
+  after the lights (recommended), e.g.
   <object3d>
     <ambientLight/>
     {/* new or removed component here */}
@@ -159,9 +162,13 @@ class LightDescriptorBase extends Object3DDescriptor {
     {/* new or removed component here */}
     <ambientLight key="light"/>
   </object3d>.
-  If you have modified a light's properties e.g. toggled castShadow, the materials need to be rebuilt as well.
+
+  If you have modified a light's properties e.g. toggled castShadow,
+  the materials need to be rebuilt as well.
+
   To acknowledge and remove this message, please add the property 'updatesRefreshAllMaterials'
     to <${elementType}/> inside the render() of ${owner && owner.getName() || 'a component'}.
+
   For more information, visit https://github.com/mrdoob/threejs/wiki/Updates .`;
   }
 }

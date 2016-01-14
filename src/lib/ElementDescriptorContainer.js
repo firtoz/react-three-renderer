@@ -23,7 +23,8 @@ import PointLightDescriptor from './descriptors/Light/PointLightDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
-import ShapeGeometryResourceDescriptor from './descriptors/Resource/ShapeGeometryResourceDescriptor';
+import ShapeGeometryResourceDescriptor from
+  './descriptors/Resource/ShapeGeometryResourceDescriptor';
 import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDescriptor';
 import ShapeResourceDescriptor from './descriptors/Resource/ShapeResourceDescriptor';
 

@@ -33,16 +33,13 @@ class MeshDescriptor extends Object3DDescriptor {
       child instanceof THREE.BufferGeometry
     );
 
-    if (invalid) {
-      debugger;
-    }
-
     return invalid;
   };
 
   addChildren(threeObject, children) {
     if (process.env.NODE_ENV !== 'production') {
-      invariant(children.filter(this._invalidChild).length === 0, 'Mesh children can only be materials or geometries!');
+      invariant(children.filter(this._invalidChild).length === 0,
+        'Mesh children can only be materials or geometries!');
     } else {
       invariant(children.filter(this._invalidChild).length === 0, false);
     }

@@ -3,8 +3,6 @@ import THREEElementDescriptor from '../../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
 
-import resource from '../../decorators/resource';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import ShapeAction from '../../../Shapes/ShapeAction';
@@ -17,7 +15,7 @@ class PathDescriptorBase extends THREEElementDescriptor {
     this.hasProp('points', {
       type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector2)),
       update: this.triggerRemount,
-      'default': [],
+      default: [],
     });
   }
 
@@ -36,7 +34,8 @@ class PathDescriptorBase extends THREEElementDescriptor {
     // TODO: create paths here
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(children.filter(this._invalidChild).length === 0, 'Shape children can only be shape actions!');
+      invariant(children.filter(this._invalidChild).length === 0,
+        'Shape children can only be shape actions!');
     } else {
       invariant(children.filter(this._invalidChild).length === 0, false);
     }
@@ -51,16 +50,15 @@ class PathDescriptorBase extends THREEElementDescriptor {
     child.performAction(threeObject);
   }
 
-  addChild(threeObject, child, mountIndex) {
+  addChild(threeObject) {
     this.triggerRemount(threeObject);
   }
-
 
   moveChild(threeObject) {
     this.triggerRemount(threeObject);
   }
 
-  removeChild(threeObject, child) {
+  removeChild(threeObject) {
     this.triggerRemount(threeObject);
   }
 
@@ -68,10 +66,6 @@ class PathDescriptorBase extends THREEElementDescriptor {
     const invalid = !(
       child instanceof ShapeAction
     );
-
-    if (invalid) {
-      debugger;
-    }
 
     return invalid;
   };
