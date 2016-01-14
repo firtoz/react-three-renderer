@@ -1,4 +1,4 @@
-import THREE from 'three.js';
+import THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
 import Viewport from './Viewport';

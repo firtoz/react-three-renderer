@@ -1,6 +1,6 @@
 import GeometryResourceDescriptor from './GeometryResourceDescriptor';
 import PropTypes from 'react/lib/ReactPropTypes';
-import THREE from 'three.js';
+import THREE from 'three';
 
 class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
   constructor(react3RendererInstance) {
