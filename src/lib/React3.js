@@ -2,7 +2,7 @@ import React from 'react';
 import React3Renderer from './React3Renderer';
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
-import THREE from 'three.js';
+import THREE from 'three';
 
 const { PropTypes } = React;
 

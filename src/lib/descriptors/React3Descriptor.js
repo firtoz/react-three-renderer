@@ -2,7 +2,7 @@ import React3DInstance from '../React3Instance';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 
-import THREE from 'three.js';
+import THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 

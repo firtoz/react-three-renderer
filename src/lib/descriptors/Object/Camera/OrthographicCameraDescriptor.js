@@ -1,5 +1,5 @@
 import CameraDescriptorBase from './CameraDescriptorBase';
-import THREE from 'three.js';
+import THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
