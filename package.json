@@ -37,8 +37,8 @@
     "gulp-babel": "^6.1.1",
     "gulp-util": "^3.0.7",
     "in-publish": "^2.0.0",
-    "three": "0.73.0",
-    "react": "^0.14.6"
+    "react": "^0.14.6",
+    "three": "0.73.2"
   },
   "repository": {
     "type": "git",
