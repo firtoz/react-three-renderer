@@ -87,8 +87,18 @@ function mockPropTypes() {
   ReactPropTypes.func = new PropType('function');
 
   ReactPropTypes.arrayOf = (instanceType) => {
-    return new PropType(`array of ${instanceType.displayName || instanceType.name
-    || instanceType._type || instanceType}`);
+    let instanceTypeString = `${instanceType.displayName || instanceType.name
+    || instanceType._type || instanceType}`;
+
+    if (instanceType instanceof PropType && instanceType._isArray) {
+      instanceTypeString = `(${instanceTypeString})`;
+    }
+
+    const propType = new PropType(`array of ${instanceTypeString}`);
+
+    propType._isArray = true;
+
+    return propType;
   };
 
   ReactPropTypes.instanceOf = (instanceType) => {
@@ -146,8 +156,8 @@ function buildCategories() {
       node: {
         treeNode,
         children: nodeChildren,
-        },
-      } = queue.shift();
+      },
+    } = queue.shift();
 
     if (nodeChildren) {
       const childNames = Object.keys(nodeChildren);
@@ -235,7 +245,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
       node,
       indent,
       stackParent,
-      } = stackItem;
+    } = stackItem;
 
     let nodeContents = '';
     const nodeName = node.name;
