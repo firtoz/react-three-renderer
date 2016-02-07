@@ -105,7 +105,14 @@ class React3DInstance {
 
     this._renderer = new THREE.WebGLRenderer({
       canvas: this._canvas,
+      precision: parameters.precision,
+      alpha: parameters.alpha,
+      premultipliedAlpha: parameters.premultipliedAlpha,
       antialias: parameters.antialias,
+      stencil: parameters.stencil,
+      preserveDrawingBuffer: parameters.preserveDrawingBuffer,
+      depth: parameters.depth,
+      logarithmicDepthBuffer: parameters.logarithmicDepthBuffer,
     });
 
     const renderer = this._renderer;
@@ -454,9 +461,81 @@ class React3DInstance {
 
   updateAntialias(antialias) {
     this._parameters.antialias = antialias;
+    // no renderer, this only happens initially or we're about to recreate it anyway.
+    // unless something broke, then we have bigger problems...
     if (!this._renderer) {
-      // no renderer, this only happens initially or we're about to recreate it anyway.
-      // unless something broke, then we have bigger problems...
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updatePrecision(precision) {
+    this._parameters.precision = precision;
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updateAlpha(alpha) {
+    this._parameters.alpha = alpha;
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updatePremultipliedAlpha(premultipliedAlpha) {
+    this._parameters.premultipliedAlpha = premultipliedAlpha;
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updateAntialias(antialias) {
+    this._parameters.antialias = antialias;
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updateStencil(stencil) {
+    this._parameters.stencil = stencil;
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updatePreserveDrawingBuffer(preserveDrawingBuffer) {
+    this._parameters.preserveDrawingBuffer = preserveDrawingBuffer;
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updateDepth(depth) {
+    this._parameters.depth = depth;
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
+  }
+
+  updateLogarithmicDepthBuffer(logarithmicDepthBuffer) {
+    this._parameters.logarithmicDepthBuffer = logarithmicDepthBuffer;
+    if (!this._renderer) {
       return;
     }
 
