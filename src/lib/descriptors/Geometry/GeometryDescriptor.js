@@ -36,6 +36,21 @@ class GeometryDescriptor extends GeometryDescriptorBase {
       default: [],
     });
 
+    this.hasProp('faceVertexUvs', {
+      type: PropTypes.array,
+      update(threeObject, faceVertexUvs, hasProp) {
+        if (hasProp) {
+          if (threeObject.faceVertexUvs !== faceVertexUvs) {
+            threeObject.faceVertexUvs = faceVertexUvs;
+
+            threeObject.uvsNeedUpdate = true;
+          }
+        }
+      },
+      updateInitial: true,
+      default: [],
+    });
+
     this.hasProp('faces', {
       type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Face3)),
       update(threeObject, faces) {
