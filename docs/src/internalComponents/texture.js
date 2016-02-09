@@ -11,7 +11,12 @@ class texture extends DocInfo {
 
   getAttributesText() {
     return {
-      repeat: '',
+      repeat: 'Sets the [repeat property of the ' +
+      'Texture](http://threejs.org/docs/#Reference/Textures/Texture.repeat).\n\n' +
+      'Default: `(1, 1)`.',
+      offset: 'Sets the [offset property of the ' +
+      'Texture](http://threejs.org/docs/#Reference/Textures/Texture.offset).\n\n' +
+      'Default: `(0, 0)`.',
       wrapS: '',
       wrapT: '',
       anisotropy: '',

@@ -30,6 +30,19 @@ class TextureDescriptor extends THREEElementDescriptor {
       default: new THREE.Vector2(1, 1),
     });
 
+    this.hasProp('offset', {
+      type: propTypeInstanceOf(THREE.Vector2),
+      updateInitial: true,
+      update(threeObject, offset) {
+        if (offset) {
+          threeObject.offset.copy(offset);
+        } else {
+          threeObject.offset.set(0, 0);
+        }
+      },
+      default: new THREE.Vector2(0, 0),
+    });
+
     [
       'wrapS',
       'wrapT',
