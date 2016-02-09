@@ -20,7 +20,10 @@ class texture extends DocInfo {
       wrapS: '',
       wrapT: '',
       anisotropy: '',
-      url: '',
+      url: 'The URL to load the texture from.\n\n' +
+      'Currently textures can be loaded from URLs only.\n\n' +
+      'Used as the first parameter for ' +
+      '[TextureLoader.load](http://threejs.org/docs/#Reference/Loaders/TextureLoader.load)',
       resourceId: '',
       crossOrigin: 'Sets the [crossOrigin property of the ' +
       'TextureLoader](http://threejs.org/docs/#Reference/Loaders/TextureLoader.crossOrigin).',
