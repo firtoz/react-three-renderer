@@ -35,6 +35,7 @@
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^3.0.0",
     "eslint-plugin-react": "^3.14.0",
+    "ghooks": "1.0.3",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-util": "^3.0.7",
@@ -59,5 +60,10 @@
   "bugs": {
     "url": "https://github.com/toxicFork/react-three-renderer/issues"
   },
-  "homepage": "https://github.com/toxicFork/react-three-renderer#readme"
+  "homepage": "https://github.com/toxicFork/react-three-renderer#readme",
+  "config": {
+    "ghooks": {
+      "pre-commit": "echo Running eslint before commit && npm run eslint-internal -loglevel silent"
+    }
+  }
 }
