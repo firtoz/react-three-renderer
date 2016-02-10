@@ -6,8 +6,10 @@ class LightInfo extends Object3DInfo {
       ...super.getAttributesText(),
       updatesRefreshAllMaterials: 'Acknowledges and silences the remount warning message.\n\n' +
       'It is expensive to add or remove lights from the scene,' +
-      ' because all materials need to be refreshed to take the new number of lights into account.\n' +
-      'Additionally, toggling `castShadow` on a light will trigger a material refresh as well.\n\n' +
+      ' because all materials need to be refreshed to take the new number of' +
+      ' lights into account.\n' +
+      'Additionally, toggling `castShadow` on a light will trigger a material' +
+      ' refresh as well.\n\n' +
       'In the development environment, a warning message is logged if this happens.\n\n' +
       'It is generally recommended not to add or remove lights after a scene is constructed,' +
       ' but if you know what you are doing you can ignore the warnings by setting the ' +
@@ -40,10 +42,14 @@ class LightInfo extends Object3DInfo {
 >    <ambientLight key="light"/>
 >  </object3d>
 > ${'```'}
->  If you have modified a light's properties e.g. toggled castShadow, the materials need to be rebuilt as well.
->  To acknowledge and remove this message, please add the property '${'`'}updatesRefreshAllMaterials${'`'}'
->    to ${'`'}<${componentName}/>${'`'} inside the ${'`'}render()${'`'} of the component.
->  For more information, visit [https://github.com/mrdoob/threejs/wiki/Updates/](https://github.com/mrdoob/threejs/wiki/Updates/).
+>  If you have modified a light's properties e.g. toggled castShadow,
+ the materials need to be rebuilt as well.
+>  To acknowledge and remove this message, please add the
+ '${'`'}updatesRefreshAllMaterials${'`'}' property.
+>    to ${'`'}<${componentName}/>${'`'} inside the ${'`'}render()${'`'} of
+ the component.
+>  For more information, visit
+ [https://github.com/mrdoob/threejs/wiki/Updates/](https://github.com/mrdoob/threejs/wiki/Updates/).
       `,
 
       shadowBias: '',
@@ -56,7 +62,7 @@ class LightInfo extends Object3DInfo {
       color: 'The light color.',
       castShadow: 'Whether the light will cast shadows or not.\n\n' +
       '**WARNING**: changing this property after the scene has been' +
-      ' constructed is expensive! See [updatesRefreshAllMaterials](#updatesRefreshAllMaterials).'
+      ' constructed is expensive! See [updatesRefreshAllMaterials](#updatesRefreshAllMaterials).',
     };
   }
 }

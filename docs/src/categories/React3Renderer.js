@@ -4,7 +4,7 @@ module.exports = {
   subHeadings: {
     API: {
       children: {
-        'React3Renderer': {
+        React3Renderer: {
           description: `Static functions on React3Renderer.
 
 * React3Renderer.findTHREEObject(component): equivalent to [ReactDOM.findDOMNode](https://facebook.github.io/react/docs/top-level-api.html#reactdom.finddomnode).

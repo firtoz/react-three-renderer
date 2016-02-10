@@ -2,15 +2,18 @@ import geometry from './geometry';
 
 class circleGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.CircleGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/CircleGeometry)';
+    return 'Creates a [THREE.CircleGeometry]' +
+      '(http://threejs.org/docs/#Reference/Extras.Geometries/CircleGeometry)';
   }
 
   getDescription() {
     return `CircleGeometry is a simple shape of Euclidean geometry.
 
-It is constructed from a number of triangular segments that are oriented around a central point and extend as far out
-as a given radius. It is built counter-clockwise from a start angle and a given central angle. It can also be used to
-create regular polygons, where the number of segments determines the number of sides.`;
+It is constructed from a number of triangular segments that are oriented
+ around a central point and extend as far out as a given radius. It is
+ built counter-clockwise from a start angle and a given central angle.
+ It can also be used to create regular polygons, where the number of
+ segments determines the number of sides.`;
   }
 
   getAttributesText() {

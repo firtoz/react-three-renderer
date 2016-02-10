@@ -6,13 +6,15 @@ ${'```'}`,
   filename: 'Entry Point',
   description: `React3 is a regular React Component that places a canvas on the page.
 
-When React3 is mounted, an instance of [[React3Renderer]] is used to render a [&lt;react3&gt;](react3) internal component into the canvas.
+When React3 is mounted, an instance of [[React3Renderer]] is used to render a
+ [&lt;react3&gt;](react3) internal component into the canvas.
 
 The react3 internal component repeatedly requests animation frames from the browser.
 
 Every frame it re-renders the whole scene.
 
-The attributes are passed on to the react3 internal component so that it can configure the renderer.`,
+The attributes are passed on to the react3 internal component so that
+ it can configure the renderer.`,
   copyAttributesFrom: 'react3',
   excludeAttributesFromCopying: {
     canvas: true,
@@ -33,7 +35,7 @@ The attributes are passed on to the react3 internal component so that it can con
 
 Finds a THREE.js object from a mounted component.
 
-You are encouraged to use [refs](https://facebook.github.io/react/docs/more-about-refs.html) instead.`
+You are encouraged to use [refs](https://facebook.github.io/react/docs/more-about-refs.html) instead.`,
         },
         'React3.eventDispatcher': {
           description: `**Advanced usage**. Used to dispatch events. Undocumented for now.`,

@@ -2,13 +2,15 @@ import object3D from './object3D';
 
 class arrowHelper extends object3D {
   getIntro() {
-    return 'Creates a [THREE.ArrowHelper](http://threejs.org/docs/#Reference/Extras.Helpers/ArrowHelper)';
+    return 'Creates a ' +
+      '[THREE.ArrowHelper](http://threejs.org/docs/#Reference/Extras.Helpers/ArrowHelper)';
   }
 
   getDescription() {
     return `An 3D arrow Object.
 
-This creates an arrow starting in origin in the direction dir for a certain length. It is also possible to change color.`;
+This creates an arrow starting in origin in the direction dir for a certain length.
+ It is also possible to change color.`;
   }
 
   getAttributesText() {

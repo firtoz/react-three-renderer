@@ -40,7 +40,7 @@ module.exports = {
           currentAncestor = currentAncestorChildren[ancestorName];
         }
 
-        const {name, intro} = resourceType;
+        const { name, intro } = resourceType;
 
         currentAncestor.children[name] = {
           name,
@@ -67,7 +67,7 @@ module.exports = {
     while (queue.length > 0) {
       const current = queue.shift();
 
-      const {node, depth} = current;
+      const { node, depth } = current;
 
       const childrenNames = node.children && Object.keys(node.children) || [];
 
@@ -103,9 +103,11 @@ module.exports = {
   getDescription() {
     return `## Usage
 
-Place [&lt;resources&gt;&lt;/resources&gt;](resources); anywhere inside [&lt;React3/&gt;](Entry-Point), or any of its children.
+Place [&lt;resources&gt;&lt;/resources&gt;](resources); anywhere inside
+ [&lt;React3/&gt;](Entry-Point), or any of its children.
 
-> The preferred place inside the parent is before any other component, since it's expensive to replace.
+> The preferred place inside the parent is before any other component,
+ since it's expensive to replace.
 
 > If this component is remounted, all of the resources will be recreated.
 

@@ -2,7 +2,8 @@ import DocInfo from '../DocInfo';
 
 class absEllipse extends DocInfo {
   getIntro() {
-    return 'Calls [THREE.Path#absEllipse](http://threejs.org/docs/#Reference/Extras.Core/Path.absellipse) on the parent shape';
+    return 'Calls [THREE.Path#absEllipse]' +
+      '(http://threejs.org/docs/#Reference/Extras.Core/Path.absellipse) on the parent shape';
   }
 
   getDescription() {
@@ -19,7 +20,8 @@ class absEllipse extends DocInfo {
       endAngle: 'The end angle in radians',
       clockwise: 'Sweep the ellipse clockwise.\n\n' +
       'Defaults to false',
-      rotation: 'The rotation angle of the ellipse in radians, counterclockwise from the positive X axis.\n\n' +
+      rotation: 'The rotation angle of the ellipse in radians, counterclockwise from the' +
+      ' positive X axis.\n\n' +
       'Optional, defaults to 0',
     };
   }
