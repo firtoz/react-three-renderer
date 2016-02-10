@@ -21,7 +21,7 @@ class React3DInstance {
       mainCamera,
       onAnimate,
       onRecreateCanvas,
-      } = props;
+    } = props;
 
     this._parameters = { ...props };
 
@@ -647,8 +647,8 @@ class React3DInstance {
       return;
     }
 
-    this._renderer.setClearColor(clearColor);
-  }
+      this._renderer.setClearColor(clearColor);
+    }
 
   refreshRenderer() {
     this.disposeResourcesAndRenderer();
@@ -656,6 +656,11 @@ class React3DInstance {
     const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
 
     delete this._renderer;
+
+    this.userData.events.removeListener('animate', this._callOnAnimate);
+    this.userData.events.removeAllListeners();
+
+    cancelAnimationFrame(this._renderRequest);
 
     if (contextLossExtension && this._canvas) {
       this._canvas.addEventListener('webglcontextlost', () => {
