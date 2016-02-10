@@ -6,7 +6,9 @@
   "scripts": {
     "compile": "gulp babel",
     "prepublish": "not-in-install && npm run compile || in-install",
-    "test": "eslint ./src/ && eslint ./docs/src/ && cd ./tests && npm test",
+    "test": "npm run eslint-internal -loglevel silent && cd ./tests && npm test",
+    "eslint-internal": "eslint ./src/ && eslint ./docs/src/",
+    "eslint": "npm run eslint-internal -loglevel silent || true",
     "tdd": "cd ./tests && npm run tdd"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
