@@ -44,7 +44,11 @@ const propProxy = {
       PropTypes.number,
       PropTypes.string,
     ]),
-    default: 0,
+    default: 0x000000,
+  },
+  clearAlpha: {
+    type: PropTypes.number,
+    default: undefined,
   },
   shadowMapEnabled: {
     type: PropTypes.bool,
@@ -89,17 +93,17 @@ const propProxy = {
     type: PropTypes.oneOf([
       'highp',
       'mediump',
-      'lowp'
+      'lowp',
     ]),
     default: 'highp',
   },
   alpha: {
     type: PropTypes.bool,
-    default: false
+    default: false,
   },
   premultipliedAlpha: {
     type: PropTypes.bool,
-    default: true
+    default: true,
   },
   antialias: {
     type: PropTypes.oneOfType([
@@ -110,20 +114,20 @@ const propProxy = {
   },
   stencil: {
     type: PropTypes.bool,
-    default: true
+    default: true,
   },
   preserveDrawingBuffer: {
     type: PropTypes.bool,
-    default: false
+    default: false,
   },
   depth: {
     type: PropTypes.bool,
-    default: true
+    default: true,
   },
   logarithmicDepthBuffer: {
     type: PropTypes.bool,
-    default: false
-  }
+    default: false,
+  },
 };
 
 class React3Descriptor extends THREEElementDescriptor {

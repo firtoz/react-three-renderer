@@ -125,8 +125,28 @@ class React3DInstance {
       renderer.sortObjects = parameters.sortObjects;
     }
 
-    if (parameters.hasOwnProperty('clearColor')) {
-      renderer.setClearColor(parameters.clearColor);
+    const hasClearColor = parameters.hasOwnProperty('clearColor');
+    const hasClearAlpha = parameters.hasOwnProperty('clearAlpha');
+
+    if (hasClearColor || hasClearAlpha) {
+      let clearColor;
+
+      if (hasClearColor) {
+        clearColor = parameters.clearColor;
+      } else {
+        clearColor = new THREE.Color(0x000000); // default clear color
+      }
+
+      if (hasClearAlpha) {
+        if (process.env.NODE_ENV !== 'production') {
+          warning(parameters.alpha === true, 'The `clearAlpha` property' +
+            ' requires the `alpha` property to be `true`.');
+        }
+
+        renderer.setClearColor(clearColor, parameters.clearAlpha);
+      } else {
+        renderer.setClearColor(clearColor);
+      }
     }
 
     if (parameters.hasOwnProperty('shadowMapEnabled')) {
@@ -647,8 +667,40 @@ class React3DInstance {
       return;
     }
 
+    if (this._parameters.hasOwnProperty('clearAlpha')) {
+      this._renderer.setClearColor(clearColor, this._parameters.clearAlpha);
+    } else {
       this._renderer.setClearColor(clearColor);
     }
+  }
+
+  updateClearAlpha(clearAlpha) {
+    const parameters = this._parameters;
+
+    if (clearAlpha === undefined) {
+      delete parameters.clearAlpha;
+    } else {
+      parameters.clearAlpha = clearAlpha;
+    }
+
+    if (!this._renderer) {
+      return;
+    }
+
+    let clearColor;
+
+    if (parameters.hasOwnProperty('clearColor')) {
+      clearColor = parameters.clearColor;
+    } else {
+      clearColor = new THREE.Color(0x000000); // default clear color
+    }
+
+    if (clearAlpha !== undefined) {
+      this._renderer.setClearColor(clearColor, clearAlpha);
+    } else {
+      this._renderer.setClearColor(clearColor);
+    }
+  }
 
   refreshRenderer() {
     this.disposeResourcesAndRenderer();

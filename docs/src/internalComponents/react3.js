@@ -27,18 +27,33 @@ class react3 extends DocInfo {
       'Internal usage only.',
       onAnimate: 'This callback gets called before every frame.',
       clearColor: 'The clear color of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#clearColor](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.clearColor).',
+      'Is used as the first parameter for ' +
+      '[THREE.WebGLRenderer#clearColor]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setClearColor).\n\n' +
+      'If the [`clearAlpha`](#clearalpha) and [`alpha`](#alpha) properties are set, ' +
+      '`clearAlpha` will be used as the second parameter.',
+      clearAlpha: 'Used for the transparency of the canvas.\n\n' +
+      'Expected range: 0 to 1, where 0 is clear and 1 is opaque.\n\n' +
+      'Is used as the second parameter for [THREE.WebGLRenderer#clearColor]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setClearColor).\n\n' +
+      'If the [`clearColor`](#clearcolor) property is set, that will be passed as' +
+      ' the first parameter.\n\n' +
+      'Requires the [`alpha`](#alpha) property to be set.',
       shadowMapEnabled: 'Toggles shadowMap usage.\n\n' +
-      'See [THREE.WebGLRenderer#shadowMapEnabled](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapEnabled).\n\n' +
+      'See [THREE.WebGLRenderer#shadowMapEnabled]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapEnabled).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       shadowMapType: 'Controls the shadowMap type.\n\n' +
-      'See [THREE.WebGLRenderer#shadowMapType](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapType).\n\n' +
+      'See [THREE.WebGLRenderer#shadowMapType]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapType).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       shadowMapCullFace: 'Controls shadowMap face culling.\n\n' +
-      'See [THREE.WebGLRenderer#shadowMapCullFace](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapCullFace).\n\n' +
+      'See [THREE.WebGLRenderer#shadowMapCullFace]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapCullFace).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       shadowMapDebug: 'Toggles shadowMap debugging.\n\n' +
-      'See [THREE.WebGLRenderer#shadowMapDebug](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapDebug).\n\n' +
+      'See [THREE.WebGLRenderer#shadowMapDebug]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapDebug).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       onRecreateCanvas: 'This callback gets called every time the canvas is recreated.\n\n' +
       'This is currently internal usage only. This helps toggling of [antialias](#antialias).',
@@ -47,30 +62,36 @@ class react3 extends DocInfo {
       width: 'The height of the canvas and the default viewport.',
       height: 'The width of the canvas and the default viewport.',
       precision: 'Sets the precision of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#precision](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).\n\n' +
+      'See [THREE.WebGLRenderer#precision]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).\n\n' +
       '> **WARNING**: This recreates the whole canvas.',
       alpha: 'Toggles alpha setting of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#alpha](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).\n\n' +
+      'See [THREE.WebGLRenderer#alpha]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).\n\n' +
       '> **WARNING**: This recreates the whole canvas.',
       premultipliedAlpha: 'Toggles the premultipliedAlpha setting of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#premultipliedAlpha](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.premultipliedAlpha).\n\n' +
+      'See [THREE.WebGLRenderer#premultipliedAlpha]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.premultipliedAlpha).\n\n' +
       '> **WARNING**: This recreates the whole canvas.',
       antialias: 'Toggles anti-aliasing of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#antialias](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).\n\n' +
+      'See [THREE.WebGLRenderer#antialias]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).\n\n' +
       '> **WARNING**: This recreates the whole canvas.',
       stencil: 'Toggles the stencil property of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#stencil](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.stencil).\n\n' +
+      'See [THREE.WebGLRenderer#stencil]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.stencil).\n\n' +
       '> **WARNING**: This recreates the whole canvas.',
       preserveDrawingBuffer: 'Toggles the preserveDrawingBuffer property of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#preserveDrawingBuffer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).\n\n' +
+      'See [THREE.WebGLRenderer#preserveDrawingBuffer]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).\n\n' +
       '> **WARNING**: This recreates the whole canvas.',
       depth: 'Toggles the depth property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#depth](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.depth).\n\n' +
       '> **WARNING**: This recreates the whole canvas.',
       logarithmicDepthBuffer: 'Toggles the logarithmicDepthBuffer property of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#logarithmicDepthBuffer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.'
-
+      'See [THREE.WebGLRenderer#logarithmicDepthBuffer]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).\n\n' +
+      '> **WARNING**: This recreates the whole canvas.',
     };
   }
 }
