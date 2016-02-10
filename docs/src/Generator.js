@@ -5,6 +5,8 @@ import path from 'path';
 // OH MY GOD YOU ARE A GENIUS
 //   I KISS YOU
 
+const rightArrowSymbol = `»`; // was: ▸
+
 function getLineage(category) {
   const lineage = [];
   let parent = category.parent;
@@ -224,7 +226,7 @@ function buildCategories() {
 }
 
 function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
-  let fileContents = `> [Wiki](Home) ▸ **API Reference**
+  let fileContents = `> [Wiki](Home) ${rightArrowSymbol} **API Reference**
 
 # API Reference
 
@@ -236,6 +238,10 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
     node: allCategories.tree.root,
     indent: -1,
   }];
+
+  const nameToHeaderItem = name => {
+    return `[[${name}]] ${rightArrowSymbol} `;
+  };
 
   while (categoryStack.length > 0) {
     const stackItem = categoryStack.shift();
@@ -266,13 +272,11 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
 
     const intro = node.intro;
     if (!node.isComponent && !node.isTodo && !node.isRoot) {
-      let nodeFileContents = `> [Wiki](Home) ▸ `;
+      let nodeFileContents = `> [Wiki](Home) ${rightArrowSymbol} `;
 
       const lineage = getLineage(node);
 
-      nodeFileContents += lineage.map(name => {
-        return `[[${name}]] ▸ `;
-      }).join('');
+      nodeFileContents += lineage.map(nameToHeaderItem).join('');
 
       nodeFileContents += `**${nodeName}**`;
 
@@ -519,16 +523,16 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
         if (!category) {
           console.log('no category found for ', componentName); // eslint-disable-line
 
-          fileContents += `> [Wiki](Home) ▸ **${componentName}**`;
+          fileContents += `> [Wiki](Home) ${rightArrowSymbol} **${componentName}**`;
         } else {
-          fileContents += `> [Wiki](Home) ▸ `;
+          fileContents += `> [Wiki](Home) ${rightArrowSymbol} `;
 
           category.isComponent = true;
 
           const lineage = getLineage(category);
 
           fileContents += lineage.map(name => {
-            return `[[${name}]] ▸ `;
+            return `[[${name}]] ${rightArrowSymbol} `;
           }).join('');
 
           fileContents += `**${componentName}**`;
