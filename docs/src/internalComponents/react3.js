@@ -1,5 +1,8 @@
 import DocInfo from '../DocInfo';
 
+const canvasRecreationWarning = '> **WARNING**: Updating this value will' +
+  ' re-create the whole canvas, which can be expensive.';
+
 class react3 extends DocInfo {
   getIntro() {
     return 'See [React3](Entry-Point). Handles renderer and canvas configuration.';
@@ -64,34 +67,34 @@ class react3 extends DocInfo {
       precision: 'Sets the precision of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#precision]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
       alpha: 'Toggles alpha setting of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#alpha]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
       premultipliedAlpha: 'Toggles the premultipliedAlpha setting of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#premultipliedAlpha]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.premultipliedAlpha).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
       antialias: 'Toggles anti-aliasing of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#antialias]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
       stencil: 'Toggles the stencil property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#stencil]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.stencil).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
       preserveDrawingBuffer: 'Toggles the preserveDrawingBuffer property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#preserveDrawingBuffer]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
       depth: 'Toggles the depth property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#depth](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.depth).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
       logarithmicDepthBuffer: 'Toggles the logarithmicDepthBuffer property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#logarithmicDepthBuffer]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).\n\n' +
-      '> **WARNING**: This recreates the whole canvas.',
+      canvasRecreationWarning,
     };
   }
 }
