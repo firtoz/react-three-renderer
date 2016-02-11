@@ -134,7 +134,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       || parentObject3D instanceof THREE.Line, 'Parent is not a mesh');
     invariant(parentObject3D[material.userData._materialSlot] === undefined
       || parentObject3D[material.userData._materialSlot] === null,
-      'Parent already has a ' + material.userData._materialSlot + ' defined');
+      `Parent already has a ${material.userData._materialSlot} defined`);
     super.setParent(material, parentObject3D);
 
     parentObject3D[material.userData._materialSlot] = material;
@@ -209,9 +209,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     return invalid;
   }
 
-  _invalidChild = child => {
-    return this.invalidChildInternal(child);
-  };
+  _invalidChild = child => this.invalidChildInternal(child);
 }
 
 module.exports = MaterialDescriptorBase;

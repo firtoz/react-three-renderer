@@ -54,7 +54,7 @@ if (process.env.NODE_ENV !== 'production') {
     if (owner) {
       const name = owner.getName();
       if (name) {
-        return ' Check the render method of `' + name + '`.';
+        return ` Check the render method of \`${name}\`.`;
       }
     }
     return '';
@@ -513,12 +513,7 @@ class React3Renderer {
   };
 
   // used by react devtools
-  nativeTagToRootNodeID = () => {
-    // console.log('wat');
-    // debugger;
-    // invariant(false, 'Wat!');
-    return null;
-  };
+  nativeTagToRootNodeID = () => null;
 
   /**
    * Finds an element rendered by React with the supplied ID.
@@ -723,16 +718,12 @@ class React3Renderer {
       threeObject: container,
       parentMarkup: null,
       childrenMarkup: [rootImage],
-      toJSON: () => {
-        return '---MARKUP---';
-      },
+      toJSON: () => '---MARKUP---',
     };
 
     Object.assign(container.userData, {
       object3D: container,
-      toJSON: () => {
-        return '---USERDATA---';
-      },
+      toJSON: () => '---USERDATA---',
       markup: rootMarkup,
     });
 

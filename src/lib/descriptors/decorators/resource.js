@@ -73,8 +73,8 @@ function resource(descriptor) {
         // it's a resource. Let's highlight all references.
         threeObject.userData.events.emit('highlight', {
           uuid: threeObject.uuid,
-          boundingBoxFunc: () => {
-            return threeObject.userData._references.reduce((boxes, objectWithReference) => {
+          boundingBoxFunc: () => threeObject.userData._references
+            .reduce((boxes, objectWithReference) => {
               const boxesForReference =
                 objectWithReference.userData._descriptor
                   .getBoundingBoxes(objectWithReference);
@@ -84,8 +84,7 @@ function resource(descriptor) {
                 invariant(boxesForReference.length > 0);
               }
               return boxes.concat(boxesForReference);
-            }, []);
-          },
+            }, []),
         });
       } else {
         return super.highlight(threeObject);

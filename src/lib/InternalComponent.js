@@ -24,7 +24,7 @@ function processChildContext(context) {
 class RemountTrigger {
   constructor() {
     this.wantRemount = false;
-    this.onTrigger = () => {
+    this.onTrigger = function onTrigger() {
     };
 
     this.trigger = () => {
@@ -79,7 +79,7 @@ class InternalComponent {
     this.threeElementDescriptor = react3RendererInstance.threeElementDescriptors[element.type];
     if (!this.threeElementDescriptor) {
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'No constructor for ' + element.type);
+        invariant(false, `No constructor for ${element.type}`);
       } else {
         invariant(false);
       }
@@ -135,9 +135,7 @@ class InternalComponent {
       threeObject: this._threeObject,
       parentMarkup: null,
       childrenMarkup: mountImages,
-      toJSON: () => {
-        return '---MARKUP---';
-      },
+      toJSON: () => '---MARKUP---',
     };
 
     if (process.env.NODE_ENV !== 'production') {
@@ -150,9 +148,7 @@ class InternalComponent {
     Object.assign(this._threeObject.userData, {
       object3D: this._threeObject,
       react3internalComponent: this, // used for highlighting etc
-      toJSON: () => {
-        return '---USERDATA---';
-      },
+      toJSON: () => '---USERDATA---',
       markup,
     });
 

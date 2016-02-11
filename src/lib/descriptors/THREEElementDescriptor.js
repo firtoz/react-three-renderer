@@ -357,7 +357,7 @@ if (process.env.NODE_ENV !== 'production') {
     if (owner) {
       const name = owner.getName();
       if (name) {
-        return ' Check the render method of `' + name + '`.';
+        return ` Check the render method of \`${name}\`.`;
       }
     }
     return '';

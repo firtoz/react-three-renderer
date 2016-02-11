@@ -168,9 +168,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
   highlight(threeObject) {
     threeObject.userData.events.emit('highlight', {
       uuid: threeObject.uuid,
-      boundingBoxFunc: () => {
-        return this.getBoundingBoxes(threeObject);
-      },
+      boundingBoxFunc: () => this.getBoundingBoxes(threeObject),
     });
   }
 

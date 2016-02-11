@@ -275,8 +275,7 @@ class React3DInstance {
       if (objectsWithMainCameraName) {
         if (process.env.NODE_ENV !== 'production') {
           warning(objectsWithMainCameraName.count < 2,
-            'There are multiple objects with name '
-            + this._mainCameraName);
+            `There are multiple objects with name ${this._mainCameraName}`);
         }
 
         if (objectsWithMainCameraName.count > 0) {
@@ -312,8 +311,7 @@ class React3DInstance {
           if (objectsWithViewportCameraName) {
             if (process.env.NODE_ENV !== 'production') {
               warning(objectsWithViewportCameraName.count < 2,
-                'There are multiple objects with name '
-                + viewport.cameraName);
+                `There are multiple objects with name ${viewport.cameraName}`);
             }
 
             if (objectsWithViewportCameraName.count > 0) {
@@ -510,15 +508,6 @@ class React3DInstance {
 
   updatePremultipliedAlpha(premultipliedAlpha) {
     this._parameters.premultipliedAlpha = premultipliedAlpha;
-    if (!this._renderer) {
-      return;
-    }
-
-    this.refreshRenderer();
-  }
-
-  updateAntialias(antialias) {
-    this._parameters.antialias = antialias;
     if (!this._renderer) {
       return;
     }

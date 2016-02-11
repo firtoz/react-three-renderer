@@ -103,29 +103,22 @@ function mockPropTypes() {
     return propType;
   };
 
-  ReactPropTypes.instanceOf = (instanceType) => {
-    return new PropType(`${instanceType.displayName || instanceType.name
+  ReactPropTypes.instanceOf = (instanceType) =>
+    new PropType(`${instanceType.displayName || instanceType.name
     || instanceType._type || instanceType}`);
-  };
 
-  ReactPropTypes.objectOf = (instanceType) => {
-    return new PropType(`object of ${instanceType.displayName || instanceType.name
+  ReactPropTypes.objectOf = (instanceType) =>
+    new PropType(`object of ${instanceType.displayName || instanceType.name
     || instanceType._type || instanceType}`);
-  };
 
-  ReactPropTypes.oneOf = (values) => {
-    return new PropType(`one of [${values.join(', ')}]`);
-  };
+  ReactPropTypes.oneOf = (values) => new PropType(`one of [${values.join(', ')}]`);
 
-  ReactPropTypes.oneOfType = (values) => {
-    return new PropType(`one of types [${values.map(value => value.displayName
+  ReactPropTypes.oneOfType = (values) =>
+    new PropType(`one of types [${values.map(value => value.displayName
       || value.name || value._type || value
     ).join(', ')}]`);
-  };
 
-  ReactPropTypes.shape = (shape) => {
-    return new PropType(`shape of ${JSON.stringify(shape)}`);
-  };
+  ReactPropTypes.shape = (shape) => new PropType(`shape of ${JSON.stringify(shape)}`);
 }
 
 function buildCategories() {
@@ -239,9 +232,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
     indent: -1,
   }];
 
-  const nameToHeaderItem = name => {
-    return `[[${name}]] ${rightArrowSymbol} `;
-  };
+  const nameToHeaderItem = name => `[[${name}]] ${rightArrowSymbol} `;
 
   while (categoryStack.length > 0) {
     const stackItem = categoryStack.shift();
@@ -318,7 +309,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
             for (let i = 0; i < attributesToCopy.length; ++i) {
               const attributeName = attributesToCopy[i];
 
-              nodeFileContents += '\n\n' + attributesContents[attributeName];
+              nodeFileContents += `\n\n${attributesContents[attributeName]}`;
             }
           }
         }
@@ -342,7 +333,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
             }
 
             if (subHeadingDescription) {
-              nodeFileContents += '\n\n' + subHeadingDescription;
+              nodeFileContents += `\n\n${subHeadingDescription}`;
             }
 
             if (grandchildrenNames.length > 0) {
@@ -387,12 +378,10 @@ ${attributeInfo.description}`;
               name: 'TODO',
               stackParent: stackItem,
               isTodo: true,
-              children: todo.map(item => {
-                return {
-                  isTodo: true,
-                  name: item,
-                };
-              }),
+              children: todo.map(item => ({
+                isTodo: true,
+                name: item,
+              })),
             },
             indent: indent + 1,
           });
@@ -486,10 +475,8 @@ class ${componentName} extends DocInfo {
 
   getAttributesText() {
     return {${Object.keys(propTypes)
-      .map(propName => {
-        return `
-      ${propName}: '',`;
-      }).join('')}
+      .map(propName => `
+      ${propName}: '',`).join('')}
     };
   }
 }
@@ -531,9 +518,8 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
 
           const lineage = getLineage(category);
 
-          fileContents += lineage.map(name => {
-            return `[[${name}]] ${rightArrowSymbol} `;
-          }).join('');
+          fileContents += lineage
+            .map(name => `[[${name}]] ${rightArrowSymbol} `).join('');
 
           fileContents += `**${componentName}**`;
         }

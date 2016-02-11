@@ -19,8 +19,8 @@ function createChainableTypeChecker(validate) {
     if (props[propName] === null) {
       const locationName = ReactPropTypeLocationNames[location];
       if (isRequired) {
-        return new Error('Required ' + locationName + ' `' + propFullName +
-          '` was not specified in ' + ('`' + componentName + '`.'));
+        return new Error(`Required ${locationName} \`${propFullName}\`` +
+          ` was not specified in \`${componentName}\`.`);
       }
       return null;
     }
@@ -45,10 +45,9 @@ function createInstanceTypeChecker(expectedClass) {
       const locationName = ReactPropTypeLocationNames[location];
       const expectedClassName = expectedClass.name || expectedClass.displayName || ANONYMOUS;
       const actualClassName = getClassName(props[propName]);
-      return new Error('Invalid ' + locationName + ' `' + propFullName +
-        '` of type ' + ('`' + actualClassName + '` supplied to `' +
-        componentName + '`, expected ') +
-        ('instance of `' + expectedClassName + '`.'));
+      return new Error(`Invalid ${locationName} \`${propFullName}\` of type ` +
+        `\`${actualClassName}\` supplied to \`${componentName}\`, expected ` +
+        `instance of \`${expectedClassName}\`.`);
     }
 
     return originalResult;
@@ -59,13 +58,9 @@ function createInstanceTypeChecker(expectedClass) {
   const _type = `${expectedClass.displayName || expectedClass.name
   || expectedClass._type || expectedClass}`;
 
-  typeChecker.toString = () => {
-    return `${'```'} ${_type} ${'```'}`;
-  };
+  typeChecker.toString = () => `${'```'} ${_type} ${'```'}`;
 
-  typeChecker.isRequired.toString = () => {
-    return `${typeChecker.toString()} *${'```'} required ${'```'}*`;
-  };
+  typeChecker.isRequired.toString = () => `${typeChecker.toString()} *${'```'} required ${'```'}*`;
 
   typeChecker.displayName = _type;
   typeChecker.isRequired.displayName = _type;

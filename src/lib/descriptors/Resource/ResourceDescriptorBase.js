@@ -89,8 +89,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
     const existingValueInSlot = parentObject3D[threeObject.userData._propertySlot];
     invariant(existingValueInSlot === undefined
       || existingValueInSlot === null,
-      'Parent already has a '
-      + threeObject.userData._propertySlot + ' defined');
+      `Parent already has a ${threeObject.userData._propertySlot} defined`);
     invariant(threeObject.userData._eventCleanupQueue.length === 0, 'Changing parents?');
 
     super.setParent(threeObject, parentObject3D);

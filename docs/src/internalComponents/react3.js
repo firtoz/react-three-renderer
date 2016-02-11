@@ -67,34 +67,34 @@ class react3 extends DocInfo {
       precision: 'Sets the precision of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#precision]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
       alpha: 'Toggles alpha setting of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#alpha]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
       premultipliedAlpha: 'Toggles the premultipliedAlpha setting of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#premultipliedAlpha]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.premultipliedAlpha).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
       antialias: 'Toggles anti-aliasing of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#antialias]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
       stencil: 'Toggles the stencil property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#stencil]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.stencil).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
       preserveDrawingBuffer: 'Toggles the preserveDrawingBuffer property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#preserveDrawingBuffer]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
       depth: 'Toggles the depth property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#depth](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.depth).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
       logarithmicDepthBuffer: 'Toggles the logarithmicDepthBuffer property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#logarithmicDepthBuffer]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).\n\n' +
-      canvasRecreationWarning,
+      `${canvasRecreationWarning}`,
     };
   }
 }
