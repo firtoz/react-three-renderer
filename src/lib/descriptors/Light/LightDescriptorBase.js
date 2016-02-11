@@ -9,6 +9,7 @@ import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 class LightDescriptorBase extends Object3DDescriptor {
   static defaultShadowCameraNear = 0.5;
   static defaultShadowCameraFar = 500;
+  static defaultShadowBias = 0;
 
   constructor(react3Instance) {
     super(react3Instance);
@@ -31,8 +32,13 @@ class LightDescriptorBase extends Object3DDescriptor {
 
     this.hasProp('shadowBias', {
       type: PropTypes.number,
-      simple: true,
-      default: 0,
+      updateInitial: true,
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.bias = value;
+        }
+      },
+      default: LightDescriptorBase.defaultShadowBias,
     });
 
     this.hasProp('shadowDarkness', {
