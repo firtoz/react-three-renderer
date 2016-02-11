@@ -7,6 +7,9 @@ import warning from 'fbjs/lib/warning';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class LightDescriptorBase extends Object3DDescriptor {
+  static defaultShadowCameraNear = 0.5;
+  static defaultShadowCameraFar = 500;
+
   constructor(react3Instance) {
     super(react3Instance);
 
@@ -38,20 +41,26 @@ class LightDescriptorBase extends Object3DDescriptor {
       default: 0.5,
     });
 
-    [
-      'shadowMapWidth',
-      'shadowMapHeight',
-    ].forEach(propName => {
-      this.hasProp(propName, {
-        type: PropTypes.number,
-        updateInitial: true,
-        update(threeObject, value, hasProp) {
-          if (hasProp) {
-            threeObject[propName] = value;
-          }
-        },
-        default: 512,
-      });
+    this.hasProp('shadowMapWidth', {
+      type: PropTypes.number,
+      updateInitial: true,
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.mapSize.x = value;
+        }
+      },
+      default: 512,
+    });
+
+    this.hasProp('shadowMapHeight', {
+      type: PropTypes.number,
+      updateInitial: true,
+      update(threeObject, value, hasProp) {
+        if (hasProp) {
+          threeObject.shadow.mapSize.y = value;
+        }
+      },
+      default: 512,
     });
 
     this.hasProp('shadowCameraNear', {
@@ -61,9 +70,8 @@ class LightDescriptorBase extends Object3DDescriptor {
         if (hasProp) {
           threeObject.shadow.camera.near = value;
         }
-        // threeObject.shadow.camera.updateProjectionMatrix();
       },
-      default: 50,
+      default: LightDescriptorBase.defaultShadowCameraNear,
     });
 
     this.hasProp('shadowCameraFar', {
@@ -73,9 +81,8 @@ class LightDescriptorBase extends Object3DDescriptor {
         if (hasProp) {
           threeObject.shadow.camera.far = value;
         }
-        // threeObject.shadow.camera.updateProjectionMatrix();
       },
-      default: 5000,
+      default: LightDescriptorBase.defaultShadowCameraFar,
     });
 
     this.hasProp('castShadow', {

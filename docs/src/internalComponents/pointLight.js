@@ -15,6 +15,8 @@ class pointLight extends LightInfo {
       intensity: '',
       decay: '',
       distance: '',
+      shadowCameraFov: '',
+      shadowCameraAspect: '',
     };
   }
 }
