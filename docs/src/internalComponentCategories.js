@@ -151,7 +151,6 @@ module.exports = {
           'Material',
           'MeshFaceMaterial', // == MultiMaterial
           'MultiMaterial',
-          'RawShaderMaterial', // extends ShaderMaterial
           'SpriteCanvasMaterial', // doesn't seem to exist?
           'SpriteMaterial', // to come with sprites!
         ],
