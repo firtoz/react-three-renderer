@@ -21,6 +21,9 @@ class React3DInstance {
       mainCamera,
       onAnimate,
       onRecreateCanvas,
+      onRendererUpdated,
+      onManualRenderTriggerCreated,
+      forceManualRender,
     } = props;
 
     this._parameters = { ...props };
@@ -40,6 +43,11 @@ class React3DInstance {
 
     this._resourceContainers = [];
     this._recreateCanvasCallback = onRecreateCanvas;
+    this._rendererUpdatedCallback = onRendererUpdated;
+    this._manualRenderTriggerCallback = onManualRenderTriggerCreated;
+    this._forceManualRender = forceManualRender;
+
+    this._warnedAboutManualRendering = false;
 
     this._canvas = null;
 
@@ -52,7 +60,15 @@ class React3DInstance {
 
     this._lastRenderMode = null;
 
-    this._renderRequest = requestAnimationFrame(this._render);
+    this._renderTrigger = (renderThisFrame) => {
+      if (renderThisFrame) {
+        this._render();
+      } else {
+        if (this._renderRequest === null) {
+          this._renderRequest = requestAnimationFrame(this._render);
+        }
+      }
+    };
 
     this.uuid = THREE.Math.generateUUID();
     this.userData = {};
@@ -115,6 +131,10 @@ class React3DInstance {
       logarithmicDepthBuffer: parameters.logarithmicDepthBuffer,
     });
 
+    if (this._rendererUpdatedCallback) {
+      this._rendererUpdatedCallback(this._renderer);
+    }
+
     const renderer = this._renderer;
 
     if (parameters.hasOwnProperty('pixelRatio')) {
@@ -176,6 +196,26 @@ class React3DInstance {
 
   initialize() {
     this.userData.events.on('animate', this._callOnAnimate);
+
+    if (this._forceManualRender) {
+      if (process.env.NODE_ENV !== 'production') {
+        if (!this._manualRenderTriggerCallback && !this._warnedAboutManualRendering) {
+          this._warnedAboutManualRendering = true;
+
+          warning(false,
+            'The `forceManualRender` property requires the ' +
+            '`onManualRenderTriggerCreated` property to be set.');
+        }
+      }
+
+      this._renderRequest = null;
+    } else {
+      this._renderRequest = requestAnimationFrame(this._render);
+    }
+
+    if (this._manualRenderTriggerCallback) {
+      this._manualRenderTriggerCallback(this._renderTrigger);
+    }
   }
 
   getObjectsByName(objectName) {
@@ -259,7 +299,12 @@ class React3DInstance {
       this._modules[i].update();
     }
 
-    this._renderRequest = requestAnimationFrame(this._render);
+    if (this._forceManualRender) {
+      this._renderRequest = null;
+    } else {
+      this._renderRequest = requestAnimationFrame(this._render);
+    }
+
     this.userData.events.emit('animate');
 
     // the scene can be destroyed within the 'animate' event
@@ -445,6 +490,36 @@ class React3DInstance {
 
   updateOnRecreateCanvas(threeObject, callback) {
     this._recreateCanvasCallback = callback;
+  }
+
+  updateOnRendererUpdated(callback) {
+    this._rendererUpdatedCallback = callback;
+  }
+
+  updateOnManualRenderTriggerCreated(callback) {
+    this._manualRenderTriggerCallback = callback;
+
+    if (callback) {
+      this._manualRenderTriggerCallback(this._renderTrigger);
+    }
+  }
+
+  updateForceManualRender(forceManualRender) {
+    if (this._forceManualRender === forceManualRender) {
+      return;
+    }
+
+    this._forceManualRender = forceManualRender;
+
+    if (forceManualRender) {
+      // was just set to be forced
+      cancelAnimationFrame(this._renderRequest);
+      this._renderRequest = null;
+    } else {
+      // was just restored
+
+      this._renderRequest = requestAnimationFrame(this._render);
+    }
   }
 
   updateHeight(newHeight) {
@@ -697,11 +772,17 @@ class React3DInstance {
     const contextLossExtension = this._renderer.extensions.get('WEBGL_lose_context');
 
     delete this._renderer;
+    if (this._rendererUpdatedCallback) {
+      this._rendererUpdatedCallback(null);
+    }
 
     this.userData.events.removeListener('animate', this._callOnAnimate);
     this.userData.events.removeAllListeners();
 
-    cancelAnimationFrame(this._renderRequest);
+    if (this._renderRequest !== null) {
+      cancelAnimationFrame(this._renderRequest);
+      this._renderRequest = null;
+    }
 
     if (contextLossExtension && this._canvas) {
       this._canvas.addEventListener('webglcontextlost', () => {
@@ -741,7 +822,11 @@ class React3DInstance {
 
   unmount() {
     this._mounted = false;
-    cancelAnimationFrame(this._renderRequest);
+
+    if (this._renderRequest !== null) {
+      cancelAnimationFrame(this._renderRequest);
+      this._renderRequest = null;
+    }
 
     this.userData.events.removeListener('animate', this._callOnAnimate);
     this.userData.events.removeAllListeners();
@@ -758,6 +843,10 @@ class React3DInstance {
       this.disposeResourcesAndRenderer();
 
       delete this._renderer;
+
+      if (this._rendererUpdatedCallback) {
+        this._rendererUpdatedCallback(null);
+      }
     }
 
     delete this._parameters;
