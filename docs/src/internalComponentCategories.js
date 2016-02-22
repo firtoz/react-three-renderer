@@ -224,6 +224,9 @@ module.exports = {
           extrudeGeometry: {
             isComponent: true,
           },
+          tubeGeometry: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeGeometry', // BoxGeometry
@@ -231,7 +234,6 @@ module.exports = {
           'PlaneGeometry', // almost like a PlaneBufferGeometry... shall I ... yes.
           'ShapeGeometry', // hmmm
           'TextGeometry', // see example, can even use raw text strings for this one? would be cool!
-          'TubeGeometry',
         ],
       },
       Shapes: {
