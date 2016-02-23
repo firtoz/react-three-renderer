@@ -146,6 +146,9 @@ module.exports = {
               },
             },
           },
+          rawShaderMaterial: {
+            isComponent: true,
+          },
         },
         TODO: [
           'Material',
