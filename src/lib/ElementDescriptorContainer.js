@@ -62,6 +62,7 @@ import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMateria
 import MeshPhongMaterialDescriptor from './descriptors/Material/MeshPhongMaterialDescriptor';
 import MeshLambertMaterialDescriptor from './descriptors/Material/MeshLambertMaterialDescriptor';
 import ShaderMaterialDescriptor from './descriptors/Material/ShaderMaterialDescriptor';
+import RawShaderMaterialDescriptor from './descriptors/Material/RawShaderMaterialDescriptor';
 import TextureDescriptor from './descriptors/Material/TextureDescriptor';
 import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
 import UniformsDescriptor from './descriptors/Material/UniformsDescriptor';
@@ -107,6 +108,7 @@ class ElementDescriptorContainer {
       meshLambertMaterial: new MeshLambertMaterialDescriptor(react3RendererInstance),
       pointsMaterial: new PointsMaterialDescriptor(react3RendererInstance),
       shaderMaterial: new ShaderMaterialDescriptor(react3RendererInstance),
+      rawShaderMaterial: new RawShaderMaterialDescriptor(react3RendererInstance),
       lineBasicMaterial: new LineBasicMaterialDescriptor(react3RendererInstance),
       lineDashedMaterial: new LineDashedMaterialDescriptor(react3RendererInstance),
       meshDepthMaterial: new MeshDepthMaterialDescriptor(react3RendererInstance),
