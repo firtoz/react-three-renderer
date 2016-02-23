@@ -81,7 +81,6 @@ function internalGetID(markup) {
   return markup && markup[ID_PROPERTY_NAME] || '';
 }
 
-
 /**
  * @param {THREE.Object3D|HTMLCanvasElement} container That may contain
  * a React component
@@ -111,6 +110,21 @@ function isInternalComponentType(type) {
     && typeof type.prototype.mountComponent === 'function'
     && typeof type.prototype.receiveComponent === 'function';
 }
+
+// function getNextMarkupSibling(markup) {
+//   const parentMarkup = markup.parentMarkup;
+//   if (parentMarkup) {
+//     const parentChildren = parentMarkup.childrenMarkups;
+//     const indexInParent = parentChildren.indexOf(markup);
+//
+//     invariant(indexInParent !== -1, 'Could not find child markup`s index in parent');
+//
+//     return parentChildren.length > indexInParent
+//       && parentChildren[indexInParent + 1] || null;
+//   }
+//
+//   return null;
+// }
 
 class React3Renderer {
   // to be used by modules e.g. mouse input ( see examples )
@@ -775,24 +789,39 @@ class React3Renderer {
     if (!ReactElement.isValidElement(nextElement)) {
       if (process.env.NODE_ENV !== 'production') {
         if (typeof nextElement === 'string') {
-          invariant(false, 'React.render(): Invalid component element.%s',
+          invariant(false, 'React3Renderer.render(): Invalid component element.%s',
             ' Instead of passing an element string, make sure to instantiate ' +
             'it by passing it to React.createElement.');
-        } else if (typeof nextElement === 'function') {
-          invariant(false, 'React.render(): Invalid component element.%s',
-            ' Instead of passing a component class, make sure to instantiate ' +
-            'it by passing it to React.createElement.');
-        } else if (nextElement !== null && nextElement.props !== undefined) {
-          invariant(false, 'React.render(): Invalid component element.%s',
-            ' This may be caused by unintentionally loading two independent ' +
-            'copies of React.');
         } else {
-          invariant(false, 'React.render(): Invalid component element.%s', '');
+          if (typeof nextElement === 'function') {
+            invariant(false, 'React3Renderer.render(): Invalid component element.%s',
+              ' Instead of passing a component class, make sure to instantiate ' +
+              'it by passing it to React.createElement.');
+          } else {
+            if (nextElement !== null && nextElement.props !== undefined) {
+              invariant(false, 'React3Renderer.render(): Invalid component element.%s',
+                ' This may be caused by unintentionally loading two independent ' +
+                'copies of React.');
+            } else {
+              invariant(false, 'React3Renderer.render(): Invalid component element.');
+            }
+          }
         }
       } else {
         invariant(false);
       }
     }
+
+    // No need for this part, should never render into body
+    // if (process.env.NODE_ENV !== 'production') {
+    //   warning(!container || !container.tagName ||
+    //     container.tagName.toUpperCase() !== 'BODY',
+    //     'render(): Rendering components directly into document.body is ' +
+    //     'discouraged, since its children are often manipulated by third-party ' +
+    //     'scripts and browser extensions. This may lead to subtle ' +
+    //     'reconciliation issues. Try rendering into a container element created ' +
+    //     'for your app.');
+    // }
 
     const nextWrappedElement = new ReactElement(TopLevelWrapper,
       null, null, null, null, null, nextElement);
@@ -803,8 +832,15 @@ class React3Renderer {
       const prevWrappedElement = prevComponent._currentElement;
       const prevElement = prevWrappedElement.props;
       if (shouldUpdateReactComponent(prevElement, nextElement)) {
-        return this._updateRootComponent(prevComponent, nextWrappedElement,
-          container, callback)._renderedComponent.getPublicInstance();
+        const publicInst = prevComponent._renderedComponent.getPublicInstance();
+        const updatedCallback = callback &&
+          (() => {
+            callback.call(publicInst);
+          });
+
+        this._updateRootComponent(prevComponent, nextWrappedElement, container, updatedCallback);
+
+        return publicInst;
       }
 
       this.unmountComponentAtNode(container);
@@ -814,6 +850,7 @@ class React3Renderer {
     const reactRootMarkup = getReactRootMarkupInContainer(container);
     const containerHasReactMarkup = reactRootMarkup && internalGetID(reactRootMarkup);
 
+    // no need for this part for now
     // if (process.env.NODE_ENV !== 'production') {
     //   if (!containerHasReactMarkup || reactRootMarkup.nextSibling) {
     //     let rootElementSibling = reactRootMarkup;
