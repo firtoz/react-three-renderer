@@ -132,13 +132,13 @@ const propProxy = {
     type: PropTypes.func,
     default: undefined,
   },
-  onManualRenderTriggerCreated: {
-    type: PropTypes.func,
-    default: undefined,
-  },
   forceManualRender: {
     type: PropTypes.bool,
     default: false,
+  },
+  onManualRenderTriggerCreated: {
+    type: PropTypes.func,
+    default: undefined,
   },
 };
 
