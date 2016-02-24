@@ -1,4 +1,3 @@
-* [@toxicFork](https://github.com/toxicFork)
- * Original Author
+* [@kgsherman](https://github.com/kgsherman)
 * [@DelvarWorld](https://github.com/DelvarWorld)
- * Updated babel 6 configuration
+* [@baopham](https://github.com/baopham)
