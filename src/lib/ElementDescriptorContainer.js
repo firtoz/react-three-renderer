@@ -46,6 +46,7 @@ import LatheGeometryDescriptor from './descriptors/Geometry/LatheGeometryDescrip
 import TorusGeometryDescriptor from './descriptors/Geometry/TorusGeometryDescriptor';
 import TorusKnotGeometryDescriptor from './descriptors/Geometry/TorusKnotGeometryDescriptor';
 import ExtrudeGeometryDescriptor from './descriptors/Geometry/ExtrudeGeometryDescriptor';
+import TubeGeometryDescriptor from './descriptors/Geometry/TubeGeometryDescriptor';
 
 import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
 import MoveToDescriptor from './descriptors/Geometry/Shapes/MoveToDescriptor';
@@ -135,6 +136,7 @@ class ElementDescriptorContainer {
       torusGeometry: new TorusGeometryDescriptor(react3RendererInstance),
       torusKnotGeometry: new TorusKnotGeometryDescriptor(react3RendererInstance),
       extrudeGeometry: new ExtrudeGeometryDescriptor(react3RendererInstance),
+      tubeGeometry: new TubeGeometryDescriptor(react3RendererInstance),
 
       shape: new ShapeDescriptor(react3RendererInstance),
       moveTo: new MoveToDescriptor(react3RendererInstance),
