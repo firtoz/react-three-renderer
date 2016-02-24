@@ -1,8 +1,12 @@
 import DocInfo from '../DocInfo';
 
 class textGeometry extends DocInfo {
-  getDescription() {
+  getIntro() {
     return `Creates a [THREE.TextGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry)`;
+  }
+
+  getDescription() {
+    return ``;
   }
 
   getAttributesText() {
