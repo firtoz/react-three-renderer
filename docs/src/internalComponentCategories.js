@@ -229,10 +229,12 @@ module.exports = {
           tubeGeometry: {
             isComponent: true,
           },
+          dodecahedronGeometry: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeGeometry', // BoxGeometry
-          'DodecahedronGeometry',
           'PlaneGeometry', // almost like a PlaneBufferGeometry... shall I ... yes.
           'ShapeGeometry', // hmmm
           'TextGeometry', // see example, can even use raw text strings for this one? would be cool!
