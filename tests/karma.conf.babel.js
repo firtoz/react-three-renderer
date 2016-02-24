@@ -13,7 +13,7 @@ const testFiles = [
   'src/tests-src.js',
 ];
 
-if (!process.env.KARMA_TDD) {
+if (!isCoverage && !process.env.KARMA_TDD) {
   testFiles.push('src/tests-lib.js');
 }
 
@@ -53,7 +53,7 @@ export default (config) => {
 
     coverageReporter: {
       type: 'html',
-      dir: 'build/coverage/',
+      dir: 'coverage/',
     },
 
     webpack: {
@@ -71,10 +71,8 @@ export default (config) => {
       require('karma-mocha'),
       require('karma-spec-reporter'),
       require('karma-chrome-launcher'),
-      require('karma-firefox-launcher'),
       require('karma-sourcemap-loader'),
     ].concat(isCoverage ? [
-      require('istanbul-instrumenter-loader'),
       require('karma-coverage'),
     ] : []),
   };

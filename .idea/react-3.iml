@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tests/src" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests/assets" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/tests/coverage" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

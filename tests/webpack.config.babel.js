@@ -1,26 +1,30 @@
 import path from 'path';
 
-const isCoverage = process.env.KARMA_COVERAGE === 'true';
+const babelLoaderConfig = {
+  loader: 'babel',
+  exclude: [
+    /node_modules/,
+    path.join(__dirname, '..', 'lib'),
+  ],
+  test: /\.js$/,
+  query: {},
+};
 
-export default {
+const webpackConfig = {
   devtool: 'inline-source-map',
+  // *optional* isparta options: istanbul behind isparta will use it
+  isparta: {
+    embedSource: true,
+    noAutoWrap: true,
+    // these babel options will be passed only to isparta and not to babel-loader
+    babel: {
+      //   presets: ['es2015', 'stage-0', 'react']
+    },
+  },
   module: {
     loaders: [
-      {
-        loader: path.join(__dirname, 'node_modules', 'babel-loader'),
-        exclude: [
-          /node_modules/,
-          path.join(__dirname, '..', 'lib'),
-        ],
-        test: /\.js$/,
-        query: {},
-      },
+      babelLoaderConfig,
     ],
-    postLoaders: isCoverage ? [{
-      test: /.js/,
-      exclude: /test|node_modules/,
-      loader: path.join(__dirname, 'node_modules', 'istanbul-instrumenter-loader'),
-    }] : [],
   },
   devServer: {
     stats: {
@@ -28,3 +32,17 @@ export default {
     },
   },
 };
+
+if (process.env.KARMA_COVERAGE === 'true') {
+  const srcResolve = path.resolve('src');
+
+  babelLoaderConfig.exclude.push(srcResolve);
+
+  webpackConfig.module.preLoaders = [{
+    test: /.js/,
+    include: srcResolve,
+    loader: 'isparta',
+  }];
+}
+
+export default webpackConfig;
