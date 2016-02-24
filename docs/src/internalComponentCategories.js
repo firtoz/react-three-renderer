@@ -146,12 +146,14 @@ module.exports = {
               },
             },
           },
+          rawShaderMaterial: {
+            isComponent: true,
+          },
         },
         TODO: [
           'Material',
           'MeshFaceMaterial', // == MultiMaterial
           'MultiMaterial',
-          'RawShaderMaterial', // extends ShaderMaterial
           'SpriteCanvasMaterial', // doesn't seem to exist?
           'SpriteMaterial', // to come with sprites!
         ],
@@ -224,16 +226,19 @@ module.exports = {
           extrudeGeometry: {
             isComponent: true,
           },
+          tubeGeometry: {
+            isComponent: true,
+          },
+          dodecahedronGeometry: {
+            isComponent: true,
+          },
           textGeometry: {
             isComponent: true,
           },
         },
         TODO: [
           'CubeGeometry', // BoxGeometry
-          'DodecahedronGeometry',
-          'PlaneGeometry', // almost like a PlaneBufferGeometry... shall I ... yes.
           'ShapeGeometry', // hmmm
-          'TubeGeometry',
         ],
       },
       Shapes: {

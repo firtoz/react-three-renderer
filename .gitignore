@@ -1,6 +1,4 @@
 /node_modules
-build/js/bundle.js
 .idea/dictionaries/
 /lib/
 .idea/jsLinters/
-docs/generated/

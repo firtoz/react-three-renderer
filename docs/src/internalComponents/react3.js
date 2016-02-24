@@ -89,12 +89,76 @@ class react3 extends DocInfo {
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).\n\n' +
       `${canvasRecreationWarning}`,
       depth: 'Toggles the depth property of the renderer.\n\n' +
-      'See [THREE.WebGLRenderer#depth](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.depth).\n\n' +
+      'See [THREE.WebGLRenderer#depth]' +
+      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.depth).\n\n' +
       `${canvasRecreationWarning}`,
       logarithmicDepthBuffer: 'Toggles the logarithmicDepthBuffer property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#logarithmicDepthBuffer]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).\n\n' +
       `${canvasRecreationWarning}`,
+      forceManualRender: 'Prevents re-rendering every frame.\n\n' +
+      'You can use this to save some CPU and battery life.\n\n' +
+      'Requires [onManualRenderTriggerCreated](#onmanualrendertriggercreated).',
+      onManualRenderTriggerCreated: `
+This function will be called back with a 'Trigger' function in the first parameter.
+
+Example callback:
+${'```'}jsx
+function callback(trigger) {
+  console.log(trigger); // this is the trigger
+
+  trigger(); // render next frame (recommended)
+
+  trigger(true); // render immediately (advanced)
+}
+${'```'}
+
+You can use this function to trigger manual renders.
+
+See also: the [manual rendering example](https://github.com/toxicFork/react-three-renderer-example/blob/master/src/examples/ManualRendering/index.js).
+
+This is what the trigger function looks like:
+
+${'```'}jsx
+function (renderThisFrame) {
+  if (renderThisFrame) {
+    // render immediately
+    this._render();
+  } else {
+    if (this._renderRequest === null) {
+      // ensure that there will be one render next frame
+      this._renderRequest = requestAnimationFrame(this._render);
+    }
+  }
+};
+${'```'}
+
+You can use this property without [forceManualRender](#forcemanualrender)
+ for example to render multiple times within one frame (maybe for VR?).
+
+Hopefully that will not be necessary; but please do let me know if
+ you find a use case for it!
+`,
+      onRendererUpdated: `This function gets called with the renderer as the first parameter.
+
+Example callback:
+${'```'}jsx
+function callback(renderer) {
+  if(renderer !== null) {
+    console.log(renderer instanceOf THREE.WebGLRenderer); // true
+  } else {
+    // renderer is just destroyed or will be recreated soon
+  }
+}
+${'```'}
+
+The renderer gets created when:
+
+- the react3 component is mounted
+- the canvas gets recreated ( see [onRecreateCanvas](#onRecreateCanvas) )
+  - this happens when you change some properties of react3.
+- when the component is about to be unmounted or remounted
+  - the value passed to the function will be null in this case`,
     };
   }
 }

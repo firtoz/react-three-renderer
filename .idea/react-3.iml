@@ -7,6 +7,8 @@
       <sourceFolder url="file://$MODULE_DIR$/docs/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/wiki" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tests/src" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tests/assets" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/lib" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -1,0 +1,63 @@
+{
+  "name": "react-three-renderer-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint ./src/ && node ./node_modules/karma/bin/karma start --single-run",
+    "tdd": "bash -c \"(export KARMA_TDD=true; node ./node_modules/karma/bin/karma start)\"",
+    "cover": "bash -c \"(export KARMA_COVERAGE=true; npm test)\""
+  },
+  "keywords": [
+    "react-three-renderer",
+    "reactjs",
+    "threejs"
+  ],
+  "author": "Firtina -toxicFork- Ozbalikci",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.5.1",
+    "babel-core": "^6.5.1",
+    "babel-eslint": "^5.0.0-beta6",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.5.0",
+    "babel-polyfill": "^6.5.0",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-runtime": "^6.5.0",
+    "chai": "^3.5.0",
+    "dirty-chai": "^1.2.2",
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^5.0.0",
+    "eslint-plugin-react": "^3.16.1",
+    "istanbul-instrumenter-loader": "^0.1.3",
+    "karma": "^0.13.19",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-mocha": "^0.2.1",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.24",
+    "karma-webpack": "^1.7.0",
+    "mocha": "^2.4.5",
+    "mocha-loader": "^0.7.1",
+    "react-dom": "^0.14.7",
+    "source-map-support": "^0.4.0",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0",
+      "react"
+    ],
+    "plugins": [
+      "transform-runtime",
+      "transform-decorators-legacy"
+    ]
+  }
+}

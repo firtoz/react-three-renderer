@@ -46,6 +46,8 @@ import LatheGeometryDescriptor from './descriptors/Geometry/LatheGeometryDescrip
 import TorusGeometryDescriptor from './descriptors/Geometry/TorusGeometryDescriptor';
 import TorusKnotGeometryDescriptor from './descriptors/Geometry/TorusKnotGeometryDescriptor';
 import ExtrudeGeometryDescriptor from './descriptors/Geometry/ExtrudeGeometryDescriptor';
+import TubeGeometryDescriptor from './descriptors/Geometry/TubeGeometryDescriptor';
+import DodecahedronGeometryDescriptor from './descriptors/Geometry/DodecahedronGeometryDescriptor';
 import TextGeometryDescriptor from './descriptors/Geometry/TextGeometryDescriptor';
 
 import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
@@ -63,6 +65,7 @@ import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMateria
 import MeshPhongMaterialDescriptor from './descriptors/Material/MeshPhongMaterialDescriptor';
 import MeshLambertMaterialDescriptor from './descriptors/Material/MeshLambertMaterialDescriptor';
 import ShaderMaterialDescriptor from './descriptors/Material/ShaderMaterialDescriptor';
+import RawShaderMaterialDescriptor from './descriptors/Material/RawShaderMaterialDescriptor';
 import TextureDescriptor from './descriptors/Material/TextureDescriptor';
 import MaterialResourceDescriptor from './descriptors/Resource/MaterialResourceDescriptor';
 import UniformsDescriptor from './descriptors/Material/UniformsDescriptor';
@@ -108,6 +111,7 @@ class ElementDescriptorContainer {
       meshLambertMaterial: new MeshLambertMaterialDescriptor(react3RendererInstance),
       pointsMaterial: new PointsMaterialDescriptor(react3RendererInstance),
       shaderMaterial: new ShaderMaterialDescriptor(react3RendererInstance),
+      rawShaderMaterial: new RawShaderMaterialDescriptor(react3RendererInstance),
       lineBasicMaterial: new LineBasicMaterialDescriptor(react3RendererInstance),
       lineDashedMaterial: new LineDashedMaterialDescriptor(react3RendererInstance),
       meshDepthMaterial: new MeshDepthMaterialDescriptor(react3RendererInstance),
@@ -134,6 +138,8 @@ class ElementDescriptorContainer {
       torusGeometry: new TorusGeometryDescriptor(react3RendererInstance),
       torusKnotGeometry: new TorusKnotGeometryDescriptor(react3RendererInstance),
       extrudeGeometry: new ExtrudeGeometryDescriptor(react3RendererInstance),
+      tubeGeometry: new TubeGeometryDescriptor(react3RendererInstance),
+      dodecahedronGeometry: new DodecahedronGeometryDescriptor(react3RendererInstance),
       textGeometry: new TextGeometryDescriptor(react3RendererInstance),
 
       shape: new ShapeDescriptor(react3RendererInstance),

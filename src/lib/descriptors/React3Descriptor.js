@@ -128,6 +128,18 @@ const propProxy = {
     type: PropTypes.bool,
     default: false,
   },
+  onRendererUpdated: {
+    type: PropTypes.func,
+    default: undefined,
+  },
+  forceManualRender: {
+    type: PropTypes.bool,
+    default: false,
+  },
+  onManualRenderTriggerCreated: {
+    type: PropTypes.func,
+    default: undefined,
+  },
 };
 
 class React3Descriptor extends THREEElementDescriptor {
@@ -158,6 +170,19 @@ class React3Descriptor extends THREEElementDescriptor {
 
       this.hasProp(propName, propInfo);
     });
+  }
+
+  completePropertyUpdates(threeObject) {
+    if (process.env.NODE_ENV !== 'production') {
+      if (!threeObject._warnedAboutManualRendering) {
+        if (threeObject._forceManualRender && !threeObject._manualRenderTriggerCallback) {
+          threeObject._warnedAboutManualRendering = true;
+          warning(false,
+            'The `React3` component has `forceManualRender` property set, but not' +
+            ' `onManualRenderTriggerCreated`. You will not be able to update the view.');
+        }
+      }
+    }
   }
 
   setParent(threeObject, parentObject3D) {
