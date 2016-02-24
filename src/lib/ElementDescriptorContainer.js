@@ -48,6 +48,7 @@ import TorusKnotGeometryDescriptor from './descriptors/Geometry/TorusKnotGeometr
 import ExtrudeGeometryDescriptor from './descriptors/Geometry/ExtrudeGeometryDescriptor';
 import TubeGeometryDescriptor from './descriptors/Geometry/TubeGeometryDescriptor';
 import DodecahedronGeometryDescriptor from './descriptors/Geometry/DodecahedronGeometryDescriptor';
+import TextGeometryDescriptor from './descriptors/Geometry/TextGeometryDescriptor';
 
 import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
 import MoveToDescriptor from './descriptors/Geometry/Shapes/MoveToDescriptor';
@@ -139,6 +140,7 @@ class ElementDescriptorContainer {
       extrudeGeometry: new ExtrudeGeometryDescriptor(react3RendererInstance),
       tubeGeometry: new TubeGeometryDescriptor(react3RendererInstance),
       dodecahedronGeometry: new DodecahedronGeometryDescriptor(react3RendererInstance),
+      textGeometry: new TextGeometryDescriptor(react3RendererInstance),
 
       shape: new ShapeDescriptor(react3RendererInstance),
       moveTo: new MoveToDescriptor(react3RendererInstance),
