@@ -87,5 +87,5 @@ ${'```'}
       },
     },
   },
-  sourceLink: '../blob/master/src/React3Renderer.js',
+  sourceLink: '../blob/master/src/lib/React3Renderer.js',
 };

@@ -12,6 +12,7 @@ class cylinderGeometry extends geometry {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
+
       radiusTop: '',
       radiusBottom: '',
       height: '',

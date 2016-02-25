@@ -1,31 +1,17 @@
 react-three-renderer
 ====================
 
-[![Join the chat at https://gitter.im/toxicFork/react-three-renderer](https://badges.gitter.im/toxicFork/react-three-renderer.svg)](https://gitter.im/toxicFork/react-three-renderer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 Render into a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
-> This is still an experimental and incomplete project, use at your own risk!
+Would you like to know more? [See the wiki](https://github.com/toxicFork/react-three-renderer/wiki).
 
-[![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg)](https://travis-ci.org/toxicFork/react-three-renderer)
+[Live examples](http://toxicfork.github.io/react-three-renderer-example/).
+
+> This is still an experimental and work in progress project, use at your own risk!
+
+[![Join the chat at https://gitter.im/toxicFork/react-three-renderer](https://badges.gitter.im/toxicFork/react-three-renderer.svg)](https://gitter.im/toxicFork/react-three-renderer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg)](https://travis-ci.org/toxicFork/react-three-renderer)
 
 [![npm](https://nodei.co/npm/react-three-renderer.svg?downloads=true)](https://nodei.co/npm/react-three-renderer/)
-
-WIKI
-=============
-
-[Wiki is now live!](https://github.com/toxicFork/react-three-renderer/wiki)
-
-> Work in progress!
-
-Influences
-==========
-
-I have been heavily inspired by [react-three](https://github.com/Izzimach/react-three) by [Izzimach](https://github.com/Izzimach/).
-
-After finding out about [React 0.14](https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html), I have decided to see how someone would approach writing their own custom renderer. 
-
-This is the outcome of that curiosity.
 
 Installation
 ============
@@ -52,6 +38,8 @@ class Simple extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    // construct the position vector here, because if we use 'new' within render,
+    // React will think that things have changed when they have not.
     this.cameraPosition = new THREE.Vector3(0, 0, 5);
 
     this.state = {
@@ -59,6 +47,11 @@ class Simple extends React.Component {
     };
 
     this._onAnimate = () => {
+      // we will get this callback every frame
+
+      // pretend cubeRotation is immutable.
+      // this helps with updates and pure rendering.
+      // React will be sure that the rotation has now updated.
       this.setState({
         cubeRotation: new THREE.Euler(
           this.state.cubeRotation.x + 0.1,
@@ -70,11 +63,11 @@ class Simple extends React.Component {
   }
 
   render() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = window.innerWidth; // canvas width
+    const height = window.innerHeight; // canvas height
 
     return (<React3
-      mainCamera="camera"
+      mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
       width={width}
       height={height}
 
@@ -110,14 +103,37 @@ class Simple extends React.Component {
 ReactDOM.render(<Simple/>, document.body);
 ```
 
+To go further, [follow the white rabbit](https://github.com/toxicFork/react-three-renderer/wiki/Entry-Point).
+
 Building
 ========
 
 Fork and clone this repository, then do a npm install.
 
-``` gulp babel ``` produces es5 compatible code in the 'lib' directory.
+``` npm run compile ``` produces es5 compatible code in the 'lib' directory.
 
-You can use npm link or local npm install if you would like to play with it.
+You can use [npm link](https://docs.npmjs.com/cli/link) or [local npm install](http://stackoverflow.com/questions/8088795/installing-a-local-module-using-npm) if you would like to play with your fork.
+
+Testing
+=======
+
+```
+# make sure that you have run compile first
+npm run compile
+npm test
+```
+
+Currently it runs tests on Chrome, but other browser support can be added if necessary.
+More information on testing will be added here.
+
+Influences
+==========
+
+I have been heavily inspired by [react-three](https://github.com/Izzimach/react-three) by [Izzimach](https://github.com/Izzimach/).
+
+After finding out about [React 0.14](https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html), I have decided to see how someone would approach writing their own custom renderer.
+
+This is the outcome of that curiosity.
 
 Implementation Details
 ======================
@@ -138,16 +154,12 @@ Another benefit is that it allows me to make things super fast and not depend on
 
 In effect, a ``` <scene/> ``` has the same effort, and similar effects as creating a  ``` <div/> ```. 
 
-Isn't that amazing?
-
-Many (228+) commits, insane dedication, many commuter (train / bus) coding sessions and late evenings later, we have this.
-
 TODO
 ====
-- Documentation
-- Testing
+- More Documentation
+- More Testing
 - More examples
-- Implement rest of three.js library
-- Performance optimizations
-- Make it generic and allow the world to create their own react renderers!
+- More Performance optimizations
+- Implement rest of three.js library ( See #2 )
+- Make it generic and allow the world to create their own custom react renderers!
     - It's not that hard, trust me ;)

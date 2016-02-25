@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class tetrahedronGeometry extends DocInfo {
+class tetrahedronGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.TetrahedronGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TetrahedronGeometry)';
   }
@@ -11,9 +11,8 @@ class tetrahedronGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       radius: '',
       detail: '',
     };

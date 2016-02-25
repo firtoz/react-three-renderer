@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class planeBufferGeometry extends DocInfo {
+class planeBufferGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.PlaneBufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PlaneBufferGeometry)';
   }
@@ -11,9 +11,8 @@ class planeBufferGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       width: '',
       height: '',
       widthSegments: '',

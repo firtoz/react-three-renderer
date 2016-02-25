@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class sphereGeometry extends DocInfo {
+class sphereGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.SphereGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/SphereGeometry)';
   }
@@ -11,9 +11,8 @@ class sphereGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       radius: '',
       phiStart: '',
       phiLength: '',

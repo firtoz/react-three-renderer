@@ -12,6 +12,7 @@ class boxGeometry extends geometry {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
+
       width: 'Width of the sides on the X axis.',
       height: 'Height of the sides on the Y axis.',
       depth: 'Depth of the sides on the Z axis.',

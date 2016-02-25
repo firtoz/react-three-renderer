@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class icosahedronGeometry extends DocInfo {
+class icosahedronGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.IcosahedronGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/IcosahedronGeometry)';
   }
@@ -11,9 +11,8 @@ class icosahedronGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       radius: '',
       detail: '',
     };

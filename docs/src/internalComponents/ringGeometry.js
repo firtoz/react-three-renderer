@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class ringGeometry extends DocInfo {
+class ringGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.RingGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/RingGeometry)';
   }
@@ -11,9 +11,8 @@ class ringGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       innerRadius: '',
       outerRadius: '',
       thetaSegments: '',

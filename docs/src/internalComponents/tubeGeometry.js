@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class tubeGeometry extends DocInfo {
+class tubeGeometry extends geometry {
   getIntro() {
     return `Creates a [THREE.TubeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry)`;
   }
@@ -11,9 +11,8 @@ class tubeGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       path: 'THREE.Curve - A path that inherits from the Curve base class.',
       segments: 'The number of segments that make up the tube, default is 64.',
       radius: 'The radius of the tube, default is 1.',

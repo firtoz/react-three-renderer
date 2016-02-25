@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class planeGeometry extends DocInfo {
+class planeGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.PlaneGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PlaneGeometry)';
   }
@@ -11,9 +11,8 @@ class planeGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       width: '',
       height: '',
       widthSegments: '',

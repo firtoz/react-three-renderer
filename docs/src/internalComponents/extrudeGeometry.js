@@ -6,7 +6,14 @@ class extrudeGeometry extends geometry {
   }
 
   getDescription() {
-    return `It then wraps this with a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BufferGeometry). This is to prevent having to remount the component every time anything changes.`;
+    return `In order to create shapes to extrude, place a [&lt;shape&gt;](shape)
+ or a [&lt;shapeResource&gt;](shapeResource) within.
+
+## Implementation details:
+The geometry is wrapped within a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BufferGeometry).
+
+This is to prevent having to remount the component every time anything changes.
+ `;
   }
 
   getAttributesText() {

@@ -563,6 +563,15 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
 
         const attributesText = componentInfo.getAttributesText(descriptor, componentName);
 
+        if (descriptor.isResource) {
+          if (attributesText.resourceId !== undefined && attributesText.resourceId !== '') {
+            console.error(` ${componentName} already has resourceId?`); // eslint-disable-line
+          }
+
+          attributesText.resourceId = 'The resource id of this object,' +
+            ' only used if it is placed into [[resources]].';
+        }
+
         const attributesContents = {};
 
         if (propNames.length > 0) {
@@ -621,7 +630,7 @@ ${propTypes[propName].toString()}`;
 
 ===
 
-|**[View Source](${`../blob/master/src/${
+|**[View Source](${`../blob/master/src/lib/${
           descriptor.constructor.__modulePath}`.replace('/./', '/')}.js)**|
  ---|`;
 

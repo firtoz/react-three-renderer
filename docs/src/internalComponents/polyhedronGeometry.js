@@ -12,6 +12,7 @@ class polyhedronGeometry extends geometry {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
+
       radius: '',
       detail: '',
       vertices: '',

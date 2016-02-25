@@ -6,13 +6,13 @@ class shape extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return `Place this within [[&lt;extrudeGeometry&gt;|extrudeGeometry]]
+    or [&lt;resources&gt;](resources).`;
   }
 
   getAttributesText() {
     return {
       points: '',
-      resourceId: '',
     };
   }
 }

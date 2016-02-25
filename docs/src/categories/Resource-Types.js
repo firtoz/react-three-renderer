@@ -111,7 +111,18 @@ Place [&lt;resources&gt;&lt;/resources&gt;](resources); anywhere inside
 
 > If this component is remounted, all of the resources will be recreated.
 
-Then you can place these components inside:
+To use resources, please see:
+  - To be placed within a [&lt;mesh&gt;](mesh)
+    - [materialResource](materialResource)
+    - [geometryResource](geometryResource)
+    - [shapeGeometryResource](shapeGeometryResource)
+  - To be placed within an [&lt;extrudeGeometry&gt;](extrudeGeometry)
+    - [shapeResource](shaperesource)
+  - To be placed within [materials](Materials):
+    - [textureResource](textureresource)
+
+Then you can place these components inside to create and assign resources,
+ as long as they have a \`resourceId\` property:
 ${this._getResourceTypesString()}`;
   },
 };

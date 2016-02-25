@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import MaterialInfo from './shared/MaterialInfo';
 
-class pointsMaterial extends DocInfo {
+class pointsMaterial extends MaterialInfo {
   getIntro() {
     return 'Creates a [THREE.PointsMaterial](http://threejs.org/docs/#Reference/Materials/PointsMaterial)';
   }
@@ -11,7 +11,6 @@ class pointsMaterial extends DocInfo {
 
   getAttributesText() {
     return {
-      slot: '',
       transparent: '',
       alphaTest: '',
       side: '',

@@ -21,7 +21,6 @@ Defaults to true.`,
       name: `Name for this geometry.
 
 Default is an empty string.`,
-      resourceId: 'The resource id of this object, only used if it is placed into [[resources]].',
       vertices: 'See [THREE.Geometry#vertices](http://threejs.org/docs/#Reference/Core/Geometry.vertices).',
       faceVertexUvs: 'See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).',
       colors: 'See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).',

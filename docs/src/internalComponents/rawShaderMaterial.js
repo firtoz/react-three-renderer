@@ -1,18 +1,20 @@
-import DocInfo from '../DocInfo';
+import shaderMaterial from './shaderMaterial';
 
-class rawShaderMaterial extends DocInfo {
+class rawShaderMaterial extends shaderMaterial {
   getIntro() {
     return 'Creates a [THREE.RawShaderMaterial]' +
       '(http://threejs.org/docs/#Reference/Materials/RawShaderMaterial).';
   }
 
   getDescription() {
-    return `This is very similar to [ShaderMaterial](shadermaterial), except that
+    return `This is very similar to [[ShaderMaterial]], except that
 the vertex and fragment shader code will be exactly copied without any modifications.`;
   }
 
   getAttributesText() {
-    return {};
+    return {
+      ...super.getAttributesText(),
+    };
   }
 }
 
