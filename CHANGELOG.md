@@ -14,6 +14,10 @@ CHANGELOG
   - Add [TextGeometry]()
   - Add [TubeGeometry]()
   - Add [DodecahedronGeometry]()
+  - [LatheGeometry](https://github.com/toxicFork/react-three-renderer/wiki/latheGeometry)
+    - Fixed the type of
+    [points](https://github.com/toxicFork/react-three-renderer/wiki/latheGeometry#points)
+    to THREE.Vector2
 - Materials
   - Add [RawShaderMaterial]()
 

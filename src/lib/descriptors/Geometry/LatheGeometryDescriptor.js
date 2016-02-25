@@ -21,7 +21,7 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
     });
 
     this.hasProp('points', {
-      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)).isRequired,
+      type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector2)).isRequired,
       update: this.triggerRemount,
       default: undefined,
     });
@@ -33,7 +33,7 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
       segments,
       phiStart,
       phiLength,
-      } = props;
+    } = props;
 
     return new THREE.LatheGeometry(points, segments, phiStart, phiLength);
   }
