@@ -2,3 +2,4 @@
 .idea/dictionaries/
 /lib/
 .idea/jsLinters/
+.eslintcache
