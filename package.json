@@ -9,7 +9,7 @@
     "test": "npm run eslint-internal -loglevel silent && npm run karma-single -loglevel silent",
     "karma-single": "karma start ./tests/karma.conf.js --single-run",
     "karma": "karma start ./tests/karma.conf.js",
-    "eslint-internal": "eslint ./src/ && eslint ./docs/src/ && eslint ./tests/src/",
+    "eslint-internal": "eslint --cache ./src/ ./docs/src/ ./tests/src/",
     "eslint": "npm run eslint-internal -loglevel silent || true",
     "tdd": "bash -c \"(export KARMA_TDD=true; cd tests; npm run karma)\"",
     "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\""
