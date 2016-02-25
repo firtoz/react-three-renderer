@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import MaterialInfo from './shared/MaterialInfo';
 
-class meshLambertMaterial extends DocInfo {
+class meshLambertMaterial extends MaterialInfo {
   getIntro() {
     return 'Creates a [THREE.MeshLambertMaterial](http://threejs.org/docs/#Reference/Materials/MeshLambertMaterial)';
   }
@@ -11,7 +11,8 @@ class meshLambertMaterial extends DocInfo {
 
   getAttributesText() {
     return {
-      slot: '',
+      ...super.getAttributesText(),
+
       transparent: '',
       alphaTest: '',
       side: '',

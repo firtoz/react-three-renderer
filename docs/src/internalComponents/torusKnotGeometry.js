@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class torusKnotGeometry extends DocInfo {
+class torusKnotGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.TorusKnotGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TorusKnotGeometry)';
   }
@@ -11,9 +11,8 @@ class torusKnotGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       radius: '',
       tube: '',
       radialSegments: '',

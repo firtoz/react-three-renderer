@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import MaterialInfo from './shared/MaterialInfo';
 
-class meshPhongMaterial extends DocInfo {
+class meshPhongMaterial extends MaterialInfo {
   getIntro() {
     return 'Creates a [THREE.MeshPhongMaterial](http://threejs.org/docs/#Reference/Materials/MeshPhongMaterial)';
   }
@@ -11,7 +11,8 @@ class meshPhongMaterial extends DocInfo {
 
   getAttributesText() {
     return {
-      slot: '',
+      ...super.getAttributesText(),
+
       transparent: '',
       alphaTest: '',
       side: '',

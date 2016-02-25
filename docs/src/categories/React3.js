@@ -7,14 +7,19 @@ ${'```'}`,
   description: `React3 is a regular React Component that places a canvas on the page.
 
 When React3 is mounted, an instance of [[React3Renderer]] is used to render a
- [&lt;react3&gt;](react3) internal component into the canvas.
+ [&lt;react3&gt;](react3) internal component into the canvas. The properties are copied
+ to this component.
 
 The react3 internal component repeatedly requests animation frames from the browser.
 
 Every frame it re-renders the whole scene.
 
-The attributes are passed on to the react3 internal component so that
- it can configure the renderer.`,
+This component can have the following children:
+- [[scene]]
+- [[viewport]]
+- [[resources|Resource-Types]]
+- [[module]] **(advanced)**
+`,
   copyAttributesFrom: 'react3',
   excludeAttributesFromCopying: {
     canvas: true,
@@ -43,5 +48,5 @@ You are encouraged to use [refs](https://facebook.github.io/react/docs/more-abou
       },
     },
   },
-  sourceLink: '../blob/master/src/React3.js',
+  sourceLink: '../blob/master/src/lib/React3.js',
 };

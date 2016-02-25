@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import MaterialInfo from './shared/MaterialInfo';
 
-class meshDepthMaterial extends DocInfo {
+class meshDepthMaterial extends MaterialInfo {
   getIntro() {
     return 'Creates a [THREE.MeshDepthMaterial](http://threejs.org/docs/#Reference/Materials/MeshDepthMaterial)';
   }
@@ -11,7 +11,8 @@ class meshDepthMaterial extends DocInfo {
 
   getAttributesText() {
     return {
-      slot: '',
+      ...super.getAttributesText(),
+
       transparent: '',
       alphaTest: '',
       side: '',

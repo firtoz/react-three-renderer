@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import MaterialInfo from './shared/MaterialInfo';
 
-class meshBasicMaterial extends DocInfo {
+class meshBasicMaterial extends MaterialInfo {
   getIntro() {
     return 'Creates a [THREE.MeshBasicMaterial](http://threejs.org/docs/#Reference/Materials/MeshBasicMaterial)';
   }
@@ -11,7 +11,8 @@ class meshBasicMaterial extends DocInfo {
 
   getAttributesText() {
     return {
-      slot: '',
+      ...super.getAttributesText(),
+
       transparent: '',
       alphaTest: '',
       side: '',

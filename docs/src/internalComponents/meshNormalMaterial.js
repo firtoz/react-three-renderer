@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import MaterialInfo from './shared/MaterialInfo';
 
-class meshNormalMaterial extends DocInfo {
+class meshNormalMaterial extends MaterialInfo {
   getIntro() {
     return 'Creates a [THREE.MeshNormalMaterial](http://threejs.org/docs/#Reference/Materials/MeshNormalMaterial)';
   }
@@ -11,7 +11,8 @@ class meshNormalMaterial extends DocInfo {
 
   getAttributesText() {
     return {
-      slot: '',
+      ...super.getAttributesText(),
+
       transparent: '',
       alphaTest: '',
       side: '',

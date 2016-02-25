@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class textGeometry extends DocInfo {
+class textGeometry extends geometry {
   getIntro() {
     return `Creates a [THREE.TextGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry)`;
   }
@@ -11,9 +11,8 @@ class textGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       text: 'The text that needs to be shown.',
       font: 'The font for the text.',
       size: 'The size of the text.',

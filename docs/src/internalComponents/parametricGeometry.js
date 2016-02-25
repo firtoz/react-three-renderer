@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class parametricGeometry extends DocInfo {
+class parametricGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.ParametricGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ParametricGeometry)';
   }
@@ -11,9 +11,8 @@ class parametricGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       slices: '',
       stacks: '',
       parametricFunction: '',

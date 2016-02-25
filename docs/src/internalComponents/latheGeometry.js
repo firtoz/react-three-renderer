@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class latheGeometry extends DocInfo {
+class latheGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.LatheGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/LatheGeometry)';
   }
@@ -11,9 +11,8 @@ class latheGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       segments: '',
       phiStart: '',
       phiLength: '',

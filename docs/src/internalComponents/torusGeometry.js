@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class torusGeometry extends DocInfo {
+class torusGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.TorusGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TorusGeometry)';
   }
@@ -11,9 +11,8 @@ class torusGeometry extends DocInfo {
 
   getAttributesText() {
     return {
-      dynamic: '',
-      name: '',
-      resourceId: '',
+      ...super.getAttributesText(),
+
       radius: '',
       tube: '',
       radialSegments: '',

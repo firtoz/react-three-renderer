@@ -2,18 +2,19 @@ import DocInfo from '../DocInfo';
 
 class shapeGeometryResource extends DocInfo {
   getIntro() {
-    return 'Reference to a material created from a shape resource';
+    return 'Creates a geometry using a [shape resource](shape)';
   }
 
   getDescription() {
-    return ``;
+    return `Have the [resourceId](#resourceid) property point to a [shape resource](shape),
+    then this component will create a geometry using that shape.`;
   }
 
   getAttributesText() {
     return {
       resourceId: '',
-      type: '',
-      divisions: '',
+      type: 'The shape type.',
+      divisions: 'Number of divisions for the shape.',
     };
   }
 }

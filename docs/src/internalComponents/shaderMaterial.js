@@ -1,6 +1,6 @@
-import DocInfo from '../DocInfo';
+import MaterialInfo from './shared/MaterialInfo';
 
-class shaderMaterial extends DocInfo {
+class shaderMaterial extends MaterialInfo {
   getIntro() {
     return 'Creates a [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial)';
   }
@@ -11,15 +11,16 @@ class shaderMaterial extends DocInfo {
 
   getAttributesText() {
     return {
-      slot: '',
+      ...super.getAttributesText(),
+
       transparent: '',
       alphaTest: '',
       side: '',
       opacity: '',
       visible: '',
       resourceId: '',
-      vertexShader: '',
-      fragmentShader: '',
+      vertexShader: 'The vertex shader code.',
+      fragmentShader: 'The fragment shader code.',
       wireframe: '',
       wireframeLinewidth: '',
     };

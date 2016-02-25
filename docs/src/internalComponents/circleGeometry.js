@@ -19,6 +19,7 @@ It is constructed from a number of triangular segments that are oriented
   getAttributesText() {
     return {
       ...super.getAttributesText(),
+
       radius: 'Radius of the circle, default = 50.',
       segments: 'Number of segments (triangles), minimum = 3, default = 8.',
       thetaStart: 'Start angle for first segment, default = 0 (three o\'clock position).',
