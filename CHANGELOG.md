@@ -11,15 +11,15 @@ CHANGELOG
     - See React3#onRendererUpdated
   - Ensured that main logic is up to date with React@0.14.7
 - Geometries
-  - Add [TextGeometry]()
-  - Add [TubeGeometry]()
-  - Add [DodecahedronGeometry]()
+  - Add [TextGeometry](https://github.com/toxicFork/react-three-renderer/wiki/textGeometry)
+  - Add [TubeGeometry](https://github.com/toxicFork/react-three-renderer/wiki/tubeGeometry)
+  - Add [DodecahedronGeometry](https://github.com/toxicFork/react-three-renderer/wiki/dodecahedronGeometry)
   - [LatheGeometry](https://github.com/toxicFork/react-three-renderer/wiki/latheGeometry)
     - Fixed the type of
     [points](https://github.com/toxicFork/react-three-renderer/wiki/latheGeometry#points)
     to THREE.Vector2
 - Materials
-  - Add [RawShaderMaterial]()
+  - Add [RawShaderMaterial](https://github.com/toxicFork/react-three-renderer/wiki/rawShaderMaterial)
 
 ### Documentation
 - Improve README.md
