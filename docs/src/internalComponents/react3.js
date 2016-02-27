@@ -62,8 +62,8 @@ class react3 extends DocInfo {
       'This is currently internal usage only. This helps toggling of [antialias](#antialias).',
       pixelRatio: 'The pixel ratio of the renderer.\n\n' +
       'Preferred value: window.devicePixelRatio.',
-      width: 'The height of the canvas and the default viewport.',
-      height: 'The width of the canvas and the default viewport.',
+      width: 'The width of the canvas and the default viewport.',
+      height: 'The height of the canvas and the default viewport.',
       precision: 'Sets the precision of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#precision]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).\n\n' +
