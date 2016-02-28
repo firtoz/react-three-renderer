@@ -5,6 +5,10 @@ class RawShaderMaterialDescriptor extends ShaderMaterialDescriptor {
   construct(props) {
     const materialDescription = this.getMaterialDescription(props);
 
+    if (props.hasOwnProperty('uniforms')) {
+      materialDescription.uniforms = props.uniforms;
+    }
+
     if (props.hasOwnProperty('vertexShader')) {
       materialDescription.vertexShader = props.vertexShader;
     }
