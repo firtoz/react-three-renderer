@@ -43,13 +43,13 @@ class TextGeometryDescriptor extends GeometryDescriptorBase {
     });
 
     this.hasProp('bevelThickness', {
-      type: PropTypes.bool,
+      type: PropTypes.number,
       update: this.triggerRemount,
       default: 10,
     });
 
     this.hasProp('bevelSize', {
-      type: PropTypes.bool,
+      type: PropTypes.number,
       update: this.triggerRemount,
       default: 8,
     });
