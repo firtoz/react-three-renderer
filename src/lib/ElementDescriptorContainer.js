@@ -106,6 +106,7 @@ class ElementDescriptorContainer {
       mesh: new MeshDescriptor(react3RendererInstance),
       line: new LineDescriptor(react3RendererInstance),
       points: new PointsDescriptor(react3RendererInstance),
+      sprite: new SpriteDescriptor(react3RendererInstance),
 
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3RendererInstance),
       meshPhongMaterial: new MeshPhongMaterialDescriptor(react3RendererInstance),
