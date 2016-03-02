@@ -15,6 +15,7 @@ import CubeCameraDescriptor from './descriptors/Object/Camera/CubeCameraDescript
 import MeshDescriptor from './descriptors/Object/MeshDescriptor';
 import LineDescriptor from './descriptors/Object/LineDescriptor';
 import PointsDescriptor from './descriptors/Object/PointsDescriptor';
+import SpriteDescriptor from './descriptors/Object/SpriteDescriptor';
 
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
