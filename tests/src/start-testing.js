@@ -13,10 +13,10 @@ chai.use(dirtyChai);
 module.exports = (type) => {
   describe(`${type}/React3`, () => {
     require('./core/React3/React3Mounts')(type);
+  });
 
-    describe(`ManualRendering`, () => {
-      require('./core/Warnings/ManualRendering')(type);
-    });
+  describe(`${type}/React3/ManualRendering`, () => {
+    require('./core/Warnings/ManualRendering')(type);
   });
 
   describe(`${type}/Warnings`, () => {

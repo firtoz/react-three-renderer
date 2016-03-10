@@ -38,6 +38,27 @@ module.exports = class MockConsole {
     this._events.removeAllListeners();
 
     if (ignoreChecks) {
+      this._messages.forEach(message => {
+        let func = null;
+
+        switch (message.args.type) {
+          case 'LOG':
+            func = window.console.log;
+            break;
+          case 'WARNING':
+            func = window.console.warning;
+            break;
+          case 'ERROR':
+          default:
+            func = window.console.error;
+            break;
+        }
+
+        delete message.args.type;
+
+        func.apply(window.console, message.args);
+      });
+
       this._messages = [];
       this._expectedMessages = [];
 

@@ -52,6 +52,30 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     return this._react3RendererInstance.instantiateReactComponent(element);
   }
 
+  _replaceNodeWithMarkupByID(prevComponentID, nextMarkup) {
+    const markup = this._react3RendererInstance.getMarkup(prevComponentID);
+
+    const parentMarkup = markup.parentMarkup;
+
+    const ownerChildrenMarkups = parentMarkup.childrenMarkup;
+
+    const indexInParent = ownerChildrenMarkups.indexOf(markup);
+
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(indexInParent !== -1, 'The node has no parent');
+    } else {
+      invariant(indexInParent !== -1);
+    }
+
+    const parentInternalComponent = parentMarkup.threeObject.userData.react3internalComponent;
+    const originalInternalComponent = markup.threeObject.userData.react3internalComponent;
+
+    parentInternalComponent.removeChild(originalInternalComponent);
+    const nextChild = nextMarkup.threeObject.userData.react3internalComponent;
+    nextChild._mountIndex = indexInParent;
+    parentInternalComponent.createChild(nextChild, nextMarkup);
+  }
+
   // See ReactCompositeComponent.mountComponent
   mountComponent(rootID, transaction, context) {
     this._context = context;
