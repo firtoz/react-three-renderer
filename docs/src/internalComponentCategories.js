@@ -44,6 +44,9 @@ module.exports = {
               points: {
                 isComponent: true,
               },
+              sprite: {
+                isComponent: true,
+              },
             },
             TODO: [
               'Bone',
@@ -53,7 +56,6 @@ module.exports = {
               'MorphAnimMesh',
               'SkinnedMesh',
               'Skeleton',
-              'Sprite',
             ],
           },
           Lights: {
