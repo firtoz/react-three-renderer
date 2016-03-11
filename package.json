@@ -5,7 +5,7 @@
   "main": "./lib/React3.js",
   "scripts": {
     "compile": "gulp babel",
-    "prepublish": "not-in-install && npm run compile || in-install",
+    "prepublish": "not-in-install && npm run compile && npm test || in-install",
     "test": "npm run eslint-internal -loglevel silent && npm run karma-single -loglevel silent",
     "karma-single": "karma start ./tests/karma.conf.js --single-run",
     "karma": "karma start ./tests/karma.conf.js",
