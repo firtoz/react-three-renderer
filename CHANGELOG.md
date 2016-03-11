@@ -1,6 +1,38 @@
 CHANGELOG
 ===========
 
+## 0.1.1
+
+### Fixes
+- core
+  - Fixed a bug which would crash when the return type from a composite component would change e.g.:
+  ```jsx
+  class Wrapper extends React.Component {
+    static propTypes = {
+      internal: React.PropTypes.bool,
+      res: React.PropTypes.bool,
+    };
+
+    render() {
+      if (this.props.internal) {
+        return (<scene/>);
+      }
+
+      if (this.props.res) {
+        return (<MyResources/>);
+      }
+
+      return (<MyScene/>);
+    }
+  }
+  ```
+
+### Tests
+- Added tests for the above case
+
+### Documentation
+- Small documentation fixes
+
 ## 0.1.0
 
 ### Components
