@@ -1,7 +1,7 @@
 CHANGELOG
 ===========
 
-## 0.1.2
+## 0.1.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v0.1.1...v0.1.2) )
 
 ### Components
 - Add `<sprite/>` component ( #39 )
