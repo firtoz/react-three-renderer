@@ -111,6 +111,10 @@ class ResourcesDescriptor extends THREEElementDescriptor {
   hideHighlight(threeObject) {
     threeObject.userData.events.emit('hideHighlight');
   }
+
+  moveChild() {
+    // child order doesn't matter
+  }
 }
 
 module.exports = ResourcesDescriptor;

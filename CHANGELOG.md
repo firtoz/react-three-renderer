@@ -6,6 +6,7 @@ CHANGELOG
 ### Components
 - Add `<sprite/>` component ( #39 )
 - Add `uniforms` property to [&lt;shaderMaterial&gt;](https://github.com/toxicFork/react-three-renderer/wiki/shaderMaterial) and [&lt;rawShaderMaterial&gt;](https://github.com/toxicFork/react-three-renderer/wiki/rawShaderMaterial) ( #36 ).
+- Allow reordering of components within the `<resources>` component ( #40 )
 
 ### Documentation
 - Improve [&lt;module&gt;](https://github.com/toxicFork/react-three-renderer/wiki/module) documentation ( Thanks @DelvarWorld )
