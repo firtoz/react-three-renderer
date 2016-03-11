@@ -4,7 +4,7 @@ CHANGELOG
 ## 0.1.2
 
 ### Components
-- Add <sprite/> component ( #39 )
+- Add `<sprite/>` component ( #39 )
 
 ### Documentation
 - Improve [&lt;module&gt;](https://github.com/toxicFork/react-three-renderer/wiki/module) documentation ( Thanks @DelvarWorld )
