@@ -19,6 +19,9 @@ class shaderMaterial extends MaterialInfo {
       opacity: '',
       visible: '',
       resourceId: '',
+      uniforms: `The uniforms to be used for the shader.
+
+See [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms)`,
       vertexShader: 'The vertex shader code.',
       fragmentShader: 'The fragment shader code.',
       wireframe: '',

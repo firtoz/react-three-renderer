@@ -19,11 +19,17 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
       });
     });
 
+    this.hasProp('uniforms', {
+      type: PropTypes.any,
+      simple: true,
+      default: undefined,
+    });
+
     this.hasWireframe();
   }
 
-  construct(props) {
-    const materialDescription = this.getMaterialDescription(props);
+  getMaterialDescription(props) {
+    const materialDescription = super.getMaterialDescription(props);
 
     if (props.hasOwnProperty('uniforms')) {
       materialDescription.uniforms = props.uniforms;
@@ -36,6 +42,12 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
     if (props.hasOwnProperty('fragmentShader')) {
       materialDescription.fragmentShader = props.fragmentShader;
     }
+
+    return materialDescription;
+  }
+
+  construct(props) {
+    const materialDescription = this.getMaterialDescription(props);
 
     return new THREE.ShaderMaterial(materialDescription);
   }
