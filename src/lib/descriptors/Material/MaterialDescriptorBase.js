@@ -145,7 +145,10 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     const parent = material.userData.markup.parentMarkup.threeObject;
 
     // could either be a resource description or an actual material
-    if (parent instanceof THREE.Mesh || parent instanceof THREE.Points) {
+    if (parent instanceof THREE.Mesh ||
+      parent instanceof THREE.Sprite ||
+      parent instanceof THREE.Line ||
+      parent instanceof THREE.Points) {
       const slot = material.userData._materialSlot;
 
       if (parent[slot] === material) {
@@ -188,7 +191,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
 
   addChildren(threeObject, children) {
     invariant(children.filter(this._invalidChild).length === 0,
-      'Mesh children can only be materials or geometries!');
+      'Material children can only be textures or texture resource references!');
   }
 
   addChild(threeObject, child) {
@@ -200,7 +203,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   removeChild() {
-    // doesn't matter
+    // doesn't matter since the texture will take care of things on unmount
   }
 
   invalidChildInternal(child) {

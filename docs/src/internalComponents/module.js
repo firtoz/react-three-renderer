@@ -12,7 +12,9 @@ class Module extends DocInfo {
 
   getAttributesText() {
     return {
-      descriptor: 'A class that extends ReactThreeRenderer.Module',
+      descriptor: `A class that extends ReactThreeRenderer.Module.
+
+It must expose an \`update()\` function which will be called every frame.`,
     };
   }
 }

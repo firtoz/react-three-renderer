@@ -1,12 +1,18 @@
 import object3D from './object3D';
 
 class sprite extends object3D {
-  getDescription() {
+  getIntro() {
     return 'Creates a [THREE.Sprite](http://threejs.org/docs/#Reference/Objects/Sprite)';
   }
 
+  getDescription() {
+    return `This object can contain a [[spriteMaterial]].`;
+  }
+
   getAttributesText() {
-    return `This object can contain a [[spriteMaterial]]`;
+    return {
+      ...super.getAttributesText(),
+    };
   }
 }
 
