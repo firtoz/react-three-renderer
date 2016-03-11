@@ -131,6 +131,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   setParent(material, parentObject3D) {
     invariant(parentObject3D instanceof THREE.Mesh
       || parentObject3D instanceof THREE.Points
+      || parentObject3D instanceof THREE.Sprite
       || parentObject3D instanceof THREE.Line, 'Parent is not a mesh');
     invariant(parentObject3D[material.userData._materialSlot] === undefined
       || parentObject3D[material.userData._materialSlot] === null,

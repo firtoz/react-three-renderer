@@ -15,6 +15,7 @@ import CubeCameraDescriptor from './descriptors/Object/Camera/CubeCameraDescript
 import MeshDescriptor from './descriptors/Object/MeshDescriptor';
 import LineDescriptor from './descriptors/Object/LineDescriptor';
 import PointsDescriptor from './descriptors/Object/PointsDescriptor';
+import SpriteDescriptor from './descriptors/Object/SpriteDescriptor';
 
 import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
@@ -105,6 +106,7 @@ class ElementDescriptorContainer {
       mesh: new MeshDescriptor(react3RendererInstance),
       line: new LineDescriptor(react3RendererInstance),
       points: new PointsDescriptor(react3RendererInstance),
+      sprite: new SpriteDescriptor(react3RendererInstance),
 
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3RendererInstance),
       meshPhongMaterial: new MeshPhongMaterialDescriptor(react3RendererInstance),
