@@ -8,10 +8,6 @@ import Uniform from '../../Uniform';
 import invariant from 'fbjs/lib/invariant';
 
 class UniformsDescriptor extends THREEElementDescriptor {
-  constructor(react3Instance) {
-    super(react3Instance);
-  }
-
   construct() {
     return new UniformContainer();
   }

@@ -6,7 +6,7 @@ class materialResource extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

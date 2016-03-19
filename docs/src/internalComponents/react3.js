@@ -9,7 +9,7 @@ class react3 extends DocInfo {
   }
 
   getDescription() {
-    return `Creates a [THREE.WebGLRenderer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer).`;
+    return 'Creates a [THREE.WebGLRenderer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer).';
   }
 
   getAttributesText() {
@@ -21,7 +21,7 @@ class react3 extends DocInfo {
       sortObjects: 'Controls renderer object sorting.\n\n' +
       'See [THREE.WebGLRenderer#sortObjects](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.sortObjects).',
       context: 'The rendering context.\n\n' +
-      `Currently only '3d' is supported.`,
+      'Currently only \'3d\' is supported.',
       mainCamera: 'The name of the camera to render into the canvas.\n\n' +
       'See [perspectiveCamera.name](perspectiveCamera#name).\n\n' +
       'If this value is not set, the scene can be rendered into' +

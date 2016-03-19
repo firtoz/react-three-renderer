@@ -184,6 +184,8 @@ class React3Renderer {
     } else {
       invariant(false);
     }
+
+    return null;
   }
 
 
@@ -388,6 +390,8 @@ class React3Renderer {
       // descendants are. Break out of the loop.
       return false;
     }
+
+    return true;
   };
 
   /**
@@ -619,6 +623,8 @@ class React3Renderer {
     } else {
       invariant(false);
     }
+
+    return undefined;
   }
 
 

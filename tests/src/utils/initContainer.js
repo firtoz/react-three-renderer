@@ -18,6 +18,8 @@ module.exports = (type) => {
         expect(false, 'Invalid test type');
         break;
     }
+
+    return undefined;
   }
 
   let React3;

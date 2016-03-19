@@ -21,7 +21,7 @@ module.exports = type => {
 
     mockConsole.expect('THREE.WebGLRenderer	74');
 
-    ReactDOM.render(<React3/>, testDiv);
+    ReactDOM.render(<React3 />, testDiv);
 
     expect(testDiv.firstChild).to.be.an.instanceOf(HTMLCanvasElement);
   });
@@ -46,7 +46,7 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <scene/>
+      <scene />
     </React3>, testDiv);
 
     mockConsole.expect('THREE.WebGLRenderer	74');
@@ -65,34 +65,28 @@ module.exports = type => {
       }
 
       render() {
-        return (<scene/>);
+        return (<scene />);
       }
     }
 
-    class MyResources extends React.Component {
-      render() {
-        return (<resources/>);
+    const MyResources = () => (<resources />);
+
+    const Wrapper = (props) => {
+      if (props.internal) {
+        return (<scene />);
       }
-    }
 
-    class Wrapper extends React.Component {
-      static propTypes = {
-        internal: React.PropTypes.bool,
-        res: React.PropTypes.bool,
-      };
-
-      render() {
-        if (this.props.internal) {
-          return (<scene/>);
-        }
-
-        if (this.props.res) {
-          return (<MyResources/>);
-        }
-
-        return (<MyScene/>);
+      if (props.res) {
+        return (<MyResources />);
       }
-    }
+
+      return (<MyScene />);
+    };
+
+    Wrapper.propTypes = {
+      internal: React.PropTypes.bool,
+      res: React.PropTypes.bool,
+    };
 
     /* eslint-enable */
 
@@ -111,7 +105,7 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <Wrapper internal={false}/>
+      <Wrapper internal={false} />
     </React3>, testDiv);
 
     expect(mounted).to.equal(true);
@@ -143,8 +137,8 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <viewport x={0} y={0} width={0} height={0} cameraName="test"/>
-      <scene/>
+      <viewport x={0} y={0} width={0} height={0} cameraName="test" />
+      <scene />
     </React3>, testDiv);
 
     mockConsole.expect('THREE.WebGLRenderer	74');
@@ -163,34 +157,29 @@ module.exports = type => {
       }
 
       render() {
-        return (<scene/>);
+        return (<scene />);
       }
     }
 
-    class MyResources extends React.Component {
-      render() {
-        return (<resources/>);
+    const MyResources = () => (<resources />);
+
+
+    const Wrapper = (props) => {
+      if (props.internal) {
+        return (<scene />);
       }
-    }
 
-    class Wrapper extends React.Component {
-      static propTypes = {
-        internal: React.PropTypes.bool,
-        res: React.PropTypes.bool,
-      };
-
-      render() {
-        if (this.props.internal) {
-          return (<scene/>);
-        }
-
-        if (this.props.res) {
-          return (<MyResources/>);
-        }
-
-        return (<MyScene/>);
+      if (props.res) {
+        return (<MyResources />);
       }
-    }
+
+      return (<MyScene />);
+    };
+
+    Wrapper.propTypes = {
+      internal: React.PropTypes.bool,
+      res: React.PropTypes.bool,
+    };
 
     /* eslint-enable */
 
@@ -198,7 +187,7 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <viewport x={0} y={0} width={0} height={0} cameraName="test"/>
+      <viewport x={0} y={0} width={0} height={0} cameraName="test" />
       <Wrapper
         internal
       />
@@ -210,8 +199,8 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <viewport x={0} y={0} width={0} height={0} cameraName="test"/>
-      <Wrapper internal={false}/>
+      <viewport x={0} y={0} width={0} height={0} cameraName="test" />
+      <Wrapper internal={false} />
     </React3>, testDiv);
 
     expect(mounted).to.equal(true);
@@ -220,7 +209,7 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <viewport x={0} y={0} width={0} height={0} cameraName="test"/>
+      <viewport x={0} y={0} width={0} height={0} cameraName="test" />
       <Wrapper
         internal
       />
@@ -232,7 +221,7 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <viewport x={0} y={0} width={0} height={0} cameraName="test"/>
+      <viewport x={0} y={0} width={0} height={0} cameraName="test" />
       <Wrapper
         res
       />
@@ -244,7 +233,7 @@ module.exports = type => {
       width={800}
       height={600}
     >
-      <scene/>
+      <scene />
     </React3>, testDiv);
 
     mockConsole.expect('THREE.WebGLRenderer	74');
@@ -301,7 +290,7 @@ module.exports = type => {
       render() {
         switch (this.props.type) {
           case 'camera':
-            return (<perspectiveCamera ref={cameraRef}/>);
+            return (<perspectiveCamera ref={cameraRef} />);
           case 'mesh':
             return (<mesh ref={meshRef}>
               <boxGeometry
@@ -338,7 +327,7 @@ module.exports = type => {
       height={600}
     >
       <scene>
-        <TestComponent type="camera"/>
+        <TestComponent type="camera" />
       </scene>
     </React3>, testDiv);
 
@@ -356,7 +345,7 @@ module.exports = type => {
       height={600}
     >
       <scene>
-        <TestComponent type="mesh"/>
+        <TestComponent type="mesh" />
       </scene>
     </React3>, testDiv);
 
@@ -379,7 +368,7 @@ module.exports = type => {
       height={600}
     >
       <scene>
-        <TestComponent type="group"/>
+        <TestComponent type="group" />
       </scene>
     </React3>, testDiv);
 
@@ -399,7 +388,7 @@ module.exports = type => {
       height={600}
     >
       <scene>
-        <TestComponent type="asdf"/>
+        <TestComponent type="asdf" />
       </scene>
     </React3>, testDiv);
 
@@ -418,7 +407,7 @@ module.exports = type => {
       height={600}
     >
       <scene>
-        <TestComponent type="deeper"/>
+        <TestComponent type="deeper" />
       </scene>
     </React3>, testDiv);
 

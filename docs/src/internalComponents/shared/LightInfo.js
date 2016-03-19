@@ -13,7 +13,7 @@ class LightInfo extends Object3DInfo {
       'In the development environment, a warning message is logged if this happens.\n\n' +
       'It is generally recommended not to add or remove lights after a scene is constructed,' +
       ' but if you know what you are doing you can ignore the warnings by setting the ' +
-      ` 'updatesRefreshAllMaterials' attribute to true.` + '\n\n' +
+      ' \'updatesRefreshAllMaterials\' attribute to true.\n\n' +
       `Example warning message:
 > ${'`'}<${componentName}/>${'`'} has been updated which triggered a refresh of all materials.
 >  This is a potentially expensive operation.

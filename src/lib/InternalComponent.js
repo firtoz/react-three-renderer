@@ -406,6 +406,9 @@ class InternalComponent {
     } else {
       invariant(false);
     }
+
+    // invariant should exit but keep returns consistent
+    return undefined;
   }
 
   /**
@@ -551,7 +554,7 @@ class InternalComponent {
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(false, `Trying to remove a child that is not mounted`);
+      invariant(false, 'Trying to remove a child that is not mounted');
     } else {
       invariant(false);
     }

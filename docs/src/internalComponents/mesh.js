@@ -6,7 +6,7 @@ class mesh extends object3D {
   }
 
   getDescription() {
-    return `This object can contain [[Materials]] and [[Geometries]].`;
+    return 'This object can contain [[Materials]] and [[Geometries]].';
   }
 }
 

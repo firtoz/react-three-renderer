@@ -6,7 +6,7 @@ class latheGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

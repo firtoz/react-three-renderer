@@ -6,7 +6,7 @@ class octahedronGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

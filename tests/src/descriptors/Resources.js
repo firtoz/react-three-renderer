@@ -9,7 +9,7 @@ module.exports = type => {
 
     it('should give warnings for items with resourceId properties outside resources', () => {
       mockConsole.expect('Warning: Found <meshBasicMaterial> with a resourceId property, ' +
-        'but it was not placed within a <resources/> element.');
+        'but it was not placed within a <resources /> element.');
       mockConsole.expect('THREE.WebGLRenderer	74');
 
       ReactDOM.render((<React3
@@ -58,7 +58,7 @@ module.exports = type => {
         </React3>), testDiv);
       }).to.throw('Resource container can only hold resources.' +
         ' Found children without `resourceId` properties:' +
-        ' <meshBasicMaterial/>, <meshPhongMaterial/>.');
+        ' <meshBasicMaterial />, <meshPhongMaterial />.');
     });
   });
 };

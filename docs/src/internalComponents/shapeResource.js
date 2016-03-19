@@ -6,7 +6,7 @@ class shapeResource extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

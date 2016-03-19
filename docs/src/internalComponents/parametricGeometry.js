@@ -6,7 +6,7 @@ class parametricGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

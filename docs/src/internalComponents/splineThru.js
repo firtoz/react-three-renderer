@@ -6,7 +6,7 @@ class splineThru extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

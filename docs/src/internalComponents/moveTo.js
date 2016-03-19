@@ -6,7 +6,7 @@ class moveTo extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

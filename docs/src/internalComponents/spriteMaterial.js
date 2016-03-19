@@ -6,7 +6,7 @@ class spriteMaterial extends MaterialInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

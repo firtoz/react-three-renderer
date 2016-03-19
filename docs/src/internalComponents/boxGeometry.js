@@ -6,7 +6,7 @@ class boxGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

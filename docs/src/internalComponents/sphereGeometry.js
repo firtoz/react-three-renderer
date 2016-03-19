@@ -6,7 +6,7 @@ class sphereGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

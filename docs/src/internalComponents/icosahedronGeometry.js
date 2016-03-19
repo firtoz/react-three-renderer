@@ -6,7 +6,7 @@ class icosahedronGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

@@ -6,7 +6,7 @@ class circleBufferGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

@@ -149,10 +149,10 @@ module.exports = type => {
         </scene>
       </React3>), testDiv);
 
-      mockConsole.expect(`SecurityError: Failed to execute 'texImage2D'` +
-        ` on 'WebGLRenderingContext': ` +
+      mockConsole.expect('SecurityError: Failed to execute \'texImage2D\'' +
+        ' on \'WebGLRenderingContext\': ' +
         `The cross-origin image at ${WANTED_URL}` +
-        ` may not be loaded.`);
+        ' may not be loaded.');
 
       mockConsole.once('empty', () => {
         done();

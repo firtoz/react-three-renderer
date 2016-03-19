@@ -6,7 +6,7 @@ class polyhedronGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

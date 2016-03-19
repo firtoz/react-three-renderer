@@ -43,7 +43,7 @@ Finds a THREE.js object from a mounted component.
 You are encouraged to use [refs](https://facebook.github.io/react/docs/more-about-refs.html) instead.`,
         },
         'React3.eventDispatcher': {
-          description: `**Advanced usage**. Used to dispatch events. Undocumented for now.`,
+          description: '**Advanced usage**. Used to dispatch events. Undocumented for now.',
         },
       },
     },

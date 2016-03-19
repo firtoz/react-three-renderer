@@ -6,7 +6,7 @@ class meshBasicMaterial extends MaterialInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

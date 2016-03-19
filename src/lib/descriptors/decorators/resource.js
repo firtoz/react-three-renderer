@@ -61,14 +61,16 @@ function resource(descriptor) {
         if (process.env.NODE_ENV !== 'production') {
           warning(!threeObject.userData._resourceId,
             `Found <${threeObject.userData.react3internalComponent._elementType}> `
-            + `with a resourceId property, ` +
-            `but it was not placed within a <resources/> element.`);
+            + 'with a resourceId property, ' +
+            'but it was not placed within a <resources/> element.');
         }
         super.setParent(threeObject, parentObject3D);
       }
     }
 
     highlight(threeObject) {
+      let result = undefined;
+
       if (!!threeObject.userData._resourceId) {
         // it's a resource. Let's highlight all references.
         threeObject.userData.events.emit('highlight', {
@@ -87,16 +89,22 @@ function resource(descriptor) {
             }, []),
         });
       } else {
-        return super.highlight(threeObject);
+        result = super.highlight(threeObject);
       }
+
+      return result;
     }
 
     hideHighlight(threeObject) {
+      let result = undefined;
+
       if (!!threeObject.userData._resourceId) {
         threeObject.userData.events.emit('hideHighlight');
       } else {
-        return super.hideHighlight(threeObject);
+        result = super.hideHighlight(threeObject);
       }
+
+      return result;
     }
   }
 

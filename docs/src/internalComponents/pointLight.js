@@ -6,7 +6,7 @@ class pointLight extends LightInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText(descriptor, componentName) {
