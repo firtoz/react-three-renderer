@@ -27,10 +27,47 @@ import ElementDescriptorContainer from './ElementDescriptorContainer';
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
 import ID_PROPERTY_NAME from './utils/idPropertyName';
+import ReactDOMComponentFlags from 'react/lib/ReactDOMComponentFlags';
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
 let getDeclarationErrorAddendum;
+
+const internalInstanceKey = `__reactInternalInstance$${Math.random().toString(36).slice(2)}`;
+
+const Flags = ReactDOMComponentFlags;
+
+
+/**
+ * Drill down (through composites and empty components) until we get a native or
+ * native text component.
+ *
+ * This is pretty polymorphic but unavoidable with the current structure we have
+ * for `_renderedChildren`.
+ */
+function getRenderedNativeOrTextFromComponent(component) {
+  let result = component;
+
+  let rendered = result._renderedComponent;
+
+  while (rendered) {
+    result = rendered;
+
+    rendered = result._renderedComponent;
+  }
+
+  return result;
+}
+
+/**
+ * Populate `_nativeMarkup` on the rendered native/text component with the given
+ * markup. The passed `instance` can be a composite.
+ */
+function precacheMarkup(instance, markup) {
+  const nativeInstance = getRenderedNativeOrTextFromComponent(instance);
+  nativeInstance._nativeMarkup = markup;
+  markup[internalInstanceKey] = nativeInstance;
+}
 
 if (process.env.NODE_ENV !== 'production') {
   // prop type helpers
@@ -65,11 +102,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 class TopLevelWrapper extends ReactComponent {
   render() {
+    // this.props is actually a ReactElement
     return this.props;
   }
 
-  static isReactClass = {};
-  static displayName = 'TopLevelWrapper';
+  static isReactComponent = {};
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  TopLevelWrapper.displayName = 'TopLevelWrapper';
 }
 
 function unmountComponentInternal(instance) {
@@ -81,6 +122,7 @@ function internalGetID(markup) {
   return markup && markup[ID_PROPERTY_NAME] || '';
 }
 
+// see ReactMount.js:getReactRootElementInContainer
 /**
  * @param {THREE.Object3D|HTMLCanvasElement} container That may contain
  * a React component
@@ -504,7 +546,7 @@ class React3Renderer {
             if (process.env.NODE_ENV !== 'production') {
               warning(false,
                 'React3Renderer: Root element has been removed from its original '
-                + 'container. New container: %s', rootMarkup.parentNode);
+                + 'container. New container: %s', rootMarkup.parentMarkup);
             }
           }
         }
@@ -791,6 +833,142 @@ class React3Renderer {
     return this._renderSubtreeIntoContainer(null, nextElement, container, callback);
   }
 
+  precacheChildMarkups(instance, markup) {
+    if ((instance._flags & Flags.hasCachedChildNodes) !== 0) {
+      return;
+    }
+
+    const renderedChildren = instance._renderedChildren;
+
+    const childrenNames = Object.keys(renderedChildren);
+
+    const childrenMarkup = markup.childrenMarkup;
+
+    /* eslint-disable no-labels, no-unused-labels */
+    outer: for (let i = 0; i < childrenNames.length; ++i) {
+      /* eslint-enable */
+      const childName = childrenNames[i];
+
+      const childInst = renderedChildren[childName];
+      // TODO implement _domID
+      const childID = getRenderedNativeOrTextFromComponent(childInst)._domID;
+      if (childID === null) {
+        // We're currently unmounting this child in ReactMultiChild; skip it.
+        continue;
+      }
+
+      for (let j = 0; j < childrenMarkup.length; ++j) {
+        const childMarkup = childrenMarkup[j];
+        if (childMarkup[ID_PROPERTY_NAME] === String(childID)) {
+          precacheMarkup(childInst, childMarkup);
+
+          continue outer; // eslint-disable-line no-labels
+        }
+      }
+
+      // We reached the end of the DOM children without finding an ID match.
+      if (process.env.NODE_ENV !== 'production') {
+        invariant(false, 'Unable to find element with ID %s.', childID);
+      } else {
+        invariant(false);
+      }
+
+      /* original implementation:
+      // We assume the child nodes are in the same order as the child instances.
+      for (; childMarkup !== null; childMarkup = childMarkup.nextSibling) {
+        if (childMarkup.nodeType === 1 && // Element.ELEMENT_NODE
+          childMarkup.getAttribute(ATTR_NAME) === String(childID) ||
+          childMarkup.nodeType === 8 &&
+          childMarkup.nodeValue === ` react-text: ${childID} ` ||
+          childMarkup.nodeType === 8 &&
+          childMarkup.nodeValue === ` react-empty: ${childID} `) {
+          precacheNode(childInst, childMarkup);
+          continue outer; // eslint-disable-line no-labels
+        }
+      }
+      */
+    }
+    instance._flags |= Flags.hasCachedChildNodes;
+  }
+
+  // see ReactDOMComponentTree:getClosestInstanceFromNode
+  getClosestInstanceFromMarkup(markup) {
+    if (markup[internalInstanceKey]) {
+      return markup[internalInstanceKey];
+    }
+
+    let currentMarkup = markup;
+
+    // Walk up the tree until we find an ancestor whose instance we have cached.
+    const parentMarkupsWithoutInstanceKey = [];
+    while (!currentMarkup[internalInstanceKey]) {
+      parentMarkupsWithoutInstanceKey.push(currentMarkup);
+      if (currentMarkup.parentMarkup) {
+        currentMarkup = currentMarkup.parentMarkup;
+      } else {
+        // Top of the tree. This markup must not be part of a React tree (or is
+        // unmounted, potentially).
+        return null;
+      }
+    }
+
+    // if we're here, then currentMarkup does have internalInstanceKey, otherwise
+    // we would have reached the top of the tree and returned null.
+
+    let closest;
+    let instance = currentMarkup[internalInstanceKey];
+
+    // traversing from greatest ancestor (e.g. parent of all parents) downwards
+    // e.g. walk down the tree now
+    while (instance) {
+      closest = instance;
+
+      if (!parentMarkupsWithoutInstanceKey.length) {
+        break;
+      }
+
+      // this will ensure that all children of the current greatest ancestor
+      // have internalInstanceKey
+      this.precacheChildMarkups(instance, currentMarkup);
+
+      currentMarkup = parentMarkupsWithoutInstanceKey.pop();
+      instance = currentMarkup[internalInstanceKey];
+    }
+
+    /* original impl of ^
+    for (; currentMarkup && (instance = currentMarkup[internalInstanceKey]);
+           currentMarkup = parentMarkupsWithoutInstanceKey.pop()) {
+      closest = instance;
+      if (parentMarkupsWithoutInstanceKey.length) {
+        this.precacheChildMarkups(instance, currentMarkup);
+      }
+    }
+    */
+
+    return closest;
+  }
+
+  // see ReactDOMComponentTree:getInstanceFromNode
+  getInstanceFromMarkup(markup) {
+    const inst = this.getClosestInstanceFromMarkup(markup);
+    if (inst !== null && inst._nativeMarkup === markup) {
+      return inst;
+    }
+
+    return null;
+  }
+
+  getNativeRootInstanceInContainer(container) {
+    const rootMarkup = getReactRootMarkupInContainer(container);
+    const prevNativeInstance = rootMarkup && this.getInstanceFromMarkup(rootMarkup);
+    return prevNativeInstance && !prevNativeInstance._nativeParent ? prevNativeInstance : null;
+  }
+
+  getTopLevelWrapperInContainer(container) {
+    const root = this.getNativeRootInstanceInContainer(container);
+    return root ? root._nativeContainerInfo._topLevelWrapper : null;
+  }
+
   _renderSubtreeIntoContainer(parentComponent, nextElement, container, callback) {
     if (!ReactElement.isValidElement(nextElement)) {
       if (process.env.NODE_ENV !== 'production') {
@@ -832,7 +1010,7 @@ class React3Renderer {
     const nextWrappedElement = new ReactElement(TopLevelWrapper,
       null, null, null, null, null, nextElement);
 
-    const prevComponent = this._instancesByReactRootID[this.getReactRootID(container)];
+    const prevComponent = this.getTopLevelWrapperInContainer(container);
 
     if (prevComponent) {
       const prevWrappedElement = prevComponent._currentElement;
