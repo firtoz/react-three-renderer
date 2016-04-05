@@ -19,6 +19,7 @@ class React3 extends React.Component {
     gammaOutput: PropTypes.bool,
     sortObjects: PropTypes.bool,
     mainCamera: PropTypes.string,
+    createRenderer: PropTypes.func,
     onAnimate: PropTypes.func,
     clearColor: PropTypes.oneOfType([
       propTypeInstanceOf(THREE.Color),
