@@ -1,7 +1,7 @@
 import MockConsole from './MockConsole';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
-import React from 'react';
+// import React from 'react';
 
 const { expect } = chai;
 
@@ -37,15 +37,19 @@ module.exports = (type) => {
 
   const mockConsole = new MockConsole();
 
+  mockConsole.expectThreeLog = () => {
+    mockConsole.expect('THREE.WebGLRenderer	75');
+  };
+
   before(() => {
     document.body.appendChild(testDiv);
 
-    // warmup
-    ReactDOM.render((<React3
-      key="warmup"
-      width={1}
-      height={1}
-    />), testDiv);
+    // // warmup
+    // ReactDOM.render((<React3
+    //   key="warmup"
+    //   width={1}
+    //   height={1}
+    // />), testDiv);
   });
 
   beforeEach(() => {

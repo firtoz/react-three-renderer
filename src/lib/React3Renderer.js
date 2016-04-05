@@ -1,9 +1,9 @@
 import THREE from 'three';
 
 import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
-import ReactElement from 'react/lib/ReactElement';
+import reactElementWrapper from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-import ReactEmptyComponentRegistry from 'react/lib/ReactEmptyComponentRegistry';
+// import ReactEmptyComponentRegistry from 'react/lib/ReactEmptyComponentRegistry';
 import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
 import ReactReconciler from 'react/lib/ReactReconciler';
 import ReactUpdates from 'react/lib/ReactUpdates';
@@ -20,6 +20,7 @@ import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
 
+import reactTHREEContainerInfo from './ReactTHREEContainerInfo';
 import React3DInstance from './React3Instance';
 import EventDispatcher from './utils/EventDispatcher';
 import InternalComponent from './InternalComponent';
@@ -27,47 +28,12 @@ import ElementDescriptorContainer from './ElementDescriptorContainer';
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
 import ID_PROPERTY_NAME from './utils/idPropertyName';
-import ReactDOMComponentFlags from 'react/lib/ReactDOMComponentFlags';
 
 const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
 let getDeclarationErrorAddendum;
 
 const internalInstanceKey = `__reactInternalInstance$${Math.random().toString(36).slice(2)}`;
-
-const Flags = ReactDOMComponentFlags;
-
-
-/**
- * Drill down (through composites and empty components) until we get a native or
- * native text component.
- *
- * This is pretty polymorphic but unavoidable with the current structure we have
- * for `_renderedChildren`.
- */
-function getRenderedNativeOrTextFromComponent(component) {
-  let result = component;
-
-  let rendered = result._renderedComponent;
-
-  while (rendered) {
-    result = rendered;
-
-    rendered = result._renderedComponent;
-  }
-
-  return result;
-}
-
-/**
- * Populate `_nativeMarkup` on the rendered native/text component with the given
- * markup. The passed `instance` can be a composite.
- */
-function precacheMarkup(instance, markup) {
-  const nativeInstance = getRenderedNativeOrTextFromComponent(instance);
-  nativeInstance._nativeMarkup = markup;
-  markup[internalInstanceKey] = nativeInstance;
-}
 
 if (process.env.NODE_ENV !== 'production') {
   // prop type helpers
@@ -98,6 +64,21 @@ if (process.env.NODE_ENV !== 'production') {
   };
 }
 
+
+/**
+ * Unmounts a component and removes it from the DOM.
+ *
+ * @param {ReactComponent} instance React component instance.
+ * @param {*} container DOM element to unmount from.
+ * @param {bool} safely
+ * @final
+ * @internal
+ * @see {ReactMount.unmountComponentAtNode}
+ */
+function unmountComponentFromNode(instance, container, safely) {
+  ReactReconciler.unmountComponent(instance, safely);
+}
+
 /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
 
 class TopLevelWrapper extends ReactComponent {
@@ -112,11 +93,6 @@ class TopLevelWrapper extends ReactComponent {
 if (process.env.NODE_ENV !== 'production') {
   TopLevelWrapper.displayName = 'TopLevelWrapper';
 }
-
-function unmountComponentInternal(instance) {
-  ReactReconciler.unmountComponent(instance);
-}
-
 
 function internalGetID(markup) {
   return markup && markup[ID_PROPERTY_NAME] || '';
@@ -237,13 +213,18 @@ class React3Renderer {
    * Updates the rendered children and returns a new set of children.
    *
    * @param {?object} prevChildren Previously initialized set of children.
-   * @param {?object} nextChildren Nested child maps.
+   * @param {?object} nextChildren Flat child element maps.
+   * @param {?object} removedMarkups The map for removed nodes.
    * @param {ReactReconcileTransaction} transaction
    * @param {object} context
    * @return {?object} A new set of child instances.
    * @internal
    */
-  updateChildren(prevChildren, nextChildren, transaction, context) {
+  updateChildren(prevChildren,
+                 nextChildren,
+                 removedMarkups,
+                 transaction,
+                 context) {
     // We currently don't have a way to track moves here but if we use iterators
     // instead of for..in we can zip the iterators and check if an item has
     // moved.
@@ -264,20 +245,26 @@ class React3Renderer {
         const nextElement = nextChildren[childName];
         if (prevChild !== null && prevChild !== undefined
           && shouldUpdateReactComponent(prevElement, nextElement)) {
-          ReactReconciler.receiveComponent(prevChild, nextElement, transaction, context);
+          ReactReconciler.receiveComponent(
+            prevChild, nextElement, transaction, context
+          );
 
           if (prevChild._forceRemountOfComponent) {
-            ReactReconciler.unmountComponent(prevChild, childName);
-            nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
+            removedMarkups[childName] = prevChild.getNativeMarkup();
+
+            ReactReconciler.unmountComponent(prevChild, false);
+            nextChildren[childName] = this.instantiateReactComponent(nextElement);
           } else {
             nextChildren[childName] = prevChild;
           }
         } else {
           if (prevChild) {
-            ReactReconciler.unmountComponent(prevChild, childName);
+            removedMarkups[childName] = prevChild.getNativeMarkup();
+
+            ReactReconciler.unmountComponent(prevChild, false);
           }
           // The child must be instantiated before it's mounted.
-          nextChildren[childName] = this.instantiateReactComponent(nextElement, null);
+          nextChildren[childName] = this.instantiateReactComponent(nextElement);
         }
       }
     }
@@ -289,7 +276,11 @@ class React3Renderer {
         const childName = prevChildrenKeys[i];
 
         if (!(nextChildren && nextChildren.hasOwnProperty(childName))) {
-          ReactReconciler.unmountComponent(prevChildren[childName]);
+          const prevChild = prevChildren[childName];
+
+          removedMarkups[childName] = prevChild.getNativeMarkup();
+
+          ReactReconciler.unmountComponent(prevChild, false);
         }
       }
     }
@@ -304,9 +295,9 @@ class React3Renderer {
   getMarkupFromInstance(instance) {
     const id = ReactInstanceMap.get(instance)._rootNodeID;
 
-    if (ReactEmptyComponentRegistry.isNullComponentID(id)) {
-      return null;
-    }
+    // if (ReactEmptyComponentRegistry.isNullComponentID(id)) {
+    //   return null;
+    // }
 
     if (!this.markupCache.hasOwnProperty(id) || !this.isValid(this.markupCache[id], id)) {
       this.markupCache[id] = this.findMarkupByID(id);
@@ -329,6 +320,7 @@ class React3Renderer {
     this.markupCache = {};
     this.deepestContainerSoFar = null;
     this.nextMountID = 1;
+    this.globalIdCounter = 1;
     this.nextReactRootIndex = 0;
 
     this.threeElementDescriptors = new ElementDescriptorContainer(this).descriptors;
@@ -673,14 +665,14 @@ class React3Renderer {
   /**
    * Mounts this component and inserts it into the THREE.js environment.
    *
-   * @param {ReactComponent} componentInstance The instance to mount.
+   * @param {ReactComponent} wrapperInstance The instance to mount.
    * @param {string} rootID markup ID of the root node.
    * @param {THREE.Object3D|HTMLCanvasElement} container to mount into.
    * @param {ReactReconcileTransaction} transaction
    * @param {boolean} shouldReuseMarkup If true, do not insert markup
    * @param {any} context
    */
-  mountRootComponent = (componentInstance, rootID, container,
+  mountRootComponent = (wrapperInstance, rootID, container,
                         transaction, shouldReuseMarkup, context) => {
     // if (process.env.NODE_ENV !== 'production') {
     // if (context === emptyObject) {
@@ -691,8 +683,9 @@ class React3Renderer {
     //   validateDOMNesting.updatedAncestorInfo(null, tag, null);
     // }
 
-    const markup = ReactReconciler.mountComponent(componentInstance, rootID, transaction, context);
-    componentInstance._renderedComponent._topLevelWrapper = componentInstance;
+    const markup = ReactReconciler.mountComponent(wrapperInstance, transaction, null,
+      reactTHREEContainerInfo(wrapperInstance, container), context);
+    wrapperInstance._renderedComponent._topLevelWrapper = wrapperInstance;
     this._mountRootImage(markup, container, shouldReuseMarkup, transaction);
   };
 
@@ -833,63 +826,8 @@ class React3Renderer {
     return this._renderSubtreeIntoContainer(null, nextElement, container, callback);
   }
 
-  precacheChildMarkups(instance, markup) {
-    if ((instance._flags & Flags.hasCachedChildNodes) !== 0) {
-      return;
-    }
+  // TODO check precacheChildMarkups
 
-    const renderedChildren = instance._renderedChildren;
-
-    const childrenNames = Object.keys(renderedChildren);
-
-    const childrenMarkup = markup.childrenMarkup;
-
-    /* eslint-disable no-labels, no-unused-labels */
-    outer: for (let i = 0; i < childrenNames.length; ++i) {
-      /* eslint-enable */
-      const childName = childrenNames[i];
-
-      const childInst = renderedChildren[childName];
-      // TODO implement _domID
-      const childID = getRenderedNativeOrTextFromComponent(childInst)._domID;
-      if (childID === null) {
-        // We're currently unmounting this child in ReactMultiChild; skip it.
-        continue;
-      }
-
-      for (let j = 0; j < childrenMarkup.length; ++j) {
-        const childMarkup = childrenMarkup[j];
-        if (childMarkup[ID_PROPERTY_NAME] === String(childID)) {
-          precacheMarkup(childInst, childMarkup);
-
-          continue outer; // eslint-disable-line no-labels
-        }
-      }
-
-      // We reached the end of the DOM children without finding an ID match.
-      if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Unable to find element with ID %s.', childID);
-      } else {
-        invariant(false);
-      }
-
-      /* original implementation:
-      // We assume the child nodes are in the same order as the child instances.
-      for (; childMarkup !== null; childMarkup = childMarkup.nextSibling) {
-        if (childMarkup.nodeType === 1 && // Element.ELEMENT_NODE
-          childMarkup.getAttribute(ATTR_NAME) === String(childID) ||
-          childMarkup.nodeType === 8 &&
-          childMarkup.nodeValue === ` react-text: ${childID} ` ||
-          childMarkup.nodeType === 8 &&
-          childMarkup.nodeValue === ` react-empty: ${childID} `) {
-          precacheNode(childInst, childMarkup);
-          continue outer; // eslint-disable-line no-labels
-        }
-      }
-      */
-    }
-    instance._flags |= Flags.hasCachedChildNodes;
-  }
 
   // see ReactDOMComponentTree:getClosestInstanceFromNode
   getClosestInstanceFromMarkup(markup) {
@@ -970,7 +908,7 @@ class React3Renderer {
   }
 
   _renderSubtreeIntoContainer(parentComponent, nextElement, container, callback) {
-    if (!ReactElement.isValidElement(nextElement)) {
+    if (!reactElementWrapper.isValidElement(nextElement)) {
       if (process.env.NODE_ENV !== 'production') {
         if (typeof nextElement === 'string') {
           invariant(false, 'React3Renderer.render(): Invalid component element.%s',
@@ -1007,7 +945,7 @@ class React3Renderer {
     //     'for your app.');
     // }
 
-    const nextWrappedElement = new ReactElement(TopLevelWrapper,
+    const nextWrappedElement = reactElementWrapper(TopLevelWrapper,
       null, null, null, null, null, nextElement);
 
     const prevComponent = this.getTopLevelWrapperInContainer(container);
@@ -1032,7 +970,9 @@ class React3Renderer {
 
     // aka first child
     const reactRootMarkup = getReactRootMarkupInContainer(container);
-    const containerHasReactMarkup = reactRootMarkup && internalGetID(reactRootMarkup);
+    const containerHasReactMarkup = reactRootMarkup && !!internalGetID(reactRootMarkup);
+
+    // containerHasNonRootReactChild not implemented
 
     // no need for this part for now
     // if (process.env.NODE_ENV !== 'production') {
@@ -1141,13 +1081,34 @@ class React3Renderer {
     }
     // });
 
-    if (process.env.NODE_ENV !== 'production') {
-      // Record the root element in case it later gets transplanted.
-      this.rootMarkupsByReactRootID[this.getReactRootID(container)] =
-        getReactRootMarkupInContainer(container);
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //   // Record the root element in case it later gets transplanted.
+    //   this.rootMarkupsByReactRootID[this.getReactRootID(container)] =
+    //     getReactRootMarkupInContainer(container);
+    // }
 
     return prevComponent;
+  }
+
+
+  /**
+   * True if the supplied DOM node has a direct React-rendered child that is
+   * not a React root element. Useful for warning in `render`,
+   * `unmountComponentAtNode`, etc.
+   *
+   * @param {?*} container The container.
+   * @return {boolean} True if the DOM element contains a direct child that was
+   * rendered by React but is not a root element.
+   * @internal
+   */
+  hasNonRootReactChild(container) {
+    const rootMarkup = getReactRootMarkupInContainer(container);
+    if (rootMarkup) {
+      const inst = this.getInstanceFromMarkup(rootMarkup);
+      return !!(inst && inst._nativeParent);
+    }
+
+    return false;
   }
 
   unmountComponentAtNode(container) {
@@ -1157,15 +1118,73 @@ class React3Renderer {
     // render but we still don't expect to be in a render call here.)
 
     if (process.env.NODE_ENV !== 'production') {
-      warning(ReactCurrentOwner.current === null,
-        'unmountComponentAtNode(): Render methods should be a pure function '
-        + 'of props and state; triggering nested component updates from render '
-        + 'is not allowed. If necessary, trigger nested updates in '
-        + 'componentDidUpdate. Check the render method of %s.',
-        ReactCurrentOwner.current && ReactCurrentOwner.current.getName()
-        || 'ReactCompositeComponent');
+      warning(
+        ReactCurrentOwner.current === null,
+        'unmountComponentAtNode(): Render methods should be a pure function ' +
+        'of props and state; triggering nested component updates from render ' +
+        'is not allowed. If necessary, trigger nested updates in ' +
+        'componentDidUpdate. Check the render method of %s.',
+        ReactCurrentOwner.current && ReactCurrentOwner.current.getName() ||
+        'ReactCompositeComponent'
+      );
     }
 
+    /*
+    invariant(
+      container && (
+        container.nodeType === ELEMENT_NODE_TYPE ||
+        container.nodeType === DOC_NODE_TYPE ||
+        container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE
+      ),
+      'unmountComponentAtNode(...): Target container is not a DOM element.'
+    );
+    */
+
+    const prevComponent = this.getTopLevelWrapperInContainer(container);
+    if (!prevComponent) {
+      // Check if the node being unmounted was rendered by React, but isn't a
+      // root node.
+      const containerHasNonRootReactChild = this.hasNonRootReactChild(container);
+
+      // debugger;
+
+      // Check if the container itself is a React root node.
+      const isContainerReactRoot = container && container.userData && container.userData.markup &&
+        container.userData.markup[ID_PROPERTY_NAME];
+
+      if (process.env.NODE_ENV !== 'production') {
+        warning(
+          !containerHasNonRootReactChild,
+          'unmountComponentAtNode(): The node you\'re attempting to unmount ' +
+          'was rendered by React and is not a top-level container. %s',
+          (
+            isContainerReactRoot ?
+            'You may have accidentally passed in a React root node instead ' +
+            'of its container.' :
+            'Instead, have the parent component update its state and ' +
+            'rerender in order to remove this component.'
+          )
+        );
+      }
+
+      return false;
+    }
+
+    delete this._instancesByReactRootID[prevComponent._instance.rootID];
+
+    ReactUpdates.batchedUpdates(
+      unmountComponentFromNode,
+      prevComponent,
+      container,
+      false
+    );
+
+    if (container && container.userData && container.userData._createdByReact3) {
+      delete container.userData;
+    }
+
+    return true;
+    /*
     const reactRootID = this.getReactRootID(container);
     const component = this._instancesByReactRootID[reactRootID];
     if (!component) {
@@ -1185,6 +1204,7 @@ class React3Renderer {
     }
 
     return true;
+    */
   }
 
   /**
@@ -1197,29 +1217,27 @@ class React3Renderer {
     return rootMarkup && this.getID(rootMarkup);
   }
 
+  // see instantiateReactComponent.js
+  /**
+   *
+   * @param elementToInstantiate ( aka node )
+   * @returns {*}
+   */
   instantiateReactComponent(elementToInstantiate) {
     // console.log('instantiating react component', elementToInstantiate);
     let instance;
 
-    let node = elementToInstantiate;
-
-    if (node === null || node === false) {
-      node = new ReactEmptyComponent(this.instantiateReactComponent);
-    } else if (typeof node === 'object') {
-      const element = node;
+    if (elementToInstantiate === null || elementToInstantiate === false) {
+      instance = ReactEmptyComponent.create(this.instantiateReactComponent);
+    } else if (typeof elementToInstantiate === 'object') {
+      const element = elementToInstantiate;
       if (!(element && (typeof element.type === 'function' || typeof element.type === 'string'))) {
         if (process.env.NODE_ENV !== 'production') {
-          if (element.type === null) {
-            invariant(false,
-              'Element type is invalid: expected a string (for built-in components) '
-              + 'or a class/function (for composite components) but got: %s.%s',
-              element.type, getDeclarationErrorAddendum(element._owner));
-          } else {
-            invariant(false,
-              'Element type is invalid: expected a string (for built-in components) '
-              + 'or a class/function (for composite components) but got: %s.%s',
-              typeof element.type, getDeclarationErrorAddendum(element._owner));
-          }
+          invariant(false,
+            'Element type is invalid: expected a string (for built-in components) ' +
+            'or a class/function (for composite components) but got: %s.%s',
+            (!element.type) ? element.type : typeof element.type,
+            getDeclarationErrorAddendum(element._owner));
         } else {
           invariant(false);
         }
@@ -1229,6 +1247,7 @@ class React3Renderer {
       if (typeof element.type === 'string') {
         // console.log('string value string value', element);
 
+// original: instance = ReactNativeComponent.createInternalComponent(element);
         instance = new InternalComponent(element, this);
 
         // instance = ReactNativeComponent.createInternalComponent(element);
@@ -1240,34 +1259,44 @@ class React3Renderer {
 
         instance = new Constructor(element);
 
-        console.log('internal component type'); // eslint-disable-line
+        // console.log('internal component type'); // eslint-disable-line
       } else {
-        instance = new React3CompositeComponentWrapper(this);
+        // TODO sync
+        instance = new React3CompositeComponentWrapper(element, this);
       }
-    } else if (typeof node === 'string' || typeof node === 'number') {
+    } else if (typeof elementToInstantiate === 'string'
+      || typeof elementToInstantiate === 'number') {
+      // TODO create instance for text
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Encountered invalid React node of type %s : %s', typeof node, node);
+        invariant(false, 'Encountered invalid React node of type %s : %s',
+          typeof elementToInstantiate, elementToInstantiate);
       } else {
         invariant(false);
       }
     } else {
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Encountered invalid React node of type %s', typeof node);
+        invariant(false, 'Encountered invalid React node of type %s', typeof elementToInstantiate);
       } else {
         invariant(false);
       }
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      warning(typeof instance.construct === 'function'
-        && typeof instance.mountComponent === 'function'
-        && typeof instance.receiveComponent === 'function'
-        && typeof instance.unmountComponent === 'function',
-        'Only React Components can be mounted.');
-    }
+      if (!(typeof instance.mountComponent === 'function' &&
+        typeof instance.receiveComponent === 'function' &&
+        typeof instance.getNativeMarkup === 'function' &&
+        typeof instance.unmountComponent === 'function')) {
+        debugger; // eslint-disable-line
+      }
 
-    // Sets up the instance. This can probably just move into the constructor now.
-    instance.construct(node);
+      warning(
+        typeof instance.mountComponent === 'function' &&
+        typeof instance.receiveComponent === 'function' &&
+        typeof instance.getNativeMarkup === 'function' &&
+        typeof instance.unmountComponent === 'function',
+        'Only React 3 Components can be mounted.'
+      );
+    }
 
     // These two fields are used by the DOM and ART diffing algorithms
     // respectively. Instead of using expandos on components, we should be

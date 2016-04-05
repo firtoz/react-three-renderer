@@ -19,7 +19,7 @@ module.exports = type => {
     mockConsole.expect('Warning: Failed propType: ' +
       'Required prop `height` was not specified in `react3`.');
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     ReactDOM.render(<React3 />, testDiv);
 
@@ -32,7 +32,7 @@ module.exports = type => {
       height={600}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     expect(testDiv.firstChild).to.be.an.instanceOf(HTMLCanvasElement);
     const canvas = ReactDOM.findDOMNode(react3Instance);
@@ -49,7 +49,7 @@ module.exports = type => {
       <scene />
     </React3>, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     let mounted = false;
 
@@ -72,6 +72,8 @@ module.exports = type => {
     const MyResources = () => (<resources />);
 
     const Wrapper = (props) => {
+      // debugger;
+
       if (props.internal) {
         return (<scene />);
       }
@@ -141,7 +143,7 @@ module.exports = type => {
       <scene />
     </React3>, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     let mounted = false;
 
@@ -236,7 +238,7 @@ module.exports = type => {
       <scene />
     </React3>, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
     /* eslint-disable react/no-multi-comp */
 
     let cameraReference = null;

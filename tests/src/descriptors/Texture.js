@@ -66,7 +66,7 @@ module.exports = type => {
         done();
       };
 
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
 
       ReactDOM.render((<TestComponent
         url="./bad.png"
@@ -85,13 +85,13 @@ module.exports = type => {
         onError={textureLoadFail}
       />), testDiv);
 
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
     });
 
     it('Should succeed to load online files', function _(done) {
       this.timeout(5000);
 
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
 
       ReactDOM.render((<TestComponent
         url={WANTED_URL}
@@ -113,7 +113,7 @@ module.exports = type => {
         ignoreExtensionWarnings(extensions);
       };
 
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
 
       ReactDOM.render((<React3
         width={800}
@@ -162,7 +162,7 @@ module.exports = type => {
     it('Should not fail for rendering cross origin images if crossOrigin is set', function _(done) {
       this.timeout(5000);
 
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
 
       const onSceneCreate = (scene) => {
         if (!scene) {
