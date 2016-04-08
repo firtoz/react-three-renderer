@@ -29,7 +29,7 @@ import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
 import ID_PROPERTY_NAME from './utils/idPropertyName';
 
-const SEPARATOR = ReactInstanceHandles.SEPARATOR;
+// const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
 let getDeclarationErrorAddendum;
 
@@ -661,35 +661,36 @@ class React3Renderer {
     return undefined;
   }
 
+  //
+  // /**
+  //  * Mounts this component and inserts it into the THREE.js environment.
+  //  *
+  //  * @param {ReactComponent} wrapperInstance The instance to mount.
+  //  * @param {string} rootID markup ID of the root node.
+  //  * @param {THREE.Object3D|HTMLCanvasElement} container to mount into.
+  //  * @param {ReactReconcileTransaction} transaction
+  //  * @param {boolean} shouldReuseMarkup If true, do not insert markup
+  //  * @param {any} context
+  //  */
+  // mountRootComponent = (wrapperInstance, rootID, container,
+  //                       transaction, shouldReuseMarkup, context) => {
+  //   debugger;
+  //   // if (process.env.NODE_ENV !== 'production') {
+  //   // if (context === emptyObject) {
+  //   //   context = {};
+  //   // }
+  //   // const tag = container.nodeName.toLowerCase();
+  //   // context[validateDOMNesting.ancestorInfoContextKey] =
+  //   //   validateDOMNesting.updatedAncestorInfo(null, tag, null);
+  //   // }
+  //
+  //   const markup = ReactReconciler.mountComponent(wrapperInstance, transaction, null,
+  //     reactTHREEContainerInfo(wrapperInstance, container), context);
+  //   wrapperInstance._renderedComponent._topLevelWrapper = wrapperInstance;
+  //   this._mountRootImage(markup, container, shouldReuseMarkup, transaction);
+  // };
 
-  /**
-   * Mounts this component and inserts it into the THREE.js environment.
-   *
-   * @param {ReactComponent} wrapperInstance The instance to mount.
-   * @param {string} rootID markup ID of the root node.
-   * @param {THREE.Object3D|HTMLCanvasElement} container to mount into.
-   * @param {ReactReconcileTransaction} transaction
-   * @param {boolean} shouldReuseMarkup If true, do not insert markup
-   * @param {any} context
-   */
-  mountRootComponent = (wrapperInstance, rootID, container,
-                        transaction, shouldReuseMarkup, context) => {
-    // if (process.env.NODE_ENV !== 'production') {
-    // if (context === emptyObject) {
-    //   context = {};
-    // }
-    // const tag = container.nodeName.toLowerCase();
-    // context[validateDOMNesting.ancestorInfoContextKey] =
-    //   validateDOMNesting.updatedAncestorInfo(null, tag, null);
-    // }
-
-    const markup = ReactReconciler.mountComponent(wrapperInstance, transaction, null,
-      reactTHREEContainerInfo(wrapperInstance, container), context);
-    wrapperInstance._renderedComponent._topLevelWrapper = wrapperInstance;
-    this._mountRootImage(markup, container, shouldReuseMarkup, transaction);
-  };
-
-  _mountRootImage(rootImage, container) {
+  _mountImageIntoNode(rootImage, container) {
     // if (!(container && (container.nodeType === ELEMENT_NODE_TYPE
     //   || container.nodeType === DOC_NODE_TYPE
     //   || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
@@ -796,23 +797,23 @@ class React3Renderer {
     instance.mountedIntoRoot();
   }
 
-  /**
-   * Batched mount.
-   *
-   * @param {ReactComponent} componentInstance The instance to mount.
-   * @param {string} rootID markup ID of the root node.
-   * @param {THREE.Object3D|HTMLCanvasElement} container THREE Object
-   *   or HTMLCanvasElement to mount into.
-   * @param {boolean} shouldReuseMarkup If true, do not insert markup
-   * @param {any} context
-   */
-  batchedMountRootComponent = (componentInstance, rootID,
-                               container, shouldReuseMarkup, context) => {
-    const transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
-    transaction.perform(this.mountRootComponent, null, componentInstance,
-      rootID, container, transaction, shouldReuseMarkup, context);
-    ReactUpdates.ReactReconcileTransaction.release(transaction);
-  };
+  // /**
+  //  * Batched mount.
+  //  *
+  //  * @param {ReactComponent} componentInstance The instance to mount.
+  //  * @param {string} rootID markup ID of the root node.
+  //  * @param {THREE.Object3D|HTMLCanvasElement} container THREE Object
+  //  *   or HTMLCanvasElement to mount into.
+  //  * @param {boolean} shouldReuseMarkup If true, do not insert markup
+  //  * @param {any} context
+  //  */
+  // batchedMountRootComponent = (componentInstance, rootID,
+  //                              container, shouldReuseMarkup, context) => {
+  //   const transaction = ReactUpdates.ReactReconcileTransaction.getPooled();
+  //   transaction.perform(this.mountRootComponent, null, componentInstance,
+  //     rootID, container, transaction, shouldReuseMarkup, context);
+  //   ReactUpdates.ReactReconcileTransaction.release(transaction);
+  // };
 
 
   /**
@@ -1330,6 +1331,8 @@ class React3Renderer {
    * @private
    */
   _renderNewRootComponent(nextElement, container, shouldReuseMarkup, context) {
+    // debugger;
+
     // Various parts of our code (such as ReactCompositeComponent's
     // _renderValidatedComponent) assume that calls to render aren't nested;
     // verify that that's the case.
@@ -1345,7 +1348,8 @@ class React3Renderer {
     }
 
     const componentInstance = this.instantiateReactComponent(nextElement);
-    const reactRootID = this._registerComponent(componentInstance, container);
+
+    // const reactRootID = this._registerComponent(componentInstance, container);
 
     // The initial render is synchronous but any updates that happen during
     // rendering, in componentWillMount or componentDidMount, will be batched
@@ -1358,10 +1362,19 @@ class React3Renderer {
       ReactInjection.Updates.injectBatchingStrategy(ReactDefaultBatchingStrategy);
     }
 
-    ReactUpdates.batchedUpdates(this.batchedMountRootComponent,
-      componentInstance, reactRootID, container, shouldReuseMarkup, context);
+    ReactUpdates.batchedUpdates(
+      this.batchedMountComponentIntoNode,
+      componentInstance,
+      container,
+      shouldReuseMarkup,
+      context
+    );
+
+    const wrapperID = componentInstance._instance.rootID = this.createReactRootID();
+    this._instancesByReactRootID[wrapperID] = componentInstance;
 
     if (process.env.NODE_ENV !== 'production') {
+      const reactRootID = 0;
       // Record the root element in case it later gets transplanted.
       this.rootMarkupsByReactRootID[reactRootID] = getReactRootMarkupInContainer(container);
     }
@@ -1369,46 +1382,123 @@ class React3Renderer {
     return componentInstance;
   }
 
-  _registerComponent(nextComponent, container) {
-    // if (!(container &&
-    //   (container.nodeType === ELEMENT_NODE_TYPE
-    //    || container.nodeType === DOC_NODE_TYPE
-    //    || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
-    //   if (process.env.NODE_ENV !== 'production') {
-    //     invariant(false, '_registerComponent(...): Target container is not a DOM element.');
-    //   } else {
-    //     invariant(false);
-    //   }
-    // }
-
-    // ReactBrowserEventEmitter.ensureScrollValueMonitoring();
-
-    const reactRootID = this.registerContainer(container);
-    this._instancesByReactRootID[reactRootID] = nextComponent;
-    return reactRootID;
-  }
 
   /**
-   * Registers a container node into which React components will be rendered.
-   * This also creates the "reactRoot" ID that will be assigned to the element
-   * rendered within.
+   * Batched mount.
    *
-   * @param {THREE.Object3D|HTMLCanvasElement} container to register as a container.
-   * @return {string} The "reactRoot" ID of elements rendered within.
+   * @param {ReactComponent} componentInstance The instance to mount.
+   * @param {*} container Container.
+   * @param {boolean} shouldReuseMarkup If true, do not insert markup
+   * @param {*} context que?
    */
-  registerContainer(container) {
-    let reactRootID = this.getReactRootID(container);
-    if (reactRootID) {
-      // If one exists, make sure it is a valid "reactRoot" ID.
-      reactRootID = ReactInstanceHandles.getReactRootIDFromNodeID(reactRootID);
-    }
-    if (!reactRootID) {
-      // No valid "reactRoot" ID found, create one.
-      reactRootID = `${SEPARATOR}${this.createReactRootID()}`;
-    }
-    this.containersByReactRootID[reactRootID] = container;
-    return reactRootID;
-  }
+  batchedMountComponentIntoNode = (componentInstance,
+                                   container,
+                                   shouldReuseMarkup,
+                                   context) => {
+    const transaction = ReactUpdates.ReactReconcileTransaction.getPooled(
+      /* useCreateElement */
+      !shouldReuseMarkup
+    );
+    transaction.perform(
+      this.mountComponentIntoNode,
+      null,
+      componentInstance,
+      container,
+      transaction,
+      shouldReuseMarkup,
+      context
+    );
+    ReactUpdates.ReactReconcileTransaction.release(transaction);
+  };
+
+
+  /**
+   * Mounts this component and inserts it into the DOM.
+   *
+   * @param {ReactComponent} wrapperInstance The instance to mount.
+   * @param {*} container container to mount into.
+   * @param {ReactReconcileTransaction} transaction
+   * @param {boolean} shouldReuseMarkup If true, do not insert markup
+   * @param {*} context
+   */
+  mountComponentIntoNode = (wrapperInstance,
+                            container,
+                            transaction,
+                            shouldReuseMarkup,
+                            context) => {
+    // let markerName;
+    // if (ReactFeatureFlags.logTopLevelRenders) {
+    //   var wrappedElement = wrapperInstance._currentElement.props;
+    //   var type = wrappedElement.type;
+    //   markerName = 'React mount: ' + (
+    //       typeof type === 'string' ? type :
+    //       type.displayName || type.name
+    //     );
+    //   console.time(markerName);
+    // }
+
+    const markup = ReactReconciler.mountComponent(
+      wrapperInstance,
+      transaction,
+      null,
+      reactTHREEContainerInfo(wrapperInstance, container),
+      context
+    );
+
+    // if (markerName) {
+    //   console.timeEnd(markerName);
+    // }
+
+    wrapperInstance._renderedComponent._topLevelWrapper = wrapperInstance;
+    this._mountImageIntoNode(
+      markup,
+      container,
+      wrapperInstance,
+      shouldReuseMarkup,
+      transaction
+    );
+  };
+
+  // _registerComponent(nextComponent, container) {
+  //   // if (!(container &&
+  //   //   (container.nodeType === ELEMENT_NODE_TYPE
+  //   //    || container.nodeType === DOC_NODE_TYPE
+  //   //    || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
+  //   //   if (process.env.NODE_ENV !== 'production') {
+  //   //     invariant(false, '_registerComponent(...): Target container is not a DOM element.');
+  //   //   } else {
+  //   //     invariant(false);
+  //   //   }
+  //   // }
+  //
+  //   // ReactBrowserEventEmitter.ensureScrollValueMonitoring();
+  //
+  //   const reactRootID = this.registerContainer(container);
+  //   this._instancesByReactRootID[reactRootID] = nextComponent;
+  //   return reactRootID;
+  // }
+
+  // /**
+  //  * Registers a container node into which React components will be rendered.
+  //  * This also creates the "reactRoot" ID that will be assigned to the element
+  //  * rendered within.
+  //  *
+  //  * @param {THREE.Object3D|HTMLCanvasElement} container to register as a container.
+  //  * @return {string} The "reactRoot" ID of elements rendered within.
+  //  */
+  // registerContainer(container) {
+  //   let reactRootID = this.getReactRootID(container);
+  //   if (reactRootID) {
+  //     // If one exists, make sure it is a valid "reactRoot" ID.
+  //     reactRootID = ReactInstanceHandles.getReactRootIDFromNodeID(reactRootID);
+  //   }
+  //   if (!reactRootID) {
+  //     // No valid "reactRoot" ID found, create one.
+  //     reactRootID = `${SEPARATOR}${this.createReactRootID()}`;
+  //   }
+  //   this.containersByReactRootID[reactRootID] = container;
+  //   return reactRootID;
+  // }
 
   createReactRootID() {
     return this.nextReactRootIndex++;
