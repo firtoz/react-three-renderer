@@ -3,6 +3,8 @@ react-three-renderer
 
 Render into a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
+Current supported version of React: 0.14.7. React 15 compatibility is being worked on.
+
 Would you like to know more? [See the wiki](https://github.com/toxicFork/react-three-renderer/wiki).
 
 [Live examples](http://toxicfork.github.io/react-three-renderer-example/).
