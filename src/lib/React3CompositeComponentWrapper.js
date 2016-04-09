@@ -55,7 +55,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   unmountComponent(safely) {
-    debugger; // eslint-disable-line
+    // debugger; // eslint-disable-line
 
     super.unmountComponent(safely);
 
@@ -72,14 +72,13 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     return this._react3RendererInstance.instantiateReactComponent(element);
   }
 
-  _replaceNodeWithMarkupByID(prevComponentID, nextMarkup) {
-    const markup = this._react3RendererInstance.getMarkup(prevComponentID);
 
-    const parentMarkup = markup.parentMarkup;
+  _replaceNodeWithMarkup(oldMarkup, nextMarkup) {
+    const parentMarkup = oldMarkup.parentMarkup;
 
     const ownerChildrenMarkups = parentMarkup.childrenMarkup;
 
-    const indexInParent = ownerChildrenMarkups.indexOf(markup);
+    const indexInParent = ownerChildrenMarkups.indexOf(oldMarkup);
 
     if (process.env.NODE_ENV !== 'production') {
       invariant(indexInParent !== -1, 'The node has no parent');
@@ -88,12 +87,12 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     }
 
     const parentInternalComponent = parentMarkup.threeObject.userData.react3internalComponent;
-    const originalInternalComponent = markup.threeObject.userData.react3internalComponent;
+    const originalInternalComponent = oldMarkup.threeObject.userData.react3internalComponent;
 
-    parentInternalComponent.removeChild(originalInternalComponent);
+    parentInternalComponent.removeChild(originalInternalComponent, null);
     const nextChild = nextMarkup.threeObject.userData.react3internalComponent;
     nextChild._mountIndex = indexInParent;
-    parentInternalComponent.createChild(nextChild, nextMarkup);
+    parentInternalComponent.createChild(nextChild, null, nextMarkup);
   }
 
   // See ReactCompositeComponent.mountComponent

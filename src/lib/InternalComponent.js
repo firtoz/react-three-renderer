@@ -130,8 +130,8 @@ class InternalComponent {
   }
 
   getNativeNode() {
-    console.warn('native node?'); // eslint-disable-line no-console
-    debugger; // eslint-disable-line no-debugger
+    // console.warn('native node?'); // eslint-disable-line no-console
+    // debugger; // eslint-disable-line no-debugger
     return this._markup;
   }
 
@@ -547,7 +547,11 @@ class InternalComponent {
           if (prevChild) {
             // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
             lastIndex = Math.max(prevChild._mountIndex, lastIndex);
-            // this._unmountChild(prevChild);
+            invariant(!!removedMarkups[childName], 'Removed markup map should contain this child');
+
+            delete removedMarkups[childName];
+
+            this._unmountChild(prevChildren[childName], removedMarkups[childName]);
             // The `removedMarkups` loop below will actually remove the child.
           }
 
@@ -601,6 +605,9 @@ class InternalComponent {
     const mountIndex = child._mountIndex;
 
     this._markup.childrenMarkup.splice(mountIndex, 0, mountImage);
+    if (!mountImage) {
+      debugger;
+    }
     mountImage.parentMarkup = this._markup;
 
     this.threeElementDescriptor.addChild(this._threeObject, mountImage.threeObject, mountIndex);
