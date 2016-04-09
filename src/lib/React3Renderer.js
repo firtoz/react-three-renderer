@@ -1,9 +1,7 @@
 import THREE from 'three';
-
 import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
 import reactElementWrapper from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-// import ReactEmptyComponentRegistry from 'react/lib/ReactEmptyComponentRegistry';
 import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
 import ReactReconciler from 'react/lib/ReactReconciler';
 import ReactUpdates from 'react/lib/ReactUpdates';
@@ -15,25 +13,45 @@ import ReactReconcileTransaction from 'react/lib/ReactReconcileTransaction';
 import ReactDefaultBatchingStrategy from 'react/lib/ReactDefaultBatchingStrategy';
 import traverseAllChildren from 'react/lib/traverseAllChildren';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
-
 import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-
 import reactTHREEContainerInfo from './ReactTHREEContainerInfo';
-import React3DInstance from './React3Instance';
 import EventDispatcher from './utils/EventDispatcher';
 import InternalComponent from './InternalComponent';
+import React3ComponentTree from './React3ComponentTree';
 import ElementDescriptorContainer from './ElementDescriptorContainer';
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
-
 import ID_PROPERTY_NAME from './utils/idPropertyName';
+// import ReactEmptyComponentRegistry from 'react/lib/ReactEmptyComponentRegistry';
 
 // const SEPARATOR = ReactInstanceHandles.SEPARATOR;
 
 let getDeclarationErrorAddendum;
 
-const internalInstanceKey = `__reactInternalInstance$${Math.random().toString(36).slice(2)}`;
+// const internalInstanceKey = `__reactInternalInstance$${Math.random().toString(36).slice(2)}`;
+//
+// /**
+//  * Drill down (through composites and empty components) until we get a native or
+//  * native text component.
+//  *
+//  * This is pretty polymorphic but unavoidable with the current structure we have
+//  * for `_renderedChildren`.
+//  */
+// function getRenderedNativeOrTextFromComponent(component) {
+//   let result = component;
+//
+//   let rendered = result._renderedComponent;
+//
+//   while (rendered) {
+//     result = rendered;
+//
+//     rendered = result._renderedComponent;
+//   }
+//
+//   return result;
+// }
+//
 
 if (process.env.NODE_ENV !== 'production') {
   // prop type helpers
@@ -690,7 +708,12 @@ class React3Renderer {
   //   this._mountRootImage(markup, container, shouldReuseMarkup, transaction);
   // };
 
-  _mountImageIntoNode(rootImage, container) {
+  _mountImageIntoNode(markup,
+                      container,
+                      instance,
+                      shouldReuseMarkup,
+                      transaction) {
+    void(transaction);
     // if (!(container && (container.nodeType === ELEMENT_NODE_TYPE
     //   || container.nodeType === DOC_NODE_TYPE
     //   || container.nodeType === DOCUMENT_FRAGMENT_NODE_TYPE))) {
@@ -770,6 +793,10 @@ class React3Renderer {
       };
     }
 
+    // debugger;
+
+    const rootImage = markup;
+
     const rootMarkup = {
       threeObject: container,
       parentMarkup: null,
@@ -790,11 +817,17 @@ class React3Renderer {
 
     // all objects now added can be marked as added to scene now!
 
-    const instance:React3DInstance = rootImage.threeObject;
+    // const instance:React3DInstance = rootImage.threeObject;
+    //
+    // invariant(instance instanceof React3DInstance, 'Invalid root component type found');
 
-    invariant(instance instanceof React3DInstance, 'Invalid root component type found');
+    // debugger;
 
-    instance.mountedIntoRoot();
+    rootImage.threeObject.mountedIntoRoot();
+
+    // debugger;
+
+    React3ComponentTree.precacheMarkup(instance, container.userData.markup.childrenMarkup[0]);
   }
 
   // /**
@@ -830,81 +863,23 @@ class React3Renderer {
   // TODO check precacheChildMarkups
 
 
-  // see ReactDOMComponentTree:getClosestInstanceFromNode
-  getClosestInstanceFromMarkup(markup) {
-    if (markup[internalInstanceKey]) {
-      return markup[internalInstanceKey];
-    }
-
-    let currentMarkup = markup;
-
-    // Walk up the tree until we find an ancestor whose instance we have cached.
-    const parentMarkupsWithoutInstanceKey = [];
-    while (!currentMarkup[internalInstanceKey]) {
-      parentMarkupsWithoutInstanceKey.push(currentMarkup);
-      if (currentMarkup.parentMarkup) {
-        currentMarkup = currentMarkup.parentMarkup;
-      } else {
-        // Top of the tree. This markup must not be part of a React tree (or is
-        // unmounted, potentially).
-        return null;
-      }
-    }
-
-    // if we're here, then currentMarkup does have internalInstanceKey, otherwise
-    // we would have reached the top of the tree and returned null.
-
-    let closest;
-    let instance = currentMarkup[internalInstanceKey];
-
-    // traversing from greatest ancestor (e.g. parent of all parents) downwards
-    // e.g. walk down the tree now
-    while (instance) {
-      closest = instance;
-
-      if (!parentMarkupsWithoutInstanceKey.length) {
-        break;
-      }
-
-      // this will ensure that all children of the current greatest ancestor
-      // have internalInstanceKey
-      this.precacheChildMarkups(instance, currentMarkup);
-
-      currentMarkup = parentMarkupsWithoutInstanceKey.pop();
-      instance = currentMarkup[internalInstanceKey];
-    }
-
-    /* original impl of ^
-    for (; currentMarkup && (instance = currentMarkup[internalInstanceKey]);
-           currentMarkup = parentMarkupsWithoutInstanceKey.pop()) {
-      closest = instance;
-      if (parentMarkupsWithoutInstanceKey.length) {
-        this.precacheChildMarkups(instance, currentMarkup);
-      }
-    }
-    */
-
-    return closest;
-  }
-
-  // see ReactDOMComponentTree:getInstanceFromNode
-  getInstanceFromMarkup(markup) {
-    const inst = this.getClosestInstanceFromMarkup(markup);
-    if (inst !== null && inst._nativeMarkup === markup) {
-      return inst;
-    }
-
-    return null;
-  }
-
   getNativeRootInstanceInContainer(container) {
     const rootMarkup = getReactRootMarkupInContainer(container);
-    const prevNativeInstance = rootMarkup && this.getInstanceFromMarkup(rootMarkup);
+    if (rootMarkup) {
+      // debugger;
+    }
+    const prevNativeInstance = rootMarkup && React3ComponentTree.getInstanceFromMarkup(rootMarkup);
     return prevNativeInstance && !prevNativeInstance._nativeParent ? prevNativeInstance : null;
   }
 
   getTopLevelWrapperInContainer(container) {
     const root = this.getNativeRootInstanceInContainer(container);
+    if (root) {
+      // debugger;
+
+      invariant(!!root._nativeContainerInfo, 'Root should have native container info %s',
+        ' but it does not');
+    }
     return root ? root._nativeContainerInfo._topLevelWrapper : null;
   }
 
@@ -1105,7 +1080,7 @@ class React3Renderer {
   hasNonRootReactChild(container) {
     const rootMarkup = getReactRootMarkupInContainer(container);
     if (rootMarkup) {
-      const inst = this.getInstanceFromMarkup(rootMarkup);
+      const inst = React3ComponentTree.getInstanceFromMarkup(rootMarkup);
       return !!(inst && inst._nativeParent);
     }
 

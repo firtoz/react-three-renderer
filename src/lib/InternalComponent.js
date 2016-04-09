@@ -5,12 +5,13 @@ import invariant from 'fbjs/lib/invariant';
 
 import flattenChildren from 'react/lib/flattenChildren';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
+import Flags from './React3ComponentFlags';
 
 import ID_PROPERTY_NAME from './utils/idPropertyName';
 
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
-// import React3ComponentTree from './React3ComponentTree';
+import React3ComponentTree from './React3ComponentTree';
 
 // const getNode = React3ComponentTree.getNodeFromInstance;
 
@@ -74,7 +75,7 @@ class InternalComponent {
 
     this._elementType = element.type; // _tag
     this._renderedChildren = [];
-    // this._nativeMarkup = null; // _nativeNode
+    this._nativeMarkup = null; // _nativeNode
     this._nativeParent = null;
     this._rootNodeID = null;
     this._nativeID = null; // _domID
@@ -166,6 +167,8 @@ class InternalComponent {
     // TODO sync _createContentMarkup
 
     this._threeObject = this.threeElementDescriptor.construct(element.props);
+
+
     // TODO precache node?
     this.threeElementDescriptor.applyInitialProps(this._threeObject, element.props);
 
@@ -219,6 +222,9 @@ class InternalComponent {
     }
 
     this._markup = markup;
+
+    React3ComponentTree.precacheMarkup(this, this._markup);
+    this._flags |= Flags.hasCachedChildMarkups;
 
     return markup;
   }
@@ -430,11 +436,13 @@ class InternalComponent {
    * @see ReactDOMComponent.Mixin.unmountComponent
    * node_modules/react/lib/ReactDOMComponent.js:732
    */
-  unmountComponent() {
+  unmountComponent(safely) {
     if (this._threeObject !== null) {
       this.threeElementDescriptor.componentWillUnmount(this._threeObject);
     }
-    this.unmountChildren();
+    this.unmountChildren(safely);
+    React3ComponentTree.uncacheMarkup(this);
+
     if (this._threeObject !== null) {
       this.threeElementDescriptor.unmount(this._threeObject);
       // delete this._threeObject.userData.markup;
