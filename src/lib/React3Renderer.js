@@ -330,7 +330,7 @@ class React3Renderer {
 
   constructor() {
     this._instancesByReactRootID = {};
-    this.containersByReactRootID = {};
+    // this.containersByReactRootID = {};
     if (process.env.NODE_ENV !== 'production') {
       this.rootMarkupsByReactRootID = {};
     }
@@ -529,6 +529,8 @@ class React3Renderer {
    * @return {?THREE.Object3D|HTMLCanvasElement} The container that contains the `id`.
    */
   findContainerForID(id) {
+    debugger;
+
     const reactRootID = ReactInstanceHandles.getReactRootIDFromNodeID(id);
     const container = this.containersByReactRootID[reactRootID];
 
@@ -995,14 +997,17 @@ class React3Renderer {
   }
 
   dispose() {
-    const rootIds = Object.keys(this.containersByReactRootID);
+    const rootIds = Object.keys(this._instancesByReactRootID);
 
     for (let i = 0; i < rootIds.length; ++i) {
-      this.unmountComponentAtNode(this.containersByReactRootID[rootIds[i]]);
+      this.unmountComponentAtNode(this._instancesByReactRootID[rootIds[i]]
+        .getNativeMarkup()
+        .parentMarkup
+        .threeObject);
     }
 
     delete this._instancesByReactRootID;
-    delete this.containersByReactRootID;
+    // delete this.containersByReactRootID;
     if (process.env.NODE_ENV !== 'production') {
       delete this.rootMarkupsByReactRootID;
     }

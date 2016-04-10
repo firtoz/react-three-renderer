@@ -45,7 +45,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   getNativeMarkup() {
-    debugger; // eslint-disable-line
+    return super.getNativeNode();
   }
 
   construct(element) {
