@@ -7,6 +7,7 @@ import ReactInstanceMap from 'react/lib/ReactInstanceMap';
 import emptyObject from 'fbjs/lib/emptyObject';
 import warning from 'fbjs/lib/warning';
 import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
+import ReactNodeTypes from 'react/lib/ReactNodeTypes';
 
 class ReactCompositeComponentMixinImpl {
 }
@@ -344,7 +345,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       renderedElement = this._renderValidatedComponent();
     }
 
-    // this._renderedNodeType = ReactNodeTypes.getType(renderedElement);
+    this._renderedNodeType = ReactNodeTypes.getType(renderedElement);
     this._renderedComponent = this._instantiateReactComponent(
       renderedElement
     );
