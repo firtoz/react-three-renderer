@@ -36,7 +36,6 @@ function precacheMarkup(instance, markup) {
   invariant(!!markup, 'Markup is null!');
   const nativeInstance = getRenderedNativeOrTextFromComponent(instance);
   nativeInstance._nativeMarkup = markup;
-  // TODO NATIVENODE
   markup[internalInstanceKey] = nativeInstance;
 }
 
@@ -143,7 +142,6 @@ function getClosestInstanceFromMarkup(markup) {
     }
   }
 
-  debugger;
   // if we're here, then currentMarkup does have internalInstanceKey, otherwise
   // we would have reached the top of the tree and returned null.
 
@@ -184,8 +182,6 @@ function getClosestInstanceFromMarkup(markup) {
 function getInstanceFromMarkup(markup) {
   const inst = getClosestInstanceFromMarkup(markup);
   if (inst !== null && inst._nativeMarkup === markup) {
-    // debugger;
-
     return inst;
   }
 

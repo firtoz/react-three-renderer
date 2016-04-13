@@ -13,16 +13,7 @@ import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
 import React3ComponentTree from './React3ComponentTree';
 
-// const getNode = React3ComponentTree.getNodeFromInstance;
-
 function processChildContext(context) {
-  // if (process.env.NODE_ENV !== 'production') {
-  //   // // Pass down our tag name to child components for validation purposes
-  //   // context = assign({}, context);
-  //   // const info = context[validateDOMNesting.ancestorInfoContextKey];
-  //   // context[validateDOMNesting.ancestorInfoContextKey] =
-  //        validateDOMNesting.updatedAncestorInfo(info, inst._tag, inst);
-  // }
   return context;
 }
 
@@ -70,8 +61,6 @@ class InternalComponent {
      * @type React3Renderer
      */
     this._react3RendererInstance = react3RendererInstance;
-
-    // console.log("internal: ", element);
 
     this._elementType = element.type; // _tag
     this._renderedChildren = [];
@@ -126,12 +115,11 @@ class InternalComponent {
   }
 
   getNativeMarkup() {
-    return this._markup;// getNode(this);
+    return this._markup;
   }
 
   getNativeNode() {
     // console.warn('native node?'); // eslint-disable-line no-console
-    // debugger; // eslint-disable-line no-debugger
     return this._markup;
   }
 
@@ -142,32 +130,24 @@ class InternalComponent {
    * @internal
    * @param {ReactReconcileTransaction|ReactServerRenderingTransaction} transaction
    * @param {?InternalComponent} nativeParent the containing DOM component instance
-   * @param {?ReactTHREEContainerInfo} nativeContainerInfo info about the native container
+   * @param {?React3ContainerInfo} nativeContainerInfo info about the native container
    * @param {object} context
    * @return {object} The computed markup.
    */
   mountComponent(transaction, nativeParent, nativeContainerInfo, context) {
-    // console.log("mount component", rootID);
     this._rootNodeID = `${this._react3RendererInstance.globalIdCounter++}`;
     this._nativeID = `${nativeContainerInfo._idCounter++}`;
     this._nativeParent = nativeParent;
     this._nativeContainerInfo = nativeContainerInfo;
 
     const element = this._currentElement;
-    // this._rootNodeID = rootID;
 
     if (process.env.NODE_ENV !== 'production') {
       this.threeElementDescriptor.checkPropTypes(element.type,
         this._currentElement._owner, element.props);
     }
 
-    // TODO validate ancestor info
-
-    // TODO sync _createOpenTagMarkupAndPutListeners
-    // TODO sync _createContentMarkup
-
     this._threeObject = this.threeElementDescriptor.construct(element.props);
-
 
     // TODO precache node?
     this.threeElementDescriptor.applyInitialProps(this._threeObject, element.props);
@@ -465,23 +445,6 @@ class InternalComponent {
 
   getPublicInstance() {
     return this._markup.threeObject;
-    // // debugger;
-    //
-    // const markup = this._react3RendererInstance.getMarkup(this._rootNodeID);
-    //
-    // if (markup.threeObject) {
-    //   markup.threeObject.toJSON = this.emptyJson;
-    //   return markup.threeObject;
-    // }
-    //
-    // if (process.env.NODE_ENV !== 'production') {
-    //   invariant(false, 'Node has no threeObject?');
-    // } else {
-    //   invariant(false);
-    // }
-    //
-    // // invariant should exit but keep returns consistent
-    // return undefined;
   }
 
   /**
@@ -522,8 +485,6 @@ class InternalComponent {
     let lastIndex = 0;
     let nextIndex = 0;
 
-    // let lastPlacedNode = null;
-
     if (!!nextChildren) {
       const nextChildrenNames = Object.keys(nextChildren);
 
@@ -547,12 +508,14 @@ class InternalComponent {
           if (prevChild) {
             // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
             lastIndex = Math.max(prevChild._mountIndex, lastIndex);
+
+            // handle removal here to allow replacing of components that are expected to be present
+            // only once in the parent
             invariant(!!removedMarkups[childName], 'Removed markup map should contain this child');
 
             delete removedMarkups[childName];
 
             this._unmountChild(prevChildren[childName], removedMarkups[childName]);
-            // The `removedMarkups` loop below will actually remove the child.
           }
 
           if (remountTrigger.wantRemount) {
@@ -561,9 +524,7 @@ class InternalComponent {
           }
 
           // The child must be instantiated before it's mounted.
-          // TODO _mountChildAtIndex
           this._mountChildAtIndex(nextChild, null, nextIndex, transaction, context);
-          // this._mountChildByNameAtIndex(nextChild, childName, nextIndex, transaction, context);
         }
 
         nextIndex++;
@@ -580,23 +541,6 @@ class InternalComponent {
       this._renderedChildren = nextChildren;
     }
 
-    // if (!!prevChildren) {
-    //   // Remove children that are no longer present.
-    //   const prevChildrenNames = Object.keys(prevChildren);
-    //
-    //   for (let i = 0; i < prevChildrenNames.length; ++i) {
-    //     const childName = prevChildrenNames[i];
-    //
-    //     if (remountTrigger.wantRemount) {
-    //       continue;
-    //     }
-    //
-    //     if (!(nextChildren && nextChildren.hasOwnProperty(childName))) {
-    //       this._unmountChild(prevChildren[childName]);
-    //     }
-    //   }
-    // }
-
     this.threeElementDescriptor.completeChildUpdates(this._threeObject);
   }
 
@@ -605,9 +549,6 @@ class InternalComponent {
     const mountIndex = child._mountIndex;
 
     this._markup.childrenMarkup.splice(mountIndex, 0, mountImage);
-    if (!mountImage) {
-      debugger;
-    }
     mountImage.parentMarkup = this._markup;
 
     this.threeElementDescriptor.addChild(this._threeObject, mountImage.threeObject, mountIndex);

@@ -56,8 +56,6 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   unmountComponent(safely) {
-    // debugger; // eslint-disable-line
-
     super.unmountComponent(safely);
 
     // this._threeObject = null;
@@ -117,7 +115,6 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     this._mountOrder = this._react3RendererInstance.nextMountID++;
     this._nativeParent = nativeParent;
     this._nativeContainerInfo = nativeContainerInfo;
-    // this._rootNodeID = rootID;
 
     const publicProps = this._processProps(this._currentElement.props);
     const publicContext = this._processContext(context);
@@ -296,32 +293,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       transaction,
       context);
 
-    // if (inst.componentWillMount) {
-    //   inst.componentWillMount();
-    //   // When mounting, calls to `setState` by `componentWillMount` will set
-    //   // `this._pendingStateQueue` without triggering a re-render.
-    //   if (this._pendingStateQueue) {
-    //     inst.state = this._processPendingState(inst.props, inst.context);
-    //   }
-    // }
-
-    // // If not a stateless component, we now render
-    // if (renderedElement === undefined) {
-    //   renderedElement = this._renderValidatedComponent();
-    // }
-
     if (inst.componentDidMount) {
       transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
     }
-
-    // this._renderedComponent = this._instantiateReactComponent(renderedElement);
-    //
-    // const markup = ReactReconciler.mountComponent(this._renderedComponent,
-    //   rootID, transaction, this._processChildContext(context));
-    // this._threeObject = this._renderedComponent._threeObject;
-    // if (inst.componentDidMount) {
-    //   transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
-    // }
 
     return markup;
   }
