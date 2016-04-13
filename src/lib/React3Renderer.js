@@ -413,7 +413,13 @@ class React3Renderer {
   // DO NOT RENAME
   // used by react devtools!
   findNodeHandle = (instance) => {
-    const markup = React3ComponentTree.getMarkupFromInstance(instance);
+    const inst = React3ComponentTree.getRenderedNativeOrTextFromComponent(instance);
+
+    if (!inst || !inst._threeObject) {
+      return null;
+    }
+
+    const markup = React3ComponentTree.getMarkupFromInstance(inst);
 
     this._highlightCache = markup;
     return this._highlightElement;

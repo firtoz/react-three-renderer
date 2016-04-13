@@ -241,4 +241,5 @@ module.exports = {
   uncacheMarkup,
   precacheChildMarkups,
   getClosestInstanceFromMarkup,
+  getRenderedNativeOrTextFromComponent,
 };

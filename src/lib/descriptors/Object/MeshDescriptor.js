@@ -52,6 +52,15 @@ class MeshDescriptor extends Object3DDescriptor {
   moveChild() {
     // doesn't matter
   }
+
+  getBoundingBoxes(threeObject) {
+    // recompute bounding box for highlighting from a fresh update
+    if (threeObject.geometry && threeObject.geometry.computeBoundingBox) {
+      threeObject.geometry.computeBoundingBox();
+    }
+
+    return super.getBoundingBoxes(threeObject);
+  }
 }
 
 module.exports = MeshDescriptor;
