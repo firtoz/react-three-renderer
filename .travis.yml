@@ -5,7 +5,7 @@ node_js:
   - stable
 # Handle git submodules yourself
 git:
-    submodules: false
+  submodules: false
 # Current broken on Travis 15/March/2016
 cache:
   directories:
