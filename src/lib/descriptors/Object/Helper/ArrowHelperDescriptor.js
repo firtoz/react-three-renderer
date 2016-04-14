@@ -8,16 +8,29 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
+    [
+      'dir',
+      'origin',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: propTypeInstanceOf(THREE.Vector3),
+        update: this.triggerRemount,
+        default: undefined,
+      });
+    });
 
-      dir: propTypeInstanceOf(THREE.Vector3),
-      origin: propTypeInstanceOf(THREE.Vector3),
-      length: PropTypes.number,
-      color: PropTypes.number,
-      headLength: PropTypes.number,
-      headWidth: PropTypes.number,
-    };
+    [
+      'length',
+      'color',
+      'headLength',
+      'headWidth',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.number,
+        update: this.triggerRemount,
+        default: undefined,
+      });
+    });
   }
 
   applyInitialProps(threeObject:THREE.Object3D, props) {
@@ -32,7 +45,7 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
       color,
       headLength,
       headWidth,
-      } = props;
+    } = props;
 
     return new THREE.ArrowHelper(dir, origin, length, color, headLength, headWidth);
   }
