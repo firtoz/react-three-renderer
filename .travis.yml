@@ -18,6 +18,7 @@ before_install:
   - export CHROME_BIN=google-chrome-stable
   - export DISPLAY=:99.0
   - Xvfb :99.0 -extension RANDR -ac -screen 0 1280x1024x16 > /dev/null &
+  - sleep 3 # give xvfb some time to start
   - google-chrome-stable --version
 before_script:
   - npm run compile
