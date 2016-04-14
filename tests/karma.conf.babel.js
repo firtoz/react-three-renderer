@@ -96,6 +96,11 @@ export default (config) => {
 
     // http://swizec.com/blog/how-to-run-javascript-tests-in-chrome-on-travis/swizec/6647
     configuration.browsers = ['Chrome_travis_ci'];
+
+    // to avoid DISCONNECTED messages
+    configuration.browserDisconnectTimeout = 10000; // default 2000
+    configuration.browserDisconnectTolerance = 1; // default 0
+    configuration.browserNoActivityTimeout = 60000; // default 10000
   } else {
     configuration.client = {
       mocha: {
