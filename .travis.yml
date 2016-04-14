@@ -3,7 +3,9 @@ dist: trusty
 language: node_js
 node_js:
   - stable
-# Handle git submodules yourself
+cache:
+  directories:
+    - node_modules
 git:
     submodules: false
 addons:
