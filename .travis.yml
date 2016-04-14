@@ -1,26 +1,10 @@
-sudo: true # needed for google-chrome-stable install workaround :(
 language: node_js
 node_js:
   - stable
-# Handle git submodules yourself
 git:
     submodules: false
-# Current broken on Travis 15/March/2016
-# addons:
-#   apt:
-#     sources:
-#       - google-chrome
-#     packages:
-#       - google-chrome-stable
 before_install:
-  # Chrome Stable
-  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update -qq
-  - sudo apt-get install -y google-chrome-stable
-  - export CHROME_BIN=google-chrome-stable
   - export DISPLAY=:99.0
   - Xvfb :99.0 -extension RANDR -ac -screen 0 1280x1024x16 > /dev/null &
-  - google-chrome-stable --version
 before_script:
   - npm run compile
