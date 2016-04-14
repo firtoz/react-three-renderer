@@ -11,11 +11,11 @@ cache:
   directories:
     - node_modules
 addons:
- apt:
-   sources:
-     - google-chrome
-   packages:
-     - google-chrome-stable
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
 before_install:
    Chrome Stable
 #  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
