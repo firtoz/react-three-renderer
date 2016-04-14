@@ -17,7 +17,7 @@ before_install:
   - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
   - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
-  - sudo apt-get install -y google-chrome-stable
+  - sudo apt-get install -y google-chrome-stable=49.0.2623.112
   - export CHROME_BIN=google-chrome-stable
   - export DISPLAY=:99.0
   - Xvfb :99.0 -extension RANDR -ac -screen 0 1280x1024x16 > /dev/null &
