@@ -6,10 +6,6 @@ node_js:
 # Handle git submodules yourself
 git:
   submodules: false
-# Current broken on Travis 15/March/2016
-cache:
-  directories:
-    - node_modules
 addons:
   apt:
     sources:
