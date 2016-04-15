@@ -20,10 +20,10 @@
   "keywords": "react, three.js",
   "license": "MIT",
   "dependencies": {
-    "fbjs": ">=0.8.0-alpha.3"
+    "fbjs": "0.8.0-alpha.3"
   },
   "peerDependencies": {
-    "react": "^15.0.0-rc.2",
+    "react": "^15.0.0",
     "three": ">=0.74.0"
   },
   "devDependencies": {
