@@ -6,7 +6,7 @@ class torusKnotGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

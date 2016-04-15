@@ -6,7 +6,7 @@ class cubeCamera extends camera {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

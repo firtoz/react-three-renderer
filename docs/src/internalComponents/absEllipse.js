@@ -7,7 +7,7 @@ class absEllipse extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

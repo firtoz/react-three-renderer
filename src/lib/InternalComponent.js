@@ -5,19 +5,15 @@ import invariant from 'fbjs/lib/invariant';
 
 import flattenChildren from 'react/lib/flattenChildren';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
+import Flags from './React3ComponentFlags';
 
 import ID_PROPERTY_NAME from './utils/idPropertyName';
 
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 
+import React3ComponentTree from './React3ComponentTree';
+
 function processChildContext(context) {
-  // if (process.env.NODE_ENV !== 'production') {
-  //   // // Pass down our tag name to child components for validation purposes
-  //   // context = assign({}, context);
-  //   // const info = context[validateDOMNesting.ancestorInfoContextKey];
-  //   // context[validateDOMNesting.ancestorInfoContextKey] =
-  //        validateDOMNesting.updatedAncestorInfo(info, inst._tag, inst);
-  // }
   return context;
 }
 
@@ -55,6 +51,7 @@ const getThreeObjectFromMountImage = img => img.threeObject;
 
 const ReactMultiChildMixin = ReactMultiChild.Mixin;
 
+// TODO sync ReactDOMComponent
 class InternalComponent {
   static displayName = 'React3Component';
 
@@ -65,16 +62,24 @@ class InternalComponent {
      */
     this._react3RendererInstance = react3RendererInstance;
 
-    // console.log("internal: ", element);
-
-    this._elementType = element.type;
+    this._elementType = element.type; // _tag
     this._renderedChildren = [];
+    this._nativeMarkup = null; // _nativeNode
+    this._nativeParent = null;
     this._rootNodeID = null;
+    this._nativeID = null; // _domID
+    this._nativeContainerInfo = null;
+    this._wrapperState = null;
     this._threeObject = null;
     this._topLevelWrapper = null;
     this._markup = null;
     this._nodeWithLegacyProperties = null;
     this._forceRemountOfComponent = false;
+    this._flags = 0;
+
+    if (process.env.NODE_ENV !== 'production') {
+      this._ancestorInfo = null;
+    }
 
     this.threeElementDescriptor = react3RendererInstance.threeElementDescriptors[element.type];
     if (!this.threeElementDescriptor) {
@@ -102,16 +107,33 @@ class InternalComponent {
     };
   }
 
-  construct(element) {
-    // console.log('constructing', element);
-    this._currentElement = element;
+  getNativeMarkup() {
+    return this._markup;
   }
 
-  mountComponent(rootID, transaction, context) {
-    // console.log("mount component", rootID);
+  getNativeNode() {
+    // console.warn('native node?'); // eslint-disable-line no-console
+    return this._markup;
+  }
+
+  /**
+   * Generates root tag markup then recurses. This method has side effects and
+   * is not idempotent.
+   *
+   * @internal
+   * @param {ReactReconcileTransaction|ReactServerRenderingTransaction} transaction
+   * @param {?InternalComponent} nativeParent the containing DOM component instance
+   * @param {?React3ContainerInfo} nativeContainerInfo info about the native container
+   * @param {object} context
+   * @return {object} The computed markup.
+   */
+  mountComponent(transaction, nativeParent, nativeContainerInfo, context) {
+    this._rootNodeID = `${this._react3RendererInstance.globalIdCounter++}`;
+    this._nativeID = `${nativeContainerInfo._idCounter++}`;
+    this._nativeParent = nativeParent;
+    this._nativeContainerInfo = nativeContainerInfo;
 
     const element = this._currentElement;
-    this._rootNodeID = rootID;
 
     if (process.env.NODE_ENV !== 'production') {
       this.threeElementDescriptor.checkPropTypes(element.type,
@@ -123,13 +145,14 @@ class InternalComponent {
 
     this.threeElementDescriptor.placeRemountTrigger(this._threeObject, this.remountTrigger.trigger);
 
+    // create initial children
     const childrenToUse = element.props.children;
 
     const mountImages = this.mountChildren(childrenToUse, transaction,
-      processChildContext(context, this));
+      context);
 
     const markup = {
-      [ID_PROPERTY_NAME]: rootID,
+      [ID_PROPERTY_NAME]: this._nativeID,
       _rootInstance: null,
       elementType: element.type,
       threeObject: this._threeObject,
@@ -171,6 +194,9 @@ class InternalComponent {
 
     this._markup = markup;
 
+    React3ComponentTree.precacheMarkup(this, this._markup);
+    this._flags |= Flags.hasCachedChildMarkups;
+
     return markup;
   }
 
@@ -194,7 +220,11 @@ class InternalComponent {
     );
   }
 
-  _reconcilerUpdateChildren(prevChildren, nextNestedChildrenElements, transaction, context) {
+  _reconcilerUpdateChildren(prevChildren,
+                            nextNestedChildrenElements,
+                            removedMarkups,
+                            transaction,
+                            context) {
     let nextChildren;
     if (process.env.NODE_ENV !== 'production') {
       if (this._currentElement) {
@@ -208,14 +238,14 @@ class InternalComponent {
         }
 
         return this._react3RendererInstance.updateChildren(
-          prevChildren, nextChildren, transaction, context
+          prevChildren, nextChildren, removedMarkups, transaction, context
         );
       }
     }
 
     nextChildren = flattenChildren(nextNestedChildrenElements);
     return this._react3RendererInstance.updateChildren(
-      prevChildren, nextChildren, transaction, context
+      prevChildren, nextChildren, removedMarkups, transaction, context
     );
   }
 
@@ -232,9 +262,16 @@ class InternalComponent {
         const name = childrenNames[i];
 
         const child = children[name];
-        // Inlined for performance, see `ReactInstanceHandles.createReactID`.
-        const rootID = this._rootNodeID + name;
-        const mountImage = ReactReconciler.mountComponent(child, rootID, transaction, context);
+
+        const mountImage = ReactReconciler.mountComponent(
+          child,
+          transaction,
+          this,
+          this._nativeContainerInfo,
+          context
+        );
+
+        // const mountImage = ReactReconciler.mountComponent(child, rootID, transaction, context);
         child._mountIndex = index;
         mountImages.push(mountImage);
         index++;
@@ -282,12 +319,14 @@ class InternalComponent {
     this._updateChildrenObjects(nextProps, transaction, processChildContext(context, this));
   }
 
+  // see _updateDOMChildren
   _updateChildrenObjects(nextProps, transaction, context) {
     const nextChildren = nextProps.children || null;
 
     this.updateChildren(nextChildren, transaction, context);
   }
 
+  // original: _updateDOMProperties
   _updateObjectProperties(lastProps, nextProps, transaction) {
     const remountTrigger = this.remountTrigger;
 
@@ -368,11 +407,13 @@ class InternalComponent {
    * @see ReactDOMComponent.Mixin.unmountComponent
    * node_modules/react/lib/ReactDOMComponent.js:732
    */
-  unmountComponent() {
+  unmountComponent(safely) {
     if (this._threeObject !== null) {
       this.threeElementDescriptor.componentWillUnmount(this._threeObject);
     }
-    this.unmountChildren();
+    this.unmountChildren(safely);
+    React3ComponentTree.uncacheMarkup(this);
+
     if (this._threeObject !== null) {
       this.threeElementDescriptor.unmount(this._threeObject);
       // delete this._threeObject.userData.markup;
@@ -394,18 +435,7 @@ class InternalComponent {
   }
 
   getPublicInstance() {
-    const markup = this._react3RendererInstance.getMarkup(this._rootNodeID);
-
-    if (markup.threeObject) {
-      markup.threeObject.toJSON = this.emptyJson;
-      return markup.threeObject;
-    }
-
-    if (process.env.NODE_ENV !== 'production') {
-      invariant(false, 'Node has no threeObject?');
-    } else {
-      invariant(false);
-    }
+    return this._markup.threeObject;
   }
 
   /**
@@ -414,18 +444,23 @@ class InternalComponent {
    * Improve performance by isolating this hot code path from the try/catch
    * block in `updateChildren`.
    *
-   * @param {?object} nextNestedChildren Nested child maps.
+   * @param {?object} nextNestedChildrenElements Nested child maps.
    * @param {ReactReconcileTransaction} transaction
    * @param {any} context
    * @final
    * @protected
    */
-  _updateChildren(nextNestedChildren, transaction, context) {
+  _updateChildren(nextNestedChildrenElements, transaction, context) {
     const prevChildren = this._renderedChildren;
-    const nextChildren = this._reconcilerUpdateChildren(prevChildren,
-      nextNestedChildren, transaction, context);
+    const removedMarkups = {};
+    const nextChildren = this._reconcilerUpdateChildren(
+      prevChildren,
+      nextNestedChildrenElements,
+      removedMarkups,
+      transaction,
+      context
+    );
 
-    this._renderedChildren = nextChildren;
     if (!nextChildren && !prevChildren) {
       return;
     }
@@ -464,7 +499,14 @@ class InternalComponent {
           if (prevChild) {
             // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
             lastIndex = Math.max(prevChild._mountIndex, lastIndex);
-            this._unmountChild(prevChild);
+
+            // handle removal here to allow replacing of components that are expected to be present
+            // only once in the parent
+            invariant(!!removedMarkups[childName], 'Removed markup map should contain this child');
+
+            delete removedMarkups[childName];
+
+            this._unmountChild(prevChildren[childName], removedMarkups[childName]);
           }
 
           if (remountTrigger.wantRemount) {
@@ -473,34 +515,28 @@ class InternalComponent {
           }
 
           // The child must be instantiated before it's mounted.
-          this._mountChildByNameAtIndex(nextChild, childName, nextIndex, transaction, context);
+          this._mountChildAtIndex(nextChild, null, nextIndex, transaction, context);
         }
 
         nextIndex++;
       }
-    }
 
-    if (!!prevChildren) {
-      // Remove children that are no longer present.
-      const prevChildrenNames = Object.keys(prevChildren);
+      const removedMarkupNames = Object.keys(removedMarkups);
 
-      for (let i = 0; i < prevChildrenNames.length; ++i) {
-        const childName = prevChildrenNames[i];
+      for (let i = 0; i < removedMarkupNames.length; ++i) {
+        const removedMarkupName = removedMarkupNames[i];
 
-        if (remountTrigger.wantRemount) {
-          continue;
-        }
-
-        if (!(nextChildren && nextChildren.hasOwnProperty(childName))) {
-          this._unmountChild(prevChildren[childName]);
-        }
+        this._unmountChild(prevChildren[removedMarkupName], removedMarkups[removedMarkupName]);
       }
+
+      this._renderedChildren = nextChildren;
     }
 
     this.threeElementDescriptor.completeChildUpdates(this._threeObject);
   }
 
-  createChild(child, mountImage) {
+  // afterNode unused
+  createChild(child, afterNode, mountImage) {
     const mountIndex = child._mountIndex;
 
     this._markup.childrenMarkup.splice(mountIndex, 0, mountImage);
@@ -518,9 +554,10 @@ class InternalComponent {
    * Removes a child component.
    *
    * @param {ReactComponent} child Child to remove.
+   * @param {*} markup The markup for the child.
    * @protected
    */
-  removeChild(child) {
+  removeChild(child, markup) { // eslint-disable-line no-unused-vars
     this.threeElementDescriptor.removeChild(this._threeObject, child._threeObject);
 
     if (child instanceof InternalComponent) {
@@ -551,14 +588,14 @@ class InternalComponent {
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      invariant(false, `Trying to remove a child that is not mounted`);
+      invariant(false, 'Trying to remove a child that is not mounted');
     } else {
       invariant(false);
     }
   }
 
   updateChildren = ReactMultiChildMixin.updateChildren.bind(this);
-  _mountChildByNameAtIndex = ReactMultiChildMixin._mountChildByNameAtIndex.bind(this);
+  _mountChildAtIndex = ReactMultiChildMixin._mountChildAtIndex.bind(this);
   _unmountChild = ReactMultiChildMixin._unmountChild.bind(this);
   unmountChildren = ReactMultiChildMixin.unmountChildren.bind(this);
 }

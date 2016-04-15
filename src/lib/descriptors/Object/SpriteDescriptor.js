@@ -5,10 +5,6 @@ import ResourceReference from '../../Resources/ResourceReference';
 import invariant from 'fbjs/lib/invariant';
 
 class SpriteDescriptor extends Object3DDescriptor {
-  constructor(react3Instance) {
-    super(react3Instance);
-  }
-
   construct(props) {
     const material = props.hasOwnProperty('material') ? props.material : undefined;
     const sprite = new THREE.Sprite(material);

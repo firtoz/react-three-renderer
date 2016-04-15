@@ -18,6 +18,8 @@ module.exports = (type) => {
         expect(false, 'Invalid test type');
         break;
     }
+
+    return undefined;
   }
 
   let React3;
@@ -34,6 +36,10 @@ module.exports = (type) => {
   }
 
   const mockConsole = new MockConsole();
+
+  mockConsole.expectThreeLog = () => {
+    mockConsole.expect('THREE.WebGLRenderer	75');
+  };
 
   before(() => {
     document.body.appendChild(testDiv);

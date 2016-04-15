@@ -6,7 +6,7 @@ class lineTo extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

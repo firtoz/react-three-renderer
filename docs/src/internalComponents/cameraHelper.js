@@ -6,7 +6,7 @@ class cameraHelper extends object3D {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

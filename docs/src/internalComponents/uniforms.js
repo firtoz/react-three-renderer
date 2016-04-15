@@ -6,7 +6,7 @@ class uniforms extends DocInfo {
   }
 
   getDescription() {
-    return `Any modifications to uniforms will result in the recompilation of the shader.`;
+    return 'Any modifications to uniforms will result in the recompilation of the shader.';
   }
 
   getAttributesText() {

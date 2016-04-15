@@ -5,7 +5,7 @@ import path from 'path';
 // OH MY GOD YOU ARE A GENIUS
 //   I KISS YOU
 
-const rightArrowSymbol = `»`; // was: ▸
+const rightArrowSymbol = '»'; // was: '▸' but GitHub apparently does not like this
 
 function getLineage(category) {
   const lineage = [];
@@ -409,7 +409,7 @@ ${attributeInfo.description}`;
     }
 
     if (nodeName !== null && needsColon) {
-      nodeContents += `:`;
+      nodeContents += ':';
     }
 
     if (intro) {
