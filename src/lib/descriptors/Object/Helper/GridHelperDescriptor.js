@@ -25,7 +25,6 @@ class GridHelperDescriptor extends Object3DDescriptor {
         grid.setColors(color, grid.color2);
       },
       updateInitial: true,
-      default: 0x444444,
     });
 
     this.hasProp('colorGrid', {
@@ -34,7 +33,6 @@ class GridHelperDescriptor extends Object3DDescriptor {
         grid.setColors(grid.color1, color);
       },
       updateInitial: true,
-      default: 0x888888,
     });
   }
 
