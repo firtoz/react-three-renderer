@@ -18,6 +18,24 @@ class GridHelperDescriptor extends Object3DDescriptor {
       update: this.triggerRemount,
       default: 1,
     });
+
+    this.hasProp('colorCenterLine', {
+      type: PropTypes.number,
+      update: (grid, color) => {
+        grid.setColors(color, grid.color2);
+      },
+      updateInitial: true,
+      default: 0x444444,
+    });
+
+    this.hasProp('colorGrid', {
+      type: PropTypes.number,
+      update: (grid, color) => {
+        grid.setColors(grid.color1, color);
+      },
+      updateInitial: true,
+      default: 0x888888,
+    });
   }
 
   applyInitialProps(threeObject:THREE.Object3D, props) {
