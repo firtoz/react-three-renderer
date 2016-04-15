@@ -8,12 +8,14 @@ if (isCoverage) {
   console.warn('Coverage enabled.'); // eslint-disable-line
 }
 
-const testFiles = [
-  'src/meta/MockConsole.js',
-  'src/tests-src.js',
-];
+const testFiles = [];
 
-if (!isCoverage && !process.env.KARMA_TDD) {
+if (process.env.KARMA_TDD || process.env.KARMA_SRC) {
+  testFiles.push('src/meta/MockConsole.js');
+  testFiles.push('src/tests-src.js');
+}
+
+if (!isCoverage && !process.env.KARMA_TDD && process.env.KARMA_LIB) {
   testFiles.push('src/tests-lib.js');
 }
 

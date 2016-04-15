@@ -6,12 +6,14 @@
   "scripts": {
     "compile": "gulp babel",
     "prepublish": "not-in-install && npm run compile && npm test || in-install",
-    "test": "npm run eslint-internal -loglevel silent && npm run karma-single -loglevel silent",
+    "test": "npm run eslint-internal -loglevel silent && npm run karma-src -loglevel silent && npm run karma-lib -loglevel silent",
     "karma-single": "karma start ./tests/karma.conf.js --single-run",
     "karma": "karma start ./tests/karma.conf.js",
+    "karma-src": "bash -c \"(export KARMA_SRC=true; npm run karma-single -loglevel silent)\"",
+    "karma-lib": "bash -c \"(export KARMA_LIB=true; npm run karma-single -loglevel silent)\"",
     "eslint-internal": "eslint --cache ./src/ ./docs/src/ ./tests/src/",
     "eslint": "npm run eslint-internal -loglevel silent || true",
-    "tdd": "bash -c \"(export KARMA_TDD=true; cd tests; npm run karma)\"",
+    "tdd": "bash -c \"(export KARMA_TDD=true; npm run karma)\"",
     "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\""
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
