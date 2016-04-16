@@ -5,8 +5,10 @@ CHANGELOG
 
 ### Core
 - Should work with React 15 :sparkles:
-  - This version should work with `react@^15.0.0`
+  - This version should work with [`react@^15.0.0`](https://facebook.github.io/react/blog/2016/04/08/react-v15.0.1.html)
   - For `react@^0.14.7`, please install `react-three-renderer@^0`
+  - This is because React is increasing separation between its core and `react-dom`, therefore
+  the tricks used to make `react-three-renderer` needed to change as well.
 - Lots of the core has been rewritten to stay in sync with React 15
   but that means there will probably be new bugs appearing.
 - Convert to a proper version system
