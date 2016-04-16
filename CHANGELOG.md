@@ -1,6 +1,17 @@
 CHANGELOG
 ===========
 
+## 2.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v0.1.2...v2.0.0) )
+
+### Core
+- Should work with React 15 :sparkles:
+  - This version should work with `react@^15.0.0`
+  - For `react@^0.14.7`, please install `react-three-renderer@^0`
+- Lots of the core has been rewritten to stay in sync with React 15
+  but that means there will probably be new bugs appearing.
+- Convert to a proper version system
+- Upgrade other npm packages
+
 ## 0.1.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v0.1.1...v0.1.2) )
 
 ### Components
