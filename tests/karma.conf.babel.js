@@ -111,5 +111,11 @@ export default (config) => {
     };
   }
 
+  if (process.env.KARMA_TDD) {
+    configuration.autoWatch = true;
+    configuration.autoWatchBatchDelay = 0;
+    configuration.usePolling = true;
+  }
+
   config.set(configuration);
 };
