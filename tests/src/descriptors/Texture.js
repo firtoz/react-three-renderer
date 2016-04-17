@@ -131,6 +131,34 @@ module.exports = type => {
             far={1000}
             name="mainCamera"
           />
+        </scene>
+      </React3>), testDiv);
+
+      mockConsole.expect('SecurityError: Failed to execute \'texImage2D\'' +
+        ' on \'WebGLRenderingContext\': ' +
+        `The cross-origin image at ${WANTED_URL}` +
+        ' may not be loaded.');
+
+      mockConsole.once('empty', () => {
+        done();
+      });
+
+      ReactDOM.render((<React3
+        width={800}
+        height={600}
+        mainCamera="mainCamera"
+      >
+        <scene
+          ref={onSceneCreate}
+        >
+          <perspectiveCamera
+            position={new THREE.Vector3(0, 0, 5)}
+            fov={75}
+            aspect={800 / 600}
+            near={0.1}
+            far={1000}
+            name="mainCamera"
+          />
           <mesh>
             <boxGeometry
               width={2}
@@ -148,15 +176,6 @@ module.exports = type => {
           </mesh>
         </scene>
       </React3>), testDiv);
-
-      mockConsole.expect(`SecurityError: Failed to execute 'texImage2D'` +
-        ` on 'WebGLRenderingContext': ` +
-        `The cross-origin image at ${WANTED_URL}` +
-        ` may not be loaded.`);
-
-      mockConsole.once('empty', () => {
-        done();
-      });
     });
 
     it('Should not fail for rendering cross origin images if crossOrigin is set', function _(done) {
