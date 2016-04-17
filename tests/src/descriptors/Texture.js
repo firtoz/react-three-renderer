@@ -3,7 +3,7 @@ import THREE from 'three';
 import ReactDOM from 'react-dom';
 import assert from 'assert';
 
-const WANTED_URL = 'https://avatars0.githubusercontent.com/u/860717?v=3&s=32';
+const WANTED_URL = 'http://lorempixel.com/1/1/';
 
 module.exports = type => {
   describe('TextureDescriptor', () => {
