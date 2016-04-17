@@ -89,7 +89,7 @@ module.exports = type => {
     });
 
     it('Should succeed to load online files', function _(done) {
-      this.timeout(5000);
+      this.timeout(15000);
 
       mockConsole.expectThreeLog();
 
@@ -101,7 +101,7 @@ module.exports = type => {
     });
 
     it('Should fail for rendering cross origin images if crossOrigin is not set', function _(done) {
-      this.timeout(5000);
+      this.timeout(15000);
 
       const onSceneCreate = (scene) => {
         if (!scene) {
@@ -160,7 +160,7 @@ module.exports = type => {
     });
 
     it('Should not fail for rendering cross origin images if crossOrigin is set', function _(done) {
-      this.timeout(5000);
+      this.timeout(15000);
 
       mockConsole.expectThreeLog();
 
