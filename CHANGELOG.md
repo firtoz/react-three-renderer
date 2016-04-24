@@ -1,6 +1,17 @@
 CHANGELOG
 ===========
 
+## 2.0.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.0...staging/2.0) )
+
+### Core
+- Adds CanvasRenderer fallback when WebGl support is not available #53
+
+### Testing
+- Improved testing, made faster and easier to debug
+
+### Documentation
+- Moved wiki files into repository to get rid of submodule
+
 ## 2.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v0.1.2...v2.0.0) )
 
 ### Core
