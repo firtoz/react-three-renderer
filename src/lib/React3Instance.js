@@ -9,6 +9,7 @@ import ReactUpdates from 'react/lib/ReactUpdates';
 import CameraUtils from './utils/CameraUtils';
 
 import React3Renderer from './React3Renderer';
+import isWebglSupported from './utils/isWebglSupported';
 
 const rendererProperties = [
   'gammaInput',
@@ -118,8 +119,7 @@ class React3DInstance {
     }
 
     const parameters = this._parameters;
-
-    this._renderer = new THREE.WebGLRenderer({
+    const rendererArgs = {
       canvas: this._canvas,
       precision: parameters.precision,
       alpha: parameters.alpha,
@@ -129,7 +129,10 @@ class React3DInstance {
       preserveDrawingBuffer: parameters.preserveDrawingBuffer,
       depth: parameters.depth,
       logarithmicDepthBuffer: parameters.logarithmicDepthBuffer,
-    });
+    };
+
+    this._renderer = isWebglSupported() ? new THREE.WebGLRenderer(rendererArgs)
+                                        : new THREE.CanvasRenderer(rendererArgs);
 
     if (this._rendererUpdatedCallback) {
       this._rendererUpdatedCallback(this._renderer);
