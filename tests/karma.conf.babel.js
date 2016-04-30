@@ -27,6 +27,14 @@ export default (config) => {
 
     files: [
       ...testFiles,
+      {
+        pattern: 'src/**/*.js',
+        included: false,
+      },
+      {
+        pattern: '../src/**/*.js',
+        included: false,
+      },
       // each file acts as entry point for the webpack configuration
 
       {
@@ -109,6 +117,12 @@ export default (config) => {
         reporter: 'html', // debug
       },
     };
+  }
+
+  if (process.env.KARMA_TDD) {
+    configuration.autoWatch = true;
+    configuration.autoWatchBatchDelay = 0;
+    configuration.usePolling = true;
   }
 
   config.set(configuration);
