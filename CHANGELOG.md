@@ -5,9 +5,12 @@ CHANGELOG
 
 ### Core
 - Adds CanvasRenderer fallback when WebGl support is not available #53
+- Fixed crashes that happen when returning null from composite components
+- Fixed crashes that happen when replacing composite components
 
 ### Testing
-- Improved testing, made faster and easier to debug
+- Improved testing:
+  - made faster and easier to debug
 
 ### Documentation
 - Moved wiki files into repository to get rid of submodule
