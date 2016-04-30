@@ -27,6 +27,14 @@ export default (config) => {
 
     files: [
       ...testFiles,
+      {
+        pattern: 'src/**/*.js',
+        included: false,
+      },
+      {
+        pattern: '../src/**/*.js',
+        included: false,
+      },
       // each file acts as entry point for the webpack configuration
 
       {
