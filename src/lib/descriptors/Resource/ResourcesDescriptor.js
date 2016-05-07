@@ -30,7 +30,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
       if (process.env.NODE_ENV !== 'production') {
         invariant(!!resourceId, 'Resource container can only hold resources. ' +
-          'Found children without \`resourceId\` properties:' +
+          'Found children without `resourceId` properties:' +
           ` ${children.filter(currentChild => !currentChild.userData._resourceId)
             .map(currentChild =>
               `<${currentChild.userData.react3internalComponent._elementType}/>`)

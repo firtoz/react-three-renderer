@@ -107,13 +107,6 @@ class InternalComponent {
     };
   }
 
-  construct(element) {
-    debugger; // eslint-disable-line
-
-    console.log('constructing', element); // eslint-disable-line no-console
-    this._currentElement = element;
-  }
-
   getNativeMarkup() {
     return this._markup;
   }
@@ -148,8 +141,6 @@ class InternalComponent {
     }
 
     this._threeObject = this.threeElementDescriptor.construct(element.props);
-
-    // TODO precache node?
     this.threeElementDescriptor.applyInitialProps(this._threeObject, element.props);
 
     this.threeElementDescriptor.placeRemountTrigger(this._threeObject, this.remountTrigger.trigger);
@@ -509,13 +500,15 @@ class InternalComponent {
             // Update `lastIndex` before `_mountIndex` gets unset by unmounting.
             lastIndex = Math.max(prevChild._mountIndex, lastIndex);
 
+            const removedChildMarkup = removedMarkups[childName];
+
             // handle removal here to allow replacing of components that are expected to be present
             // only once in the parent
-            invariant(!!removedMarkups[childName], 'Removed markup map should contain this child');
+            invariant(!!removedChildMarkup, 'Removed markup map should contain this child');
 
             delete removedMarkups[childName];
 
-            this._unmountChild(prevChildren[childName], removedMarkups[childName]);
+            this._unmountChild(prevChild, removedChildMarkup);
           }
 
           if (remountTrigger.wantRemount) {
@@ -529,17 +522,17 @@ class InternalComponent {
 
         nextIndex++;
       }
-
-      const removedMarkupNames = Object.keys(removedMarkups);
-
-      for (let i = 0; i < removedMarkupNames.length; ++i) {
-        const removedMarkupName = removedMarkupNames[i];
-
-        this._unmountChild(prevChildren[removedMarkupName], removedMarkups[removedMarkupName]);
-      }
-
-      this._renderedChildren = nextChildren;
     }
+
+    const removedMarkupNames = Object.keys(removedMarkups);
+
+    for (let i = 0; i < removedMarkupNames.length; ++i) {
+      const removedMarkupName = removedMarkupNames[i];
+
+      this._unmountChild(prevChildren[removedMarkupName], removedMarkups[removedMarkupName]);
+    }
+
+    this._renderedChildren = nextChildren;
 
     this.threeElementDescriptor.completeChildUpdates(this._threeObject);
   }
@@ -566,17 +559,19 @@ class InternalComponent {
    * @param {*} markup The markup for the child.
    * @protected
    */
-  removeChild(child, markup) {
-    void(markup);
+  removeChild(child, markup) { // eslint-disable-line no-unused-vars
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(!!markup && !!markup.threeObject, 'The child markup to replace has no threeObject');
+    }
 
-    this.threeElementDescriptor.removeChild(this._threeObject, child._threeObject);
+    this.threeElementDescriptor.removeChild(this._threeObject, markup.threeObject);
 
     if (child instanceof InternalComponent) {
-      child.threeElementDescriptor.removedFromParent(child._threeObject);
+      child.threeElementDescriptor.removedFromParent(markup.threeObject);
     } else if (child instanceof React3CompositeComponentWrapper) {
-      child._threeObject.userData
+      markup.threeObject.userData
         .react3internalComponent
-        .threeElementDescriptor.removedFromParent(child._threeObject);
+        .threeElementDescriptor.removedFromParent(markup.threeObject);
     } else {
       if (process.env.NODE_ENV !== 'production') {
         invariant(false, 'Cannot remove child because it is not a known component type');
@@ -590,7 +585,7 @@ class InternalComponent {
     for (let i = 0; i < childrenMarkup.length; i++) {
       const childMarkup = childrenMarkup[i];
 
-      if (childMarkup.threeObject === child._threeObject) {
+      if (childMarkup.threeObject === markup.threeObject) {
         childrenMarkup.splice(i, 1);
 
         delete childMarkup.parentMarkup;

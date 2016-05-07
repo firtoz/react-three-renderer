@@ -8,12 +8,14 @@ if (isCoverage) {
   console.warn('Coverage enabled.'); // eslint-disable-line
 }
 
-const testFiles = [
-  'src/meta/MockConsole.js',
-  'src/tests-src.js',
-];
+const testFiles = [];
 
-if (!isCoverage && !process.env.KARMA_TDD) {
+if (process.env.KARMA_TDD || process.env.KARMA_SRC) {
+  testFiles.push('src/meta/MockConsole.js');
+  testFiles.push('src/tests-src.js');
+}
+
+if (!isCoverage && !process.env.KARMA_TDD && process.env.KARMA_LIB) {
   testFiles.push('src/tests-lib.js');
 }
 
@@ -25,6 +27,14 @@ export default (config) => {
 
     files: [
       ...testFiles,
+      {
+        pattern: 'src/**/*.js',
+        included: false,
+      },
+      {
+        pattern: '../src/**/*.js',
+        included: false,
+      },
       // each file acts as entry point for the webpack configuration
 
       {
@@ -96,12 +106,23 @@ export default (config) => {
 
     // http://swizec.com/blog/how-to-run-javascript-tests-in-chrome-on-travis/swizec/6647
     configuration.browsers = ['Chrome_travis_ci'];
+
+    // to avoid DISCONNECTED messages
+    configuration.browserDisconnectTimeout = 10000; // default 2000
+    configuration.browserDisconnectTolerance = 1; // default 0
+    configuration.browserNoActivityTimeout = 60000; // default 10000
   } else {
     configuration.client = {
       mocha: {
         reporter: 'html', // debug
       },
     };
+  }
+
+  if (process.env.KARMA_TDD) {
+    configuration.autoWatch = true;
+    configuration.autoWatchBatchDelay = 0;
+    configuration.usePolling = true;
   }
 
   config.set(configuration);

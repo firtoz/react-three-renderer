@@ -28,7 +28,7 @@ class ModuleDescriptor extends THREEElementDescriptor {
 
         return new Error(`Invalid ${locationName} \`${propFullName}\` ` +
           `of type \`${actualClassName}\` supplied to \`${componentName}\`, ` +
-          'expected subclass of \`Module\`.');
+          'expected subclass of `Module`.');
       }
 
       // success returns undefined

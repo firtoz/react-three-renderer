@@ -3,7 +3,7 @@ react-three-renderer
 
 Render into a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
-Would you like to know more? [See the wiki](https://github.com/toxicFork/react-three-renderer/wiki).
+Would you like to know more? [See the wiki](https://github.com/toxicFork/react-three-renderer/wiki) or go straight to the [API documentation](https://github.com/toxicFork/react-three-renderer/wiki/API-Reference).
 
 [Live examples](http://toxicfork.github.io/react-three-renderer-example/).
 

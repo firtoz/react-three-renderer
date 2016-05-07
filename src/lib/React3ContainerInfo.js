@@ -1,6 +1,4 @@
-function React3ContainerInfo(topLevelWrapper, instance) {
-  void(instance);
-
+function React3ContainerInfo(topLevelWrapper, instance) { // eslint-disable-line no-unused-vars
   const info = {
     _topLevelWrapper: topLevelWrapper,
     _idCounter: 1,

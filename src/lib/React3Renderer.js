@@ -1,5 +1,4 @@
 import THREE from 'three';
-import ReactEmptyComponent from 'react/lib/ReactEmptyComponent';
 import reactElementWrapper from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
 import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
@@ -432,9 +431,7 @@ class React3Renderer {
                       container,
                       instance,
                       shouldReuseMarkup,
-                      transaction) {
-    void(transaction);
-
+                      transaction) { // eslint-disable-line no-unused-vars
     // TODO try to do server-side rendering for THREE
 
     if (!container.userData) {
@@ -739,41 +736,47 @@ class React3Renderer {
   // see instantiateReactComponent.js
   /**
    *
-   * @param elementToInstantiate ( aka node )
+   * @param element ( from createElement )
    * @returns {*}
    */
-  instantiateReactComponent(elementToInstantiate) {
+  instantiateReactComponent(element) {
     let instance;
 
+    let elementToInstantiate = element;
     if (elementToInstantiate === null || elementToInstantiate === false) {
-      instance = ReactEmptyComponent.create(this.instantiateReactComponent);
-    } else if (typeof elementToInstantiate === 'object') {
-      const element = elementToInstantiate;
-      if (!(element && (typeof element.type === 'function' || typeof element.type === 'string'))) {
+      elementToInstantiate = reactElementWrapper.createElement('object3D');
+      // instance = new ReactDOMEmptyComponent(this.instantiateReactComponent);
+    }
+
+    if (typeof elementToInstantiate === 'object') {
+      if (!(elementToInstantiate && (typeof elementToInstantiate.type === 'function'
+        || typeof elementToInstantiate.type === 'string'))) {
         if (process.env.NODE_ENV !== 'production') {
           invariant(false,
             'Element type is invalid: expected a string (for built-in components) ' +
             'or a class/function (for composite components) but got: %s.%s',
-            (!element.type) ? element.type : typeof element.type,
-            getDeclarationErrorAddendum(element._owner));
+            (!elementToInstantiate.type) ?
+              elementToInstantiate.type
+              : typeof elementToInstantiate.type,
+            getDeclarationErrorAddendum(elementToInstantiate._owner));
         } else {
           invariant(false);
         }
       }
 
       // Special case string values
-      if (typeof element.type === 'string') {
-// original: instance = ReactNativeComponent.createInternalComponent(element);
-        instance = new InternalComponent(element, this);
-      } else if (isInternalComponentType(element.type)) {
+      if (typeof elementToInstantiate.type === 'string') {
+// original: instance = ReactNativeComponent.createInternalComponent(elementToInstantiate);
+        instance = new InternalComponent(elementToInstantiate, this);
+      } else if (isInternalComponentType(elementToInstantiate.type)) {
         // This is temporarily available for custom components that are not string
         // representations. I.e. ART. Once those are updated to use the string
         // representation, we can drop this code path.
-        const Constructor = element.type;
+        const Constructor = elementToInstantiate.type;
 
-        instance = new Constructor(element);
+        instance = new Constructor(elementToInstantiate);
       } else {
-        instance = new React3CompositeComponentWrapper(element, this);
+        instance = new React3CompositeComponentWrapper(elementToInstantiate, this);
       }
     } else if (typeof elementToInstantiate === 'string'
       || typeof elementToInstantiate === 'number') {

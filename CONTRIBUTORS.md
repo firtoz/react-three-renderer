@@ -2,3 +2,5 @@
 * [@DelvarWorld](https://github.com/DelvarWorld)
 * [@baopham](https://github.com/baopham)
 * [@robertlong](https://github.com/robertlong)
+* [@MoOx](https://github.com/MoOx)
+* [@rana3012](https://github.com/rana3012)
