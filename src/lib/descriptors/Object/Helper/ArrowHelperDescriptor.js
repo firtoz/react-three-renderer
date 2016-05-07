@@ -8,33 +8,108 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    [
-      'dir',
-      'origin',
-    ].forEach(propName => {
-      this.hasProp(propName, {
-        type: propTypeInstanceOf(THREE.Vector3),
-        update: this.triggerRemount,
-        default: undefined,
-      });
+    this.hasProp('origin', {
+      type: propTypeInstanceOf(THREE.Vector3).isRequired,
+      update(threeObject, origin) {
+        threeObject.position.copy(origin);
+      },
+      default: undefined,
     });
 
-    [
-      'length',
-      'color',
-      'headLength',
-      'headWidth',
-    ].forEach(propName => {
-      this.hasProp(propName, {
-        type: PropTypes.number,
-        update: this.triggerRemount,
-        default: undefined,
-      });
+    this.hasProp('dir', {
+      type: propTypeInstanceOf(THREE.Vector3).isRequired,
+      update(threeObject, newDir) {
+        threeObject.setDirection(newDir);
+      },
+      default: undefined,
     });
+
+    this.hasProp('color', {
+      type: PropTypes.oneOfType([
+        propTypeInstanceOf(THREE.Color),
+        PropTypes.number,
+        PropTypes.string,
+      ]),
+      update(threeObject, newColor) {
+        threeObject.setColor(newColor);
+      },
+      default: 0xffff00,
+    });
+
+    this.hasProp('length', {
+      type: PropTypes.number,
+      update(threeObject, length) {
+        threeObject.userData.lengthProps.length = length;
+
+        threeObject.userData.lengthsChanged = true;
+      },
+      default: 1,
+    });
+
+    this.hasProp('headLength', {
+      type: PropTypes.number,
+      update: (threeObject, headLength) => {
+        threeObject.userData.lengthProps.headLength = headLength;
+
+        threeObject.userData.lengthsChanged = true;
+      },
+      default: undefined,
+    });
+
+    this.hasProp('headWidth', {
+      type: PropTypes.number,
+      update: (threeObject, headWidth) => {
+        threeObject.userData.lengthProps.headWidth = headWidth;
+
+        threeObject.userData.lengthsChanged = true;
+      },
+      default: undefined,
+    });
+  }
+
+  beginPropertyUpdates(threeObject) {
+    threeObject.userData.lengthsChanged = false;
+  }
+
+  completePropertyUpdates(threeObject) {
+    if (threeObject.userData.lengthsChanged) {
+      threeObject.userData.lengthsChanged = false;
+
+      const {
+        length,
+      } = threeObject.userData.lengthProps;
+
+      let {
+        headLength,
+        headWidth,
+      } = threeObject.userData.lengthProps;
+
+      if (headLength === undefined) {
+        headLength = 0.2 * length;
+      }
+
+      if (headWidth === undefined) {
+        headWidth = 0.2 * headLength;
+      }
+
+      threeObject.setLength(length, headLength, headWidth);
+    }
   }
 
   applyInitialProps(threeObject:THREE.Object3D, props) {
     super.applyInitialProps(threeObject, props);
+
+    const {
+      length,
+      headLength,
+      headWidth,
+    } = props;
+
+    threeObject.userData.lengthProps = {
+      length,
+      headLength,
+      headWidth,
+    };
   }
 
   construct(props) {
