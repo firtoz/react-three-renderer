@@ -88,7 +88,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const parentInternalComponent = parentMarkup.threeObject.userData.react3internalComponent;
     const originalInternalComponent = oldMarkup.threeObject.userData.react3internalComponent;
 
-    parentInternalComponent.removeChild(originalInternalComponent, null);
+    parentInternalComponent.removeChild(originalInternalComponent, oldMarkup);
     const nextChild = nextMarkup.threeObject.userData.react3internalComponent;
     nextChild._mountIndex = indexInParent;
     parentInternalComponent.createChild(nextChild, null, nextMarkup);
