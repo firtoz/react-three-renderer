@@ -27,6 +27,10 @@ module.exports = (type) => {
     require('./core/React3/CompositeComponents')(type);
   });
 
+  describe(`${type}/React3/Context`, () => {
+    require('./core/React3/Context')(type);
+  });
+
   describe(`${type}/Warnings`, () => {
     require('./core/Warnings/PropTypes')(type);
   });
