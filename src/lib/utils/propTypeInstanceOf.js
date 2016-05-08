@@ -1,22 +1,23 @@
 import PropTypes from 'react/lib/ReactPropTypes';
 import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 
+const ANONYMOUS = '<<anonymous>>';
+
 // Returns class name of the object, if any.
 function getClassName(propValue) {
   if (!(propValue.constructor
     && (propValue.constructor.name || propValue.constructor.displayName))) {
-    return '<<anonymous>>';
+    return ANONYMOUS;
   }
   return propValue.constructor.name || propValue.constructor.displayName;
 }
 
-const ANONYMOUS = '<<anonymous>>';
 
 function createChainableTypeChecker(validate) {
   function checkType(isRequired, props, propName, _componentName, location, _propFullName) {
     const componentName = _componentName || ANONYMOUS;
     const propFullName = _propFullName || propName;
-    if (props[propName] === null) {
+    if (props[propName] === undefined) {
       const locationName = ReactPropTypeLocationNames[location];
       if (isRequired) {
         return new Error(`Required ${locationName} \`${propFullName}\`` +

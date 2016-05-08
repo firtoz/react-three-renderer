@@ -52,11 +52,15 @@ module.exports = (type) => {
     />), testDiv);
   });
 
-  beforeEach(() => {
+  beforeEach(function _() {
+    this.test.body = _.toString(); // can now debug failed beforeEach
+
     mockConsole.apply();
   });
 
   afterEach(function _() {
+    this.test.body = _.toString(); // can now debug failed afterEach
+
     ReactDOM.unmountComponentAtNode(testDiv);
 
     if (this.currentTest.state === 'failed') {
