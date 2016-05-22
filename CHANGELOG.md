@@ -3,6 +3,9 @@ CHANGELOG
 
 ## 2.0.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.1...staging/2.0) )
 
+### Components
+- Added `<lineSegments>` geometry descriptor ( #68 )
+
 ## 2.0.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.0...v2.0.1) )
 
 ### Core
