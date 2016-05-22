@@ -73,9 +73,9 @@ function precacheChildMarkups(instance, markup) {
 
   const childrenMarkup = markup.childrenMarkup;
 
-  /* eslint-disable no-labels, no-unused-labels */
+  /* eslint-disable no-labels, no-unused-labels, no-restricted-syntax */
   outer: for (let i = 0; i < childrenNames.length; ++i) {
-    /* eslint-enable */
+    /* eslint-enable no-labels, no-unused-labels, no-restricted-syntax */
     const childName = childrenNames[i];
 
     const childInst = renderedChildren[childName];
