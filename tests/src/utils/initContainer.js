@@ -39,6 +39,9 @@ module.exports = (type) => {
 
   mockConsole.expectThreeLog = () => {
     mockConsole.expect('THREE.WebGLRenderer	76');
+    if (process.env.TRAVIS) {
+      mockConsole.expect('THREE.WebGLRenderer: WEBGL_depth_texture extension not supported.');
+    }
   };
 
   before(() => {
