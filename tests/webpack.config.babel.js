@@ -1,4 +1,5 @@
 import path from 'path';
+import webpack from 'webpack';
 
 const babelLoaderConfig = {
   loader: 'babel',
@@ -31,6 +32,13 @@ const webpackConfig = {
       colors: true,
     },
   },
+  plugins: process.env.TRAVIS ? [
+    new webpack.DefinePlugin({
+      'process.env': {
+        TRAVIS: process.env.TRAVIS,
+      },
+    }),
+  ] : [],
 };
 
 if (process.env.KARMA_COVERAGE === 'true') {
