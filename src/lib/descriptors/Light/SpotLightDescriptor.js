@@ -41,6 +41,7 @@ class SpotLightDescriptor extends LightDescriptorBase {
     });
 
     this.hasColor();
+    this.hasDirection();
   }
 
   construct(props) {
@@ -51,7 +52,7 @@ class SpotLightDescriptor extends LightDescriptorBase {
       angle,
       exponent,
       decay,
-      } = props;
+    } = props;
 
     return new THREE.SpotLight(color, intensity, distance, angle, exponent, decay);
   }
