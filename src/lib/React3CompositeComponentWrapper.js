@@ -28,6 +28,10 @@ function warnIfInvalidElement(Component, element) {
   }
 }
 
+function shouldConstruct(Component) {
+  return Component.prototype && Component.prototype.isReactComponent;
+}
+
 class StatelessComponent {
   render() {
     const componentCreator = ReactInstanceMap.get(this)._currentElement.type;
@@ -53,12 +57,6 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     super.construct(element);
 
     this._threeObject = null;
-  }
-
-  unmountComponent(safely) {
-    super.unmountComponent(safely);
-
-    // this._threeObject = null;
   }
 
   _updateRenderedComponent(transaction, context) {
@@ -122,60 +120,22 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const Component = this._currentElement.type;
 
     // Initialize the public class
-    let inst;
+    let inst = this._constructComponent(publicProps, publicContext);
     let renderedElement;
 
-    if (Component.prototype && Component.prototype.isReactComponent) {
-      if (process.env.NODE_ENV !== 'production') {
-        const previousOwner = ReactCurrentOwner.current;
-
-        // noinspection JSValidateTypes
-        ReactCurrentOwner.current = this;
-        try {
-          inst = new Component(publicProps, publicContext, ReactUpdateQueue);
-        } finally {
-          ReactCurrentOwner.current = previousOwner;
-        }
-      } else {
-        inst = new Component(publicProps, publicContext, ReactUpdateQueue);
-      }
-    } else {
-      const componentConstructor = Component;
-
-      if (process.env.NODE_ENV !== 'production') {
-        const previousOwner = ReactCurrentOwner.current;
-
-        // noinspection JSValidateTypes
-        ReactCurrentOwner.current = this;
-        try {
-          inst = componentConstructor(publicProps, publicContext, ReactUpdateQueue);
-        } finally {
-          ReactCurrentOwner.current = previousOwner;
-        }
-      } else {
-        inst = componentConstructor(publicProps, publicContext, ReactUpdateQueue);
-      }
-      if (!inst || !inst.render) {
-        renderedElement = inst;
-        warnIfInvalidElement(Component, renderedElement);
-        if (process.env.NODE_ENV !== 'production') {
-          invariant(
-            inst === null ||
-            inst === false ||
-            ReactElement.isValidElement(inst),
-            '%s(...): A valid React element (or null) must be returned. You may have ' +
-            'returned undefined, an array or some other invalid object.',
-            Component.displayName || Component.name || 'Component'
-          );
-        } else {
-          invariant(
-            inst === null ||
-            inst === false ||
-            ReactElement.isValidElement(inst)
-          );
-        }
-        inst = new StatelessComponent(Component);
-      }
+    // Support functional components
+    if (!shouldConstruct(Component) && (inst == null || inst.render == null)) {
+      renderedElement = inst;
+      warnIfInvalidElement(Component, renderedElement);
+      invariant(
+        inst === null ||
+        inst === false ||
+        ReactElement.isValidElement(inst),
+        '%s(...): A valid React element (or null) must be returned. You may have ' +
+        'returned undefined, an array or some other invalid object.',
+        Component.displayName || Component.name || 'Component'
+      );
+      inst = new StatelessComponent(Component);
     }
 
     if (process.env.NODE_ENV !== 'production') {
@@ -300,6 +260,27 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     return markup;
   }
 
+  _constructComponent(publicProps, publicContext) {
+    if (process.env.NODE_ENV !== 'production') {
+      ReactCurrentOwner.current = this;
+      try {
+        return this._constructComponentWithoutOwner(publicProps, publicContext);
+      } finally {
+        ReactCurrentOwner.current = null;
+      }
+    } else {
+      return this._constructComponentWithoutOwner(publicProps, publicContext);
+    }
+  }
+
+  _constructComponentWithoutOwner(publicProps, publicContext) {
+    const Component = this._currentElement.type;
+    if (shouldConstruct(Component)) {
+      return new Component(publicProps, publicContext, ReactUpdateQueue);
+    }
+
+    return Component(publicProps, publicContext, ReactUpdateQueue); // eslint-disable-line new-cap
+  }
 
   performInitialMount(_renderedElement, nativeParent, nativeContainerInfo, transaction, context) {
     const inst = this._instance;

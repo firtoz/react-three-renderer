@@ -10,6 +10,7 @@ import ReactComponent from 'react/lib/ReactComponent';
 import ReactInjection from 'react/lib/ReactInjection';
 import ReactReconcileTransaction from 'react/lib/ReactReconcileTransaction';
 import ReactDefaultBatchingStrategy from 'react/lib/ReactDefaultBatchingStrategy';
+import KeyEscapeUtils from 'react/lib/KeyEscapeUtils';
 import traverseAllChildren from 'react/lib/traverseAllChildren';
 import getNativeComponentFromComposite from 'react/lib/getNativeComponentFromComposite';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
@@ -379,7 +380,7 @@ class React3Renderer {
       warning(keyUnique,
         'flattenChildren(...): Encountered two children with the same key, '
         + '`%s`. Child keys must be unique; when two children share a key, only '
-        + 'the first child will be used.', name);
+        + 'the first child will be used.', KeyEscapeUtils.unescape(name));
     }
     if (child !== null && keyUnique) {
       childInstances[name] = this.instantiateReactComponent(child, null);
