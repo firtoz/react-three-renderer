@@ -9,7 +9,7 @@ Would you like to know more? [See the wiki](https://github.com/toxicFork/react-t
 
 > This is still an experimental and work in progress project, use at your own risk!
 
-### Due to some issues with React 15.1, please use an older version of react until compatibility is restored
+### Due to some issues with React 15.1, please use an older version of react (e.g. 15.0) until compatibility is restored
 
 [![Join the chat at https://gitter.im/toxicFork/react-three-renderer](https://badges.gitter.im/toxicFork/react-three-renderer.svg)](https://gitter.im/toxicFork/react-three-renderer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg)](https://travis-ci.org/toxicFork/react-three-renderer)
 
