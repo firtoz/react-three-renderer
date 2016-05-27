@@ -1,13 +1,12 @@
 import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
 import ReactElement from 'react/lib/ReactElement';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
-import ReactReconciler from 'react/lib/ReactReconciler';
 import invariant from 'fbjs/lib/invariant';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
+import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import emptyObject from 'fbjs/lib/emptyObject';
 import warning from 'fbjs/lib/warning';
 import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
-import ReactNodeTypes from 'react/lib/ReactNodeTypes';
 
 class ReactCompositeComponentMixinImpl {
 }
@@ -30,6 +29,23 @@ function warnIfInvalidElement(Component, element) {
 
 function shouldConstruct(Component) {
   return Component.prototype && Component.prototype.isReactComponent;
+}
+
+function invokeComponentDidMountWithTimer() {
+  const publicInstance = this._instance;
+  if (this._debugID !== 0) {
+    ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
+      this._debugID,
+      'componentDidMount'
+    );
+  }
+  publicInstance.componentDidMount();
+  if (this._debugID !== 0) {
+    ReactInstrumentation.debugTool.onEndLifeCycleTimer(
+      this._debugID,
+      'componentDidMount'
+    );
+  }
 }
 
 class StatelessComponent {
@@ -70,6 +86,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
 
+  // TODO: prevInstance
   _replaceNodeWithMarkup(oldMarkup, nextMarkup) {
     const parentMarkup = oldMarkup.parentMarkup;
 
@@ -254,7 +271,11 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       context);
 
     if (inst.componentDidMount) {
-      transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
+      if (process.env.NODE_ENV !== 'production') {
+        transaction.getReactMountReady().enqueue(invokeComponentDidMountWithTimer, this);
+      } else {
+        transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
+      }
     }
 
     return markup;
@@ -275,45 +296,51 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 
   _constructComponentWithoutOwner(publicProps, publicContext) {
     const Component = this._currentElement.type;
+    let instanceOrElement;
     if (shouldConstruct(Component)) {
-      return new Component(publicProps, publicContext, ReactUpdateQueue);
-    }
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
+            this._debugID,
+            'ctor'
+          );
+        }
+      }
+      instanceOrElement = new Component(publicProps, publicContext, ReactUpdateQueue);
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onEndLifeCycleTimer(
+            this._debugID,
+            'ctor'
+          );
+        }
+      }
+    } else {
+      // This can still be an instance in case of factory components
+      // but we'll count this as time spent rendering as the more common case.
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
+            this._debugID,
+            'render'
+          );
+        }
+      }
 
-    return Component(publicProps, publicContext, ReactUpdateQueue); // eslint-disable-line new-cap
-  }
+      /* eslint-disable new-cap */
+      instanceOrElement = Component(publicProps, publicContext, ReactUpdateQueue);
+      /* eslint-enable */
 
-  performInitialMount(_renderedElement, nativeParent, nativeContainerInfo, transaction, context) {
-    const inst = this._instance;
-    if (inst.componentWillMount) {
-      inst.componentWillMount();
-      // When mounting, calls to `setState` by `componentWillMount` will set
-      // `this._pendingStateQueue` without triggering a re-render.
-      if (this._pendingStateQueue) {
-        inst.state = this._processPendingState(inst.props, inst.context);
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onEndLifeCycleTimer(
+            this._debugID,
+            'render'
+          );
+        }
       }
     }
-
-    let renderedElement = _renderedElement;
-
-    // If not a stateless component, we now render
-    if (renderedElement === undefined) {
-      renderedElement = this._renderValidatedComponent();
-    }
-
-    this._renderedNodeType = ReactNodeTypes.getType(renderedElement);
-    this._renderedComponent = this._instantiateReactComponent(
-      renderedElement
-    );
-
-    const markup = ReactReconciler.mountComponent(
-      this._renderedComponent,
-      transaction,
-      nativeParent,
-      nativeContainerInfo,
-      this._processChildContext(context)
-    );
-
-    return markup;
+    return instanceOrElement;
   }
 
   /**

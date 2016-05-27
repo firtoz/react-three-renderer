@@ -17,14 +17,17 @@
     "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\""
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
-  "keywords": "react, three.js",
+  "keywords": [
+    "react",
+    "three.js"
+  ],
   "license": "MIT",
   "dependencies": {
-    "fbjs": "0.8.2"
+    "fbjs": "0.8.3"
   },
   "peerDependencies": {
-    "react": "^15.0.0",
-    "three": ">=0.74.0"
+    "react": "~15.1.0",
+    "three": ">=0.74.0 < 0.78.0"
   },
   "devDependencies": {
     "babel-cli": "6.9.0",
@@ -42,9 +45,9 @@
     "chai": "3.5.0",
     "del": "2.2.0",
     "dirty-chai": "1.2.2",
-    "eslint": "2.10.2",
+    "eslint": "2.11.0",
     "eslint-config-airbnb": "9.0.1",
-    "eslint-plugin-import": "1.8.0",
+    "eslint-plugin-import": "1.8.1",
     "eslint-plugin-jsx-a11y": "^1.2.2",
     "eslint-plugin-react": "5.1.1",
     "estraverse-fb": "1.3.1",
@@ -62,13 +65,13 @@
     "karma-sourcemap-loader": "0.3.7",
     "karma-spec-reporter": "0.0.26",
     "karma-webpack": "1.7.0",
-    "mocha": "2.5.2",
+    "mocha": "2.5.3",
     "mocha-loader": "0.7.1",
     "react": "15.1.0",
     "react-dom": "15.1.0",
     "sinon": "2.0.0-pre",
     "source-map-support": "0.4.0",
-    "three": "0.76.1",
+    "three": "0.77.1",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1"
   },
