@@ -1,10 +1,14 @@
 CHANGELOG
 ===========
 
-## 2.0.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.1...staging/2.0) )
+## 2.1.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.1...staging/2.0) )
 
 ### Components
 - Added `<lineSegments>` geometry descriptor ( #68 )
+
+### Core
+- Fixed compatibility with `react@~15.1.0`
+- Fixed compatibility with `three@>=0.74.0 < 0.78.0`
 
 ## 2.0.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.0...v2.0.1) )
 

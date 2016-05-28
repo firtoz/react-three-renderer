@@ -2,9 +2,11 @@ import ReactReconciler from 'react/lib/ReactReconciler';
 import ReactMultiChild from 'react/lib/ReactMultiChild';
 
 import invariant from 'fbjs/lib/invariant';
+import emptyFunction from 'fbjs/lib/emptyFunction';
 
 import flattenChildren from 'react/lib/flattenChildren';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
+import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import Flags from './React3ComponentFlags';
 
 import ID_PROPERTY_NAME from './utils/idPropertyName';
@@ -47,6 +49,16 @@ function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
 }
 
+let setChildrenForInstrumentation = emptyFunction;
+if (process.env.NODE_ENV !== 'production') {
+  setChildrenForInstrumentation = function _(children) {
+    ReactInstrumentation.debugTool.onSetChildren(
+      this._debugID,
+      children ? Object.keys(children).map(key => children[key]._debugID) : []
+    );
+  };
+}
+
 const getThreeObjectFromMountImage = img => img.threeObject;
 
 const ReactMultiChildMixin = ReactMultiChild.Mixin;
@@ -69,7 +81,6 @@ class InternalComponent {
     this._rootNodeID = null;
     this._nativeID = null; // _domID
     this._nativeContainerInfo = null;
-    this._wrapperState = null;
     this._threeObject = null;
     this._topLevelWrapper = null;
     this._markup = null;
@@ -148,8 +159,12 @@ class InternalComponent {
     // create initial children
     const childrenToUse = element.props.children;
 
-    const mountImages = this.mountChildren(childrenToUse, transaction,
-      context);
+    let mountImages;
+    if (childrenToUse) {
+      mountImages = this.mountChildren(childrenToUse, transaction, context);
+    } else {
+      mountImages = [];
+    }
 
     const markup = {
       [ID_PROPERTY_NAME]: this._nativeID,
@@ -276,6 +291,10 @@ class InternalComponent {
         mountImages.push(mountImage);
         index++;
       }
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      setChildrenForInstrumentation.call(this, children);
     }
 
     return mountImages;
@@ -421,6 +440,7 @@ class InternalComponent {
 
     this._markup = null;
     this._rootNodeID = null;
+
     if (this._nodeWithLegacyProperties) {
       const node = this._nodeWithLegacyProperties;
       node._reactInternalComponent = null;
@@ -533,6 +553,10 @@ class InternalComponent {
     }
 
     this._renderedChildren = nextChildren;
+
+    if (process.env.NODE_ENV !== 'production') {
+      setChildrenForInstrumentation.call(this, nextChildren);
+    }
 
     this.threeElementDescriptor.completeChildUpdates(this._threeObject);
   }

@@ -10,9 +10,11 @@ import ReactComponent from 'react/lib/ReactComponent';
 import ReactInjection from 'react/lib/ReactInjection';
 import ReactReconcileTransaction from 'react/lib/ReactReconcileTransaction';
 import ReactDefaultBatchingStrategy from 'react/lib/ReactDefaultBatchingStrategy';
+import KeyEscapeUtils from 'react/lib/KeyEscapeUtils';
 import traverseAllChildren from 'react/lib/traverseAllChildren';
 import getNativeComponentFromComposite from 'react/lib/getNativeComponentFromComposite';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
+import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
@@ -25,6 +27,7 @@ import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 import ID_PROPERTY_NAME from './utils/idPropertyName';
 
 let getDeclarationErrorAddendum;
+let getDisplayName;
 
 if (process.env.NODE_ENV !== 'production') {
   // prop type helpers
@@ -52,6 +55,21 @@ if (process.env.NODE_ENV !== 'production') {
       }
     }
     return '';
+  };
+
+  getDisplayName = (instance) => {
+    const element = instance._currentElement;
+    if (element == null) {
+      return '#empty';
+    } else if (typeof element === 'string' || typeof element === 'number') {
+      return '#text';
+    } else if (typeof element.type === 'string') {
+      return element.type;
+    } else if (instance.getName) {
+      return instance.getName() || 'Unknown';
+    }
+
+    return element.type.displayName || element.type.name || 'Unknown';
   };
 }
 
@@ -287,6 +305,8 @@ class React3Renderer {
     this._highlightElement = document.createElement('div');
     this._highlightCache = null;
 
+    this._nextDebugID = 1;
+
     if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       this._agent = null;
 
@@ -379,7 +399,7 @@ class React3Renderer {
       warning(keyUnique,
         'flattenChildren(...): Encountered two children with the same key, '
         + '`%s`. Child keys must be unique; when two children share a key, only '
-        + 'the first child will be used.', name);
+        + 'the first child will be used.', KeyEscapeUtils.unescape(name));
     }
     if (child !== null && keyUnique) {
       childInstances[name] = this.instantiateReactComponent(child, null);
@@ -468,7 +488,17 @@ class React3Renderer {
 
     rootImage.threeObject.mountedIntoRoot();
 
-    React3ComponentTree.precacheMarkup(instance, container.userData.markup.childrenMarkup[0]);
+    const firstChild = container.userData.markup.childrenMarkup[0];
+    React3ComponentTree.precacheMarkup(instance, firstChild);
+
+    const nativeInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
+    if (nativeInstance._debugID !== 0) {
+      ReactInstrumentation.debugTool.onNativeOperation(
+        nativeInstance._debugID,
+        'mount',
+        markup.toString()
+      );
+    }
   }
 
   /**
@@ -743,7 +773,9 @@ class React3Renderer {
     let instance;
 
     let elementToInstantiate = element;
-    if (elementToInstantiate === null || elementToInstantiate === false) {
+
+    const isEmpty = elementToInstantiate === null || elementToInstantiate === false;
+    if (isEmpty) {
       elementToInstantiate = reactElementWrapper.createElement('object3D');
       // instance = new ReactDOMEmptyComponent(this.instantiateReactComponent);
     }
@@ -816,6 +848,20 @@ class React3Renderer {
       instance._warnedAboutRefsInRender = false;
     }
 
+    if (process.env.NODE_ENV !== 'production') {
+      const debugID = isEmpty ? 0 : `r3r${this._nextDebugID++}`;
+      instance._debugID = debugID;
+
+      if (debugID !== 0) {
+        const displayName = getDisplayName(instance);
+        ReactInstrumentation.debugTool.onSetDisplayName(debugID, displayName);
+        const owner = elementToInstantiate && elementToInstantiate._owner;
+        if (owner) {
+          ReactInstrumentation.debugTool.onSetOwner(debugID, owner._debugID);
+        }
+      }
+    }
+
     // Internal instances should fully constructed at this point, so they should
     // not get any new fields added to them at this point.
     if (process.env.NODE_ENV !== 'production') {
@@ -837,6 +883,10 @@ class React3Renderer {
    * @private
    */
   _renderNewRootComponent(nextElement, container, shouldReuseMarkup, context) {
+    if (process.env.NODE_ENV !== 'production') {
+      ReactInstrumentation.debugTool.onBeginFlush();
+    }
+
     // Various parts of our code (such as ReactCompositeComponent's
     // _renderValidatedComponent) assume that calls to render aren't nested;
     // verify that that's the case.
@@ -852,6 +902,12 @@ class React3Renderer {
     }
 
     const componentInstance = this.instantiateReactComponent(nextElement);
+
+    if (process.env.NODE_ENV !== 'production') {
+      // Mute future events from the top level wrapper.
+      // It is an implementation detail that devtools should not know about.
+      componentInstance._debugID = 0;
+    }
 
     // The initial render is synchronous but any updates that happen during
     // rendering, in componentWillMount or componentDidMount, will be batched
@@ -879,6 +935,12 @@ class React3Renderer {
       const reactRootID = 0;
       // Record the root element in case it later gets transplanted.
       this.rootMarkupsByReactRootID[reactRootID] = getReactRootMarkupInContainer(container);
+
+      // The instance here is TopLevelWrapper so we report mount for its child.
+      ReactInstrumentation.debugTool.onMountRootComponent(
+        componentInstance._renderedComponent._debugID
+      );
+      ReactInstrumentation.debugTool.onEndFlush();
     }
 
     return componentInstance;
