@@ -8,11 +8,12 @@ class SpotLightDescriptor extends LightDescriptorBase {
     super(react3Instance);
 
     const defaults = [
-      1,
-      0,
-      Math.PI / 3,
-      10,
-      1,
+      1, // intensity
+      0, // distance
+      Math.PI / 3, // angle
+      10, // exponent
+      1, // decay
+      0, // penumbra
     ];
 
     [
@@ -21,6 +22,7 @@ class SpotLightDescriptor extends LightDescriptorBase {
       'angle',
       'exponent',
       'decay',
+      'penumbra',
     ].forEach((propName, i) => {
       this.hasProp(propName, {
         type: PropTypes.number,
@@ -41,6 +43,7 @@ class SpotLightDescriptor extends LightDescriptorBase {
     });
 
     this.hasColor();
+    this.hasDirection();
   }
 
   construct(props) {
@@ -51,7 +54,7 @@ class SpotLightDescriptor extends LightDescriptorBase {
       angle,
       exponent,
       decay,
-      } = props;
+    } = props;
 
     return new THREE.SpotLight(color, intensity, distance, angle, exponent, decay);
   }

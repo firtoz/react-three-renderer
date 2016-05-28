@@ -29,6 +29,7 @@ const propProxy = {
       '2d',
       '3d',
     ]).isRequired,
+    default: undefined,
   },
   mainCamera: {
     type: PropTypes.string,
@@ -85,9 +86,11 @@ const propProxy = {
   },
   width: {
     type: PropTypes.number.isRequired,
+    default: 1,
   },
   height: {
     type: PropTypes.number.isRequired,
+    default: 1,
   },
   precision: {
     type: PropTypes.oneOf([

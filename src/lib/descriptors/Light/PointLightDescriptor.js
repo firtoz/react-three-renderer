@@ -50,6 +50,10 @@ class PointLightDescriptor extends LightDescriptorBase {
       },
       default: PointLightDescriptor.defaultShadowCameraAspect,
     });
+
+    this.removeProp('lookAt');
+    this.removeProp('rotation');
+    this.removeProp('quaternion');
   }
 
   construct(props) {
