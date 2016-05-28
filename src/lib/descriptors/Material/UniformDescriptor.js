@@ -29,6 +29,7 @@ class UniformDescriptor extends THREEElementDescriptor {
 
     this.hasProp('name', {
       type: PropTypes.string.isRequired,
+      update: this.triggerRemount,
     });
   }
 

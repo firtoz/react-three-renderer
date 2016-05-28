@@ -18,6 +18,7 @@ class THREEElementDescriptor {
     this.react3RendererInstance = react3RendererInstance;
     this.propUpdates = {};
     this.propDeletes = {};
+    this.propDefaults = {};
     this._initialOnly = {};
     this._updateInitial = [];
     this._simpleProperties = [];
@@ -51,6 +52,7 @@ class THREEElementDescriptor {
     delete this.propTypes[name];
     delete this.propDeletes[name];
     delete this.propUpdates[name];
+    delete this.propDefaults[name];
 
     const updateInitialIndex = this._updateInitial.indexOf(name);
     if (updateInitialIndex !== -1) {
@@ -96,19 +98,31 @@ class THREEElementDescriptor {
         this.propDeletes[name] = (threeObject) => {
           info.update(threeObject, info.default, true);
         };
+
+        this.propDefaults[name] = info.default;
+      } else {
+        invariant(info.update === this.triggerRemount,
+          `The type information for ${this.constructor.name}.${name} ` +
+          'should include a `default` property if it\'s not going to trigger remount');
       }
 
       if (info.hasOwnProperty('remove')) {
-        invariant(!info.hasOwnProperty('default'), 'The information should not include ' +
-          'both of `default` and `remove` properties');
-        this.propDeletes[name] = (threeObject) => {
-          info.update(threeObject, info.default);
-        };
+        invariant(false, `Bad 'remove' info for ${this.constructor.name}.${name}`);
       }
 
       if (info.hasOwnProperty('updateInitial')) {
         invariant(info.hasOwnProperty('update'), 'The information should include a ' +
           '`update` property if it has a`updateInitial` property');
+
+        if (process.env.NODE_ENV !== 'production') {
+          invariant(info.hasOwnProperty('default')
+            || this.propUpdates[name].length === 3
+            || this.propUpdates[name] === this.triggerRemount,
+            `Prop info for ${this.constructor.name}.${name} has 'updateInitial', ` +
+            'but no \'default\', and ' +
+            `the update function accepts ${this.propUpdates[name].length}` +
+            ' parameters instead of 3.');
+        }
 
         if (this._updateInitial.indexOf(name) === -1) {
           this._updateInitial.push(name);
@@ -203,7 +217,13 @@ class THREEElementDescriptor {
       if (props.hasOwnProperty(propertyName)) {
         this.propUpdates[propertyName](threeObject, props[propertyName], true);
       } else {
-        this.propUpdates[propertyName](threeObject, undefined, false);
+        let originalValue = undefined;
+
+        if (this.propDefaults.hasOwnProperty(propertyName)) {
+          originalValue = this.propDefaults[propertyName];
+        }
+
+        this.propUpdates[propertyName](threeObject, originalValue, false);
       }
     });
 

@@ -6,6 +6,25 @@ import PropTypes from 'react/lib/ReactPropTypes';
 import warning from 'fbjs/lib/warning';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
+const updateLightTargetFromQuaternion = (() => {
+  const lightPositionVector = new THREE.Vector3();
+  const forward = new THREE.Vector3();
+
+  return (light) => {
+    light.updateMatrixWorld();
+
+    lightPositionVector.setFromMatrixPosition(light.matrixWorld);
+
+    // rotate forward to match the rotation
+    // then set the target position
+    light.target.position.copy(forward.set(0, 0, 1)
+      .applyQuaternion(light.quaternion)
+      .add(lightPositionVector));
+
+    light.target.updateMatrixWorld();
+  };
+})();
+
 class LightDescriptorBase extends Object3DDescriptor {
   static defaultShadowCameraNear = 0.5;
   static defaultShadowCameraFar = 500;
@@ -15,6 +34,7 @@ class LightDescriptorBase extends Object3DDescriptor {
     super(react3Instance);
 
     this._hasColor = false;
+    this._hasDirection = false;
 
     if (process.env.NODE_ENV !== 'production') {
       this._warnedAboutLightMaterialUpdate = false;
@@ -99,6 +119,73 @@ class LightDescriptorBase extends Object3DDescriptor {
     });
   }
 
+  hasDirection() {
+    this._hasDirection = true;
+
+    // recreate the props to use target
+    this.removeProp('position');
+    this.removeProp('rotation');
+    this.removeProp('quaternion');
+    this.removeProp('lookAt');
+
+    this.hasProp('position', {
+      type: propTypeInstanceOf(THREE.Vector3),
+      update(threeObject, position) {
+        threeObject.position.copy(position);
+
+        if (threeObject.userData._lookAt) {
+          threeObject.lookAt(threeObject.userData._lookAt);
+        }
+
+        threeObject.userData._needsDirectionUpdate = true;
+      },
+      default: new THREE.Vector3(),
+    });
+
+    this.hasProp('rotation', {
+      type: propTypeInstanceOf(THREE.Euler),
+      update(light, rotation) {
+        light.rotation.copy(rotation);
+
+        light.userData._needsDirectionUpdate = true;
+      },
+      default: new THREE.Euler(),
+    });
+
+    this.hasProp('quaternion', {
+      type: propTypeInstanceOf(THREE.Quaternion),
+      update(light, quaternion) {
+        light.quaternion.copy(quaternion);
+
+        light.userData._needsDirectionUpdate = true;
+      },
+      default: new THREE.Quaternion(),
+    });
+
+    this.hasProp('lookAt', {
+      type: propTypeInstanceOf(THREE.Vector3),
+      update(threeObject, lookAt) {
+        threeObject.userData._lookAt = lookAt;
+
+        if (!!lookAt) {
+          threeObject.lookAt(lookAt);
+
+          threeObject.userData._needsDirectionUpdate = true;
+        }
+      },
+      default: undefined,
+    });
+  }
+
+  completePropertyUpdates(threeObject) {
+    super.completePropertyUpdates(threeObject);
+
+    if (threeObject.userData._needsDirectionUpdate) {
+      threeObject.userData._needsDirectionUpdate = false;
+      updateLightTargetFromQuaternion(threeObject);
+    }
+  }
+
   hasColor() {
     this._hasColor = true;
 
@@ -120,6 +207,14 @@ class LightDescriptorBase extends Object3DDescriptor {
 
     if (props.hasOwnProperty('castShadow')) {
       threeObject.castShadow = props.castShadow;
+    }
+
+    if (this._hasDirection) {
+      threeObject.userData._needsDirectionUpdate = false;
+
+      if (props.position || props.lookAt || props.rotation || props.quaternion) {
+        updateLightTargetFromQuaternion(threeObject);
+      }
     }
   }
 

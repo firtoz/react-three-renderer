@@ -2,8 +2,23 @@ import Object3DInfo from './Object3DInfo';
 
 class LightInfo extends Object3DInfo {
   getAttributesText(descriptor, componentName) {
+    const attributesText = super.getAttributesText(descriptor, componentName);
+
+    if (descriptor._hasDirection) {
+      [
+        'position',
+        'rotation',
+        'quaternion',
+        'lookAt',
+      ].forEach(propName => {
+        attributesText[propName] = `${attributesText[propName]}
+
+Additionally, updating this property will trigger an update for the light target position.`;
+      });
+    }
+
     return {
-      ...super.getAttributesText(),
+      ...attributesText,
       updatesRefreshAllMaterials: 'Acknowledges and silences the remount warning message.\n\n' +
       'It is expensive to add or remove lights from the scene,' +
       ' because all materials need to be refreshed to take the new number of' +
