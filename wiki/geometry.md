@@ -8,6 +8,15 @@ Creates a [THREE.Geometry](http://threejs.org/docs/#Reference/Extras.Geometries/
 ### vertices
 ``` array of THREE.Vector3 ``` *``` required ```*: See [THREE.Geometry#vertices](http://threejs.org/docs/#Reference/Core/Geometry.vertices).
 
+### colors
+``` array of THREE.Color ```: See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).
+
+### faceVertexUvs
+``` array of (array of (array of THREE.Vector2)) ```: See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).
+
+### faces
+``` array of THREE.Face3 ```: See [THREE.Geometry#faces](http://threejs.org/docs/#Reference/Core/Geometry.faces).
+
 ### dynamic
 ``` bool ```: See [THREE.Geometry#dynamic](http://threejs.org/docs/#Reference/Core/Geometry.dynamic).
 
@@ -21,15 +30,6 @@ Defaults to true.
 ``` string ```: Name for this geometry.
 
 Default is an empty string.
-
-### colors
-``` array of THREE.Color ```: See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).
-
-### faceVertexUvs
-``` array of (array of THREE.Vector2) ```: See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).
-
-### faces
-``` array of THREE.Face3 ```: See [THREE.Geometry#faces](http://threejs.org/docs/#Reference/Core/Geometry.faces).
 
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
