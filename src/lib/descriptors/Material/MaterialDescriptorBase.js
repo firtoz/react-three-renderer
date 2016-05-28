@@ -47,7 +47,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       update: (threeObject, side) => {
         threeObject.side = side;
       },
-      default: undefined,
+      default: THREE.FrontSide,
     });
 
     this.hasProp('opacity', {
