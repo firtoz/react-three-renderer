@@ -849,7 +849,7 @@ class React3Renderer {
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      const debugID = isEmpty ? 0 : this._nextDebugID++;
+      const debugID = isEmpty ? 0 : `r3r${this._nextDebugID++}`;
       instance._debugID = debugID;
 
       if (debugID !== 0) {
