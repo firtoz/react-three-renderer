@@ -95,6 +95,10 @@ class TextureDescriptor extends THREEElementDescriptor {
     ].forEach(eventName => {
       this.hasProp(eventName, {
         type: PropTypes.func,
+        update() {
+          // do nothing
+        },
+        default: undefined,
       });
     });
   }

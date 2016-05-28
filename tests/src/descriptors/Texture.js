@@ -128,6 +128,8 @@ module.exports = type => {
         width={800}
         height={600}
         mainCamera="mainCamera"
+        forceManualRender
+        onManualRenderTriggerCreated={() => {}}
       >
         <scene>
           <perspectiveCamera

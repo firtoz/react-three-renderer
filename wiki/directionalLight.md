@@ -8,22 +8,8 @@ Creates a [THREE.DirectionalLight](http://threejs.org/docs/#Reference/Lights/Dir
 ### name
 ``` string ```: Name for the 3D Object.
 
-### position
-``` THREE.Vector3 ```: The position of the 3D object relative to the parent.
-
-### rotation
-``` THREE.Euler ```: The rotation of the 3D object relative to the parent, in euler form.
-
-### quaternion
-``` THREE.Quaternion ```: The rotation of the 3D object relative to the parent, in quaternion form.
-
 ### scale
 ``` THREE.Vector3 ```: The scale of the 3D object relative to the parent.
-
-### lookAt
-``` THREE.Vector3 ```: The target position for the 3D object to look at.
-
-This calls [THREE.Object3D#lookAt](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) every time the value changes or the position of the object changes.
 
 ### frustumCulled
 ``` bool ```: Whether the 3D object will be culled by the camera frustum or not.
@@ -128,6 +114,28 @@ Example warning message:
 
 ### color
 ``` one of types [THREE.Color, number, string] ```: The light color.
+
+### position
+``` THREE.Vector3 ```: The position of the 3D object relative to the parent.
+
+Additionally, updating this property will trigger an update for the light target position.
+
+### rotation
+``` THREE.Euler ```: The rotation of the 3D object relative to the parent, in euler form.
+
+Additionally, updating this property will trigger an update for the light target position.
+
+### quaternion
+``` THREE.Quaternion ```: The rotation of the 3D object relative to the parent, in quaternion form.
+
+Additionally, updating this property will trigger an update for the light target position.
+
+### lookAt
+``` THREE.Vector3 ```: The target position for the 3D object to look at.
+
+This calls [THREE.Object3D#lookAt](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) every time the value changes or the position of the object changes.
+
+Additionally, updating this property will trigger an update for the light target position.
 
 ===
 

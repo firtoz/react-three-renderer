@@ -14,6 +14,7 @@ class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.updateCacheAndReplace.bind(this, propName),
+        default: 1,
       });
     });
 
@@ -35,7 +36,7 @@ class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
       height,
       widthSegments,
       heightSegments,
-      } = props;
+    } = props;
 
     return new THREE.PlaneBufferGeometry(width, height, widthSegments, heightSegments);
   }

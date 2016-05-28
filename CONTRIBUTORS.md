@@ -4,3 +4,5 @@
 * [@robertlong](https://github.com/robertlong)
 * [@MoOx](https://github.com/MoOx)
 * [@rana3012](https://github.com/rana3012)
+* [@Nopik](https://github.com/Nopik)
+* [@jardakotesovec](https://github.com/jardakotesovec)

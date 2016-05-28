@@ -39,6 +39,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
         threeObject.alphaTest = alphaTest;
         threeObject.needsUpdate = true;
       },
+      default: 0,
     });
 
     this.hasProp('side', {
@@ -47,7 +48,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       update: (threeObject, side) => {
         threeObject.side = side;
       },
-      default: undefined,
+      default: THREE.FrontSide,
     });
 
     this.hasProp('opacity', {

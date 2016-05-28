@@ -63,13 +63,18 @@ class DirectionalLightDescriptor extends LightDescriptorBase {
     });
 
     this.hasColor();
+    this.hasDirection();
   }
 
   construct(props) {
     const color = props.color;
     const intensity = props.intensity;
 
-    return new THREE.DirectionalLight(color, intensity);
+    const result = new THREE.DirectionalLight(color, intensity);
+
+    result.position.set(0, 0, 0);
+
+    return result;
   }
 
   unmount(threeObject) {

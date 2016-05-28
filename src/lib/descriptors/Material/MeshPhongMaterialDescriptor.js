@@ -7,12 +7,6 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      side: PropTypes.number,
-    };
-
     this.hasColor();
     this.hasColor('specular', 0x111111);
     this.hasColor('emissive', 0x000000);

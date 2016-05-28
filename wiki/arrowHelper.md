@@ -48,25 +48,25 @@ This calls [THREE.Object3D#lookAt](http://threejs.org/docs/#Reference/Core/Objec
 
 > **WARNING**: If you use the same material for multiple objects and some of them receive shadows and some do not, it may cause adverse side effects. In that case, it is recommended to use different materials.
 
+### origin
+``` THREE.Vector3 ``` *``` required ```*: The start position of the arrow.
+
 ### dir
-``` THREE.Vector3 ```: direction from origin.
+``` THREE.Vector3 ``` *``` required ```*: direction from origin.
 
 Must be a unit vector.
 
-### origin
-``` THREE.Vector3 ```: The start position of the arrow.
+### color
+``` one of types [THREE.Color, number, string] ```: The color that will be used for the arrow materials.
 
 ### length
 ``` number ```: The length of the arrow.
 
-### color
-``` number ```: hexadecimal value to define color e.g.: ` 0xffff00 `
-
 ### headLength
-``` number ```: The length of the head of the arrow
+``` number ```: The length of the head of the arrow.
 
 ### headWidth
-``` number ```: The length of the width of the arrow
+``` number ```: The length of the width of the arrow.
 
 ===
 

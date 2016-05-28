@@ -41,6 +41,9 @@ module.exports = {
               line: {
                 isComponent: true,
               },
+              lineSegments: {
+                isComponent: true,
+              },
               points: {
                 isComponent: true,
               },
@@ -51,7 +54,6 @@ module.exports = {
             TODO: [
               'Bone',
               'LensFlare',
-              'LineSegments',
               'LOD',
               'MorphAnimMesh',
               'SkinnedMesh',
