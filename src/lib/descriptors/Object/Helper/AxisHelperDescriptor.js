@@ -7,11 +7,11 @@ class AxisHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
-    this.propTypes = {
-      ...this.propTypes,
-
-      size: PropTypes.number,
-    };
+    this.hasProp('size', {
+      type: PropTypes.number,
+      update: this.triggerRemount,
+      default: 1,
+    });
   }
 
   applyInitialProps(threeObject:THREE.Object3D, props) {

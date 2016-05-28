@@ -19,6 +19,7 @@ CHANGELOG
 - Lights
   - Fixed `<directionalLight>` and `<pointLight>` rotation updates ( #65, #73 )
   - Fixed shadow bugs for materials which did not declare a `side` property
+- Fixed updating of all arrow/axis helper props
 
 ### Core
 - Fixed compatibility with `react@~15.1.0`
