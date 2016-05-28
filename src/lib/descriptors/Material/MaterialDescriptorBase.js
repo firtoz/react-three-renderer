@@ -39,6 +39,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
         threeObject.alphaTest = alphaTest;
         threeObject.needsUpdate = true;
       },
+      default: 0,
     });
 
     this.hasProp('side', {
