@@ -3,8 +3,22 @@ CHANGELOG
 
 ## 2.1.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.1...staging/2.0) )
 
+### Breaking changes
+- Lights
+  - `<directionalLight>` and `<pointLight>` used to point to the origin by default, but from 2.1.0 they will look forward.
+  If you would like to restore this behaviour you can do:
+```jsx
+  // initialisation
+  origin = new THREE.Vector3(0,0,0);
+  // and within render 
+  <directionalLight ... lookAt={origin}/>
+``` 
+
 ### Components
 - Added `<lineSegments>` geometry descriptor ( #68 )
+- Lights
+  - Fixed `<directionalLight>` and `<pointLight>` rotation updates ( #65, #73 )
+  - Fixed shadow bugs for materials which did not declare a `side` property
 
 ### Core
 - Fixed compatibility with `react@~15.1.0`
