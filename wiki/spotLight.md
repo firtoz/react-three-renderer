@@ -112,6 +112,9 @@ Example warning message:
 ### decay
 ``` number ```
 
+### penumbra
+``` number ```
+
 ### shadowCameraFov
 ``` number ```
 
