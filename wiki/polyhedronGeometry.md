@@ -5,17 +5,26 @@
 Creates a [THREE.PolyhedronGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PolyhedronGeometry)
 
 ## Attributes
+### vertices
+``` array of number ``` *``` required ```*
+
 ### radius
 ``` number ``` *``` required ```*
 
 ### detail
 ``` number ``` *``` required ```*
 
-### vertices
-``` array of number ``` *``` required ```*
-
 ### indices
 ``` array of number ``` *``` required ```*
+
+### colors
+``` array of THREE.Color ```: See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).
+
+### faceVertexUvs
+``` array of (array of (array of THREE.Vector2)) ```: See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).
+
+### faces
+``` array of THREE.Face3 ```: See [THREE.Geometry#faces](http://threejs.org/docs/#Reference/Core/Geometry.faces).
 
 ### dynamic
 ``` bool ```: See [THREE.Geometry#dynamic](http://threejs.org/docs/#Reference/Core/Geometry.dynamic).
