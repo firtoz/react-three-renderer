@@ -20,7 +20,7 @@ Defaults to `material`. Other example values:
 ``` number ```
 
 ### side
-``` number ```
+``` one of [THREE.FrontSide, THREE.BackSide, THREE.DoubleSide] ```
 
 ### opacity
 ``` number ```
