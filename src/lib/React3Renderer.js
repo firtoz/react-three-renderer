@@ -28,8 +28,10 @@ import ID_PROPERTY_NAME from './utils/idPropertyName';
 
 let getDeclarationErrorAddendum;
 let getDisplayName;
+let staticDebugIdHack;
 
 if (process.env.NODE_ENV !== 'production') {
+  staticDebugIdHack = 0;
   // prop type helpers
   // the warnings for propTypes will not say <anonymous>.
   // Some performance is sacrificed for this.
@@ -305,7 +307,10 @@ class React3Renderer {
     this._highlightElement = document.createElement('div');
     this._highlightCache = null;
 
-    this._nextDebugID = 1;
+    if (process.env.NODE_ENV !== 'production') {
+      this._nextDebugID = 1;
+      this._debugIdPrefix = staticDebugIdHack++;
+    }
 
     if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       this._agent = null;
@@ -849,7 +854,7 @@ class React3Renderer {
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      const debugID = isEmpty ? 0 : `r3r${this._nextDebugID++}`;
+      const debugID = isEmpty ? 0 : `r3r${this._debugIdPrefix}-${this._nextDebugID++}`;
       instance._debugID = debugID;
 
       if (debugID !== 0) {

@@ -1,6 +1,11 @@
 CHANGELOG
 ===========
 
+## 2.1.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.1...v2.1.1) )
+
+### Core
+- Fixed bug which would prevent multiple React3 components in the same page
+
 ## 2.1.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.0.1...v2.1.0) )
 
 ### Breaking changes
