@@ -116,9 +116,7 @@ module.exports = type => {
         width={800}
         height={600}
       >
-        <scene>
-          <group />
-        </scene>
+        <scene />
       </React3>
     </div>, testDiv);
   });
