@@ -335,7 +335,9 @@ class InternalComponent {
     }
 
     this._updateObjectProperties(lastProps, nextProps, transaction, context);
-    this._updateChildrenObjects(nextProps, transaction, processChildContext(context, this));
+    if (!this._forceRemountOfComponent) {
+      this._updateChildrenObjects(nextProps, transaction, processChildContext(context, this));
+    }
   }
 
   // see _updateDOMChildren

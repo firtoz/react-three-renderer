@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
 import THREE from 'three';
+import sinon from 'sinon';
 
 module.exports = type => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
@@ -393,5 +394,81 @@ module.exports = type => {
 
     expect(subTestReference).to.be.instanceOf(TestComponent);
     expect(groupReference).to.be.instanceOf(THREE.Group);
+  });
+
+  it('updates refs correctly when a parent component remounts', () => {
+    const boxRef = sinon.spy();
+    const meshRef = sinon.spy();
+
+    ReactDOM.render(<React3
+      width={800}
+      height={600}
+    >
+      <scene>
+        <scene>
+          <mesh
+            onMouseEnter={() => {}}
+            ref={meshRef}
+          >
+            <boxGeometry
+              width={1}
+              height={1}
+              depth={1}
+              ref={boxRef}
+            />
+            <meshBasicMaterial
+              color={0x00ff00}
+            />
+          </mesh>
+        </scene>
+      </scene>
+    </React3>, testDiv);
+
+    mockConsole.expect('Warning: Foreign prop onMouseEnter found in mesh.');
+    mockConsole.expectThreeLog();
+
+    sinon.assert.calledOnce(boxRef);
+    expect(boxRef.lastCall.args[0]).not.to.be.null();
+
+    sinon.assert.calledOnce(meshRef);
+    expect(meshRef.lastCall.args[0]).not.to.be.null();
+
+    const boxRef2 = sinon.spy();
+
+    ReactDOM.render(<React3
+      width={800}
+      height={600}
+    >
+      <scene>
+        <scene>
+          <mesh
+            onMouseEnter={() => {}}
+            ref={meshRef}
+          >
+            <boxGeometry
+              width={1}
+              height={1}
+              depth={1}
+              ref={boxRef2}
+            />
+            <meshBasicMaterial
+              color={0x00ff00}
+            />
+          </mesh>
+        </scene>
+      </scene>
+    </React3>, testDiv);
+
+    sinon.assert.calledTwice(boxRef);
+    expect(boxRef.lastCall.args[0]).to.be.null();
+
+    sinon.assert.calledOnce(boxRef2);
+    expect(boxRef2.lastCall.args[0]).not.to.be.null();
+
+    sinon.assert.calledThrice(meshRef);
+    expect(meshRef.lastCall.args[0]).not.to.be.null();
+
+    mockConsole.expect('Warning: updating prop ' +
+      'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
   });
 };
