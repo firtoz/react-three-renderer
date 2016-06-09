@@ -15,7 +15,8 @@
     "eslint": "npm run eslint-internal -loglevel silent || true",
     "tdd": "bash -c \"(export KARMA_TDD=true; npm run karma)\"",
     "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\"",
-    "storybook": "start-storybook -p 9001 -s .storybook/public"
+    "storybook": "start-storybook -p 9001 -s .storybook/public",
+    "publish-sb": "npm run prepublish && bash .storybook/publish.sh"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
   "keywords": [
