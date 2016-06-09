@@ -14,7 +14,8 @@
     "eslint-internal": "eslint --cache ./src/ ./docs/src/ ./tests/src/",
     "eslint": "npm run eslint-internal -loglevel silent || true",
     "tdd": "bash -c \"(export KARMA_TDD=true; npm run karma)\"",
-    "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\""
+    "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\"",
+    "storybook": "start-storybook -p 9001"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
   "keywords": [
@@ -30,6 +31,7 @@
     "three": ">=0.74.0 < 0.78.0"
   },
   "devDependencies": {
+    "@kadira/storybook": "^1.29.4",
     "babel-cli": "6.9.0",
     "babel-core": "6.9.0",
     "babel-eslint": "6.0.4",
