@@ -1,7 +1,7 @@
 import { configure } from '@kadira/storybook';
 
 configure(function () {
-  require('./stories/Examples-webgl');
-  require('./stories/Examples-advanced');
-  require('./stories/Examples-benchmarks');
+  require('./stories/Examples/webgl.stories.js');
+  require('./stories/Examples/advanced.stories.js');
+  require('./stories/Examples/benchmark.stories.js');
 }, module);

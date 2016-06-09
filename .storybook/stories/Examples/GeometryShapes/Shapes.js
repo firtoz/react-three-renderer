@@ -1,0 +1,136 @@
+import React from 'react';
+import Shape from './Shape';
+
+class Shapes extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  render() {
+    return (<group>
+      <Shape
+        resourceId="california"
+        x={-300}
+        y={-100}
+        z={0}
+        color={0xf08000}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="triangle"
+        color={0x8080f0}
+        x={-180}
+        y={0}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="roundedRect"
+        x={-150}
+        y={150}
+        z={0}
+        color={0x008000}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="track"
+        x={200}
+        y={-100}
+        z={0}
+        color={0x008080}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="square"
+        color={0x0040f0}
+        x={150}
+        y={100}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="heart"
+        color={0xf00000}
+        x={60}
+        y={100}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={Math.PI}
+        s={1}
+      />
+      <Shape
+        resourceId="circle"
+        color={0x00f000}
+        x={120}
+        y={250}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="fish"
+        color={0x404040}
+        x={-60}
+        y={200}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="smiley"
+        x={-200}
+        y={250}
+        z={0}
+        color={0xf000f0}
+        rx={0}
+        ry={0}
+        rz={Math.PI}
+        s={1}
+      />
+      <Shape
+        resourceId="arc"
+        color={0x804000}
+        x={150}
+        y={0}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+      <Shape
+        resourceId="spline"
+        color={0x808080}
+        x={-50}
+        y={-100}
+        z={0}
+        rx={0}
+        ry={0}
+        rz={0}
+        s={1}
+      />
+    </group>);
+  }
+}
+
+export default Shapes;
