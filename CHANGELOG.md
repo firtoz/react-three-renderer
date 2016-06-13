@@ -1,6 +1,11 @@
 CHANGELOG
 ===========
 
+## 2.1.3 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.1.2...v2.1.3) )
+
+### Core
+- Fixed bug which would cause a crash when a component needs to update refs and it needs to remount ( déjà vu )
+
 ## 2.1.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.1.1...v2.1.2) )
 
 ### Core

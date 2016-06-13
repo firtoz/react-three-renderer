@@ -320,6 +320,10 @@ class InternalComponent {
     this._currentElement = nextElement;
 
     this.updateComponent(transaction, prevElement, nextElement, context);
+
+    if (this._forceRemountOfComponent) {
+      this._currentElement = null;
+    }
   }
 
   updateComponent(transaction, prevElement, nextElement, context) {
