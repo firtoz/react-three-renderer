@@ -465,8 +465,51 @@ module.exports = type => {
     sinon.assert.calledOnce(boxRef2);
     expect(boxRef2.lastCall.args[0]).not.to.be.null();
 
-    sinon.assert.calledThrice(meshRef);
+    sinon.assert.calledTwice(meshRef);
     expect(meshRef.lastCall.args[0]).not.to.be.null();
+    expect(meshRef.lastCall.args[0], 'It should be a different mesh').not.to.equal(
+      meshRef.getCall(0).args[0]);
+
+    mockConsole.expect('Warning: updating prop ' +
+      'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
+
+    const meshRef2 = sinon.spy();
+
+    ReactDOM.render(<React3
+      width={800}
+      height={600}
+    >
+      <scene>
+        <scene>
+          <mesh
+            onMouseEnter={() => {}}
+            ref={meshRef2}
+          >
+            <boxGeometry
+              width={1}
+              height={1}
+              depth={1}
+              ref={boxRef2}
+            />
+            <meshBasicMaterial
+              color={0x00ff00}
+            />
+          </mesh>
+        </scene>
+      </scene>
+    </React3>, testDiv);
+
+    sinon.assert.calledThrice(boxRef2);
+    expect(boxRef2.getCall(1).args[0]).to.be.null();
+    expect(boxRef2.lastCall.args[0]).not.to.be.null();
+
+    sinon.assert.calledThrice(meshRef);
+    expect(meshRef.lastCall.args[0]).to.be.null();
+
+    sinon.assert.calledOnce(meshRef2);
+    expect(meshRef2.lastCall.args[0]).not.to.be.null();
+    expect(meshRef2.lastCall.args[0], 'It should be a different mesh').not.to.equal(
+      meshRef.lastCall.args[0]);
 
     mockConsole.expect('Warning: updating prop ' +
       'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
