@@ -5,7 +5,7 @@ import path from 'path';
 // OH MY GOD YOU ARE A GENIUS
 //   I KISS YOU
 
-const rightArrowSymbol = `»`; // was: ▸
+const rightArrowSymbol = '»'; // was: '▸' but GitHub apparently does not like this
 
 function getLineage(category) {
   const lineage = [];
@@ -271,7 +271,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
 
       nodeFileContents += `**${nodeName}**`;
 
-      nodeFileContents += '\n\n' + `# ${nodeName}`;
+      nodeFileContents += `\n\n# ${nodeName}`;
 
       const fileIntro = node.fileIntro || intro;
       if (fileIntro) {
@@ -282,7 +282,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
         const description = nodeData.description ||
           (nodeData.getDescription && nodeData.getDescription.call(nodeData)) || undefined;
         if (description) {
-          nodeFileContents += '\n\n' + `${description}`;
+          nodeFileContents += `\n\n${description}`;
         }
       }
 
@@ -329,7 +329,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
             const grandchildrenNames = grandchildren && Object.keys(grandchildren) || [];
 
             if (grandchildrenNames.length > 0 || subHeadingDescription) {
-              nodeFileContents += '\n\n' + `## ${subHeadingName}:`;
+              nodeFileContents += `\n\n## ${subHeadingName}:`;
             }
 
             if (subHeadingDescription) {
@@ -342,7 +342,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
 
                 const attributeInfo = grandchildren[attributeName];
 
-                nodeFileContents += '\n\n' + `### ${attributeName}
+                nodeFileContents += `\n\n### ${attributeName}
 ${attributeInfo.description}`;
               }
             }
@@ -350,7 +350,7 @@ ${attributeInfo.description}`;
         }
 
         if (nodeData.sourceLink) {
-          nodeFileContents += '\n\n' + `===
+          nodeFileContents += `\n\n===
 
 |**[View Source](${nodeData.sourceLink})**|
  ---|`;
@@ -409,7 +409,7 @@ ${attributeInfo.description}`;
     }
 
     if (nodeName !== null && needsColon) {
-      nodeContents += `:`;
+      nodeContents += ':';
     }
 
     if (intro) {
@@ -438,7 +438,7 @@ ${attributeInfo.description}`;
 
           const childrenName = ancestor.childrenName || 'Components';
 
-          textToAppendToAncestor += '\n' + `## ${childrenName}\n`;
+          textToAppendToAncestor += `\n## ${childrenName}\n`;
         }
 
         for (let i = 0; i < depth; ++i) {
@@ -524,14 +524,14 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
           fileContents += `**${componentName}**`;
         }
 
-        fileContents += '\n\n' + `# ${componentName}`;
+        fileContents += `\n\n# ${componentName}`;
 
         if (intro.length > 0) {
-          fileContents += '\n\n' + `${intro}`;
+          fileContents += `\n\n${intro}`;
         }
 
         if (description.length > 0) {
-          fileContents += '\n\n' + `${description}`;
+          fileContents += `\n\n${description}`;
         }
 
         if (descriptor.isResource) {

@@ -6,7 +6,7 @@ class meshLambertMaterial extends MaterialInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

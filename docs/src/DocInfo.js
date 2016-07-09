@@ -1,6 +1,6 @@
 class DocInfo {
   getIntro() {
-    return ``;
+    return '';
   }
 
   getDescription() {

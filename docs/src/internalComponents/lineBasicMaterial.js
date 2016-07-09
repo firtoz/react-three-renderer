@@ -6,7 +6,7 @@ class lineBasicMaterial extends MaterialInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

@@ -6,7 +6,7 @@ class camera extends object3D {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

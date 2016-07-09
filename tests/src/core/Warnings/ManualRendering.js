@@ -20,7 +20,7 @@ module.exports = type => {
 
     mockConsole.expect('Warning: The `forceManualRender` property requires the ' +
       '`onManualRenderTriggerCreated` property to be set.');
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
   });
 
   it('Calls renderer function', () => {
@@ -33,7 +33,7 @@ module.exports = type => {
       onRendererUpdated={onRendererUpdated}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     expect(onRendererUpdated.called).to.be.true();
     expect(onRendererUpdated.getCall(0).args.length).to.equal(1);
@@ -53,7 +53,7 @@ module.exports = type => {
       onManualRenderTriggerCreated={manualTriggerCallback}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
   });
 
   it('Shows warnings when the onManualRenderTriggerCreated is removed', () => {
@@ -65,7 +65,7 @@ module.exports = type => {
       onManualRenderTriggerCreated={sinon.spy()}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     ReactDOM.render(<React3
       width={800}
@@ -93,7 +93,7 @@ module.exports = type => {
       height={600}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     ReactDOM.render(<React3
       width={800}
@@ -121,7 +121,7 @@ module.exports = type => {
       height={600}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     ReactDOM.render(<React3
       width={800}
@@ -148,7 +148,7 @@ module.exports = type => {
       onManualRenderTriggerCreated={manualTriggerCallback}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
   });
 
   it('Does not call onAnimate if manual rendering is forced', done => {
@@ -165,7 +165,7 @@ module.exports = type => {
       onManualRenderTriggerCreated={manualTriggerCallback}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
 
     setTimeout(() => {
       expect(onAnimate.called).to.be.false();
@@ -214,7 +214,7 @@ module.exports = type => {
       onManualRenderTriggerCreated={manualTriggerCallback}
     />, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
   });
 
   it('Manual rendering trigger with default arguments' +
@@ -338,6 +338,6 @@ module.exports = type => {
       });
     });
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
   });
 };

@@ -6,7 +6,7 @@ class planeBufferGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

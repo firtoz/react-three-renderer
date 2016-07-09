@@ -6,7 +6,7 @@ class perspectiveCamera extends camera {
   }
 
   getDescription() {
-    return `Camera with perspective projection.`;
+    return 'Camera with perspective projection.';
   }
 
   getAttributesText() {

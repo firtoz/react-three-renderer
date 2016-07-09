@@ -6,7 +6,7 @@ module.exports = type => {
     const { testDiv, React3, mockConsole } = require('../utils/initContainer')(type);
 
     it('should set name property for entities', (done) => {
-      mockConsole.expect('THREE.WebGLRenderer', '74');
+      mockConsole.expectThreeLog();
 
       // the entities should be constructed from leaves to ancestors, and then siblings
       // ( 1 -> 2 -> 3 -> 4 ) in reverse, ( 5 -> 6 ) in reverse

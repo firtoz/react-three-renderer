@@ -20,9 +20,9 @@ This creates an arrow starting in origin in the direction dir for a certain leng
       'Must be a unit vector.',
       origin: 'The start position of the arrow.',
       length: 'The length of the arrow.',
-      color: 'hexadecimal value to define color e.g.: ` 0xffff00 `',
-      headLength: 'The length of the head of the arrow',
-      headWidth: 'The length of the width of the arrow',
+      color: 'The color that will be used for the arrow materials.',
+      headLength: 'The length of the head of the arrow.',
+      headWidth: 'The length of the width of the arrow.',
     };
   }
 }

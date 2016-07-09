@@ -37,7 +37,7 @@ module.exports = type => {
 
     // should whine but still should work!
     mockConsole.expect('THREE.Euler: .setFromRotationMatrix() given unsupported order: undefined');
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
   });
 
   it('Does not show warnings when proper types are used', () => {
@@ -52,6 +52,6 @@ module.exports = type => {
       />
     </React3>, testDiv);
 
-    mockConsole.expect('THREE.WebGLRenderer	74');
+    mockConsole.expectThreeLog();
   });
 };

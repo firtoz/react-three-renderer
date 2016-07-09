@@ -19,6 +19,14 @@ module.exports = (type) => {
     require('./core/Warnings/ManualRendering')(type);
   });
 
+  describe(`${type}/React3/Updates`, () => {
+    require('./core/React3/Updates')(type);
+  });
+
+  describe(`${type}/React3/CompositeComponents`, () => {
+    require('./core/React3/CompositeComponents')(type);
+  });
+
   describe(`${type}/Warnings`, () => {
     require('./core/Warnings/PropTypes')(type);
   });

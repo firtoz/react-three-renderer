@@ -39,6 +39,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
         threeObject.alphaTest = alphaTest;
         threeObject.needsUpdate = true;
       },
+      default: 0,
     });
 
     this.hasProp('side', {
@@ -47,7 +48,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       update: (threeObject, side) => {
         threeObject.side = side;
       },
-      default: undefined,
+      default: THREE.FrontSide,
     });
 
     this.hasProp('opacity', {
@@ -165,10 +166,15 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
 
   highlight(threeObject) {
     const ownerMesh = threeObject.userData.markup.parentMarkup.threeObject;
+
     threeObject.userData.events.emit('highlight', {
       uuid: threeObject.uuid,
       boundingBoxFunc: () => {
         const boundingBox = new THREE.Box3();
+
+        if (ownerMesh && ownerMesh.geometry && ownerMesh.geometry.computeBoundingBox) {
+          ownerMesh.geometry.computeBoundingBox();
+        }
 
         boundingBox.setFromObject(ownerMesh);
 
@@ -180,7 +186,13 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   getBoundingBoxes(threeObject) {
     const boundingBox = new THREE.Box3();
 
-    boundingBox.setFromObject(threeObject.userData.markup.parentMarkup.threeObject);
+    const ownerMesh = threeObject.userData.markup.parentMarkup.threeObject;
+
+    if (ownerMesh && ownerMesh.geometry && ownerMesh.geometry.computeBoundingBox) {
+      ownerMesh.geometry.computeBoundingBox();
+    }
+
+    boundingBox.setFromObject(ownerMesh);
 
     return [boundingBox];
   }

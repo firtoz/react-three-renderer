@@ -79,7 +79,7 @@ module.exports = type => {
     }
 
     it('Should have correct default values for shadow camera', (done) => {
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
 
       ReactDOM.render((<TestComponent
         done={done}
@@ -88,7 +88,7 @@ module.exports = type => {
     });
 
     it('Should assign correct values for shadow camera', (done) => {
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
 
       ReactDOM.render((<TestComponent
         done={done}

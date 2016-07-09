@@ -7,7 +7,7 @@ class Module extends DocInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

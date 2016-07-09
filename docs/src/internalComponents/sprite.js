@@ -6,7 +6,7 @@ class sprite extends object3D {
   }
 
   getDescription() {
-    return `This object can contain a [[spriteMaterial]].`;
+    return 'This object can contain a [[spriteMaterial]].';
   }
 
   getAttributesText() {

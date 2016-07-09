@@ -6,7 +6,7 @@ class ambientLight extends LightInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 }
 

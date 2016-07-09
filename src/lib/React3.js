@@ -49,6 +49,9 @@ class React3 extends React.Component {
     context: '3d',
   };
 
+  static findTHREEObject = React3Renderer.findTHREEObject;
+  static eventDispatcher = React3Renderer.eventDispatcher;
+
   constructor(props, context) {
     super(props, context);
 
@@ -97,13 +100,10 @@ class React3 extends React.Component {
       </react3>, canvas);
   }
 
-  static findTHREEObject = React3Renderer.findTHREEObject;
-  static eventDispatcher = React3Renderer.eventDispatcher;
-
   render() {
     const {
       canvasKey,
-      } = this.state;
+    } = this.state;
 
     return (<canvas
       ref="canvas"

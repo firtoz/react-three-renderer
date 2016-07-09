@@ -10,7 +10,7 @@ module.exports = type => {
     it('should give warnings for items with resourceId properties outside resources', () => {
       mockConsole.expect('Warning: Found <meshBasicMaterial> with a resourceId property, ' +
         'but it was not placed within a <resources/> element.');
-      mockConsole.expect('THREE.WebGLRenderer	74');
+      mockConsole.expectThreeLog();
 
       ReactDOM.render((<React3
         width={800}

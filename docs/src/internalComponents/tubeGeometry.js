@@ -2,11 +2,11 @@ import geometry from './geometry';
 
 class tubeGeometry extends geometry {
   getIntro() {
-    return `Creates a [THREE.TubeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry)`;
+    return 'Creates a [THREE.TubeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry)';
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

@@ -95,11 +95,17 @@ class TextureDescriptor extends THREEElementDescriptor {
     ].forEach(eventName => {
       this.hasProp(eventName, {
         type: PropTypes.func,
+        update() {
+          // do nothing
+        },
+        default: undefined,
       });
     });
   }
 
   construct(props) {
+    let result = undefined;
+
     if (props.hasOwnProperty('url')) {
       const textureLoader = new THREE.TextureLoader();
 
@@ -123,10 +129,12 @@ class TextureDescriptor extends THREEElementDescriptor {
         onError = props.onError;
       }
 
-      return textureLoader.load(props.url, onLoad, onProgress, onError);
+      result = textureLoader.load(props.url, onLoad, onProgress, onError);
+    } else {
+      invariant(false, 'The texture needs a url property.');
     }
 
-    invariant(false, 'The texture needs a url property.');
+    return result;
   }
 
   setParent(texture, parentObject3D) {

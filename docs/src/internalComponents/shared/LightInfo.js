@@ -2,8 +2,23 @@ import Object3DInfo from './Object3DInfo';
 
 class LightInfo extends Object3DInfo {
   getAttributesText(descriptor, componentName) {
+    const attributesText = super.getAttributesText(descriptor, componentName);
+
+    if (descriptor._hasDirection) {
+      [
+        'position',
+        'rotation',
+        'quaternion',
+        'lookAt',
+      ].forEach(propName => {
+        attributesText[propName] = `${attributesText[propName]}
+
+Additionally, updating this property will trigger an update for the light target position.`;
+      });
+    }
+
     return {
-      ...super.getAttributesText(),
+      ...attributesText,
       updatesRefreshAllMaterials: 'Acknowledges and silences the remount warning message.\n\n' +
       'It is expensive to add or remove lights from the scene,' +
       ' because all materials need to be refreshed to take the new number of' +
@@ -13,7 +28,7 @@ class LightInfo extends Object3DInfo {
       'In the development environment, a warning message is logged if this happens.\n\n' +
       'It is generally recommended not to add or remove lights after a scene is constructed,' +
       ' but if you know what you are doing you can ignore the warnings by setting the ' +
-      ` 'updatesRefreshAllMaterials' attribute to true.` + '\n\n' +
+      ' \'updatesRefreshAllMaterials\' attribute to true.\n\n' +
       `Example warning message:
 > ${'`'}<${componentName}/>${'`'} has been updated which triggered a refresh of all materials.
 >  This is a potentially expensive operation.

@@ -149,7 +149,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
    * @private
    */
   _printArgs(args, stack) {
-    return `[${args.type || `LOG`}]|${args.map(arg =>
+    return `[${args.type || 'LOG'}]|${args.map(arg =>
         util.inspect(arg, {}))
       .join('\t')}${stack ? `\n${stack}\n` : ''}`;
   }

@@ -6,7 +6,7 @@ class tetrahedronGeometry extends geometry {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText() {

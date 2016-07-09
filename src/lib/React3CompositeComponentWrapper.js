@@ -1,13 +1,12 @@
 import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
 import ReactElement from 'react/lib/ReactElement';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
-import ReactReconciler from 'react/lib/ReactReconciler';
 import invariant from 'fbjs/lib/invariant';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
+import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import emptyObject from 'fbjs/lib/emptyObject';
 import warning from 'fbjs/lib/warning';
 import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
-import ReactComponent from 'react/lib/ReactComponent';
 
 class ReactCompositeComponentMixinImpl {
 }
@@ -17,29 +16,63 @@ ReactCompositeComponentMixinImpl.prototype = {
   ...ReactCompositeComponent.Mixin,
 };
 
-class StatelessComponent extends ReactComponent {
+function warnIfInvalidElement(Component, element) {
+  if (process.env.NODE_ENV !== 'production') {
+    warning(
+      element === null || element === false || ReactElement.isValidElement(element),
+      '%s(...): A valid React element (or null) must be returned. You may have ' +
+      'returned undefined, an array or some other invalid object.',
+      Component.displayName || Component.name || 'Component'
+    );
+  }
+}
+
+function shouldConstruct(Component) {
+  return Component.prototype && Component.prototype.isReactComponent;
+}
+
+function invokeComponentDidMountWithTimer() {
+  const publicInstance = this._instance;
+  if (this._debugID !== 0) {
+    ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
+      this._debugID,
+      'componentDidMount'
+    );
+  }
+  publicInstance.componentDidMount();
+  if (this._debugID !== 0) {
+    ReactInstrumentation.debugTool.onEndLifeCycleTimer(
+      this._debugID,
+      'componentDidMount'
+    );
+  }
+}
+
+class StatelessComponent {
   render() {
-    const component = ReactInstanceMap.get(this)._currentElement.type;
-    return component(this.props, this.context, this.updater);
+    const componentCreator = ReactInstanceMap.get(this)._currentElement.type;
+    const element = componentCreator(this.props, this.context, this.updater);
+    warnIfInvalidElement(componentCreator, element);
+    return element;
   }
 }
 
 class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
-  constructor(react3RendererInstance) {
+  constructor(element, react3RendererInstance) {
     super();
     this._react3RendererInstance = react3RendererInstance;
+
+    this.construct(element);
+  }
+
+  getNativeMarkup() {
+    return super.getNativeNode();
   }
 
   construct(element) {
     super.construct(element);
 
     this._threeObject = null;
-  }
-
-  unmountComponent() {
-    super.unmountComponent();
-
-    // this._threeObject = null;
   }
 
   _updateRenderedComponent(transaction, context) {
@@ -52,14 +85,14 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     return this._react3RendererInstance.instantiateReactComponent(element);
   }
 
-  _replaceNodeWithMarkupByID(prevComponentID, nextMarkup) {
-    const markup = this._react3RendererInstance.getMarkup(prevComponentID);
 
-    const parentMarkup = markup.parentMarkup;
+  // TODO: prevInstance
+  _replaceNodeWithMarkup(oldMarkup, nextMarkup) {
+    const parentMarkup = oldMarkup.parentMarkup;
 
     const ownerChildrenMarkups = parentMarkup.childrenMarkup;
 
-    const indexInParent = ownerChildrenMarkups.indexOf(markup);
+    const indexInParent = ownerChildrenMarkups.indexOf(oldMarkup);
 
     if (process.env.NODE_ENV !== 'production') {
       invariant(indexInParent !== -1, 'The node has no parent');
@@ -68,19 +101,35 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     }
 
     const parentInternalComponent = parentMarkup.threeObject.userData.react3internalComponent;
-    const originalInternalComponent = markup.threeObject.userData.react3internalComponent;
+    const originalInternalComponent = oldMarkup.threeObject.userData.react3internalComponent;
 
-    parentInternalComponent.removeChild(originalInternalComponent);
+    parentInternalComponent.removeChild(originalInternalComponent, oldMarkup);
     const nextChild = nextMarkup.threeObject.userData.react3internalComponent;
     nextChild._mountIndex = indexInParent;
-    parentInternalComponent.createChild(nextChild, nextMarkup);
+    parentInternalComponent.createChild(nextChild, null, nextMarkup);
   }
 
   // See ReactCompositeComponent.mountComponent
-  mountComponent(rootID, transaction, context) {
+
+  /**
+   * Initializes the component, renders markup, and registers event listeners.
+   *
+   * @param {ReactReconcileTransaction|ReactServerRenderingTransaction} transaction
+   * @param {?object} nativeParent
+   * @param {?object} nativeContainerInfo
+   * @param {?object} context
+   * @return {?string} Rendered markup to be inserted into the DOM.
+   * @final
+   * @internal
+   */
+  mountComponent(transaction,
+                 nativeParent,
+                 nativeContainerInfo,
+                 context) {
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;
-    this._rootNodeID = rootID;
+    this._nativeParent = nativeParent;
+    this._nativeContainerInfo = nativeContainerInfo;
 
     const publicProps = this._processProps(this._currentElement.props);
     const publicContext = this._processContext(context);
@@ -88,60 +137,46 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const Component = this._currentElement.type;
 
     // Initialize the public class
-    let inst;
+    let inst = this._constructComponent(publicProps, publicContext);
     let renderedElement;
 
-    // This is a way to detect if Component is a stateless arrow function
-    // component, which is not newable. It might not be 100% reliable but is
-    // something we can do until we start detecting that Component extends
-    // React.Component. We already assume that typeof Component === 'function'.
-    const canInstantiate = ('prototype' in Component);
-
-    if (canInstantiate) {
-      if (process.env.NODE_ENV !== 'production') {
-        const previousCurrent = ReactCurrentOwner.current;
-
-        // noinspection JSValidateTypes
-        ReactCurrentOwner.current = this;
-
-        try {
-          inst = new Component(publicProps, publicContext, ReactUpdateQueue);
-        } finally {
-          ReactCurrentOwner.current = previousCurrent;
-        }
-      } else {
-        inst = new Component(publicProps, publicContext, ReactUpdateQueue);
-      }
-    }
-
-
-    if (!canInstantiate || inst === null || inst === false || ReactElement.isValidElement(inst)) {
+    // Support functional components
+    if (!shouldConstruct(Component) && (inst == null || inst.render == null)) {
       renderedElement = inst;
+      warnIfInvalidElement(Component, renderedElement);
+      invariant(
+        inst === null ||
+        inst === false ||
+        ReactElement.isValidElement(inst),
+        '%s(...): A valid React element (or null) must be returned. You may have ' +
+        'returned undefined, an array or some other invalid object.',
+        Component.displayName || Component.name || 'Component'
+      );
       inst = new StatelessComponent(Component);
     }
 
     if (process.env.NODE_ENV !== 'production') {
       // This will throw later in _renderValidatedComponent, but add an early
       // warning now to help debugging
-      if (inst.render === null) {
-        if (process.env.NODE_ENV !== 'production') {
-          warning(false,
-            '%s(...): No `render` method found on the returned component '
-            + 'instance: you may have forgotten to define `render`, returned '
-            + 'null/false from a stateless component, or tried to render an '
-            + 'element whose type is a function that isn\'t a React component.',
-            Component.displayName || Component.name || 'Component');
-        }
-      } else {
-        // We support ES6 inheriting from React.Component, the module pattern,
-        // and stateless components, but not ES6 classes that don't extend
-        if (process.env.NODE_ENV !== 'production') {
-          const allOK = Component.prototype && Component.prototype.isReactComponent
-            || !canInstantiate || !(inst instanceof Component);
-          warning(allOK, '%s(...): React component classes must extend React.Component.',
-            Component.displayName || Component.name || 'Component');
-        }
+      if (!inst.render) {
+        warning(
+          false,
+          '%s(...): No `render` method found on the returned component ' +
+          'instance: you may have forgotten to define `render`.',
+          Component.displayName || Component.name || 'Component'
+        );
       }
+
+      const propsMutated = inst.props !== publicProps;
+      const componentName =
+        Component.displayName || Component.name || 'Component';
+
+      warning(
+        inst.props === undefined || !propsMutated,
+        '%s(...): When calling super() in `%s`, make sure to pass ' +
+        'up the same props that your component\'s constructor was passed.',
+        componentName, componentName
+      );
     }
 
     // These should be set up in the constructor, but as a convenience for
@@ -160,37 +195,56 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       // Since plain JS classes are defined without any special initialization
       // logic, we can not catch common errors early. Therefore, we have to
       // catch them here, at initialization time, instead.
-      if (process.env.NODE_ENV !== 'production') {
-        warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved,
-          'getInitialState was defined on %s, a plain JavaScript class. '
-          + 'This is only supported for classes created using React.createClass. '
-          + 'Did you mean to define a state property instead?', this.getName() || 'a component');
-        warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved,
-          'getDefaultProps was defined on %s, a plain JavaScript class. '
-          + 'This is only supported for classes created using React.createClass. '
-          + 'Use a static property to define defaultProps instead.',
-          this.getName() || 'a component');
-        warning(!inst.propTypes,
-          'propTypes was defined as an instance property on %s. Use a static '
-          + 'property to define propTypes instead.', this.getName() || 'a component');
-        warning(!inst.contextTypes,
-          'contextTypes was defined as an instance property on %s. Use a '
-          + 'static property to define contextTypes instead.', this.getName() || 'a component');
-        warning(typeof inst.componentShouldUpdate !== 'function',
-          '%s has a method called '
-          + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? '
-          + 'The name is phrased as a question because the function is '
-          + 'expected to return a value.', this.getName() || 'A component');
-        warning(typeof inst.componentDidUnmount !== 'function',
-          '%s has a method called '
-          + 'componentDidUnmount(). But there is no such lifecycle method. '
-          + 'Did you mean componentWillUnmount()?', this.getName() || 'A component');
-        warning(typeof inst.componentWillRecieveProps !== 'function', '%s has a method called '
-          + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?',
-          this.getName() || 'A component');
-      }
+      warning(
+        !inst.getInitialState ||
+        inst.getInitialState.isReactClassApproved,
+        'getInitialState was defined on %s, a plain JavaScript class. ' +
+        'This is only supported for classes created using React.createClass. ' +
+        'Did you mean to define a state property instead?',
+        this.getName() || 'a component'
+      );
+      warning(
+        !inst.getDefaultProps ||
+        inst.getDefaultProps.isReactClassApproved,
+        'getDefaultProps was defined on %s, a plain JavaScript class. ' +
+        'This is only supported for classes created using React.createClass. ' +
+        'Use a static property to define defaultProps instead.',
+        this.getName() || 'a component'
+      );
+      warning(
+        !inst.propTypes,
+        'propTypes was defined as an instance property on %s. Use a static ' +
+        'property to define propTypes instead.',
+        this.getName() || 'a component'
+      );
+      warning(
+        !inst.contextTypes,
+        'contextTypes was defined as an instance property on %s. Use a ' +
+        'static property to define contextTypes instead.',
+        this.getName() || 'a component'
+      );
+      warning(
+        typeof inst.componentShouldUpdate !== 'function',
+        '%s has a method called ' +
+        'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' +
+        'The name is phrased as a question because the function is ' +
+        'expected to return a value.',
+        (this.getName() || 'A component')
+      );
+      warning(
+        typeof inst.componentDidUnmount !== 'function',
+        '%s has a method called ' +
+        'componentDidUnmount(). But there is no such lifecycle method. ' +
+        'Did you mean componentWillUnmount()?',
+        this.getName() || 'A component'
+      );
+      warning(
+        typeof inst.componentWillRecieveProps !== 'function',
+        '%s has a method called ' +
+        'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?',
+        (this.getName() || 'A component')
+      );
     }
-
     let initialState = inst.state;
     if (initialState === undefined) {
       inst.state = initialState = null;
@@ -209,30 +263,84 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     this._pendingReplaceState = false;
     this._pendingForceUpdate = false;
 
-    if (inst.componentWillMount) {
-      inst.componentWillMount();
-      // When mounting, calls to `setState` by `componentWillMount` will set
-      // `this._pendingStateQueue` without triggering a re-render.
-      if (this._pendingStateQueue) {
-        inst.state = this._processPendingState(inst.props, inst.context);
+    const markup = this.performInitialMount(
+      renderedElement,
+      nativeParent,
+      nativeContainerInfo,
+      transaction,
+      context);
+
+    if (inst.componentDidMount) {
+      if (process.env.NODE_ENV !== 'production') {
+        transaction.getReactMountReady().enqueue(invokeComponentDidMountWithTimer, this);
+      } else {
+        transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
       }
     }
 
-    // If not a stateless component, we now render
-    if (renderedElement === undefined) {
-      renderedElement = this._renderValidatedComponent();
-    }
-
-    this._renderedComponent = this._instantiateReactComponent(renderedElement);
-
-    const markup = ReactReconciler.mountComponent(this._renderedComponent,
-      rootID, transaction, this._processChildContext(context));
-    this._threeObject = this._renderedComponent._threeObject;
-    if (inst.componentDidMount) {
-      transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
-    }
-
     return markup;
+  }
+
+  _constructComponent(publicProps, publicContext) {
+    if (process.env.NODE_ENV !== 'production') {
+      ReactCurrentOwner.current = this;
+      try {
+        return this._constructComponentWithoutOwner(publicProps, publicContext);
+      } finally {
+        ReactCurrentOwner.current = null;
+      }
+    } else {
+      return this._constructComponentWithoutOwner(publicProps, publicContext);
+    }
+  }
+
+  _constructComponentWithoutOwner(publicProps, publicContext) {
+    const Component = this._currentElement.type;
+    let instanceOrElement;
+    if (shouldConstruct(Component)) {
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
+            this._debugID,
+            'ctor'
+          );
+        }
+      }
+      instanceOrElement = new Component(publicProps, publicContext, ReactUpdateQueue);
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onEndLifeCycleTimer(
+            this._debugID,
+            'ctor'
+          );
+        }
+      }
+    } else {
+      // This can still be an instance in case of factory components
+      // but we'll count this as time spent rendering as the more common case.
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
+            this._debugID,
+            'render'
+          );
+        }
+      }
+
+      /* eslint-disable new-cap */
+      instanceOrElement = Component(publicProps, publicContext, ReactUpdateQueue);
+      /* eslint-enable */
+
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID !== 0) {
+          ReactInstrumentation.debugTool.onEndLifeCycleTimer(
+            this._debugID,
+            'render'
+          );
+        }
+      }
+    }
+    return instanceOrElement;
   }
 
   /**

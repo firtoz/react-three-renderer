@@ -6,7 +6,7 @@ class spotLight extends LightInfo {
   }
 
   getDescription() {
-    return ``;
+    return '';
   }
 
   getAttributesText(descriptor, componentName) {
