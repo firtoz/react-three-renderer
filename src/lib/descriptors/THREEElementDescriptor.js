@@ -350,9 +350,11 @@ class THREEElementDescriptor {
   }
 
   triggerRemount(threeObject) {
-    threeObject.userData._triggerRemount();
+    if (threeObject.userData._triggerRemount) {
+      threeObject.userData._triggerRemount();
 
-    delete threeObject.userData._triggerRemount;
+      delete threeObject.userData._triggerRemount;
+    }
   }
 
   beginPropertyUpdates(threeObject) { // eslint-disable-line no-unused-vars
