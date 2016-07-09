@@ -28,7 +28,7 @@ class PolyhedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
       indices,
       radius,
       detail,
-      } = props;
+    } = props;
 
     return new THREE.PolyhedronGeometry(vertices, indices, radius, detail);
   }

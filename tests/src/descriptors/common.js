@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import sinon from 'sinon';
+import THREE from 'three';
+
+import { expect } from 'chai';
 
 module.exports = type => {
   describe('Common-Props', () => {
@@ -71,6 +75,102 @@ module.exports = type => {
           </group>
         </scene>
       </React3>), testDiv);
+    });
+
+    it('should not trigger remount on initial props updates', () => {
+      const originalPolyhedron = THREE.PolyhedronGeometry;
+
+      const polyhedronGeometryStub = sinon.stub(THREE, 'PolyhedronGeometry',
+        class PolyStub extends originalPolyhedron {
+
+        }
+      );
+
+      ReactDOM.render((<React3
+        width={800}
+        height={600}
+        mainCamera="mainCamera"
+      >
+        <scene>
+          <mesh>
+            <polyhedronGeometry
+              vertices={[
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+              ]}
+              indices={[
+                0,
+                1,
+                2,
+              ]}
+              detail={2}
+              radius={5}
+            />
+            <meshBasicMaterial color={0x00ff00} />
+          </mesh>
+        </scene>
+      </React3>), testDiv);
+
+      mockConsole.expectThreeLog();
+
+      sinon.assert.calledOnce(polyhedronGeometryStub);
+
+      expect(polyhedronGeometryStub.lastCall.args[0].length,
+        'Should use the correct vertices property on first call').to.equal(9);
+      expect(polyhedronGeometryStub.lastCall.args[0][0],
+        'Should use the correct values for vertices on first call').to.equal(1);
+
+      ReactDOM.render((<React3
+        width={800}
+        height={600}
+        mainCamera="mainCamera"
+      >
+        <scene>
+          <mesh>
+            <polyhedronGeometry
+              vertices={[
+                10,
+                20,
+                30,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+              ]}
+              indices={[
+                0,
+                1,
+                2,
+              ]}
+              detail={2}
+              radius={5}
+            />
+            <meshBasicMaterial color={0x00ff00} />
+          </mesh>
+        </scene>
+      </React3>), testDiv);
+
+      // it should now call the constructor again because it's using
+      // a different array for vertices and indices
+      sinon.assert.calledTwice(polyhedronGeometryStub);
+
+      expect(polyhedronGeometryStub.lastCall.args[0].length,
+        'Should use the correct vertices property on last call').to.equal(9);
+      expect(polyhedronGeometryStub.lastCall.args[0][0],
+        'Should use the correct values for vertices on last call').to.equal(10);
+      expect(polyhedronGeometryStub.lastCall.args[0][1],
+        'Should use the correct values for vertices on last call').to.equal(20);
+
+      polyhedronGeometryStub.restore();
     });
   });
 };
