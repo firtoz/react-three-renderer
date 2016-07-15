@@ -1,6 +1,12 @@
 CHANGELOG
 ===========
 
+## 2.1.4 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.1.3...v2.1.4) )
+
+### Core
+- Fixed bug which would cause a crash while mounting certain components
+with certain props that would trigger a remount ( #86 )
+
 ## 2.1.3 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.1.2...v2.1.3) )
 
 ### Core
