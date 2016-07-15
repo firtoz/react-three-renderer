@@ -12,9 +12,12 @@ import ReactReconcileTransaction from 'react/lib/ReactReconcileTransaction';
 import ReactDefaultBatchingStrategy from 'react/lib/ReactDefaultBatchingStrategy';
 import KeyEscapeUtils from 'react/lib/KeyEscapeUtils';
 import traverseAllChildren from 'react/lib/traverseAllChildren';
-import getNativeComponentFromComposite from 'react/lib/getNativeComponentFromComposite';
+import getHostComponentFromComposite from 'react/lib/getHostComponentFromComposite';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 import ReactInstrumentation from 'react/lib/ReactInstrumentation';
+import ReactDOMUnknownPropertyDevtool from 'react/lib/ReactDOMUnknownPropertyDevtool';
+import ReactDOMDebugTool from 'react/lib/ReactDOMDebugTool';
+import ReactDOMNullInputValuePropDevtool from 'react/lib/ReactDOMNullInputValuePropDevtool';
 import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
@@ -87,7 +90,15 @@ if (process.env.NODE_ENV !== 'production') {
  * @see {ReactMount.unmountComponentAtNode}
  */
 function unmountComponentFromNode(instance, container, safely) {
+  if (process.env.NODE_ENV !== 'production') {
+    ReactInstrumentation.debugTool.onBeginFlush();
+  }
+
   ReactReconciler.unmountComponent(instance, safely);
+
+  if (process.env.NODE_ENV !== 'production') {
+    ReactInstrumentation.debugTool.onEndFlush();
+  }
 }
 
 /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
@@ -181,7 +192,7 @@ class React3Renderer {
     if (ReactInstanceMap.has(componentOrElement)) {
       let instance = ReactInstanceMap.get(componentOrElement);
 
-      instance = getNativeComponentFromComposite(instance);
+      instance = getHostComponentFromComposite(instance);
 
       return instance ? React3ComponentTree.getMarkupFromInstance(instance).threeObject : null;
     }
@@ -251,7 +262,7 @@ class React3Renderer {
           );
 
           if (prevChild._forceRemountOfComponent) {
-            removedMarkups[childName] = prevChild.getNativeMarkup();
+            removedMarkups[childName] = prevChild.getHostMarkup();
 
             ReactReconciler.unmountComponent(prevChild, false);
             nextChildren[childName] = this.instantiateReactComponent(nextElement);
@@ -260,7 +271,7 @@ class React3Renderer {
           }
         } else {
           if (prevChild) {
-            removedMarkups[childName] = prevChild.getNativeMarkup();
+            removedMarkups[childName] = prevChild.getHostMarkup();
 
             ReactReconciler.unmountComponent(prevChild, false);
           }
@@ -279,7 +290,7 @@ class React3Renderer {
         if (!(nextChildren && nextChildren.hasOwnProperty(childName))) {
           const prevChild = prevChildren[childName];
 
-          removedMarkups[childName] = prevChild.getNativeMarkup();
+          removedMarkups[childName] = prevChild.getHostMarkup();
 
           ReactReconciler.unmountComponent(prevChild, false);
         }
@@ -437,7 +448,7 @@ class React3Renderer {
   // DO NOT RENAME
   // used by react devtools!
   findNodeHandle = (instance) => {
-    const inst = React3ComponentTree.getRenderedNativeOrTextFromComponent(instance);
+    const inst = React3ComponentTree.getRenderedHostOrTextFromComponent(instance);
 
     if (!inst || !inst._threeObject) {
       return null;
@@ -451,6 +462,7 @@ class React3Renderer {
 
   // used by react devtools
   nativeTagToRootNodeID = () => null;
+  hostTagToRootNodeID = () => null;
 
   _mountImageIntoNode(markup,
                       container,
@@ -496,10 +508,10 @@ class React3Renderer {
     const firstChild = container.userData.markup.childrenMarkup[0];
     React3ComponentTree.precacheMarkup(instance, firstChild);
 
-    const nativeInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
-    if (nativeInstance._debugID !== 0) {
-      ReactInstrumentation.debugTool.onNativeOperation(
-        nativeInstance._debugID,
+    const hostInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
+    if (hostInstance._debugID !== 0) {
+      ReactInstrumentation.debugTool.onHostOperation(
+        hostInstance._debugID,
         'mount',
         markup.toString()
       );
@@ -517,19 +529,19 @@ class React3Renderer {
     return this._renderSubtreeIntoContainer(null, nextElement, container, callback);
   }
 
-  getNativeRootInstanceInContainer(container) {
+  getHostRootInstanceInContainer(container) {
     const rootMarkup = getReactRootMarkupInContainer(container);
-    const prevNativeInstance = rootMarkup && React3ComponentTree.getInstanceFromMarkup(rootMarkup);
-    return prevNativeInstance && !prevNativeInstance._nativeParent ? prevNativeInstance : null;
+    const prevHostInstance = rootMarkup && React3ComponentTree.getInstanceFromMarkup(rootMarkup);
+    return prevHostInstance && !prevHostInstance._hostParent ? prevHostInstance : null;
   }
 
   getTopLevelWrapperInContainer(container) {
-    const root = this.getNativeRootInstanceInContainer(container);
+    const root = this.getHostRootInstanceInContainer(container);
     if (root) {
-      invariant(!!root._nativeContainerInfo, 'Root should have native container info %s',
+      invariant(!!root._hostContainerInfo, 'Root should have native container info %s',
         ' but it does not');
     }
-    return root ? root._nativeContainerInfo._topLevelWrapper : null;
+    return root ? root._hostContainerInfo._topLevelWrapper : null;
   }
 
   _renderSubtreeIntoContainer(parentComponent, nextElement, container, callback) {
@@ -617,7 +629,7 @@ class React3Renderer {
 
     for (let i = 0; i < rootIds.length; ++i) {
       this.unmountComponentAtNode(this._instancesByReactRootID[rootIds[i]]
-        .getNativeMarkup()
+        .getHostMarkup()
         .parentMarkup
         .threeObject);
     }
@@ -690,7 +702,7 @@ class React3Renderer {
     const rootMarkup = getReactRootMarkupInContainer(container);
     if (rootMarkup) {
       const inst = React3ComponentTree.getInstanceFromMarkup(rootMarkup);
-      return !!(inst && inst._nativeParent);
+      return !!(inst && inst._hostParent);
     }
 
     return false;
@@ -836,7 +848,7 @@ class React3Renderer {
       warning(
         typeof instance.mountComponent === 'function' &&
         typeof instance.receiveComponent === 'function' &&
-        typeof instance.getNativeMarkup === 'function' &&
+        typeof instance.getHostMarkup === 'function' &&
         typeof instance.unmountComponent === 'function',
         'Only React 3 Components can be mounted.'
       );
@@ -925,6 +937,11 @@ class React3Renderer {
       ReactInjection.Updates.injectBatchingStrategy(ReactDefaultBatchingStrategy);
     }
 
+    if (process.env.NODE_ENV !== 'production') {
+      ReactDOMDebugTool.removeDevtool(ReactDOMUnknownPropertyDevtool);
+      ReactDOMDebugTool.removeDevtool(ReactDOMNullInputValuePropDevtool);
+    }
+
     ReactUpdates.batchedUpdates(
       this.batchedMountComponentIntoNode,
       componentInstance,
@@ -932,6 +949,11 @@ class React3Renderer {
       shouldReuseMarkup,
       context
     );
+
+    if (process.env.NODE_ENV !== 'production') {
+      ReactDOMDebugTool.addDevtool(ReactDOMUnknownPropertyDevtool);
+      ReactDOMDebugTool.addDevtool(ReactDOMNullInputValuePropDevtool);
+    }
 
     const wrapperID = componentInstance._instance.rootID = this.createReactRootID();
     this._instancesByReactRootID[wrapperID] = componentInstance;

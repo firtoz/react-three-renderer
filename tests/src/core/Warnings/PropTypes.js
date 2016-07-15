@@ -22,18 +22,27 @@ module.exports = type => {
       />
     </React3>, testDiv);
 
-    mockConsole.expect('Warning: Failed propType: Invalid prop `name` of type `number`' +
-      ' supplied to `scene`, expected `string`.');
-    mockConsole.expect('Warning: Failed propType: Invalid prop `position` of type `THREE.Vector2`' +
-      ' supplied to `scene`, expected instance of `THREE.Vector3`.');
-    mockConsole.expect('Warning: Failed propType: Invalid prop `rotation` of type `THREE.Vector3`' +
-      ' supplied to `scene`, expected instance of `THREE.Euler`.');
-    mockConsole.expect('Warning: Failed propType: Invalid prop `quaternion` of type `THREE.Euler`' +
-      ' supplied to `scene`, expected instance of `THREE.Quaternion`.');
-    mockConsole.expect('Warning: Failed propType: Invalid prop `renderOrder` of type `string`' +
-      ' supplied to `scene`, expected `number`.');
-    mockConsole.expect('Warning: Failed propType: Invalid prop `fog` of type `String`' +
-      ' supplied to `scene`, expected instance of `THREE.Fog`.');
+    mockConsole.expect('Warning: Failed prop type: Invalid prop `name` of type `number`' +
+      ' supplied to `scene`, expected `string`.\n' +
+      '    in scene');
+    mockConsole.expect('Warning: Failed prop type: Invalid prop `position`' +
+      ' of type `THREE.Vector2`' +
+      ' supplied to `scene`, expected instance of `THREE.Vector3`.\n' +
+      '    in scene');
+    mockConsole.expect('Warning: Failed prop type: Invalid prop `rotation`' +
+      ' of type `THREE.Vector3`' +
+      ' supplied to `scene`, expected instance of `THREE.Euler`.\n' +
+      '    in scene');
+    mockConsole.expect('Warning: Failed prop type: Invalid prop `quaternion`' +
+      ' of type `THREE.Euler`' +
+      ' supplied to `scene`, expected instance of `THREE.Quaternion`.\n' +
+      '    in scene');
+    mockConsole.expect('Warning: Failed prop type: Invalid prop `renderOrder` of type `string`' +
+      ' supplied to `scene`, expected `number`.\n' +
+      '    in scene');
+    mockConsole.expect('Warning: Failed prop type: Invalid prop `fog` of type `String`' +
+      ' supplied to `scene`, expected instance of `THREE.Fog`.\n' +
+      '    in scene');
 
     // should whine but still should work!
     mockConsole.expect('THREE.Euler: .setFromRotationMatrix() given unsupported order: undefined');

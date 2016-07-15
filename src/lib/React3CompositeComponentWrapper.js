@@ -1,5 +1,8 @@
 import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
 import ReactElement from 'react/lib/ReactElement';
+import ReactDOMDebugTool from 'react/lib/ReactDOMDebugTool';
+import ReactDOMUnknownPropertyDevtool from 'react/lib/ReactDOMUnknownPropertyDevtool';
+import ReactDOMNullInputValuePropDevtool from 'react/lib/ReactDOMNullInputValuePropDevtool';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 import invariant from 'fbjs/lib/invariant';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
@@ -65,8 +68,8 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     this.construct(element);
   }
 
-  getNativeMarkup() {
-    return super.getNativeNode();
+  getHostMarkup() {
+    return super.getHostNode();
   }
 
   construct(element) {
@@ -76,7 +79,17 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   _updateRenderedComponent(transaction, context) {
+    if (process.env.NODE_ENV !== 'production') {
+      ReactDOMDebugTool.removeDevtool(ReactDOMUnknownPropertyDevtool);
+      ReactDOMDebugTool.removeDevtool(ReactDOMNullInputValuePropDevtool);
+    }
+
     super._updateRenderedComponent(transaction, context);
+
+    if (process.env.NODE_ENV !== 'production') {
+      ReactDOMDebugTool.addDevtool(ReactDOMUnknownPropertyDevtool);
+      ReactDOMDebugTool.addDevtool(ReactDOMNullInputValuePropDevtool);
+    }
 
     this._threeObject = this._renderedComponent._threeObject;
   }
@@ -115,23 +128,23 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
    * Initializes the component, renders markup, and registers event listeners.
    *
    * @param {ReactReconcileTransaction|ReactServerRenderingTransaction} transaction
-   * @param {?object} nativeParent
-   * @param {?object} nativeContainerInfo
+   * @param {?object} hostParent
+   * @param {?object} hostContainerInfo
    * @param {?object} context
    * @return {?string} Rendered markup to be inserted into the DOM.
    * @final
    * @internal
    */
   mountComponent(transaction,
-                 nativeParent,
-                 nativeContainerInfo,
+                 hostParent,
+                 hostContainerInfo,
                  context) {
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;
-    this._nativeParent = nativeParent;
-    this._nativeContainerInfo = nativeContainerInfo;
+    this._hostParent = hostParent;
+    this._hostContainerInfo = hostContainerInfo;
 
-    const publicProps = this._processProps(this._currentElement.props);
+    const publicProps = this._currentElement.props;
     const publicContext = this._processContext(context);
 
     const Component = this._currentElement.type;
@@ -265,8 +278,8 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 
     const markup = this.performInitialMount(
       renderedElement,
-      nativeParent,
-      nativeContainerInfo,
+      hostParent,
+      hostContainerInfo,
       transaction,
       context);
 

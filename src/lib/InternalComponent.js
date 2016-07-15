@@ -76,11 +76,11 @@ class InternalComponent {
 
     this._elementType = element.type; // _tag
     this._renderedChildren = [];
-    this._nativeMarkup = null; // _nativeNode
-    this._nativeParent = null;
+    this._hostMarkup = null; // _hostNode
+    this._hostParent = null;
     this._rootNodeID = null;
-    this._nativeID = null; // _domID
-    this._nativeContainerInfo = null;
+    this._hostID = null; // _domID
+    this._hostContainerInfo = null;
     this._threeObject = null;
     this._topLevelWrapper = null;
     this._markup = null;
@@ -118,12 +118,12 @@ class InternalComponent {
     };
   }
 
-  getNativeMarkup() {
+  getHostMarkup() {
     return this._markup;
   }
 
-  getNativeNode() {
-    // console.warn('native node?'); // eslint-disable-line no-console
+  getHostNode() {
+    // console.warn('host node?'); // eslint-disable-line no-console
     return this._markup;
   }
 
@@ -133,22 +133,22 @@ class InternalComponent {
    *
    * @internal
    * @param {ReactReconcileTransaction|ReactServerRenderingTransaction} transaction
-   * @param {?InternalComponent} nativeParent the containing DOM component instance
-   * @param {?React3ContainerInfo} nativeContainerInfo info about the native container
+   * @param {?InternalComponent} hostParent the containing DOM component instance
+   * @param {?React3ContainerInfo} hostContainerInfo info about the host container
    * @param {object} context
    * @return {object} The computed markup.
    */
-  mountComponent(transaction, nativeParent, nativeContainerInfo, context) {
+  mountComponent(transaction, hostParent, hostContainerInfo, context) {
     this._rootNodeID = `${this._react3RendererInstance.globalIdCounter++}`;
-    this._nativeID = `${nativeContainerInfo._idCounter++}`;
-    this._nativeParent = nativeParent;
-    this._nativeContainerInfo = nativeContainerInfo;
+    this._hostID = `${hostContainerInfo._idCounter++}`;
+    this._hostParent = hostParent;
+    this._hostContainerInfo = hostContainerInfo;
 
     const element = this._currentElement;
 
     if (process.env.NODE_ENV !== 'production') {
-      this.threeElementDescriptor.checkPropTypes(element.type,
-        this._currentElement._owner, element.props);
+      this.threeElementDescriptor.checkPropTypes(element,
+        this._currentElement._owner, this._debugID, element.props);
     }
 
     this._threeObject = this.threeElementDescriptor.construct(element.props);
@@ -167,7 +167,7 @@ class InternalComponent {
     }
 
     const markup = {
-      [ID_PROPERTY_NAME]: this._nativeID,
+      [ID_PROPERTY_NAME]: this._hostID,
       _rootInstance: null,
       elementType: element.type,
       threeObject: this._threeObject,
@@ -282,7 +282,7 @@ class InternalComponent {
           child,
           transaction,
           this,
-          this._nativeContainerInfo,
+          this._hostContainerInfo,
           context
         );
 
@@ -360,8 +360,8 @@ class InternalComponent {
     this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
 
     if (process.env.NODE_ENV !== 'production') {
-      this.threeElementDescriptor.checkPropTypes(this._currentElement.type,
-        this._currentElement._owner, nextProps);
+      this.threeElementDescriptor.checkPropTypes(this._currentElement,
+        this._currentElement._owner, this._debugID, nextProps);
     }
 
     const lastPropKeys = Object.keys(lastProps);
