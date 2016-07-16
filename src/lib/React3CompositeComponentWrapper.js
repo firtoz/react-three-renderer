@@ -6,7 +6,7 @@ import ReactInstanceMap from 'react/lib/ReactInstanceMap';
 import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import emptyObject from 'fbjs/lib/emptyObject';
 import warning from 'fbjs/lib/warning';
-import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
+import removeDevTool from './utils/removeDevTool';
 
 class ReactCompositeComponentMixinImpl {
 }
@@ -65,8 +65,8 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     this.construct(element);
   }
 
-  getNativeMarkup() {
-    return super.getNativeNode();
+  getHostMarkup() {
+    return super.getHostNode();
   }
 
   construct(element) {
@@ -76,13 +76,24 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   _updateRenderedComponent(transaction, context) {
+    let devToolRemoved;
+    if (process.env.NODE_ENV !== 'production') {
+      devToolRemoved = removeDevTool();
+    }
+
     super._updateRenderedComponent(transaction, context);
+
+    if (process.env.NODE_ENV !== 'production') {
+      if (devToolRemoved) {
+        removeDevTool.restore();
+      }
+    }
 
     this._threeObject = this._renderedComponent._threeObject;
   }
 
-  _instantiateReactComponent(element) {
-    return this._react3RendererInstance.instantiateReactComponent(element);
+  _instantiateReactComponent(element, shouldHaveDebugID) {
+    return this._react3RendererInstance.instantiateReactComponent(element, shouldHaveDebugID);
   }
 
 
@@ -115,29 +126,31 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
    * Initializes the component, renders markup, and registers event listeners.
    *
    * @param {ReactReconcileTransaction|ReactServerRenderingTransaction} transaction
-   * @param {?object} nativeParent
-   * @param {?object} nativeContainerInfo
+   * @param {?object} hostParent
+   * @param {?object} hostContainerInfo
    * @param {?object} context
    * @return {?string} Rendered markup to be inserted into the DOM.
    * @final
    * @internal
    */
   mountComponent(transaction,
-                 nativeParent,
-                 nativeContainerInfo,
+                 hostParent,
+                 hostContainerInfo,
                  context) {
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;
-    this._nativeParent = nativeParent;
-    this._nativeContainerInfo = nativeContainerInfo;
+    this._hostParent = hostParent;
+    this._hostContainerInfo = hostContainerInfo;
 
-    const publicProps = this._processProps(this._currentElement.props);
+    const publicProps = this._currentElement.props;
     const publicContext = this._processContext(context);
 
     const Component = this._currentElement.type;
 
+    const updateQueue = transaction.getUpdateQueue();
+
     // Initialize the public class
-    let inst = this._constructComponent(publicProps, publicContext);
+    let inst = this._constructComponent(publicProps, publicContext, updateQueue);
     let renderedElement;
 
     // Support functional components
@@ -184,7 +197,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     inst.props = publicProps;
     inst.context = publicContext;
     inst.refs = emptyObject;
-    inst.updater = ReactUpdateQueue;
+    inst.updater = updateQueue;
 
     this._instance = inst;
 
@@ -265,8 +278,8 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 
     const markup = this.performInitialMount(
       renderedElement,
-      nativeParent,
-      nativeContainerInfo,
+      hostParent,
+      hostContainerInfo,
       transaction,
       context);
 
@@ -281,20 +294,20 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     return markup;
   }
 
-  _constructComponent(publicProps, publicContext) {
+  _constructComponent(publicProps, publicContext, updateQueue) {
     if (process.env.NODE_ENV !== 'production') {
       ReactCurrentOwner.current = this;
       try {
-        return this._constructComponentWithoutOwner(publicProps, publicContext);
+        return this._constructComponentWithoutOwner(publicProps, publicContext, updateQueue);
       } finally {
         ReactCurrentOwner.current = null;
       }
     } else {
-      return this._constructComponentWithoutOwner(publicProps, publicContext);
+      return this._constructComponentWithoutOwner(publicProps, publicContext, updateQueue);
     }
   }
 
-  _constructComponentWithoutOwner(publicProps, publicContext) {
+  _constructComponentWithoutOwner(publicProps, publicContext, updateQueue) {
     const Component = this._currentElement.type;
     let instanceOrElement;
     if (shouldConstruct(Component)) {
@@ -306,7 +319,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
           );
         }
       }
-      instanceOrElement = new Component(publicProps, publicContext, ReactUpdateQueue);
+      instanceOrElement = new Component(publicProps, publicContext, updateQueue);
       if (process.env.NODE_ENV !== 'production') {
         if (this._debugID !== 0) {
           ReactInstrumentation.debugTool.onEndLifeCycleTimer(
@@ -328,7 +341,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       }
 
       /* eslint-disable new-cap */
-      instanceOrElement = Component(publicProps, publicContext, ReactUpdateQueue);
+      instanceOrElement = Component(publicProps, publicContext, updateQueue);
       /* eslint-enable */
 
       if (process.env.NODE_ENV !== 'production') {

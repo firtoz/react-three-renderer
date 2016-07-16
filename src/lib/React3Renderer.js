@@ -12,7 +12,7 @@ import ReactReconcileTransaction from 'react/lib/ReactReconcileTransaction';
 import ReactDefaultBatchingStrategy from 'react/lib/ReactDefaultBatchingStrategy';
 import KeyEscapeUtils from 'react/lib/KeyEscapeUtils';
 import traverseAllChildren from 'react/lib/traverseAllChildren';
-import getNativeComponentFromComposite from 'react/lib/getNativeComponentFromComposite';
+import getHostComponentFromComposite from 'react/lib/getHostComponentFromComposite';
 import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
 import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import emptyObject from 'fbjs/lib/emptyObject';
@@ -25,6 +25,7 @@ import React3ComponentTree from './React3ComponentTree';
 import ElementDescriptorContainer from './ElementDescriptorContainer';
 import React3CompositeComponentWrapper from './React3CompositeComponentWrapper';
 import ID_PROPERTY_NAME from './utils/idPropertyName';
+import removeDevTool from './utils/removeDevTool';
 
 let getDeclarationErrorAddendum;
 let getDisplayName;
@@ -87,7 +88,15 @@ if (process.env.NODE_ENV !== 'production') {
  * @see {ReactMount.unmountComponentAtNode}
  */
 function unmountComponentFromNode(instance, container, safely) {
+  if (process.env.NODE_ENV !== 'production') {
+    ReactInstrumentation.debugTool.onBeginFlush();
+  }
+
   ReactReconciler.unmountComponent(instance, safely);
+
+  if (process.env.NODE_ENV !== 'production') {
+    ReactInstrumentation.debugTool.onEndFlush();
+  }
 }
 
 /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
@@ -181,7 +190,7 @@ class React3Renderer {
     if (ReactInstanceMap.has(componentOrElement)) {
       let instance = ReactInstanceMap.get(componentOrElement);
 
-      instance = getNativeComponentFromComposite(instance);
+      instance = getHostComponentFromComposite(instance);
 
       return instance ? React3ComponentTree.getMarkupFromInstance(instance).threeObject : null;
     }
@@ -251,21 +260,21 @@ class React3Renderer {
           );
 
           if (prevChild._forceRemountOfComponent) {
-            removedMarkups[childName] = prevChild.getNativeMarkup();
+            removedMarkups[childName] = prevChild.getHostMarkup();
 
             ReactReconciler.unmountComponent(prevChild, false);
-            nextChildren[childName] = this.instantiateReactComponent(nextElement);
+            nextChildren[childName] = this.instantiateReactComponent(nextElement, true);
           } else {
             nextChildren[childName] = prevChild;
           }
         } else {
           if (prevChild) {
-            removedMarkups[childName] = prevChild.getNativeMarkup();
+            removedMarkups[childName] = prevChild.getHostMarkup();
 
             ReactReconciler.unmountComponent(prevChild, false);
           }
           // The child must be instantiated before it's mounted.
-          nextChildren[childName] = this.instantiateReactComponent(nextElement);
+          nextChildren[childName] = this.instantiateReactComponent(nextElement, true);
         }
       }
     }
@@ -279,7 +288,7 @@ class React3Renderer {
         if (!(nextChildren && nextChildren.hasOwnProperty(childName))) {
           const prevChild = prevChildren[childName];
 
-          removedMarkups[childName] = prevChild.getNativeMarkup();
+          removedMarkups[childName] = prevChild.getHostMarkup();
 
           ReactReconciler.unmountComponent(prevChild, false);
         }
@@ -407,7 +416,7 @@ class React3Renderer {
         + 'the first child will be used.', KeyEscapeUtils.unescape(name));
     }
     if (child !== null && keyUnique) {
-      childInstances[name] = this.instantiateReactComponent(child, null);
+      childInstances[name] = this.instantiateReactComponent(child, true);
     }
   };
 
@@ -437,7 +446,7 @@ class React3Renderer {
   // DO NOT RENAME
   // used by react devtools!
   findNodeHandle = (instance) => {
-    const inst = React3ComponentTree.getRenderedNativeOrTextFromComponent(instance);
+    const inst = React3ComponentTree.getRenderedHostOrTextFromComponent(instance);
 
     if (!inst || !inst._threeObject) {
       return null;
@@ -451,6 +460,7 @@ class React3Renderer {
 
   // used by react devtools
   nativeTagToRootNodeID = () => null;
+  hostTagToRootNodeID = () => null;
 
   _mountImageIntoNode(markup,
                       container,
@@ -496,10 +506,10 @@ class React3Renderer {
     const firstChild = container.userData.markup.childrenMarkup[0];
     React3ComponentTree.precacheMarkup(instance, firstChild);
 
-    const nativeInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
-    if (nativeInstance._debugID !== 0) {
-      ReactInstrumentation.debugTool.onNativeOperation(
-        nativeInstance._debugID,
+    const hostInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
+    if (hostInstance._debugID !== 0) {
+      ReactInstrumentation.debugTool.onHostOperation(
+        hostInstance._debugID,
         'mount',
         markup.toString()
       );
@@ -517,19 +527,19 @@ class React3Renderer {
     return this._renderSubtreeIntoContainer(null, nextElement, container, callback);
   }
 
-  getNativeRootInstanceInContainer(container) {
+  getHostRootInstanceInContainer(container) {
     const rootMarkup = getReactRootMarkupInContainer(container);
-    const prevNativeInstance = rootMarkup && React3ComponentTree.getInstanceFromMarkup(rootMarkup);
-    return prevNativeInstance && !prevNativeInstance._nativeParent ? prevNativeInstance : null;
+    const prevHostInstance = rootMarkup && React3ComponentTree.getInstanceFromMarkup(rootMarkup);
+    return prevHostInstance && !prevHostInstance._hostParent ? prevHostInstance : null;
   }
 
   getTopLevelWrapperInContainer(container) {
-    const root = this.getNativeRootInstanceInContainer(container);
+    const root = this.getHostRootInstanceInContainer(container);
     if (root) {
-      invariant(!!root._nativeContainerInfo, 'Root should have native container info %s',
+      invariant(!!root._hostContainerInfo, 'Root should have native container info %s',
         ' but it does not');
     }
-    return root ? root._nativeContainerInfo._topLevelWrapper : null;
+    return root ? root._hostContainerInfo._topLevelWrapper : null;
   }
 
   _renderSubtreeIntoContainer(parentComponent, nextElement, container, callback) {
@@ -562,6 +572,14 @@ class React3Renderer {
     const nextWrappedElement = reactElementWrapper(TopLevelWrapper,
       null, null, null, null, null, nextElement);
 
+    let nextContext;
+    if (parentComponent) {
+      const parentInst = ReactInstanceMap.get(parentComponent);
+      nextContext = parentInst._processChildContext(parentInst._context);
+    } else {
+      nextContext = emptyObject;
+    }
+
     const prevComponent = this.getTopLevelWrapperInContainer(container);
 
     if (prevComponent) {
@@ -574,7 +592,11 @@ class React3Renderer {
             callback.call(publicInst);
           });
 
-        this._updateRootComponent(prevComponent, nextWrappedElement, container, updatedCallback);
+        this._updateRootComponent(prevComponent,
+          nextWrappedElement,
+          nextContext,
+          container,
+          updatedCallback);
 
         return publicInst;
       }
@@ -590,20 +612,12 @@ class React3Renderer {
 
     const shouldReuseMarkup = containerHasReactMarkup && !prevComponent;
 
-    let component;
-    if (parentComponent === null) {
-      // no context
-      component = this._renderNewRootComponent(nextWrappedElement, container, shouldReuseMarkup,
-        emptyObject
-      )._renderedComponent.getPublicInstance();
-    } else {
-      // yes context
-      component = this._renderNewRootComponent(nextWrappedElement, container, shouldReuseMarkup,
-        parentComponent._reactInternalInstance
-          ._processChildContext(parentComponent
-            ._reactInternalInstance._context)
-      )._renderedComponent.getPublicInstance();
-    }
+    const component = this._renderNewRootComponent(
+      nextWrappedElement,
+      container,
+      shouldReuseMarkup,
+      nextContext
+    )._renderedComponent.getPublicInstance();
 
     if (callback) {
       callback.call(component);
@@ -617,7 +631,7 @@ class React3Renderer {
 
     for (let i = 0; i < rootIds.length; ++i) {
       this.unmountComponentAtNode(this._instancesByReactRootID[rootIds[i]]
-        .getNativeMarkup()
+        .getHostMarkup()
         .parentMarkup
         .threeObject);
     }
@@ -666,8 +680,8 @@ class React3Renderer {
     }
   }
 
-  _updateRootComponent(prevComponent, nextElement, container, callback) {
-    ReactUpdateQueue.enqueueElementInternal(prevComponent, nextElement);
+  _updateRootComponent(prevComponent, nextElement, nextContext, container, callback) {
+    ReactUpdateQueue.enqueueElementInternal(prevComponent, nextElement, nextContext);
     if (callback) {
       ReactUpdateQueue.enqueueCallbackInternal(prevComponent, callback);
     }
@@ -690,7 +704,7 @@ class React3Renderer {
     const rootMarkup = getReactRootMarkupInContainer(container);
     if (rootMarkup) {
       const inst = React3ComponentTree.getInstanceFromMarkup(rootMarkup);
-      return !!(inst && inst._nativeParent);
+      return !!(inst && inst._hostParent);
     }
 
     return false;
@@ -771,62 +785,81 @@ class React3Renderer {
   // see instantiateReactComponent.js
   /**
    *
-   * @param element ( from createElement )
-   * @returns {*}
+   * @param _node ( from createElement )
+   * @param {boolean} shouldHaveDebugID
+   * @return {object} A new instance of the element's constructor.
    */
-  instantiateReactComponent(element) {
+  instantiateReactComponent(_node, shouldHaveDebugID) {
     let instance;
 
-    let elementToInstantiate = element;
+    const node = _node;
 
-    const isEmpty = elementToInstantiate === null || elementToInstantiate === false;
-    if (isEmpty) {
-      elementToInstantiate = reactElementWrapper.createElement('object3D');
-      // instance = new ReactDOMEmptyComponent(this.instantiateReactComponent);
-    }
+    const isEmptyNode = (node === null || node === false);
 
-    if (typeof elementToInstantiate === 'object') {
-      if (!(elementToInstantiate && (typeof elementToInstantiate.type === 'function'
-        || typeof elementToInstantiate.type === 'string'))) {
+    if (isEmptyNode) {
+      // Create an object3D node so that empty components can be added anywhere
+      instance = new InternalComponent(
+        reactElementWrapper.createElement('object3D', {
+          visible: false,
+        }), this);
+      // original: instance = new ReactDOMEmptyComponent(this.instantiateReactComponent);
+    } else if (typeof node === 'object') {
+      const element = node;
+
+      if (!(element && (typeof element.type === 'function'
+        || typeof element.type === 'string'))) {
         if (process.env.NODE_ENV !== 'production') {
-          invariant(false,
-            'Element type is invalid: expected a string (for built-in components) ' +
-            'or a class/function (for composite components) but got: %s.%s',
-            (!elementToInstantiate.type) ?
-              elementToInstantiate.type
-              : typeof elementToInstantiate.type,
-            getDeclarationErrorAddendum(elementToInstantiate._owner));
+          if (element.type == null) {
+            invariant(false, 'Element type is invalid:' +
+              ' expected a string (for built-in components)' +
+              ' or a class/function (for composite components)' +
+              ' but got: %s.%s', element.type, getDeclarationErrorAddendum(element._owner));
+          } else {
+            invariant(false, 'Element type is invalid:' +
+              ' expected a string (for built-in components)' +
+              ' or a class/function (for composite components)' +
+              ' but got: %s.%s', typeof element.type, getDeclarationErrorAddendum(element._owner));
+          }
         } else {
-          invariant(false);
+          if (element.type == null) {
+            invariant(element.type, getDeclarationErrorAddendum(element._owner));
+          } else {
+            invariant(typeof element.type, getDeclarationErrorAddendum(element._owner));
+          }
         }
       }
 
       // Special case string values
-      if (typeof elementToInstantiate.type === 'string') {
-// original: instance = ReactNativeComponent.createInternalComponent(elementToInstantiate);
-        instance = new InternalComponent(elementToInstantiate, this);
-      } else if (isInternalComponentType(elementToInstantiate.type)) {
+      if (typeof element.type === 'string') {
+        // original: instance = ReactHostComponent.createInternalComponent(element);
+        instance = new InternalComponent(element, this);
+      } else if (isInternalComponentType(element.type)) {
         // This is temporarily available for custom components that are not string
         // representations. I.e. ART. Once those are updated to use the string
         // representation, we can drop this code path.
-        const Constructor = elementToInstantiate.type;
+        const Constructor = element.type;
 
-        instance = new Constructor(elementToInstantiate);
+        instance = new Constructor(element);
+
+        // We renamed this. Allow the old name for compat. :(
+        if (!instance.getHostNode) {
+          instance.getHostNode = instance.getNativeNode;
+        }
       } else {
-        instance = new React3CompositeComponentWrapper(elementToInstantiate, this);
+        instance = new React3CompositeComponentWrapper(element, this);
       }
-    } else if (typeof elementToInstantiate === 'string'
-      || typeof elementToInstantiate === 'number') {
+    } else if (typeof node === 'string'
+      || typeof node === 'number') {
       // TODO create instance for text
       if (process.env.NODE_ENV !== 'production') {
         invariant(false, 'Encountered invalid React node of type %s : %s',
-          typeof elementToInstantiate, elementToInstantiate);
+          typeof node, node);
       } else {
         invariant(false);
       }
     } else {
       if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Encountered invalid React node of type %s', typeof elementToInstantiate);
+        invariant(false, 'Encountered invalid React node of type %s', typeof element);
       } else {
         invariant(false);
       }
@@ -836,7 +869,7 @@ class React3Renderer {
       warning(
         typeof instance.mountComponent === 'function' &&
         typeof instance.receiveComponent === 'function' &&
-        typeof instance.getNativeMarkup === 'function' &&
+        typeof instance.getHostMarkup === 'function' &&
         typeof instance.unmountComponent === 'function',
         'Only React 3 Components can be mounted.'
       );
@@ -849,21 +882,17 @@ class React3Renderer {
     instance._mountImage = null;
 
     if (process.env.NODE_ENV !== 'production') {
-      instance._isOwnerNecessary = false;
-      instance._warnedAboutRefsInRender = false;
-    }
-
-    if (process.env.NODE_ENV !== 'production') {
-      const debugID = isEmpty ? 0 : `r3r${this._debugIdPrefix}-${this._nextDebugID++}`;
-      instance._debugID = debugID;
-
-      if (debugID !== 0) {
+      if (!isEmptyNode && shouldHaveDebugID) {
+        const debugID = `r3r${this._debugIdPrefix}-${this._nextDebugID++}`;
+        instance._debugID = debugID;
         const displayName = getDisplayName(instance);
         ReactInstrumentation.debugTool.onSetDisplayName(debugID, displayName);
-        const owner = elementToInstantiate && elementToInstantiate._owner;
+        const owner = node && node._owner;
         if (owner) {
           ReactInstrumentation.debugTool.onSetOwner(debugID, owner._debugID);
         }
+      } else {
+        instance._debugID = 0;
       }
     }
 
@@ -888,10 +917,6 @@ class React3Renderer {
    * @private
    */
   _renderNewRootComponent(nextElement, container, shouldReuseMarkup, context) {
-    if (process.env.NODE_ENV !== 'production') {
-      ReactInstrumentation.debugTool.onBeginFlush();
-    }
-
     // Various parts of our code (such as ReactCompositeComponent's
     // _renderValidatedComponent) assume that calls to render aren't nested;
     // verify that that's the case.
@@ -906,7 +931,7 @@ class React3Renderer {
         || 'ReactCompositeComponent');
     }
 
-    const componentInstance = this.instantiateReactComponent(nextElement);
+    const componentInstance = this.instantiateReactComponent(nextElement, false);
 
     if (process.env.NODE_ENV !== 'production') {
       // Mute future events from the top level wrapper.
@@ -925,6 +950,11 @@ class React3Renderer {
       ReactInjection.Updates.injectBatchingStrategy(ReactDefaultBatchingStrategy);
     }
 
+    let devToolRemoved;
+    if (process.env.NODE_ENV !== 'production') {
+      devToolRemoved = removeDevTool();
+    }
+
     ReactUpdates.batchedUpdates(
       this.batchedMountComponentIntoNode,
       componentInstance,
@@ -932,6 +962,12 @@ class React3Renderer {
       shouldReuseMarkup,
       context
     );
+
+    if (process.env.NODE_ENV !== 'production') {
+      if (devToolRemoved) {
+        removeDevTool.restore();
+      }
+    }
 
     const wrapperID = componentInstance._instance.rootID = this.createReactRootID();
     this._instancesByReactRootID[wrapperID] = componentInstance;
@@ -945,7 +981,6 @@ class React3Renderer {
       ReactInstrumentation.debugTool.onMountRootComponent(
         componentInstance._renderedComponent._debugID
       );
-      ReactInstrumentation.debugTool.onEndFlush();
     }
 
     return componentInstance;

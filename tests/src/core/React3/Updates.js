@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import chai from 'chai';
 import THREE from 'three';
 import sinon from 'sinon';
+import { EventEmitter } from 'events';
 
 module.exports = type => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
@@ -407,7 +408,8 @@ module.exports = type => {
       <scene>
         <scene>
           <mesh
-            onMouseEnter={() => {}}
+            onMouseEnter={() => {
+            }}
             ref={meshRef}
           >
             <boxGeometry
@@ -442,7 +444,8 @@ module.exports = type => {
       <scene>
         <scene>
           <mesh
-            onMouseEnter={() => {}}
+            onMouseEnter={() => {
+            }}
             ref={meshRef}
           >
             <boxGeometry
@@ -482,7 +485,8 @@ module.exports = type => {
       <scene>
         <scene>
           <mesh
-            onMouseEnter={() => {}}
+            onMouseEnter={() => {
+            }}
             ref={meshRef2}
           >
             <boxGeometry
@@ -513,5 +517,77 @@ module.exports = type => {
 
     mockConsole.expect('Warning: updating prop ' +
       'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
+  });
+
+  it('updates state of components', () => {
+    const eventEmitter = new EventEmitter();
+
+    const sceneRef = sinon.spy();
+
+    class MyScene extends React.Component { // eslint-disable-line react/no-multi-comp
+      constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+          testHit: 5,
+        };
+      }
+
+      componentDidMount() {
+        eventEmitter.addListener('test', this._onTest);
+      }
+
+      componentWillUnmount() {
+        eventEmitter.removeListener('test', this._onTest);
+      }
+
+      _onTest = () => {
+        this.setState({
+          testHit: this.state.testHit + 1,
+        });
+      };
+
+      render() {
+        const {
+          testHit,
+        } = this.state;
+
+        const position = new THREE.Vector3(testHit, 0, 0);
+
+        return (<scene
+          ref={sceneRef}
+          position={position}
+        />);
+      }
+    }
+
+    ReactDOM.render(<React3
+      width={800}
+      height={600}
+    >
+      <MyScene />
+    </React3>, testDiv);
+
+    mockConsole.expectThreeLog();
+
+    const scene = sceneRef.lastCall.args[0];
+
+    expect(scene.position.x,
+      'The original state should be used'
+    ).to.equal(5);
+
+    eventEmitter.emit('test');
+
+    expect(scene.position.x,
+      'The state should have changed once'
+    ).to.equal(6);
+
+    eventEmitter.emit('test');
+    eventEmitter.emit('test');
+    eventEmitter.emit('test');
+
+    expect(scene.position.x,
+      'The state should have changed correct number of times'
+    ).to.equal(9);
   });
 };

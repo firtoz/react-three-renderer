@@ -8,13 +8,13 @@ import ID_PROPERTY_NAME from './utils/idPropertyName';
 const internalInstanceKey = `__react3InternalInstance$${Math.random().toString(36).slice(2)}`;
 
 /**
- * Drill down (through composites and empty components) until we get a native or
- * native text component.
+ * Drill down (through composites and empty components) until we get a host or
+ * host text component.
  *
  * This is pretty polymorphic but unavoidable with the current structure we have
  * for `_renderedChildren`.
  */
-function getRenderedNativeOrTextFromComponent(component) {
+function getRenderedHostOrTextFromComponent(component) {
   let result = component;
 
   let rendered = result._renderedComponent;
@@ -29,27 +29,27 @@ function getRenderedNativeOrTextFromComponent(component) {
 }
 
 /**
- * Populate `_nativeMarkup` on the rendered native/text component with the given
+ * Populate `_hostMarkup` on the rendered host/text component with the given
  * markup. The passed `instance` can be a composite.
  */
 function precacheMarkup(instance, markup) {
   invariant(!!markup, 'Markup is null!');
-  const nativeInstance = getRenderedNativeOrTextFromComponent(instance);
-  nativeInstance._nativeMarkup = markup;
-  markup[internalInstanceKey] = nativeInstance;
+  const hostInstance = getRenderedHostOrTextFromComponent(instance);
+  hostInstance._hostMarkup = markup;
+  markup[internalInstanceKey] = hostInstance;
 }
 
 
 function uncacheMarkup(inst) {
-  const markup = inst._nativeMarkup;
+  const markup = inst._hostMarkup;
   if (markup) {
     delete markup[internalInstanceKey];
-    inst._nativeMarkup = null;
+    inst._hostMarkup = null;
   }
 }
 
 /**
- * Populate `_nativeMarkup` on each child of `inst`, assuming that the children
+ * Populate `_hostMarkup` on each child of `inst`, assuming that the children
  * match up with the children of `markup`.
  *
  * We cache entire levels at once to avoid an n^2 problem where we access the
@@ -80,7 +80,7 @@ function precacheChildMarkups(instance, markup) {
 
     const childInst = renderedChildren[childName];
     // TODO implement _domID
-    const childID = getRenderedNativeOrTextFromComponent(childInst)._nativeID;
+    const childID = getRenderedHostOrTextFromComponent(childInst)._hostID;
     if (childID === null) {
       // We're currently unmounting this child in ReactMultiChild; skip it.
       continue;
@@ -181,7 +181,7 @@ function getClosestInstanceFromMarkup(markup) {
 // see ReactDOMComponentTree:getInstanceFromNode
 function getInstanceFromMarkup(markup) {
   const inst = getClosestInstanceFromMarkup(markup);
-  if (inst !== null && inst._nativeMarkup === markup) {
+  if (inst !== null && inst._hostMarkup === markup) {
     return inst;
   }
 
@@ -191,7 +191,7 @@ function getInstanceFromMarkup(markup) {
 
 /**
  * Given an InternalComponent, return the corresponding
- * native markup.
+ * host markup.
  */
 function getMarkupFromInstance(inst) {
   // Without this first invariant, passing a non-React3-component triggers the next
@@ -199,39 +199,39 @@ function getMarkupFromInstance(inst) {
 
   if (process.env.NODE_ENV !== 'production') {
     invariant(
-      inst._nativeMarkup !== undefined,
+      inst._hostMarkup !== undefined,
       'getMarkupFromInstance: Invalid argument.'
     );
   } else {
     invariant(
-      inst._nativeMarkup !== undefined
+      inst._hostMarkup !== undefined
     );
   }
 
-  if (inst._nativeMarkup) {
-    return inst._nativeMarkup;
+  if (inst._hostMarkup) {
+    return inst._hostMarkup;
   }
 
   let currentInstance = inst;
 
-  // Walk up the tree until we find an ancestor whose native node we have cached.
+  // Walk up the tree until we find an ancestor whose host node we have cached.
   const parents = [];
-  while (!currentInstance._nativeMarkup) {
+  while (!currentInstance._hostMarkup) {
     parents.push(currentInstance);
     invariant(
-      currentInstance._nativeParent,
+      currentInstance._hostParent,
       'React3 tree root should always have a node reference.'
     );
-    currentInstance = currentInstance._nativeParent;
+    currentInstance = currentInstance._hostParent;
   }
 
-  // Now parents contains each ancestor that does *not* have a cached native
+  // Now parents contains each ancestor that does *not* have a cached host
   // markup, and `currentInstance` is the deepest ancestor that does.
   for (; parents.length; currentInstance = parents.pop()) {
-    precacheChildMarkups(currentInstance, currentInstance._nativeMarkup);
+    precacheChildMarkups(currentInstance, currentInstance._hostMarkup);
   }
 
-  return currentInstance._nativeMarkup;
+  return currentInstance._hostMarkup;
 }
 
 module.exports = {
@@ -241,5 +241,5 @@ module.exports = {
   uncacheMarkup,
   precacheChildMarkups,
   getClosestInstanceFromMarkup,
-  getRenderedNativeOrTextFromComponent,
+  getRenderedHostOrTextFromComponent,
 };

@@ -8,15 +8,19 @@ module.exports = type => {
   const { expect } = chai;
 
   it('Mounts with prop warnings', () => {
-    mockConsole.expect('Warning: Failed propType: ' +
-      'Required prop `width` was not specified in `React3`.');
-    mockConsole.expect('Warning: Failed propType: ' +
-      'Required prop `height` was not specified in `React3`.');
+    mockConsole.expect('Warning: Failed prop type: ' +
+      'Required prop `width` was not specified in `React3`.\n' +
+      '    in React3');
+    mockConsole.expect('Warning: Failed prop type: ' +
+      'Required prop `height` was not specified in `React3`.\n' +
+      '    in React3');
 
-    mockConsole.expect('Warning: Failed propType: ' +
-      'Required prop `width` was not specified in `react3`.');
-    mockConsole.expect('Warning: Failed propType: ' +
-      'Required prop `height` was not specified in `react3`.');
+    mockConsole.expect('Warning: Failed prop type: ' +
+      'Required prop `width` was not specified in `react3`.\n' +
+      '    in react3');
+    mockConsole.expect('Warning: Failed prop type: ' +
+      'Required prop `height` was not specified in `react3`.\n' +
+      '    in react3');
 
     mockConsole.expectThreeLog();
 
