@@ -27,7 +27,7 @@
   },
   "peerDependencies": {
     "react": "~15.2.0",
-    "three": ">=0.78.0 < 0.79.0"
+    "three": ">=0.78.0 < 0.80.0"
   },
   "devDependencies": {
     "babel-cli": "6.10.1",
@@ -45,7 +45,7 @@
     "chai": "3.5.0",
     "del": "2.2.1",
     "dirty-chai": "1.2.2",
-    "eslint": "3.0.1",
+    "eslint": "3.1.0",
     "eslint-config-airbnb": "9.0.1",
     "eslint-plugin-import": "1.10.3",
     "eslint-plugin-jsx-a11y": "^2.0.1",

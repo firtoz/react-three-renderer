@@ -38,7 +38,7 @@ module.exports = (type) => {
   const mockConsole = new MockConsole();
 
   mockConsole.expectThreeLog = () => {
-    mockConsole.expect('THREE.WebGLRenderer	78');
+    mockConsole.expect('THREE.WebGLRenderer	79');
   };
 
   before(() => {
