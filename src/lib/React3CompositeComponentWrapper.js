@@ -31,21 +31,25 @@ function shouldConstruct(Component) {
   return Component.prototype && Component.prototype.isReactComponent;
 }
 
-function invokeComponentDidMountWithTimer() {
-  const publicInstance = this._instance;
-  if (this._debugID !== 0) {
-    ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
-      this._debugID,
-      'componentDidMount'
-    );
-  }
-  publicInstance.componentDidMount();
-  if (this._debugID !== 0) {
-    ReactInstrumentation.debugTool.onEndLifeCycleTimer(
-      this._debugID,
-      'componentDidMount'
-    );
-  }
+let invokeComponentDidMountWithTimer;
+
+if (process.env.NODE_ENV !== 'production') {
+  invokeComponentDidMountWithTimer = function _invokeComponentDidMountWithTimer() {
+    const publicInstance = this._instance;
+    if (this._debugID !== 0) {
+      ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
+        this._debugID,
+        'componentDidMount'
+      );
+    }
+    publicInstance.componentDidMount();
+    if (this._debugID !== 0) {
+      ReactInstrumentation.debugTool.onEndLifeCycleTimer(
+        this._debugID,
+        'componentDidMount'
+      );
+    }
+  };
 }
 
 class StatelessComponent {

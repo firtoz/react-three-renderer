@@ -506,13 +506,15 @@ class React3Renderer {
     const firstChild = container.userData.markup.childrenMarkup[0];
     React3ComponentTree.precacheMarkup(instance, firstChild);
 
-    const hostInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
-    if (hostInstance._debugID !== 0) {
-      ReactInstrumentation.debugTool.onHostOperation(
-        hostInstance._debugID,
-        'mount',
-        markup.toString()
-      );
+    if (process.env.NODE_ENV !== 'production') {
+      const hostInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
+      if (hostInstance._debugID !== 0) {
+        ReactInstrumentation.debugTool.onHostOperation(
+          hostInstance._debugID,
+          'mount',
+          markup.toString()
+        );
+      }
     }
   }
 
