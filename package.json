@@ -14,7 +14,9 @@
     "eslint-internal": "eslint --cache ./src/ ./docs/src/ ./tests/src/",
     "eslint": "npm run eslint-internal -loglevel silent || true",
     "tdd": "bash -c \"(export KARMA_TDD=true; npm run karma)\"",
-    "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\""
+    "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-single)\"",
+    "storybook": "start-storybook -p 9001 -s .storybook/public",
+    "publish-sb": "npm run prepublish && bash .storybook/publish.sh"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
   "keywords": [
@@ -30,6 +32,7 @@
     "three": ">=0.74.0 < 0.78.0"
   },
   "devDependencies": {
+    "@kadira/storybook": "^1.29.4",
     "babel-cli": "6.9.0",
     "babel-core": "6.9.0",
     "babel-eslint": "6.0.4",
@@ -42,6 +45,7 @@
     "babel-preset-stage-0": "6.5.0",
     "babel-register": "6.9.0",
     "babel-runtime": "6.9.0",
+    "cannon": "^0.6.2",
     "chai": "3.5.0",
     "del": "2.2.0",
     "dirty-chai": "1.2.2",
@@ -57,6 +61,7 @@
     "gulp-util": "3.0.7",
     "in-publish": "2.0.0",
     "isparta-loader": "2.0.0",
+    "json-loader": "^0.5.4",
     "karma": "0.13.22",
     "karma-chai": "0.1.0",
     "karma-chrome-launcher": "1.0.1",
@@ -71,6 +76,7 @@
     "react-dom": "15.1.0",
     "sinon": "2.0.0-pre",
     "source-map-support": "0.4.0",
+    "stats.js": "^0.16.0",
     "three": "0.77.1",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1"
