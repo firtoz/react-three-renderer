@@ -49,6 +49,45 @@ Defaults to `material`. Other example values:
 ### metal
 ``` bool ```
 
+### lightMapIntensity
+``` number ```
+
+### aoMapIntensity
+``` number ```
+
+### emissiveIntensity
+``` number ```
+
+### bumpScale
+``` number ```
+
+### displacementScale
+``` number ```
+
+### reflectivity
+``` number ```
+
+### displacementBias
+``` number ```
+
+### refractionRatio
+``` number ```
+
+### normalScale
+``` THREE.Vector2 ```
+
+### shading
+``` one of [THREE.FlatShading, THREE.SmoothShading] ```
+
+### skinning
+``` bool ```
+
+### morphTargets
+``` bool ```
+
+### morphNormals
+``` bool ```
+
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
 

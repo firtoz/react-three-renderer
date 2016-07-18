@@ -2,6 +2,7 @@ import THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
   constructor(react3RendererInstance) {
@@ -26,14 +27,123 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
       },
       default: false,
     });
+
+    [
+      'lightMapIntensity',
+      'aoMapIntensity',
+      'emissiveIntensity',
+      'bumpScale',
+      'displacementScale',
+      'reflectivity',
+    ]
+      .forEach(propName => {
+        this.hasProp(propName, {
+          type: PropTypes.number,
+          update(threeObject, propValue) {
+            threeObject[propName] = propValue;
+            threeObject.needsUpdate = true;
+          },
+          default: 1,
+        });
+      });
+
+    [
+      'displacementBias',
+    ]
+      .forEach(propName => {
+        this.hasProp(propName, {
+          type: PropTypes.number,
+          update(threeObject, propValue) {
+            threeObject[propName] = propValue;
+            threeObject.needsUpdate = true;
+          },
+          default: 0,
+        });
+      });
+
+    [
+      'refractionRatio',
+    ]
+      .forEach(propName => {
+        this.hasProp(propName, {
+          type: PropTypes.number,
+          update(threeObject, propValue) {
+            threeObject[propName] = propValue;
+            threeObject.needsUpdate = true;
+          },
+          default: 0.98,
+        });
+      });
+
+    this.hasProp('normalScale', {
+      type: propTypeInstanceOf(THREE.Vector2),
+      update(threeObject, normalScale) {
+        threeObject.normalScale.copy(normalScale);
+        threeObject.needsUpdate = true;
+      },
+      default: new THREE.Vector2(1, 1),
+    });
+
+    this.hasProp('shading', {
+      type: PropTypes.oneOf([THREE.FlatShading, THREE.SmoothShading]),
+      update(threeObject, shading) {
+        threeObject.shading = shading;
+        threeObject.needsUpdate = true;
+      },
+      default: THREE.SmoothShading,
+    });
+
+    [
+      'skinning',
+      'morphTargets',
+      'morphNormals',
+    ].forEach(propName => {
+      this.hasProp(propName, {
+        type: PropTypes.bool,
+        update(threeObject, propValue) {
+          threeObject[propName] = propValue;
+          threeObject.needsUpdate = true;
+        },
+        default: false,
+      });
+    });
+  }
+
+  getMaterialDescription(props) {
+    const materialDescription = super.getMaterialDescription(props);
+
+    [
+      'shininess',
+
+      'lightMapIntensity',
+      'aoMapIntensity',
+      'emissiveIntensity',
+      'bumpScale',
+      'displacementScale',
+      'reflectivity',
+
+      'displacementBias',
+
+      'refractionRatio',
+
+      'normalScale',
+
+      'shading',
+
+      'skinning',
+      'morphTargets',
+      'morphNormals',
+    ].forEach((propName) => {
+      if (props.hasOwnProperty(propName)) {
+        materialDescription[propName] = props[propName];
+      }
+    });
+
+    return materialDescription;
   }
 
   construct(props) {
     const materialDescription = this.getMaterialDescription(props);
-
-    if (props.hasOwnProperty('shininess')) {
-      materialDescription.shininess = props.shininess;
-    }
 
     return new THREE.MeshPhongMaterial(materialDescription);
   }
