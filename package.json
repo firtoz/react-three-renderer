@@ -1,6 +1,6 @@
 {
   "name": "react-three-renderer",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "description": "Render into a three.js canvas using React.",
   "main": "./lib/React3.js",
   "scripts": {
