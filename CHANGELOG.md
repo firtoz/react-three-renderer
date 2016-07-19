@@ -1,6 +1,11 @@
 CHANGELOG
 ===========
 
+## 2.2.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.2.0...v2.2.1) )
+
+### Components
+- Add `magFilter` and `minFilter` attributes to `<texture/>` ( #75 )
+
 ## 2.2.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.1.4...v2.2.0) )
 
 ### Core
