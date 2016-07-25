@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import getImageDataForColor from './utils/getImageDataForColor';
 
 // TODO: WRITE A REACTJS RENDERER TO GENERATE DOCUMENTATION
 // OH MY GOD YOU ARE A GENIUS
@@ -304,13 +305,11 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
           }
 
           if (attributesToCopy.length > 0) {
-            nodeFileContents += '\n\n## Attributes';
+            nodeFileContents += '\n\n## Attributes\n\n';
 
-            for (let i = 0; i < attributesToCopy.length; ++i) {
-              const attributeName = attributesToCopy[i];
-
-              nodeFileContents += `\n\n${attributesContents[attributeName]}`;
-            }
+            attributesToCopy.forEach(attributeName => {
+              nodeFileContents += `${attributesContents[attributeName]}`;
+            });
           }
         }
 
@@ -438,7 +437,7 @@ ${attributeInfo.description}`;
 
           const childrenName = ancestor.childrenName || 'Components';
 
-          textToAppendToAncestor += `\n## ${childrenName}\n`;
+          textToAppendToAncestor += `\n## ${childrenName}\n\n`;
         }
 
         for (let i = 0; i < depth; ++i) {
@@ -489,157 +488,244 @@ module.exports = ${componentName};
 }
 
 function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
-  Object
-    .keys(descriptors)
-    .forEach(
-      (componentName) => {
-        const descriptor = descriptors[componentName];
+  function writePropDocumentation(propTypes,
+                                  componentInfo,
+                                  descriptor,
+                                  componentName) {
+    return Promise.resolve().then(() => {
+      const requiredProps = [];
+      const optionalProps = [];
 
-        const propTypes = descriptor.propTypes;
-
-        const ComponentInfo = getComponentInfo(componentName, propTypes);
-
-        const componentInfo = new ComponentInfo();
-
-        const intro = componentInfo.getIntro();
-        const description = componentInfo.getDescription();
-
-        let fileContents = '';
-
-        const category = allCategories.flat[componentName];
-        if (!category) {
-          console.log('no category found for ', componentName); // eslint-disable-line
-
-          fileContents += `> [Wiki](Home) ${rightArrowSymbol} **${componentName}**`;
+      Object.keys(propTypes).forEach(propName => {
+        if (propTypes[propName]._isRequired) {
+          requiredProps.push(propName);
         } else {
-          fileContents += `> [Wiki](Home) ${rightArrowSymbol} `;
-
-          category.isComponent = true;
-
-          const lineage = getLineage(category);
-
-          fileContents += lineage
-            .map(name => `[[${name}]] ${rightArrowSymbol} `).join('');
-
-          fileContents += `**${componentName}**`;
+          optionalProps.push(propName);
         }
+      });
 
-        fileContents += `\n\n# ${componentName}`;
+      let propNames;
 
-        if (intro.length > 0) {
-          fileContents += `\n\n${intro}`;
-        }
+      const propPriority = componentInfo.propPriority;
 
-        if (description.length > 0) {
-          fileContents += `\n\n${description}`;
-        }
-
-        if (descriptor.isResource) {
-          // move resourceId prop to the end
-
-          const resourceIdProp = propTypes.resourceId;
-
-          delete propTypes.resourceId;
-
-          propTypes.resourceId = resourceIdProp;
-        }
-
-        let propNames = Object.keys(propTypes);
-
-        const requiredProps = [];
-        const optionalProps = [];
-
-        for (let i = 0; i < propNames.length; ++i) {
-          const propName = propNames[i];
-
-          if (propTypes[propName]._isRequired) {
-            requiredProps.push(propName);
-          } else {
-            optionalProps.push(propName);
-          }
-        }
-
-        propNames = requiredProps.concat(optionalProps);
-
-        const attributesText = componentInfo.getAttributesText(descriptor, componentName);
-
-        if (descriptor.isResource) {
-          if (attributesText.resourceId !== undefined && attributesText.resourceId !== '') {
-            console.error(` ${componentName} already has resourceId?`); // eslint-disable-line
+      if (propPriority) {
+        const propWeight = (propName) => {
+          if (propPriority.hasOwnProperty(propName)) {
+            return propPriority[propName];
           }
 
-          attributesText.resourceId = 'The resource id of this object,' +
-            ' only used if it is placed into [[resources]].';
+          return 0;
+        };
+
+        const sortByPriority = (a, b) => propWeight(b) - propWeight(a);
+
+        propNames = requiredProps.sort(sortByPriority)
+          .concat(optionalProps.sort(sortByPriority));
+      } else {
+        propNames = requiredProps
+          .concat(optionalProps);
+      }
+
+      const attributesText = componentInfo.getAttributesText(descriptor, componentName);
+
+      const propDefaults = descriptor.propDefaults;
+
+      if (descriptor.isResource) {
+        if (attributesText.resourceId !== undefined && attributesText.resourceId !== '') {
+          console.error(` ${componentName} already has resourceId?`); // eslint-disable-line
         }
 
-        const attributesContents = {};
+        attributesText.resourceId = 'The resource id of this object,' +
+          ' only used if it is placed into [[resources]].';
+      }
 
-        if (propNames.length > 0) {
-          fileContents += '\n\n## Attributes\n';
+      const attributesContents = {};
 
-          propNames.forEach((propName, i) => {
-            if (i > 0) {
-              fileContents += '\n\n';
-            }
+      descriptor._attributesContents = attributesContents;
 
-            let textForAttributes = '';
+      if (propNames.length > 0) {
+        return Promise.all(propNames.map((propName, i) => {
+          let propDetailText = '';
 
-            textForAttributes += `### ${propName}
+          // reserve its place
+          attributesContents[propName] = '';
+
+          if (i > 0) {
+            propDetailText += '\n\n';
+          }
+
+          propDetailText += `### ${propName}
 ${propTypes[propName].toString()}`;
 
-            const propDescription = attributesText[propName];
+          const propDescription = attributesText[propName];
 
-            if (propDescription && propDescription.length > 0) {
-              textForAttributes += `: ${propDescription}`;
-            }
+          if (propDescription && propDescription.length > 0) {
+            propDetailText += `: ${propDescription}`;
+          }
 
-            fileContents += textForAttributes;
+          return Promise.resolve()
+            .then(() => {
+              if (propDefaults.hasOwnProperty(propName)) {
+                const propDefault = propDefaults[propName];
+                if (propDefault !== undefined) {
+                  let defaultText = '';
 
-            attributesContents[propName] = textForAttributes;
-          });
-        }
+                  defaultText += '\n\n**Default**: `';
 
-        descriptor._attributesContents = attributesContents;
+                  let colorPromise = Promise.resolve('');
 
-        if (category) {
-          const children = category.children;
+                  if (propDefault && propDefault.isMockedThreeKey) {
+                    defaultText += `${propDefault}`;
+                  } else if (typeof propDefault === 'string') {
+                    defaultText += `'${propDefault}'`;
+                  } else if (Number.isInteger(propDefault)
+                    && propTypes[propName]._type.toString() === // is a value for color
+                    'one of types [THREE.Color, number, string]'
+                  ) {
+                    let numberString = propDefault.toString(16);
 
-          if (children && children.length > 0) {
-            fileContents += '\n\n## Children:'; // EOF
+                    while (numberString.length < 6) {
+                      numberString = `0${numberString}`;
+                    }
 
-            for (let i = 0; i < children.length; ++i) {
-              const child = children[i];
+                    numberString = `0x${numberString}`;
 
-              fileContents += `\n  * [[${child.name}]]`;
+                    defaultText += numberString;
 
-              if (child.intro) {
-                fileContents += `: ${child.intro}`;
+                    colorPromise = getImageDataForColor(propDefault)
+                      .then(imageData =>
+                      ` ![${numberString}]` +
+                      `(data:image/png;base64,${imageData})`);
+                  } else if (propDefault instanceof Array) {
+                    defaultText += `[${propDefault.join(', ')}]`;
+                  } else {
+                    defaultText += `${propDefault}`;
+                  }
+
+                  defaultText += '`';
+
+                  return colorPromise.then(colorMarkup =>
+                    `${defaultText}${colorMarkup}`);
+                }
+              }
+
+              return '';
+            }).then(defaultText => {
+              propDetailText += defaultText;
+
+              attributesContents[propName] = propDetailText;
+
+              return Promise.resolve();
+            });
+        })).then(() => propNames.reduce((result, propName) =>
+          `${result}${attributesContents[propName]}`, '\n\n## Attributes\n\n'));
+      }
+
+      return ('');
+    });
+  }
+
+  return Promise.all(Object
+    .keys(descriptors)
+    .map((componentName) => {
+      const descriptor = descriptors[componentName];
+
+      const propTypes = descriptor.propTypes;
+
+      const ComponentInfo = getComponentInfo(componentName, propTypes);
+
+      const componentInfo = new ComponentInfo();
+
+      const intro = componentInfo.getIntro();
+      const description = componentInfo.getDescription();
+
+      let fileContents = '';
+
+      const category = allCategories.flat[componentName];
+      if (!category) {
+        console.log('no category found for ', componentName); // eslint-disable-line
+
+        fileContents += `> [Wiki](Home) ${rightArrowSymbol} **${componentName}**`;
+      } else {
+        fileContents += `> [Wiki](Home) ${rightArrowSymbol} `;
+
+        category.isComponent = true;
+
+        const lineage = getLineage(category);
+
+        fileContents += lineage
+          .map(name => `[[${name}]] ${rightArrowSymbol} `).join('');
+
+        fileContents += `**${componentName}**`;
+      }
+
+      fileContents += `\n\n# ${componentName}`;
+
+      if (intro.length > 0) {
+        fileContents += `\n\n${intro}`;
+      }
+
+      if (description.length > 0) {
+        fileContents += `\n\n${description}`;
+      }
+
+      if (descriptor.isResource) {
+        // move resourceId prop to the end
+
+        const resourceIdProp = propTypes.resourceId;
+
+        delete propTypes.resourceId;
+
+        propTypes.resourceId = resourceIdProp;
+      }
+
+      return writePropDocumentation(propTypes,
+        componentInfo,
+        descriptor,
+        componentName)
+        .then(finalAttributesText => {
+          fileContents += finalAttributesText;
+
+          if (category) {
+            const children = category.children;
+
+            if (children && children.length > 0) {
+              fileContents += '\n\n## Children:'; // EOF
+
+              for (let i = 0; i < children.length; ++i) {
+                const child = children[i];
+
+                fileContents += `\n  * [[${child.name}]]`;
+
+                if (child.intro) {
+                  fileContents += `: ${child.intro}`;
+                }
               }
             }
           }
-        }
 
-        if (descriptor.isResource) {
-          fileContents += '\n\n';
+          if (descriptor.isResource) {
+            fileContents += '\n\n';
 
-          fileContents += 'This component can be added into [&lt;resources/&gt;](resources)!' +
-            ' See [[Resource Types]] for more information.';
-        }
+            fileContents += 'This component can be added into [&lt;resources/&gt;](resources)!' +
+              ' See [[Resource Types]] for more information.';
+          }
 
-        fileContents += `
+          fileContents += `
 
 ===
 
 |**[View Source](${`../blob/master/src/lib/${
-          descriptor.constructor.__modulePath}`.replace('/./', '/')}.js)**|
+            descriptor.constructor.__modulePath}`.replace('/./', '/')}.js)**|
  ---|`;
 
-        fileContents += '\n'; // EOF
+          fileContents += '\n'; // EOF
 
-        addFileToWrite(filesToWrite, `${prefix}${componentName}.md`, fileContents);
-      }
-    )
-  ;
+          addFileToWrite(filesToWrite, `${prefix}${componentName}.md`, fileContents);
+
+          return Promise.resolve();
+        });
+    }));
 }
 function populateCategoryIntros(descriptors, allCategories) {
   // populate category intros for descriptors
@@ -678,11 +764,26 @@ module.exports = (done) => {
   Object.keys(THREE).forEach(key => {
     const value = THREE[key];
     if (value && value.prototype) {
-      value.displayName = `THREE.${key}`;
+      THREE[key] = class MockedClass extends value {
+        constructor(...rest) {
+          super(...rest);
+
+          this._args = rest;
+        }
+
+        toString() {
+          return `new THREE.${key}(${this._args.join(', ')})`;
+        }
+      };
+
+      THREE[key].displayName = `THREE.${key}`;
+
       return;
     }
 
-    THREE[key] = `THREE.${key}`;
+    THREE[key] = {};
+    THREE[key].toString = () => `THREE.${key}`;
+    THREE[key].isMockedThreeKey = true;
   });
 
   mockPropTypes();
@@ -728,19 +829,23 @@ module.exports = (done) => {
 
   const prefix = 'wiki/';
 
-  writeDescriptors(descriptors, allCategories, filesToWrite, prefix);
+  writeDescriptors(descriptors, allCategories, filesToWrite, prefix).then(() => {
+    // write categories
+    writeCategories(allCategories, descriptors, filesToWrite, prefix);
 
-  // write categories
-  writeCategories(allCategories, descriptors, filesToWrite, prefix);
+    const fileNames = Object.keys(filesToWrite);
 
-  const fileNames = Object.keys(filesToWrite);
+    for (let i = 0; i < fileNames.length; ++i) {
+      const { filename, contents } = filesToWrite[fileNames[i]];
+      fs.writeFileSync(filename, contents, 'utf8');
+    }
 
-  for (let i = 0; i < fileNames.length; ++i) {
-    const { filename, contents } = filesToWrite[fileNames[i]];
-    fs.writeFileSync(filename, contents, 'utf8');
-  }
+    done();
+  }, (error) => {
+    console.error(error); // eslint-disable-line no-console
 
-  done();
+    return false;
+  });
 
   return true;
 };

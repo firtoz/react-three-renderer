@@ -15,7 +15,7 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
-        default: undefined,
+        default: 1,
       });
     });
 
@@ -27,7 +27,7 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        default: undefined,
+        default: 1,
       });
     });
   }
@@ -40,7 +40,7 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
       widthSegments,
       heightSegments,
       depthSegments,
-      } = props;
+    } = props;
 
     return new THREE.BoxGeometry(width, height, depth,
       widthSegments, heightSegments, depthSegments);

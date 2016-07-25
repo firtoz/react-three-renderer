@@ -9,6 +9,7 @@ Defaults to \`material\`. Other example values:
 - customDepthMaterial
 - customDistanceMaterial
 - and so on`,
+      color: 'Geometry color',
     };
   }
 }

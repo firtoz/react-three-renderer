@@ -30,26 +30,38 @@ This component can have the following children:
 
 Currently only '3d' is supported.
 
+**Default**: `'3d'`
+
 ### width
 ``` number ``` *``` required ```*: The width of the canvas and the default viewport.
 
+**Default**: `1`
+
 ### height
 ``` number ``` *``` required ```*: The height of the canvas and the default viewport.
+
+**Default**: `1`
 
 ### gammaInput
 ``` bool ```: Controls renderer gamma input.
 
 See [THREE.WebGLRenderer#gammaInput](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.gammaInput).
 
+**Default**: `false`
+
 ### gammaOutput
 ``` bool ```: Controls renderer gamma output.
 
 See [THREE.WebGLRenderer#gammaOutput](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.gammaOutput).
 
+**Default**: `false`
+
 ### sortObjects
 ``` bool ```: Controls renderer object sorting.
 
 See [THREE.WebGLRenderer#sortObjects](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.sortObjects).
+
+**Default**: `true`
 
 ### mainCamera
 ``` string ```: The name of the camera to render into the canvas.
@@ -68,6 +80,8 @@ Is used as the first parameter for [THREE.WebGLRenderer#clearColor](http://three
 
 If the [`clearAlpha`](#clearalpha) and [`alpha`](#alpha) properties are set, `clearAlpha` will be used as the second parameter.
 
+**Default**: `0x000000` ![0x000000](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAkSURBVJXBAQEAMAzDIF7/nncNgYcTTDTRRBNNNNFEE0000UQfY7IBFwkI/wUAAAAASUVORK5CYII=)
+
 ### clearAlpha
 ``` number ```: Used for the transparency of the canvas.
 
@@ -79,12 +93,23 @@ If the [`clearColor`](#clearcolor) property is set, that will be passed as the f
 
 Requires the [`alpha`](#alpha) property to be set.
 
+### alpha
+``` bool ```: Toggles alpha setting of the renderer.
+
+See [THREE.WebGLRenderer#alpha](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).
+
+> **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
+
+**Default**: `false`
+
 ### shadowMapEnabled
 ``` bool ```: Toggles shadowMap usage.
 
 See [THREE.WebGLRenderer#shadowMapEnabled](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapEnabled).
 
 > **WARNING**: Updating this value will force all materials to refresh.
+
+**Default**: `false`
 
 ### shadowMapType
 ``` one of [THREE.BasicShadowMap, THREE.PCFShadowMap, THREE.PCFSoftShadowMap] ```: Controls the shadowMap type.
@@ -93,12 +118,16 @@ See [THREE.WebGLRenderer#shadowMapType](http://threejs.org/docs/#Reference/Rende
 
 > **WARNING**: Updating this value will force all materials to refresh.
 
+**Default**: `THREE.PCFShadowMap`
+
 ### shadowMapCullFace
 ``` one of [THREE.CullFaceNone, THREE.CullFaceBack, THREE.CullFaceFront, THREE.CullFaceFrontBack] ```: Controls shadowMap face culling.
 
 See [THREE.WebGLRenderer#shadowMapCullFace](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapCullFace).
 
 > **WARNING**: Updating this value will force all materials to refresh.
+
+**Default**: `THREE.CullFaceFront`
 
 ### shadowMapDebug
 ``` bool ```: Toggles shadowMap debugging.
@@ -107,10 +136,14 @@ See [THREE.WebGLRenderer#shadowMapDebug](http://threejs.org/docs/#Reference/Rend
 
 > **WARNING**: Updating this value will force all materials to refresh.
 
+**Default**: `false`
+
 ### pixelRatio
 ``` number ```: The pixel ratio of the renderer.
 
 Preferred value: window.devicePixelRatio.
+
+**Default**: `1`
 
 ### precision
 ``` one of [highp, mediump, lowp] ```: Sets the precision of the renderer.
@@ -119,12 +152,7 @@ See [THREE.WebGLRenderer#precision](http://threejs.org/docs/#Reference/Renderers
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
-### alpha
-``` bool ```: Toggles alpha setting of the renderer.
-
-See [THREE.WebGLRenderer#alpha](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).
-
-> **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
+**Default**: `'highp'`
 
 ### premultipliedAlpha
 ``` bool ```: Toggles the premultipliedAlpha setting of the renderer.
@@ -133,12 +161,16 @@ See [THREE.WebGLRenderer#premultipliedAlpha](http://threejs.org/docs/#Reference/
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
+**Default**: `true`
+
 ### antialias
 ``` one of types [bool, number] ```: Toggles anti-aliasing of the renderer.
 
 See [THREE.WebGLRenderer#antialias](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
+
+**Default**: `false`
 
 ### stencil
 ``` bool ```: Toggles the stencil property of the renderer.
@@ -147,12 +179,16 @@ See [THREE.WebGLRenderer#stencil](http://threejs.org/docs/#Reference/Renderers/W
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
+**Default**: `true`
+
 ### preserveDrawingBuffer
 ``` bool ```: Toggles the preserveDrawingBuffer property of the renderer.
 
 See [THREE.WebGLRenderer#preserveDrawingBuffer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
+
+**Default**: `false`
 
 ### depth
 ``` bool ```: Toggles the depth property of the renderer.
@@ -161,12 +197,16 @@ See [THREE.WebGLRenderer#depth](http://threejs.org/docs/#Reference/Renderers/Web
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
+**Default**: `true`
+
 ### logarithmicDepthBuffer
 ``` bool ```: Toggles the logarithmicDepthBuffer property of the renderer.
 
 See [THREE.WebGLRenderer#logarithmicDepthBuffer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
+
+**Default**: `false`
 
 ### onRendererUpdated
 ``` function ```: This function gets called with the renderer as the first parameter.
@@ -196,6 +236,8 @@ The renderer gets created when:
 You can use this to save some CPU and battery life.
 
 Requires [onManualRenderTriggerCreated](#onmanualrendertriggercreated).
+
+**Default**: `false`
 
 ### onManualRenderTriggerCreated
 ``` function ```: 
@@ -237,7 +279,6 @@ You can use this property without [forceManualRender](#forcemanualrender)
 
 Hopefully that will not be necessary; but please do let me know if
  you find a use case for it!
-
 
 ## Additional Attributes:
 

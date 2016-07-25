@@ -33,6 +33,8 @@ class LightDescriptorBase extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
+    this.removeProp('receiveShadow');
+
     this._hasColor = false;
     this._hasDirection = false;
 
@@ -249,36 +251,37 @@ class LightDescriptorBase extends Object3DDescriptor {
       rootInstance.allMaterialsNeedUpdate();
     }
   }
+}
 
-  static getDynamicWarningMessage(elementType, owner) {
-    return `<${elementType}/> has been updated which triggered a refresh of all materials.
-  This is a potentially expensive operation.
-  This can happen when you add or remove a light, or add or remove any component
-  before any lights without keys e.g.
-  <object3d>
-    {/* new or removed component here */}
-    <ambientLight/>
-  </object3d>, or update some properties of lights.
+if (process.env.NODE_ENV !== 'production') {
+  LightDescriptorBase.getDynamicWarningMessage = (elementType, owner) =>
+    `<${elementType}/> has been updated which triggered a refresh of all materials.
+This is a potentially expensive operation.
+This can happen when you add or remove a light, or add or remove any component
+before any lights without keys e.g.
+<object3d>
+  {/* new or removed component here */}
+  <ambientLight/>
+</object3d>, or update some properties of lights.
 
-  If you would like to add components, you should either add the components
-  after the lights (recommended), e.g.
-  <object3d>
-    <ambientLight/>
-    {/* new or removed component here */}
-  </object3d>, or add a 'key' property to the lights e.g.
-  <object3d>
-    {/* new or removed component here */}
-    <ambientLight key="light"/>
-  </object3d>.
+If you would like to add components, you should either add the components
+after the lights (recommended), e.g.
+<object3d>
+  <ambientLight/>
+  {/* new or removed component here */}
+</object3d>, or add a 'key' property to the lights e.g.
+<object3d>
+  {/* new or removed component here */}
+  <ambientLight key="light"/>
+</object3d>.
 
-  If you have modified a light's properties e.g. toggled castShadow,
-  the materials need to be rebuilt as well.
+If you have modified a light's properties e.g. toggled castShadow,
+the materials need to be rebuilt as well.
 
-  To acknowledge and remove this message, please add the property 'updatesRefreshAllMaterials'
-    to <${elementType}/> inside the render() of ${owner && owner.getName() || 'a component'}.
+To acknowledge and remove this message, please add the property 'updatesRefreshAllMaterials'
+  to <${elementType}/> inside the render() of ${owner && owner.getName() || 'a component'}.
 
-  For more information, visit https://github.com/mrdoob/threejs/wiki/Updates .`;
-  }
+For more information, visit https://github.com/mrdoob/threejs/wiki/Updates .`;
 }
 
 module.exports = LightDescriptorBase;

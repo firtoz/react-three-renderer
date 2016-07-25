@@ -13,37 +13,47 @@ It is constructed from a number of triangular segments that are oriented
  segments determines the number of sides.
 
 ## Attributes
+
+### name
+``` string ```: Name for this geometry.
+
+**Default**: `''`
+
 ### vertices
 ``` array of THREE.Vector3 ```: See [THREE.Geometry#vertices](http://threejs.org/docs/#Reference/Core/Geometry.vertices).
+
+**Default**: `[]`
 
 ### colors
 ``` array of THREE.Color ```: See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).
 
+**Default**: `[]`
+
 ### faceVertexUvs
 ``` array of (array of (array of THREE.Vector2)) ```: See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).
 
+**Default**: `[]`
+
 ### faces
 ``` array of THREE.Face3 ```: See [THREE.Geometry#faces](http://threejs.org/docs/#Reference/Core/Geometry.faces).
+
+**Default**: `[]`
 
 ### dynamic
 ``` bool ```: See [THREE.Geometry#dynamic](http://threejs.org/docs/#Reference/Core/Geometry.dynamic).
 
 Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
 
-Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
+Unless set to true internal typed arrays corresponding to buffers will be deleted
+once sent to GPU.
 
-Defaults to true.
-
-### name
-``` string ```: Name for this geometry.
-
-Default is an empty string.
+**Default**: `false`
 
 ### radius
-``` number ```: Radius of the circle, default = 50.
+``` number ```: Radius of the circle
 
 ### segments
-``` number ```: Number of segments (triangles), minimum = 3, default = 8.
+``` number ```: Number of segments (triangles), minimum = 3
 
 ### thetaStart
 ``` number ```: Start angle for first segment, default = 0 (three o'clock position).
@@ -55,6 +65,8 @@ The default is 2*Pi, which makes for a complete circle.
 
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
+
+**Default**: `''`
 
 This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.
 

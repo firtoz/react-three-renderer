@@ -137,8 +137,7 @@ You can use this property without [forceManualRender](#forcemanualrender)
  for example to render multiple times within one frame (maybe for VR?).
 
 Hopefully that will not be necessary; but please do let me know if
- you find a use case for it!
-`,
+ you find a use case for it!`,
       onRendererUpdated: `This function gets called with the renderer as the first parameter.
 
 Example callback:

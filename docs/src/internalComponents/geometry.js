@@ -15,12 +15,9 @@ class geometry extends DocInfo {
 
 Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
 
-Unless set to true internal typed arrays corresponding to buffers will be deleted once sent to GPU.
-
-Defaults to true.`,
-      name: `Name for this geometry.
-
-Default is an empty string.`,
+Unless set to true internal typed arrays corresponding to buffers will be deleted
+once sent to GPU.`,
+      name: 'Name for this geometry.',
       vertices: 'See [THREE.Geometry#vertices](http://threejs.org/docs/#Reference/Core/Geometry.vertices).',
       faceVertexUvs: 'See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).',
       colors: 'See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).',

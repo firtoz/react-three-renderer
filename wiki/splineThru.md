@@ -5,8 +5,11 @@
 Calls [THREE.Path#splineThru](http://threejs.org/docs/#Reference/Extras.Core/Path.splineThru) on the parent shape
 
 ## Attributes
+
 ### points
 ``` array of THREE.Vector2 ``` *``` required ```*
+
+**Default**: `[]`
 
 ===
 

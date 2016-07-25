@@ -5,6 +5,16 @@ CHANGELOG
 
 ### Components
 - Add `magFilter` and `minFilter` attributes to `<texture/>` ( #75 )
+- Fix the default value for the `rotation` property of `<absEllipse/>`
+- Remove the `receiveShadow` property from light components
+
+### Documentation
+- Add notes for default values for attributes
+- Reorder some properties in the `<react3/>`
+and `<boxGeometry/>` documentation to make more sense
+- Clarify documentation for `lookAt` property for `<object3D/>` and its subclasses
+- Add missing default properties for some components
+- Whitespace fixes
 
 ## 2.2.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.1.4...v2.2.0) )
 

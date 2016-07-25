@@ -8,11 +8,16 @@ Place this within [[&lt;extrudeGeometry&gt;|extrudeGeometry]]
     or [&lt;resources&gt;](resources).
 
 ## Attributes
+
 ### points
 ``` array of THREE.Vector2 ```
 
+**Default**: `[]`
+
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
+
+**Default**: `''`
 
 ## Children:
   * [[moveTo]]: Calls [THREE.Path#moveTo](http://threejs.org/docs/#Reference/Extras.Core/Path.moveTo) on the parent shape

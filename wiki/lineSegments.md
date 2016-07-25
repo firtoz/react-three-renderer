@@ -7,22 +7,31 @@ Creates a [THREE.LineSegments](http://threejs.org/docs/#Reference/Objects/LineSe
 This object can contain [[Materials]] and [[Geometries]].
 
 ## Attributes
+
 ### name
 ``` string ```: Name for this geometry.
 
-Default is an empty string.
+**Default**: `''`
 
 ### position
 ``` THREE.Vector3 ```
 
+**Default**: `new THREE.Vector3()`
+
 ### rotation
 ``` THREE.Euler ```
+
+**Default**: `new THREE.Euler()`
 
 ### quaternion
 ``` THREE.Quaternion ```
 
+**Default**: `new THREE.Quaternion()`
+
 ### scale
 ``` THREE.Vector3 ```
+
+**Default**: `new THREE.Vector3(1, 1, 1)`
 
 ### lookAt
 ``` THREE.Vector3 ```
@@ -30,8 +39,12 @@ Default is an empty string.
 ### frustumCulled
 ``` bool ```
 
+**Default**: `true`
+
 ### visible
 ``` bool ```
+
+**Default**: `true`
 
 ### renderOrder
 ``` number ```
@@ -39,8 +52,12 @@ Default is an empty string.
 ### castShadow
 ``` bool ```
 
+**Default**: `false`
+
 ### receiveShadow
 ``` bool ```
+
+**Default**: `false`
 
 ===
 

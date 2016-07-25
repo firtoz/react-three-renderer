@@ -13,7 +13,7 @@ import checkReactTypeSpec from 'react/lib/checkReactTypeSpec';
  * @abstract
  */
 class THREEElementDescriptor {
-  constructor(react3RendererInstance:React3Renderer) {
+  constructor(react3RendererInstance: React3Renderer) {
     this.react3RendererInstance = react3RendererInstance;
     this.propUpdates = {};
     this.propDeletes = {};
@@ -83,6 +83,8 @@ class THREEElementDescriptor {
         this.propDeletes[name] = (threeObject) => {
           this.propUpdates[name](threeObject, info.default, true);
         };
+
+        this.propDefaults[name] = info.default;
       }
     } else {
       if (info.hasOwnProperty('update')) {

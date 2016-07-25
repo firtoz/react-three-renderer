@@ -5,8 +5,11 @@
 Reference to a material resource
 
 ## Attributes
+
 ### resourceId
 ``` string ``` *``` required ```*
+
+**Default**: `''`
 
 ===
 

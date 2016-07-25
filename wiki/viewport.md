@@ -10,6 +10,7 @@ If the [mainCamera](react3#maincamera) property of the root component is
 not set, then the scene will be rendered into the viewports.
 
 ## Attributes
+
 ### x
 ``` number ``` *``` required ```*: The x (px) position of the viewport in the canvas
 

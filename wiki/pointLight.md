@@ -5,20 +5,31 @@
 Creates a [THREE.PointLight](http://threejs.org/docs/#Reference/Lights/PointLight)
 
 ## Attributes
+
 ### name
 ``` string ```: Name for the 3D Object.
+
+**Default**: `''`
 
 ### position
 ``` THREE.Vector3 ```: The position of the 3D object relative to the parent.
 
+**Default**: `new THREE.Vector3()`
+
 ### scale
 ``` THREE.Vector3 ```: The scale of the 3D object relative to the parent.
+
+**Default**: `new THREE.Vector3(1, 1, 1)`
 
 ### frustumCulled
 ``` bool ```: Whether the 3D object will be culled by the camera frustum or not.
 
+**Default**: `true`
+
 ### visible
 ``` bool ```: Whether the 3D object will be visible or not.
+
+**Default**: `true`
 
 ### renderOrder
 ``` number ```: The render order override for the 3D object.
@@ -28,11 +39,7 @@ Creates a [THREE.PointLight](http://threejs.org/docs/#Reference/Lights/PointLigh
 
 **WARNING**: changing this property after the scene has been constructed is expensive! See [updatesRefreshAllMaterials](#updatesRefreshAllMaterials).
 
-### receiveShadow
-``` bool ```: Whether the 3D object will receive shadows or not.
-> **WARNING**: This will trigger a refresh for any materials the object is using.
-
-> **WARNING**: If you use the same material for multiple objects and some of them receive shadows and some do not, it may cause adverse side effects. In that case, it is recommended to use different materials.
+**Default**: `false`
 
 ### updatesRefreshAllMaterials
 ``` bool ```: Acknowledges and silences the remount warning message.
@@ -79,44 +86,70 @@ Example warning message:
 >    to `<pointLight/>` inside the `render()` of
  the component.
 >  For more information, visit
- [https://github.com/mrdoob/threejs/wiki/Updates/](https://github.com/mrdoob/threejs/wiki/Updates/).
+ [https://github.com/mrdoob/three.js/wiki/updates](https://github.com/mrdoob/three.js/wiki/updates).
       
+
+**Default**: `false`
 
 ### shadowBias
 ``` number ```
 
+**Default**: `0`
+
 ### shadowDarkness
 ``` number ```
+
+**Default**: `0.5`
 
 ### shadowMapWidth
 ``` number ```
 
+**Default**: `512`
+
 ### shadowMapHeight
 ``` number ```
+
+**Default**: `512`
 
 ### shadowCameraNear
 ``` number ```
 
+**Default**: `0.5`
+
 ### shadowCameraFar
 ``` number ```
+
+**Default**: `500`
 
 ### color
 ``` one of types [THREE.Color, number, string] ```: The light color.
 
+**Default**: `0xffffff` ![0xffffff](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAvSURBVJXBwQnAMAADsbPp/is7BPIunBRgCEX6eLbxJwlXkYpUpCIVqUhFCjCEIh1kwAUXig8DxQAAAABJRU5ErkJggg==)
+
 ### intensity
 ``` number ```
+
+**Default**: `1`
 
 ### decay
 ``` number ```
 
+**Default**: `1`
+
 ### distance
 ``` number ```
+
+**Default**: `0`
 
 ### shadowCameraFov
 ``` number ```
 
+**Default**: `90`
+
 ### shadowCameraAspect
 ``` number ```
+
+**Default**: `1`
 
 ===
 

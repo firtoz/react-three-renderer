@@ -25,7 +25,7 @@ class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        default: undefined,
+        default: 1,
       });
     });
   }

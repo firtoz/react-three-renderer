@@ -5,8 +5,11 @@
 Reference to a geometry resource.
 
 ## Attributes
+
 ### resourceId
 ``` string ``` *``` required ```*: The resourceId for the [geometry](Geometries).
+
+**Default**: `''`
 
 ===
 

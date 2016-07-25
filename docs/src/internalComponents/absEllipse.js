@@ -18,11 +18,9 @@ class absEllipse extends DocInfo {
       yRadius: 'The radius of the ellipse in the y axis',
       startAngle: 'The start angle in radians',
       endAngle: 'The end angle in radians',
-      clockwise: 'Sweep the ellipse clockwise.\n\n' +
-      'Defaults to false',
+      clockwise: 'Sweep the ellipse clockwise.',
       rotation: 'The rotation angle of the ellipse in radians, counterclockwise from the' +
-      ' positive X axis.\n\n' +
-      'Optional, defaults to 0',
+      ' positive X axis.',
     };
   }
 }

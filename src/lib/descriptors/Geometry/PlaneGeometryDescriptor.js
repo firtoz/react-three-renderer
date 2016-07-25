@@ -25,7 +25,7 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        default: undefined,
+        default: 1,
       });
     });
   }
@@ -36,7 +36,7 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
       height,
       widthSegments,
       heightSegments,
-      } = props;
+    } = props;
 
     return new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
   }

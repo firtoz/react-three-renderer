@@ -21,8 +21,8 @@ This creates an arrow starting in origin in the direction dir for a certain leng
       origin: 'The start position of the arrow.',
       length: 'The length of the arrow.',
       color: 'The color that will be used for the arrow materials.',
-      headLength: 'The length of the head of the arrow.',
-      headWidth: 'The length of the width of the arrow.',
+      headLength: 'The length of the head of the arrow.\n\n**Default**: `0.2 * length`',
+      headWidth: 'The length of the width of the arrow.\n\n**Default**: `0.2 * headLength`',
     };
   }
 }

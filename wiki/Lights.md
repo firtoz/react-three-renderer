@@ -3,6 +3,7 @@
 # Lights
 
 ## Components
+
 * [[ambientLight]]: Creates a [THREE.AmbientLight](http://threejs.org/docs/#Reference/Lights/AmbientLight)
 * [[directionalLight]]: Creates a [THREE.DirectionalLight](http://threejs.org/docs/#Reference/Lights/DirectionalLight)
 * [[spotLight]]: Creates a [THREE.SpotLight](http://threejs.org/docs/#Reference/Lights/SpotLight)
