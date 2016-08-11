@@ -21,6 +21,7 @@ CHANGELOG
   - [`skinning`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#skinning)
   - [`morphTargets`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphTargets)
   - [`morphNormals`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphNormals)
+- Fixed accidental swapping of `tubularSegments` and `radialSegments` attributes for `<torusKnotGeometry/>`
 
 ### Documentation
 - Add notes for default values for attributes

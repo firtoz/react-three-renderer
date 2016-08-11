@@ -47,10 +47,10 @@ once sent to GPU.
 ### tube
 ``` number ```
 
-### radialSegments
+### tubularSegments
 ``` number ```
 
-### tubularSegments
+### radialSegments
 ``` number ```
 
 ### p

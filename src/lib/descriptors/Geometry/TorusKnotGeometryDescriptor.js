@@ -10,8 +10,8 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
     [
       'radius',
       'tube',
-      'radialSegments',
       'tubularSegments',
+      'radialSegments',
       'p',
       'q',
       'heightScale',
@@ -28,18 +28,18 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
     const {
       radius,
       tube,
-      radialSegments,
       tubularSegments,
+      radialSegments,
       p,
       q,
       heightScale,
-      } = props;
+    } = props;
 
     return new THREE.TorusKnotGeometry(
       radius,
       tube,
-      radialSegments,
       tubularSegments,
+      radialSegments,
       p,
       q,
       heightScale);
