@@ -7,6 +7,20 @@ CHANGELOG
 - Add `magFilter` and `minFilter` attributes to `<texture/>` ( #75 )
 - Fix the default value for the `rotation` property of `<absEllipse/>`
 - Remove the `receiveShadow` property from light components
+- Add missing attributes to `<meshPhongMaterial/>`:
+  - [`lightMapIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#lightMapIntensity)
+  - [`aoMapIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#aoMapIntensity)
+  - [`emissiveIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#emissiveIntensity)
+  - [`bumpScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#bumpScale)
+  - [`displacementScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#displacementScale)
+  - [`reflectivity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#reflectivity)
+  - [`displacementBias`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#displacementBias)
+  - [`refractionRatio`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#refractionRatio)
+  - [`normalScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#normalScale)
+  - [`shading`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#shading)
+  - [`skinning`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#skinning)
+  - [`morphTargets`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphTargets)
+  - [`morphNormals`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphNormals)
 
 ### Documentation
 - Add notes for default values for attributes
