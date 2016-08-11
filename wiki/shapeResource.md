@@ -5,8 +5,11 @@
 Reference to a shape resource
 
 ## Attributes
+
 ### resourceId
 ``` string ``` *``` required ```*
+
+**Default**: `''`
 
 ===
 

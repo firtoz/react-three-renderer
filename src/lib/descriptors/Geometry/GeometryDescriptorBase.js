@@ -13,6 +13,8 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
+    this.hasName();
+
     this.hasProp('vertices', {
       type: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)),
       update(threeObject, vertices, hasProp) {
@@ -74,7 +76,6 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
       default: [],
     });
 
-
     this.hasProp('dynamic', {
       type: PropTypes.bool,
       update(threeObject, dynamic) {
@@ -82,8 +83,6 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
       },
       default: false,
     });
-
-    this.hasName();
   }
 
   setParent(geometry, parentObject3D) {

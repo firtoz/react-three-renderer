@@ -96,10 +96,42 @@ class TextureDescriptor extends THREEElementDescriptor {
       this.hasProp(eventName, {
         type: PropTypes.func,
         update() {
-          // do nothing
+          // do nothing because these props are only used for initial loading callbacks
         },
         default: undefined,
       });
+    });
+
+    this.hasProp('magFilter', {
+      type: PropTypes.oneOf([
+        THREE.LinearFilter,
+        THREE.NearestFilter,
+      ]),
+      update(texture, magFilter) {
+        texture.magFilter = magFilter;
+        if (texture.image) {
+          texture.needsUpdate = true;
+        }
+      },
+      default: THREE.LinearFilter,
+    });
+
+    this.hasProp('minFilter', {
+      type: PropTypes.oneOf([
+        THREE.LinearMipMapLinearFilter,
+        THREE.NearestFilter,
+        THREE.NearestMipMapNearestFilter,
+        THREE.NearestMipMapLinearFilter,
+        THREE.LinearFilter,
+        THREE.LinearMipMapNearestFilter,
+      ]),
+      update(texture, magFilter) {
+        texture.magFilter = magFilter;
+        if (texture.image) {
+          texture.needsUpdate = true;
+        }
+      },
+      default: THREE.LinearMipMapLinearFilter,
     });
   }
 

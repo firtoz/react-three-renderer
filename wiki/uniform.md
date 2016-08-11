@@ -9,6 +9,7 @@ See [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMa
 Any modifications to uniforms will result in the recompilation of the shader.
 
 ## Attributes
+
 ### type
 ``` string ``` *``` required ```*: See [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial) for information about uniform types.
 
@@ -17,6 +18,8 @@ Any modifications to uniforms will result in the recompilation of the shader.
 
 ### value
 ``` any ```: See [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial) for information about uniform values.
+
+**Default**: `null`
 
 ===
 

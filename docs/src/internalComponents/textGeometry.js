@@ -16,11 +16,11 @@ class textGeometry extends geometry {
       text: 'The text that needs to be shown.',
       font: 'The font for the text.',
       size: 'The size of the text.',
-      height: 'The thickness to extrude text. Default is 50.',
-      curveSegments: 'The number of points on the curves. Default is 12.',
-      bevelEnabled: 'Turn on bevel. Default is false.',
-      bevelThickness: 'How deep into text bevel goes. Default is 10.',
-      bevelSize: 'How far from text outline is bevel. Default is 8.',
+      height: 'The thickness to extrude text.',
+      curveSegments: 'The number of points on the curves.',
+      bevelEnabled: 'Turn on bevel.',
+      bevelThickness: 'How deep into text bevel goes.',
+      bevelSize: 'How far from text outline is bevel.',
     };
   }
 }

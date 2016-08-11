@@ -16,8 +16,7 @@ class absArc extends DocInfo {
       radius: 'The radius of the arc',
       startAngle: 'The start angle in radians',
       endAngle: 'The end angle in radians',
-      clockwise: 'Sweep the arc clockwise.\n\n' +
-      'Defaults to false',
+      clockwise: 'Sweep the arc clockwise.',
     };
   }
 }

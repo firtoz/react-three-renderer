@@ -14,9 +14,9 @@ class dodecahedronGeometry extends geometry {
     return {
       ...super.getAttributesText(),
 
-      radius: 'Radius of the dodecahedron. Default is 1.',
+      radius: 'Radius of the dodecahedron.',
       detail: 'Setting this to a value greater than 0 adds vertices ' +
-      'making it no longer a dodecahedron. Default is 0.',
+      'making it no longer a dodecahedron.',
     };
   }
 }

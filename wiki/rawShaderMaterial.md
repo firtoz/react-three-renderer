@@ -8,6 +8,7 @@ This is very similar to [[ShaderMaterial]], except that
 the vertex and fragment shader code will be exactly copied without any modifications.
 
 ## Attributes
+
 ### vertexShader
 ``` string ``` *``` required ```*: The vertex shader code.
 
@@ -22,17 +23,23 @@ Defaults to `material`. Other example values:
 - customDistanceMaterial
 - and so on
 
+**Default**: `'material'`
+
 ### transparent
 ``` bool ```
 
 ### side
 ``` one of [THREE.FrontSide, THREE.BackSide, THREE.DoubleSide] ```
 
+**Default**: `THREE.FrontSide`
+
 ### opacity
 ``` number ```
 
 ### visible
 ``` bool ```
+
+**Default**: `true`
 
 ### uniforms
 ``` any ```: The uniforms to be used for the shader.
@@ -42,11 +49,17 @@ See [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials
 ### wireframe
 ``` bool ```
 
+**Default**: `false`
+
 ### wireframeLinewidth
 ``` number ```
 
+**Default**: `1`
+
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
+
+**Default**: `''`
 
 This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.
 

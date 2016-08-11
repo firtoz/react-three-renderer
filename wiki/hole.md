@@ -9,8 +9,11 @@ It creates a path and accepts path actions e.g. [[moveTo]], [[lineTo]], and so o
 See [[shape#children]].
 
 ## Attributes
+
 ### points
 ``` array of THREE.Vector2 ```
+
+**Default**: `[]`
 
 ===
 

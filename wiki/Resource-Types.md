@@ -68,6 +68,7 @@ Then you can place these components inside to create and assign resources,
     * [[meshBasicMaterial]]: Creates a [THREE.MeshBasicMaterial](http://threejs.org/docs/#Reference/Materials/MeshBasicMaterial)
 
 ## Components
+
 * [[resources]]: Resource Container
 * [[materialResource]]: Reference to a material resource
 * [[textureResource]]: Reference to a texture resource

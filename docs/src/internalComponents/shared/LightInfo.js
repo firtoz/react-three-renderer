@@ -64,7 +64,7 @@ Additionally, updating this property will trigger an update for the light target
 >    to ${'`'}<${componentName}/>${'`'} inside the ${'`'}render()${'`'} of
  the component.
 >  For more information, visit
- [https://github.com/mrdoob/threejs/wiki/Updates/](https://github.com/mrdoob/threejs/wiki/Updates/).
+ [https://github.com/mrdoob/three.js/wiki/updates](https://github.com/mrdoob/three.js/wiki/updates).
       `,
 
       shadowBias: '',

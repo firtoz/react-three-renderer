@@ -32,7 +32,7 @@ class AbsEllipseDescriptor extends ShapeActionDescriptorBase {
     this.hasProp('rotation', {
       type: PropTypes.number,
       update: this.triggerRemount,
-      default: false,
+      default: 0,
     });
   }
 
@@ -46,7 +46,7 @@ class AbsEllipseDescriptor extends ShapeActionDescriptorBase {
       endAngle,
       clockwise,
       rotation,
-      } = props;
+    } = props;
 
     return new AbsEllipseAction(
       x,

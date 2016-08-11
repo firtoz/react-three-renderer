@@ -5,8 +5,11 @@
 Reference to a texture resource
 
 ## Attributes
+
 ### resourceId
 ``` string ``` *``` required ```*
+
+**Default**: `''`
 
 ===
 

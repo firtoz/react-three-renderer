@@ -5,6 +5,7 @@
 Creates a [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial)
 
 ## Attributes
+
 ### vertexShader
 ``` string ``` *``` required ```*: The vertex shader code.
 
@@ -19,20 +20,28 @@ Defaults to `material`. Other example values:
 - customDistanceMaterial
 - and so on
 
+**Default**: `'material'`
+
 ### transparent
 ``` bool ```
 
 ### alphaTest
 ``` number ```
 
+**Default**: `0`
+
 ### side
 ``` one of [THREE.FrontSide, THREE.BackSide, THREE.DoubleSide] ```
+
+**Default**: `THREE.FrontSide`
 
 ### opacity
 ``` number ```
 
 ### visible
 ``` bool ```
+
+**Default**: `true`
 
 ### uniforms
 ``` any ```: The uniforms to be used for the shader.
@@ -42,11 +51,17 @@ See [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials
 ### wireframe
 ``` bool ```
 
+**Default**: `false`
+
 ### wireframeLinewidth
 ``` number ```
 
+**Default**: `1`
+
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
+
+**Default**: `''`
 
 ## Children:
   * [[uniforms]]: A container for [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms).

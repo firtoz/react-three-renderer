@@ -29,7 +29,7 @@ const propProxy = {
       '2d',
       '3d',
     ]).isRequired,
-    default: undefined,
+    default: '3d',
   },
   mainCamera: {
     type: PropTypes.string,
@@ -50,6 +50,10 @@ const propProxy = {
   clearAlpha: {
     type: PropTypes.number,
     default: undefined,
+  },
+  alpha: {
+    type: PropTypes.bool,
+    default: false,
   },
   shadowMapEnabled: {
     type: PropTypes.bool,
@@ -99,10 +103,6 @@ const propProxy = {
       'lowp',
     ]),
     default: 'highp',
-  },
-  alpha: {
-    type: PropTypes.bool,
-    default: false,
   },
   premultipliedAlpha: {
     type: PropTypes.bool,
