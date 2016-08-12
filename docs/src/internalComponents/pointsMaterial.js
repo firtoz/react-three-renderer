@@ -5,10 +5,6 @@ class pointsMaterial extends MaterialInfo {
     return 'Creates a [THREE.PointsMaterial](http://threejs.org/docs/#Reference/Materials/PointsMaterial)';
   }
 
-  getDescription() {
-    return '';
-  }
-
   getAttributesText() {
     return {
       ...super.getAttributesText(),

@@ -10,6 +10,10 @@ class DocInfo {
   getAttributesText() {
     throw new Error(`getAttributesText not implemented for ${this.constructor.name}`);
   }
+
+  getFooter() {
+    return '';
+  }
 }
 
 module.exports = DocInfo;

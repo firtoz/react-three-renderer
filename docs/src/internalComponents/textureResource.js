@@ -14,6 +14,17 @@ class textureResource extends DocInfo {
       resourceId: '',
     };
   }
+
+  getFooter() {
+    return `If you would like to assign this texture resource to a material, 
+you can do this by declaring the texture within:
+
+${'```'}jsx
+<...material>
+  <texture url={...} .../>
+</...material>
+${'```'}`;
+  }
 }
 
 module.exports = textureResource;

@@ -5,10 +5,6 @@ class meshDepthMaterial extends MaterialInfo {
     return 'Creates a [THREE.MeshDepthMaterial](http://threejs.org/docs/#Reference/Materials/MeshDepthMaterial)';
   }
 
-  getDescription() {
-    return '';
-  }
-
   getAttributesText() {
     return {
       ...super.getAttributesText(),

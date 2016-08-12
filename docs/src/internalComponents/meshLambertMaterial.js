@@ -5,10 +5,6 @@ class meshLambertMaterial extends MaterialInfo {
     return 'Creates a [THREE.MeshLambertMaterial](http://threejs.org/docs/#Reference/Materials/MeshLambertMaterial)';
   }
 
-  getDescription() {
-    return '';
-  }
-
   getAttributesText() {
     return {
       ...super.getAttributesText(),

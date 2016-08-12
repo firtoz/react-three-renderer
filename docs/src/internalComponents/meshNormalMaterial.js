@@ -5,10 +5,6 @@ class meshNormalMaterial extends MaterialInfo {
     return 'Creates a [THREE.MeshNormalMaterial](http://threejs.org/docs/#Reference/Materials/MeshNormalMaterial)';
   }
 
-  getDescription() {
-    return '';
-  }
-
   getAttributesText() {
     return {
       ...super.getAttributesText(),

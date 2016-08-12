@@ -5,10 +5,6 @@ class meshPhongMaterial extends MaterialInfo {
     return 'Creates a [THREE.MeshPhongMaterial](http://threejs.org/docs/#Reference/Materials/MeshPhongMaterial)';
   }
 
-  getDescription() {
-    return '';
-  }
-
   getAttributesText() {
     return {
       ...super.getAttributesText(),

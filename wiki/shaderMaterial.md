@@ -66,6 +66,17 @@ See [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials
 ## Children:
   * [[uniforms]]: A container for [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms).
 
+## Notes:
+
+If you would like to set a texture as a map for this material, 
+you can do this by declaring the texture within:
+
+```jsx
+<...material>
+    <texture url={...} .../>
+</...material>
+```
+
 This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.
 
 ===

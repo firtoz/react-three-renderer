@@ -62,6 +62,8 @@ once sent to GPU.
 
 **Default**: `''`
 
+## Notes:
+
 This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.
 
 ===

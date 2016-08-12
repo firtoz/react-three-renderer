@@ -71,6 +71,17 @@ Default: `(0, 0)`.
 
 **Default**: `''`
 
+## Notes:
+
+If you would like to assign this texture to a material, 
+you can do this by declaring the texture within:
+
+```jsx
+<...material>
+  <texture url={...} .../>
+</...material>
+```
+
 This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.
 
 ===

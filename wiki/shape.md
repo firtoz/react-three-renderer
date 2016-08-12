@@ -29,6 +29,8 @@ Place this within [[&lt;extrudeGeometry&gt;|extrudeGeometry]]
   * [[splineThru]]: Calls [THREE.Path#splineThru](http://threejs.org/docs/#Reference/Extras.Core/Path.splineThru) on the parent shape
   * [[hole]]: Adds a hole into a parent shape, see [THREE.Shape#holes](http://threejs.org/docs/#Reference/Extras.Core/Shape.holes)
 
+## Notes:
+
 This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.
 
 ===

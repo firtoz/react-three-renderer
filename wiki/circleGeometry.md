@@ -68,6 +68,8 @@ The default is 2*Pi, which makes for a complete circle.
 
 **Default**: `''`
 
+## Notes:
+
 This component can be added into [&lt;resources/&gt;](resources)! See [[Resource Types]] for more information.
 
 ===

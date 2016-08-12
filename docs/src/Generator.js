@@ -704,7 +704,23 @@ ${propTypes[propName].toString()}`;
             }
           }
 
+          let hasNotes = false;
+
+          const ensureNotesHeaderAdded = () => {
+            if (!hasNotes) {
+              hasNotes = true;
+              fileContents += `\n\n## Notes:`;
+            }
+          };
+
+          const footer = componentInfo.getFooter();
+          if (footer.length > 0) {
+            ensureNotesHeaderAdded();
+            fileContents += `\n\n${footer}`;
+          }
+
           if (descriptor.isResource) {
+            ensureNotesHeaderAdded();
             fileContents += '\n\n';
 
             fileContents += 'This component can be added into [&lt;resources/&gt;](resources)!' +
