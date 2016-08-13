@@ -1,6 +1,6 @@
-import GeometryDescriptorBase from './GeometryDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 class PolyhedronGeometryDescriptorBase extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {

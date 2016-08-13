@@ -7,7 +7,7 @@ const babelLoaderConfig = {
     /node_modules/,
     path.join(__dirname, '..', 'lib'),
   ],
-  test: /\.js$/,
+  test: /\.jsx?$/,
   query: {},
 };
 
@@ -39,6 +39,13 @@ const webpackConfig = {
       },
     }),
   ] : [],
+  resolve: {
+    extensions: [
+      '',
+      '.js',
+      '.jsx',
+    ],
+  },
 };
 
 if (process.env.KARMA_COVERAGE === 'true') {
@@ -47,7 +54,7 @@ if (process.env.KARMA_COVERAGE === 'true') {
   babelLoaderConfig.exclude.push(srcResolve);
 
   webpackConfig.module.preLoaders = [{
-    test: /.js/,
+    test: /\.jsx?$/,
     include: srcResolve,
     loader: 'isparta',
   }];

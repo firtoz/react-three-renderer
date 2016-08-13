@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+import del from 'del';
 import getImageDataForColor from './utils/getImageDataForColor';
-import rimraf from 'rimraf';
 
 // TODO: WRITE A REACTJS RENDERER TO GENERATE DOCUMENTATION
 // OH MY GOD YOU ARE A GENIUS
@@ -11,7 +11,7 @@ function clearImageDirectory() {
   const imagePath = 'wiki/images';
 
   if (fs.existsSync(imagePath)) {
-    rimraf.sync(imagePath);
+    del.sync(imagePath);
     fs.mkdirSync(imagePath);
   }
 }
@@ -263,12 +263,10 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
     if (nodeName !== null) {
       if (isTodo) {
         nodeContents += `* ${nodeName}`;
+      } else if (nodeData && nodeData.filename) {
+        nodeContents += `* [${nodeName}](${normalizeFilename(nodeData.filename)})`;
       } else {
-        if (nodeData && nodeData.filename) {
-          nodeContents += `* [${nodeName}](${normalizeFilename(nodeData.filename)})`;
-        } else {
-          nodeContents += `* [[${nodeName}]]`;
-        }
+        nodeContents += `* [[${nodeName}]]`;
       }
     }
 
@@ -297,7 +295,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
         }
       }
 
-      node.filename = `${prefix}${nodeData && nodeData.filename || nodeName}.md`;
+      node.filename = `${prefix}${(nodeData && nodeData.filename) || nodeName}.md`;
       node.hasChildren = false;
 
       if (nodeData) {
@@ -335,7 +333,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
 
             const grandchildren = subHeading.children;
 
-            const grandchildrenNames = grandchildren && Object.keys(grandchildren) || [];
+            const grandchildrenNames = (grandchildren && Object.keys(grandchildren)) || [];
 
             if (grandchildrenNames.length > 0 || subHeadingDescription) {
               nodeFileContents += `\n\n## ${subHeadingName}:`;

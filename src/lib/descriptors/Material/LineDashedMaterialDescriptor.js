@@ -1,7 +1,8 @@
 import THREE from 'three';
-import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
   constructor(react3RendererInstance) {

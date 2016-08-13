@@ -2,6 +2,10 @@
 // Copy this file, and add rule overrides as needed.
 {
   "rules": {
-    "global-require": 0
+    "global-require": 0,
+    "import/no-extraneous-dependencies": 0
+  },
+  "env": {
+    "browser": true
   }
 }

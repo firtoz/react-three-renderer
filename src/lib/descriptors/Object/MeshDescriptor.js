@@ -1,9 +1,8 @@
 import THREE from 'three';
-import Object3DDescriptor from './Object3DDescriptor';
+import invariant from 'fbjs/lib/invariant';
 
 import ResourceReference from '../../Resources/ResourceReference';
-
-import invariant from 'fbjs/lib/invariant';
+import Object3DDescriptor from './Object3DDescriptor';
 
 class MeshDescriptor extends Object3DDescriptor {
   construct(props) {

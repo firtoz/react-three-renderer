@@ -1,7 +1,6 @@
-import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 import MoveToAction from '../../../Shapes/MoveToAction';
 
 class MoveToDescriptor extends ShapeActionDescriptorBase {

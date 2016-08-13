@@ -1,8 +1,10 @@
 {
   "env": {
-    "mocha": true
+    "mocha": true,
+    "browser": true
   },
   "rules": {
-    "global-require": 0
+    "global-require": 0,
+    "import/no-extraneous-dependencies": 0
   }
 }

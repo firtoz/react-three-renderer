@@ -1,7 +1,8 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 class CylinderGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -35,7 +36,7 @@ class CylinderGeometryDescriptor extends GeometryDescriptorBase {
       openEnded,
       thetaStart,
       thetaLength,
-      } = props;
+    } = props;
 
     return new THREE.CylinderGeometry(
       radiusTop,

@@ -1,16 +1,15 @@
 /* eslint-disable no-console */
 import 'source-map-support/browser-source-map-support';
+import chai from 'chai';
+import dirtyChai from 'dirty-chai';
+
+import MockConsole from '../utils/MockConsole';
 
 if (process.env.KARMA_TDD) {
   sourceMapSupport.install({ // eslint-disable-line no-undef
     handleUncaughtExceptions: false,
   });
 }
-
-
-import MockConsole from '../utils/MockConsole';
-import chai from 'chai';
-import dirtyChai from 'dirty-chai';
 
 chai.use(dirtyChai);
 
@@ -26,7 +25,7 @@ afterEach(() => {
 describe('Mock Console', () => {
   it('should replace window.console', () => {
     const mockConsole = new MockConsole();
-    mockConsole.apply();
+    mockConsole.replaceConsole();
 
     expect(window.console).to.equal(mockConsole);
 
@@ -35,7 +34,7 @@ describe('Mock Console', () => {
 
   it('should fail when a message is expected but another is received', () => {
     const mockConsole = new MockConsole();
-    mockConsole.apply();
+    mockConsole.replaceConsole();
 
     expect(() => {
       mockConsole.expect('one');
@@ -45,7 +44,7 @@ describe('Mock Console', () => {
 
     mockConsole.revert();
 
-    mockConsole.apply();
+    mockConsole.replaceConsole();
 
     expect(() => {
       console.log('two');
@@ -59,7 +58,7 @@ describe('Mock Console', () => {
   it('should fail when a message is expected but is not received', () => {
     expect(() => {
       const mockConsole = new MockConsole();
-      mockConsole.apply();
+      mockConsole.replaceConsole();
 
       mockConsole.expect('one');
 
@@ -70,7 +69,7 @@ describe('Mock Console', () => {
   it('should fail when a message is received but is not expected', () => {
     expect(() => {
       const mockConsole = new MockConsole();
-      mockConsole.apply();
+      mockConsole.replaceConsole();
 
       console.log('one');
 
@@ -81,7 +80,7 @@ describe('Mock Console', () => {
   it('should fail for console.warn', () => {
     expect(() => {
       const mockConsole = new MockConsole();
-      mockConsole.apply();
+      mockConsole.replaceConsole();
 
       console.warn('one');
 
@@ -92,7 +91,7 @@ describe('Mock Console', () => {
   it('should fail for console.error', () => {
     expect(() => {
       const mockConsole = new MockConsole();
-      mockConsole.apply();
+      mockConsole.replaceConsole();
 
       console.error('one');
 
@@ -102,7 +101,7 @@ describe('Mock Console', () => {
 
   it('should succeed when expected messages are received', () => {
     const mockConsole = new MockConsole();
-    mockConsole.apply();
+    mockConsole.replaceConsole();
 
     mockConsole.expect('one');
     console.log('one');
@@ -135,7 +134,7 @@ describe('Mock Console', () => {
 
   it('should succeed when received messages are expected', () => {
     const mockConsole = new MockConsole();
-    mockConsole.apply();
+    mockConsole.replaceConsole();
 
     console.log('one');
     mockConsole.expect('one');
@@ -168,7 +167,7 @@ describe('Mock Console', () => {
 
   it('should work for delayed logs', (done) => {
     const mockConsole = new MockConsole();
-    mockConsole.apply();
+    mockConsole.replaceConsole();
 
     mockConsole.expect('one');
 
@@ -193,7 +192,7 @@ describe('Mock Console', () => {
   it('should be reusable', () => {
     const mockConsole = new MockConsole();
 
-    mockConsole.apply();
+    mockConsole.replaceConsole();
     console.log('one');
     mockConsole.expect('one');
     mockConsole.revert();
@@ -201,7 +200,7 @@ describe('Mock Console', () => {
     // should be ignored
     console.log('two');
 
-    mockConsole.apply();
+    mockConsole.replaceConsole();
     mockConsole.expect('three');
     console.log('three');
     mockConsole.revert();
@@ -210,7 +209,7 @@ describe('Mock Console', () => {
   it('should ignore messages when requested', () => {
     const mockConsole = new MockConsole();
 
-    mockConsole.apply();
+    mockConsole.replaceConsole();
 
     mockConsole.expect('one');
     console.log('one');

@@ -1,7 +1,7 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 class ParametricGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3Instance) {

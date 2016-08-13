@@ -1,9 +1,9 @@
 import THREE from 'three';
-import Object3DDescriptor from '../Object/Object3DDescriptor';
 
 import PropTypes from 'react/lib/ReactPropTypes';
-
 import warning from 'fbjs/lib/warning';
+
+import Object3DDescriptor from '../Object/Object3DDescriptor';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 const updateLightTargetFromQuaternion = (() => {
@@ -169,7 +169,7 @@ class LightDescriptorBase extends Object3DDescriptor {
       update(threeObject, lookAt) {
         threeObject.userData._lookAt = lookAt;
 
-        if (!!lookAt) {
+        if (lookAt) {
           threeObject.lookAt(lookAt);
 
           threeObject.userData._needsDirectionUpdate = true;
@@ -279,7 +279,7 @@ If you have modified a light's properties e.g. toggled castShadow,
 the materials need to be rebuilt as well.
 
 To acknowledge and remove this message, please add the property 'updatesRefreshAllMaterials'
-  to <${elementType}/> inside the render() of ${owner && owner.getName() || 'a component'}.
+  to <${elementType}/> inside the render() of ${(owner && owner.getName()) || 'a component'}.
 
 For more information, visit https://github.com/mrdoob/threejs/wiki/Updates .`;
 }

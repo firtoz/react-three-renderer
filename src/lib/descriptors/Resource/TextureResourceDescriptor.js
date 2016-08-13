@@ -1,8 +1,7 @@
-import ResourceDescriptorBase from './ResourceDescriptorBase';
 import THREE from 'three';
-
 import invariant from 'fbjs/lib/invariant';
 
+import ResourceDescriptorBase from './ResourceDescriptorBase';
 import Uniform from '../../Uniform';
 
 class TextureResourceDescriptor extends ResourceDescriptorBase {

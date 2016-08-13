@@ -1,13 +1,12 @@
-import THREEElementDescriptor from '../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
-import ResourceReference from '../../Resources/ResourceReference';
-
-import React3Renderer from '../../React3Renderer';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import THREEElementDescriptor from '../THREEElementDescriptor';
+import ResourceReference from '../../Resources/ResourceReference';
+import React3Renderer from '../../React3Renderer';
+
 class ResourceDescriptorBase extends THREEElementDescriptor {
-  constructor(react3RendererInstance:React3Renderer) {
+  constructor(react3RendererInstance: React3Renderer) {
     super(react3RendererInstance);
 
     this.hasProp('resourceId', {
@@ -171,8 +170,8 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   }
 
   resourceUpdated(threeObject, newResource, oldResource) {
-    const parentObject = threeObject.userData.markup.parentMarkup
-      && threeObject.userData.markup.parentMarkup.threeObject
+    const parentObject = (threeObject.userData.markup.parentMarkup
+      && threeObject.userData.markup.parentMarkup.threeObject)
       || undefined;
 
     if (parentObject) {

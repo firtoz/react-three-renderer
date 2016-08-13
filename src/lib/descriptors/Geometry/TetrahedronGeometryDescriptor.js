@@ -1,4 +1,5 @@
 import THREE from 'three';
+
 import PolyhedronGeometryDescriptorBase from './PolyhedronGeometryDescriptorBase';
 
 class TetrahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {

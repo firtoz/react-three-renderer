@@ -14,7 +14,13 @@ function getClassName(propValue) {
 
 
 function createChainableTypeChecker(validate) {
-  function checkType(isRequired, props, propName, _componentName, location, _propFullName) {
+  function checkType(isRequired,
+                     props,
+                     propName,
+                     _componentName,
+                     location,
+                     _propFullName,
+                     ...rest) {
     const componentName = _componentName || ANONYMOUS;
     const propFullName = _propFullName || propName;
     if (props[propName] === undefined) {
@@ -26,7 +32,7 @@ function createChainableTypeChecker(validate) {
       return null;
     }
 
-    return validate(props, propName, componentName, location, propFullName);
+    return validate(props, propName, componentName, location, propFullName, ...rest);
   }
 
   const chainedCheckType = checkType.bind(null, false);
@@ -38,9 +44,9 @@ function createChainableTypeChecker(validate) {
 function createInstanceTypeChecker(expectedClass) {
   const originalInstanceOf = PropTypes.instanceOf(expectedClass);
 
-  function validate(props, propName, componentName, location, propFullName) {
+  function validate(props, propName, componentName, location, propFullName, ...rest) {
     const originalResult = originalInstanceOf(props, propName,
-      componentName, location, propFullName);
+      componentName, location, propFullName, ...rest);
 
     if (originalResult !== null) {
       const locationName = ReactPropTypeLocationNames[location];

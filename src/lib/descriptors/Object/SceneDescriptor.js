@@ -1,6 +1,6 @@
 import THREE from 'three';
-import Object3DDescriptor from './Object3DDescriptor';
 
+import Object3DDescriptor from './Object3DDescriptor';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class SceneDescriptor extends Object3DDescriptor {
@@ -14,7 +14,7 @@ class SceneDescriptor extends Object3DDescriptor {
     });
   }
 
-  applyInitialProps(threeObject:THREE.Scene, props) {
+  applyInitialProps(threeObject: THREE.Scene, props) {
     super.applyInitialProps(threeObject, props);
   }
 

@@ -1,4 +1,5 @@
 import THREE from 'three';
+
 import MeshDescriptor from './MeshDescriptor';
 
 class PointsDescriptor extends MeshDescriptor {

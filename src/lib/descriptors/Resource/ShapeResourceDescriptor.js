@@ -1,8 +1,8 @@
-import ResourceDescriptorBase from './ResourceDescriptorBase';
 import THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
 
+import ResourceDescriptorBase from './ResourceDescriptorBase';
 import ShapeResourceReference from '../../Resources/ShapeResourceReference';
 
 class ShapeResourceDescriptor extends ResourceDescriptorBase {

@@ -1,7 +1,8 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 class TorusGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -29,7 +30,7 @@ class TorusGeometryDescriptor extends GeometryDescriptorBase {
       radialSegments,
       tubularSegments,
       arc,
-      } = props;
+    } = props;
 
     return new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc);
   }

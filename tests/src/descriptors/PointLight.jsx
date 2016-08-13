@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import chai from 'chai';
+
 const { expect } = chai;
 
 module.exports = type => {
@@ -35,9 +36,7 @@ module.exports = type => {
       };
 
       componentDidMount() {
-        const {
-          pointLight,
-        } = this.refs;
+        const pointLight = this._pointLight;
 
         const {
           expectedCameraNear,
@@ -59,6 +58,10 @@ module.exports = type => {
         this.props.done();
       }
 
+      _pointLightRef = (c) => {
+        this._pointLight = c;
+      };
+
       render() {
         const {
           lightProps,
@@ -70,7 +73,7 @@ module.exports = type => {
         >
           <scene>
             <pointLight
-              ref="pointLight"
+              ref={this._pointLightRef}
               {...lightProps}
             />
           </scene>

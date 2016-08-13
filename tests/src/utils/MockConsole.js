@@ -19,7 +19,7 @@ module.exports = class MockConsole {
   /**
    * Replaces window.console.
    */
-  apply() {
+  replaceConsole() {
     this.prevConsole = window.console;
 
     window.console = this;
@@ -28,7 +28,7 @@ module.exports = class MockConsole {
   /**
    * Returns previously held hostage window.console.
    *
-   * @param [ignoreChecks] {bool} If this is true, then it will ignore
+   * @param [ignoreChecks] {boolean} If this is true, then it will ignore
    *     expected but not received, or received but unexpected messages.
    *     This is useful for not throwing additional errors from failed tests.
    */
@@ -103,7 +103,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
    */
   log(...args) {
     if (this._verbose) {
-      this.prevConsole.log.apply(this.prevConsole, args);
+      this.prevConsole.log(...args);
     }
 
     args.type = 'LOG';
@@ -117,7 +117,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
    */
   warn(...args) {
     if (this._verbose) {
-      this.prevConsole.warn.apply(this.prevConsole, args);
+      this.prevConsole.warn(...args);
     }
 
     args.type = 'WARNING';
@@ -131,7 +131,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
    */
   error(...args) {
     if (this._verbose) {
-      this.prevConsole.error.apply(this.prevConsole, args);
+      this.prevConsole.error(...args);
     }
 
     args.type = 'ERROR';
@@ -150,7 +150,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
    */
   _printArgs(args, stack) {
     return `[${args.type || 'LOG'}]|${args.map(arg =>
-        util.inspect(arg, {}))
+      util.inspect(arg, {}))
       .join('\t')}${stack ? `\n${stack}\n` : ''}`;
   }
 

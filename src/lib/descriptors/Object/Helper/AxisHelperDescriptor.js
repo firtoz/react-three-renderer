@@ -1,7 +1,8 @@
 import THREE from 'three';
-import Object3DDescriptor from '../Object3DDescriptor';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import Object3DDescriptor from '../Object3DDescriptor';
 
 class AxisHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
@@ -14,14 +15,14 @@ class AxisHelperDescriptor extends Object3DDescriptor {
     });
   }
 
-  applyInitialProps(threeObject:THREE.Object3D, props) {
+  applyInitialProps(threeObject: THREE.Object3D, props) {
     super.applyInitialProps(threeObject, props);
   }
 
   construct(props) {
     const {
       size,
-      } = props;
+    } = props;
     return new THREE.AxisHelper(size);
   }
 

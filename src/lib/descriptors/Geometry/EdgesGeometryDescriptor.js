@@ -1,7 +1,8 @@
 import THREE from 'three';
-import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
 class EdgesGeometryDescriptor extends BufferGeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -27,7 +28,7 @@ class EdgesGeometryDescriptor extends BufferGeometryDescriptorBase {
     const {
       geometry,
       thresholdAngle,
-      } = props;
+    } = props;
 
     return new THREE.EdgesGeometry(geometry, thresholdAngle);
   }

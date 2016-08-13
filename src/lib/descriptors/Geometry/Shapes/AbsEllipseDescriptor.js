@@ -1,7 +1,6 @@
-import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 import AbsEllipseAction from '../../../Shapes/AbsEllipseAction';
 
 class AbsEllipseDescriptor extends ShapeActionDescriptorBase {

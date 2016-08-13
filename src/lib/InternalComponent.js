@@ -212,6 +212,13 @@ class InternalComponent {
     React3ComponentTree.precacheMarkup(this, this._markup);
     this._flags |= Flags.hasCachedChildMarkups;
 
+    if (process.env.NODE_ENV !== 'production') {
+      if (this._debugID) {
+        const callback = () => ReactInstrumentation.debugTool.onComponentHasMounted(this._debugID);
+        transaction.getReactMountReady().enqueue(callback, this);
+      }
+    }
+
     return markup;
   }
 
@@ -237,6 +244,7 @@ class InternalComponent {
 
   _reconcilerUpdateChildren(prevChildren,
                             nextNestedChildrenElements,
+                            mountImages,
                             removedMarkups,
                             transaction,
                             context) {
@@ -247,20 +255,34 @@ class InternalComponent {
 
         try {
           ReactCurrentOwner.current = this._currentElement._owner;
-          nextChildren = flattenChildren(nextNestedChildrenElements);
+          nextChildren = flattenChildren(nextNestedChildrenElements, this._debugID);
         } finally {
           ReactCurrentOwner.current = previousCurrent;
         }
 
         return this._react3RendererInstance.updateChildren(
-          prevChildren, nextChildren, removedMarkups, transaction, context
+          prevChildren,
+          nextChildren,
+          mountImages,
+          removedMarkups,
+          transaction,
+          this,
+          this._hostContainerInfo,
+          context
         );
       }
     }
 
     nextChildren = flattenChildren(nextNestedChildrenElements);
     return this._react3RendererInstance.updateChildren(
-      prevChildren, nextChildren, removedMarkups, transaction, context
+      prevChildren,
+      nextChildren,
+      mountImages,
+      removedMarkups,
+      transaction,
+      this,
+      this._hostContainerInfo,
+      context
     );
   }
 
@@ -271,7 +293,7 @@ class InternalComponent {
     const mountImages = [];
     let index = 0;
 
-    if (!!children) {
+    if (children) {
       const childrenNames = Object.keys(children);
       for (let i = 0; i < childrenNames.length; ++i) {
         const name = childrenNames[i];
@@ -341,6 +363,14 @@ class InternalComponent {
     this._updateObjectProperties(lastProps, nextProps, transaction, context);
     if (!this._forceRemountOfComponent) {
       this._updateChildrenObjects(nextProps, transaction, processChildContext(context, this));
+
+      if (process.env.NODE_ENV !== 'production') {
+        if (this._debugID) {
+          const callback = () =>
+            ReactInstrumentation.debugTool.onComponentHasUpdated(this._debugID);
+          transaction.getReactMountReady().enqueue(callback, this);
+        }
+      }
     }
   }
 
@@ -479,9 +509,11 @@ class InternalComponent {
   _updateChildren(nextNestedChildrenElements, transaction, context) {
     const prevChildren = this._renderedChildren;
     const removedMarkups = {};
+    const mountImages = [];
     const nextChildren = this._reconcilerUpdateChildren(
       prevChildren,
       nextNestedChildrenElements,
+      mountImages,
       removedMarkups,
       transaction,
       context
@@ -499,10 +531,12 @@ class InternalComponent {
 
     // `nextIndex` will increment for each child in `nextChildren`, but
     // `lastIndex` will be the last index visited in `prevChildren`.
-    let lastIndex = 0;
     let nextIndex = 0;
+    let lastIndex = 0;
+    // `nextMountIndex` will increment for each newly mounted child.
+    let nextMountIndex = 0;
 
-    if (!!nextChildren) {
+    if (nextChildren) {
       const nextChildrenNames = Object.keys(nextChildren);
 
       for (let i = 0; i < nextChildrenNames.length; ++i) {
@@ -537,13 +571,21 @@ class InternalComponent {
             this._unmountChild(prevChild, removedChildMarkup);
           }
 
-          if (remountTrigger.wantRemount) {
+          if (!remountTrigger.wantRemount) {
             // The remount can be triggered by unmountChild as well (see extrude geometry)
-            continue;
-          }
 
-          // The child must be instantiated before it's mounted.
-          this._mountChildAtIndex(nextChild, null, nextIndex, transaction, context);
+            // The child must be instantiated before it's mounted.
+            this._mountChildAtIndex(
+              nextChild,
+              mountImages[nextMountIndex],
+              null,
+              nextIndex,
+              transaction,
+              context
+            );
+
+            nextMountIndex++;
+          }
         }
 
         nextIndex++;
@@ -602,12 +644,10 @@ class InternalComponent {
       markup.threeObject.userData
         .react3internalComponent
         .threeElementDescriptor.removedFromParent(markup.threeObject);
+    } else if (process.env.NODE_ENV !== 'production') {
+      invariant(false, 'Cannot remove child because it is not a known component type');
     } else {
-      if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Cannot remove child because it is not a known component type');
-      } else {
-        invariant(false);
-      }
+      invariant(false);
     }
 
     const childrenMarkup = this._markup.childrenMarkup;

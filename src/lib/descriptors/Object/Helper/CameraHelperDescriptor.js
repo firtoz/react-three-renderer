@@ -1,8 +1,8 @@
 import THREE from 'three';
-import CameraUtils from '../../../utils/CameraUtils.js';
-import Object3DDescriptor from '../Object3DDescriptor';
-
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import Object3DDescriptor from '../Object3DDescriptor';
+import CameraUtils from '../../../utils/CameraUtils.js';
 
 class CameraHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
@@ -37,7 +37,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     return new THREE.CameraHelper(new THREE.PerspectiveCamera());
   }
 
-  applyInitialProps(cameraHelper:THREE.CameraHelper, props) {
+  applyInitialProps(cameraHelper: THREE.CameraHelper, props) {
     super.applyInitialProps(cameraHelper, props);
 
     cameraHelper.userData._onCameraProjectionUpdate = () => {
@@ -107,7 +107,7 @@ class CameraHelperDescriptor extends Object3DDescriptor {
     }
   }
 
-  _setCamera(helper:THREE.CameraHelper, camera) {
+  _setCamera(helper: THREE.CameraHelper, camera) {
     const userData = helper.userData;
 
     if (userData._camera === camera) {

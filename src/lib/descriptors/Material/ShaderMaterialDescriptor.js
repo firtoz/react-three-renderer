@@ -1,9 +1,9 @@
 import THREE from 'three';
-import MaterialDescriptorBase from './MaterialDescriptorBase';
-
-import UniformContainer from '../../UniformContainer';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import MaterialDescriptorBase from './MaterialDescriptorBase';
+import UniformContainer from '../../UniformContainer';
 
 class ShaderMaterialDescriptor extends MaterialDescriptorBase {
   constructor(react3RendererInstance) {

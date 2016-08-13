@@ -1,14 +1,16 @@
 import invariant from 'fbjs/lib/invariant';
-import React3Renderer from '../React3Instance';
 
 import ReactPropTypeLocations from 'react/lib/ReactPropTypeLocations';
 import warning from 'fbjs/lib/warning';
 
 import events from 'events';
-const { EventEmitter } = events;
 
 import PropTypes from 'react/lib/ReactPropTypes';
 import checkReactTypeSpec from 'react/lib/checkReactTypeSpec';
+import React3Renderer from '../React3Instance';
+
+const { EventEmitter } = events;
+
 /**
  * @abstract
  */
@@ -130,7 +132,7 @@ class THREEElementDescriptor {
         }
       }
 
-      if (!!info.initialOnly) {
+      if (info.initialOnly) {
         invariant(info.hasOwnProperty('updateInitial'), 'The information should include a ' +
           '`updateInitial` property if it has an `initialOnly` property');
       }
@@ -218,7 +220,7 @@ class THREEElementDescriptor {
       if (props.hasOwnProperty(propertyName)) {
         this.propUpdates[propertyName](threeObject, props[propertyName], true);
       } else {
-        let originalValue = undefined;
+        let originalValue;
 
         if (this.propDefaults.hasOwnProperty(propertyName)) {
           originalValue = this.propDefaults[propertyName];

@@ -1,7 +1,8 @@
 import THREE from 'three';
-import Object3DDescriptor from '../Object3DDescriptor';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import Object3DDescriptor from '../Object3DDescriptor';
 import propTypeInstanceOf from '../../../utils/propTypeInstanceOf';
 
 class ArrowHelperDescriptor extends Object3DDescriptor {
@@ -96,7 +97,7 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
     }
   }
 
-  applyInitialProps(threeObject:THREE.Object3D, props) {
+  applyInitialProps(threeObject: THREE.Object3D, props) {
     super.applyInitialProps(threeObject, props);
 
     const {

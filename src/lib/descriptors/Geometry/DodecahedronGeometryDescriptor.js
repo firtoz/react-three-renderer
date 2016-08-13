@@ -1,8 +1,8 @@
 import THREE from 'three';
 
-import GeometryDescriptorBase from './GeometryDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 class DodecahedronGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {

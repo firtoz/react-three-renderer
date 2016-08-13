@@ -1,6 +1,11 @@
 CHANGELOG
 ===========
 
+## 2.3.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.2.1...v2.3.0) )
+
+### Core
+- Restore compatibility with `react@~15.3.0`
+
 ## 2.2.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.2.0...v2.2.1) )
 
 ### Components
