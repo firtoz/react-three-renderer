@@ -1,8 +1,8 @@
 import THREE from 'three';
-import THREEElementDescriptor from '../../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
 
+import THREEElementDescriptor from '../../THREEElementDescriptor';
 import HoleAction from '../../../Shapes/HoleAction';
 
 class ShapeActionDescriptorBase extends THREEElementDescriptor {

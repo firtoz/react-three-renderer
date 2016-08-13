@@ -1,7 +1,8 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {

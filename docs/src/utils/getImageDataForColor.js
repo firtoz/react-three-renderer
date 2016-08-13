@@ -13,13 +13,13 @@ module.exports = function getImageDataForColor(colorValue, numberString) {
         height: 12,
       });
 
-      const r = colorValue >> 16;
-      const g = colorValue >> 8 & 255;
+      const r = (colorValue >> 16);
+      const g = (colorValue >> 8) & 255;
       const b = colorValue & 255;
 
       for (let y = 0; y < png.height; ++y) {
         for (let x = 0; x < png.width; ++x) {
-          const idx = (png.width * y + x) << 2;
+          const idx = ((png.width * y) + x) << 2;
 
           if (x <= 1 || x >= png.width - 2 || y <= 1 || y >= png.height - 2) {
             // border

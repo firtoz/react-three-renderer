@@ -1,7 +1,8 @@
 import THREE from 'three';
-import LightDescriptorBase from './LightDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import LightDescriptorBase from './LightDescriptorBase';
 
 class PointLightDescriptor extends LightDescriptorBase {
   static defaultShadowCameraFov = 90;

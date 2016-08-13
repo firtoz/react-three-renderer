@@ -27,8 +27,18 @@ function warnIfInvalidElement(Component, element) {
   }
 }
 
+const CompositeTypes = {
+  ImpureClass: 0,
+  PureClass: 1,
+  StatelessFunctional: 2,
+};
+
 function shouldConstruct(Component) {
-  return Component.prototype && Component.prototype.isReactComponent;
+  return (!!Component.prototype && Component.prototype.isReactComponent);
+}
+
+function isPureComponent(Component) {
+  return !!(Component.prototype && Component.prototype.isPureReactComponent);
 }
 
 let invokeComponentDidMountWithTimer;
@@ -154,11 +164,18 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     const updateQueue = transaction.getUpdateQueue();
 
     // Initialize the public class
-    let inst = this._constructComponent(publicProps, publicContext, updateQueue);
+    const doConstruct = shouldConstruct(Component);
+    let inst = this._constructComponent(
+      doConstruct,
+      publicProps,
+      publicContext,
+      updateQueue
+    );
+
     let renderedElement;
 
     // Support functional components
-    if (!shouldConstruct(Component) && (inst == null || inst.render == null)) {
+    if (!doConstruct && (inst == null || inst.render == null)) {
       renderedElement = inst;
       warnIfInvalidElement(Component, renderedElement);
       invariant(
@@ -170,6 +187,11 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
         Component.displayName || Component.name || 'Component'
       );
       inst = new StatelessComponent(Component);
+      this._compositeType = CompositeTypes.StatelessFunctional;
+    } else if (isPureComponent(Component)) {
+      this._compositeType = CompositeTypes.PureClass;
+    } else {
+      this._compositeType = CompositeTypes.ImpureClass;
     }
 
     if (process.env.NODE_ENV !== 'production') {
@@ -295,26 +317,49 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
       }
     }
 
+    if (process.env.NODE_ENV !== 'production') {
+      if (this._debugID) {
+        const callback = () => ReactInstrumentation.debugTool.onComponentHasMounted(this._debugID);
+        transaction.getReactMountReady().enqueue(callback, this);
+      }
+    }
+
     return markup;
   }
 
-  _constructComponent(publicProps, publicContext, updateQueue) {
+  _constructComponent(doConstruct,
+                      publicProps,
+                      publicContext,
+                      updateQueue) {
     if (process.env.NODE_ENV !== 'production') {
       ReactCurrentOwner.current = this;
       try {
-        return this._constructComponentWithoutOwner(publicProps, publicContext, updateQueue);
+        return this._constructComponentWithoutOwner(
+          doConstruct,
+          publicProps,
+          publicContext,
+          updateQueue
+        );
       } finally {
         ReactCurrentOwner.current = null;
       }
     } else {
-      return this._constructComponentWithoutOwner(publicProps, publicContext, updateQueue);
+      return this._constructComponentWithoutOwner(
+        doConstruct,
+        publicProps,
+        publicContext,
+        updateQueue
+      );
     }
   }
 
-  _constructComponentWithoutOwner(publicProps, publicContext, updateQueue) {
+  _constructComponentWithoutOwner(doConstruct,
+                                  publicProps,
+                                  publicContext,
+                                  updateQueue) {
     const Component = this._currentElement.type;
     let instanceOrElement;
-    if (shouldConstruct(Component)) {
+    if (doConstruct) {
       if (process.env.NODE_ENV !== 'production') {
         if (this._debugID !== 0) {
           ReactInstrumentation.debugTool.onBeginLifeCycleTimer(

@@ -1,7 +1,8 @@
 import THREE from 'three';
-import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
 class CircleBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -27,7 +28,7 @@ class CircleBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
       segments,
       thetaStart,
       thetaLength,
-      } = props;
+    } = props;
 
     return new THREE.CircleBufferGeometry(radius, segments, thetaStart, thetaLength);
   }

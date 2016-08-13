@@ -1,7 +1,6 @@
-import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 import AbsArcAction from '../../../Shapes/AbsArcAction';
 
 class AbsArcDescriptor extends ShapeActionDescriptorBase {
@@ -37,7 +36,7 @@ class AbsArcDescriptor extends ShapeActionDescriptorBase {
       startAngle,
       endAngle,
       clockwise,
-      } = props;
+    } = props;
 
     return new AbsArcAction(
       x,

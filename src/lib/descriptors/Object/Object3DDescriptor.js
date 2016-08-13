@@ -1,9 +1,9 @@
 import THREE from 'three';
 
-import THREEElementDescriptor from '../THREEElementDescriptor';
-
 import invariant from 'fbjs/lib/invariant';
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import THREEElementDescriptor from '../THREEElementDescriptor';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 function _arrayMove(array, oldIndex, newIndex) {
@@ -59,7 +59,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
       update(threeObject, lookAt) {
         threeObject.userData._lookAt = lookAt;
 
-        if (!!lookAt) {
+        if (lookAt) {
           threeObject.lookAt(lookAt);
         }
       },

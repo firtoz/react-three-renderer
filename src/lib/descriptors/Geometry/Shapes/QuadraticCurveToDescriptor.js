@@ -1,7 +1,6 @@
-import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 import QuadraticCurveToAction from '../../../Shapes/QuadraticCurveToAction';
 
 class QuadraticCurveToDescriptor extends ShapeActionDescriptorBase {
@@ -28,7 +27,7 @@ class QuadraticCurveToDescriptor extends ShapeActionDescriptorBase {
       cpY,
       x,
       y,
-      } = props;
+    } = props;
 
     return new QuadraticCurveToAction(
       cpX,

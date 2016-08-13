@@ -1,20 +1,17 @@
 import THREE from 'three';
-import THREEElementDescriptor from '../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
-
-import resource from '../decorators/resource';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import resource from '../decorators/resource';
+import THREEElementDescriptor from '../THREEElementDescriptor';
 import Uniform from '../../Uniform';
-
 import React3Renderer from '../../React3Renderer';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 @resource
 class TextureDescriptor extends THREEElementDescriptor {
-  constructor(react3RendererInstance:React3Renderer) {
+  constructor(react3RendererInstance: React3Renderer) {
     super(react3RendererInstance);
 
     this.hasProp('repeat', {
@@ -136,7 +133,7 @@ class TextureDescriptor extends THREEElementDescriptor {
   }
 
   construct(props) {
-    let result = undefined;
+    let result;
 
     if (props.hasOwnProperty('url')) {
       const textureLoader = new THREE.TextureLoader();
@@ -145,9 +142,9 @@ class TextureDescriptor extends THREEElementDescriptor {
         textureLoader.crossOrigin = props.crossOrigin;
       }
 
-      let onLoad = undefined;
-      let onProgress = undefined;
-      let onError = undefined;
+      let onLoad;
+      let onProgress;
+      let onError;
 
       if (props.hasOwnProperty('onLoad')) {
         onLoad = props.onLoad;

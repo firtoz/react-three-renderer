@@ -1,18 +1,17 @@
 import THREE from 'three';
 
-import THREEElementDescriptor from '../THREEElementDescriptor';
+import invariant from 'fbjs/lib/invariant';
 
+import THREEElementDescriptor from '../THREEElementDescriptor';
 import UniformContainer from '../../UniformContainer';
 import Uniform from '../../Uniform';
-
-import invariant from 'fbjs/lib/invariant';
 
 class UniformsDescriptor extends THREEElementDescriptor {
   construct() {
     return new UniformContainer();
   }
 
-  setParent(threeObject:UniformContainer, parentObject3D) {
+  setParent(threeObject: UniformContainer, parentObject3D) {
     invariant(parentObject3D instanceof THREE.ShaderMaterial,
       'Parent of <uniforms/> is not a shader material');
     invariant(parentObject3D.uniforms === undefined, 'Parent already has uniforms');

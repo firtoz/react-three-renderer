@@ -1,4 +1,5 @@
 import THREE from 'three';
+
 import ShaderMaterialDescriptor from './ShaderMaterialDescriptor';
 
 class RawShaderMaterialDescriptor extends ShaderMaterialDescriptor {

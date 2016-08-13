@@ -1,7 +1,8 @@
 import THREE from 'three';
-import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import MaterialDescriptorBase from './MaterialDescriptorBase';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {

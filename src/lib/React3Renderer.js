@@ -1,3 +1,5 @@
+/* eslint-env browser */
+
 import THREE from 'three';
 import reactElementWrapper from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
@@ -115,7 +117,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 function internalGetID(markup) {
-  return markup && markup[ID_PROPERTY_NAME] || '';
+  return (markup && markup[ID_PROPERTY_NAME]) || '';
 }
 
 // see ReactMount.js:getReactRootElementInContainer
@@ -131,8 +133,8 @@ function getReactRootMarkupInContainer(container) {
 
   // in ReactMount this is container.firstChild.
 
-  return container.userData && container.userData.markup
-    && container.userData.markup.childrenMarkup[0] || null;
+  return (container.userData && container.userData.markup
+    && container.userData.markup.childrenMarkup[0]) || null;
 }
 
 /**
@@ -224,16 +226,22 @@ class React3Renderer {
    *
    * @param {?object} prevChildren Previously initialized set of children.
    * @param {?object} nextChildren Flat child element maps.
+   * @param mountImages
    * @param {?object} removedMarkups The map for removed nodes.
    * @param {ReactReconcileTransaction} transaction
+   * @param hostParent
+   * @param hostContainerInfo
    * @param {object} context
    * @return {?object} A new set of child instances.
    * @internal
    */
   updateChildren(prevChildren,
                  nextChildren,
+                 mountImages,
                  removedMarkups,
                  transaction,
+                 hostParent,
+                 hostContainerInfo,
                  context) {
     // We currently don't have a way to track moves here but if we use iterators
     // instead of for..in we can zip the iterators and check if an item has
@@ -244,7 +252,7 @@ class React3Renderer {
       return null;
     }
 
-    if (!!nextChildren) {
+    if (nextChildren) {
       const nextChildrenKeys = Object.keys(nextChildren);
 
       for (let i = 0; i < nextChildrenKeys.length; ++i) {
@@ -263,7 +271,20 @@ class React3Renderer {
             removedMarkups[childName] = prevChild.getHostMarkup();
 
             ReactReconciler.unmountComponent(prevChild, false);
-            nextChildren[childName] = this.instantiateReactComponent(nextElement, true);
+            const nextChildInstance = this.instantiateReactComponent(nextElement, true);
+            nextChildren[childName] = nextChildInstance;
+
+            // Creating mount image now ensures refs are resolved in right order
+            // (see https://github.com/facebook/react/pull/7101 for explanation).
+            const nextChildMountImage = ReactReconciler.mountComponent(
+              nextChildInstance,
+              transaction,
+              hostParent,
+              hostContainerInfo,
+              context
+            );
+
+            mountImages.push(nextChildMountImage);
           } else {
             nextChildren[childName] = prevChild;
           }
@@ -274,12 +295,26 @@ class React3Renderer {
             ReactReconciler.unmountComponent(prevChild, false);
           }
           // The child must be instantiated before it's mounted.
-          nextChildren[childName] = this.instantiateReactComponent(nextElement, true);
+          const nextChildInstance = this.instantiateReactComponent(nextElement, true);
+
+          nextChildren[childName] = nextChildInstance;
+
+          // Creating mount image now ensures refs are resolved in right order
+          // (see https://github.com/facebook/react/pull/7101 for explanation).
+          const nextChildMountImage = ReactReconciler.mountComponent(
+            nextChildInstance,
+            transaction,
+            hostParent,
+            hostContainerInfo,
+            context
+          );
+
+          mountImages.push(nextChildMountImage);
         }
       }
     }
 
-    if (!!prevChildren) {
+    if (prevChildren) {
       // Unmount children that are no longer present.
       const prevChildrenKeys = Object.keys(prevChildren);
       for (let i = 0; i < prevChildrenKeys.length; ++i) {
@@ -551,20 +586,16 @@ class React3Renderer {
           invariant(false, 'React3Renderer.render(): Invalid component element.%s',
             ' Instead of passing an element string, make sure to instantiate ' +
             'it by passing it to React.createElement.');
+        } else if (typeof nextElement === 'function') {
+          invariant(false, 'React3Renderer.render(): Invalid component element.%s',
+            ' Instead of passing a component class, make sure to instantiate ' +
+            'it by passing it to React.createElement.');
+        } else if (nextElement !== null && nextElement.props !== undefined) {
+          invariant(false, 'React3Renderer.render(): Invalid component element.%s',
+            ' This may be caused by unintentionally loading two independent ' +
+            'copies of React.');
         } else {
-          if (typeof nextElement === 'function') {
-            invariant(false, 'React3Renderer.render(): Invalid component element.%s',
-              ' Instead of passing a component class, make sure to instantiate ' +
-              'it by passing it to React.createElement.');
-          } else {
-            if (nextElement !== null && nextElement.props !== undefined) {
-              invariant(false, 'React3Renderer.render(): Invalid component element.%s',
-                ' This may be caused by unintentionally loading two independent ' +
-                'copies of React.');
-            } else {
-              invariant(false, 'React3Renderer.render(): Invalid component element.');
-            }
-          }
+          invariant(false, 'React3Renderer.render(): Invalid component element.');
         }
       } else {
         invariant(false);
@@ -725,7 +756,7 @@ class React3Renderer {
         'of props and state; triggering nested component updates from render ' +
         'is not allowed. If necessary, trigger nested updates in ' +
         'componentDidUpdate. Check the render method of %s.',
-        ReactCurrentOwner.current && ReactCurrentOwner.current.getName() ||
+        (ReactCurrentOwner.current && ReactCurrentOwner.current.getName()) ||
         'ReactCompositeComponent'
       );
     }
@@ -822,12 +853,10 @@ class React3Renderer {
               ' or a class/function (for composite components)' +
               ' but got: %s.%s', typeof element.type, getDeclarationErrorAddendum(element._owner));
           }
+        } else if (element.type == null) {
+          invariant(element.type, getDeclarationErrorAddendum(element._owner));
         } else {
-          if (element.type == null) {
-            invariant(element.type, getDeclarationErrorAddendum(element._owner));
-          } else {
-            invariant(typeof element.type, getDeclarationErrorAddendum(element._owner));
-          }
+          invariant(typeof element.type, getDeclarationErrorAddendum(element._owner));
         }
       }
 
@@ -859,12 +888,10 @@ class React3Renderer {
       } else {
         invariant(false);
       }
+    } else if (process.env.NODE_ENV !== 'production') {
+      invariant(false, 'Encountered invalid React node of type %s', typeof element);
     } else {
-      if (process.env.NODE_ENV !== 'production') {
-        invariant(false, 'Encountered invalid React node of type %s', typeof element);
-      } else {
-        invariant(false);
-      }
+      invariant(false);
     }
 
     if (process.env.NODE_ENV !== 'production') {
@@ -928,8 +955,8 @@ class React3Renderer {
         'of props and state; triggering nested component updates from ' +
         'render is not allowed. If necessary, trigger nested updates in ' +
         'componentDidUpdate. Check the render method of %s.',
-        ReactCurrentOwner.current &&
-        ReactCurrentOwner.current.getName()
+        (ReactCurrentOwner.current &&
+        ReactCurrentOwner.current.getName())
         || 'ReactCompositeComponent');
     }
 

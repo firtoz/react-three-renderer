@@ -69,7 +69,7 @@ module.exports = {
 
       const { node, depth } = current;
 
-      const childrenNames = node.children && Object.keys(node.children) || [];
+      const childrenNames = (node.children && Object.keys(node.children)) || [];
 
       if (node.name !== null) {
         result += '\n';

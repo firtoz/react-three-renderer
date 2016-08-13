@@ -1,7 +1,7 @@
-import MockConsole from './MockConsole';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
 import React from 'react';
+import MockConsole from './MockConsole';
 
 const { expect } = chai;
 
@@ -55,7 +55,7 @@ module.exports = (type) => {
   beforeEach(function _() {
     this.test.body = _.toString(); // can now debug failed beforeEach
 
-    mockConsole.apply();
+    mockConsole.replaceConsole();
   });
 
   afterEach(function _() {

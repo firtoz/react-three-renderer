@@ -1,4 +1,5 @@
 import THREE from 'three';
+
 import LightDescriptorBase from './LightDescriptorBase';
 
 class AmbientLightDescriptor extends LightDescriptorBase {

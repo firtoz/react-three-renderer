@@ -1,10 +1,9 @@
-import ResourceContainer from '../../Resources/ResourceContainer';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-
-import THREEElementDescriptor from '../THREEElementDescriptor';
-
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import ResourceContainer from '../../Resources/ResourceContainer';
+import THREEElementDescriptor from '../THREEElementDescriptor';
 
 /**
  * Resource decorator.
@@ -69,9 +68,9 @@ function resource(descriptor) {
     }
 
     highlight(threeObject) {
-      let result = undefined;
+      let result;
 
-      if (!!threeObject.userData._resourceId) {
+      if (threeObject.userData._resourceId) {
         // it's a resource. Let's highlight all references.
         threeObject.userData.events.emit('highlight', {
           uuid: threeObject.uuid,
@@ -96,9 +95,9 @@ function resource(descriptor) {
     }
 
     hideHighlight(threeObject) {
-      let result = undefined;
+      let result;
 
-      if (!!threeObject.userData._resourceId) {
+      if (threeObject.userData._resourceId) {
         threeObject.userData.events.emit('hideHighlight');
       } else {
         result = super.hideHighlight(threeObject);

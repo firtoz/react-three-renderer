@@ -1,6 +1,7 @@
-import GeometryResourceDescriptor from './GeometryResourceDescriptor';
 import PropTypes from 'react/lib/ReactPropTypes';
 import THREE from 'three';
+
+import GeometryResourceDescriptor from './GeometryResourceDescriptor';
 
 class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
   constructor(react3RendererInstance) {
@@ -31,7 +32,7 @@ class ShapeGeometryResourceDescriptor extends GeometryResourceDescriptor {
     threeObject.userData._type = props.type;
   }
 
-  applyToSlot(threeObject, parentObject, shape:THREE.Shape) {
+  applyToSlot(threeObject, parentObject, shape: THREE.Shape) {
     if (!shape) {
       return super.applyToSlot(threeObject, parentObject, null);
     }

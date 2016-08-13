@@ -1,10 +1,9 @@
 import THREE from 'three';
-import THREEElementDescriptor from '../../THREEElementDescriptor';
 
 import invariant from 'fbjs/lib/invariant';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import THREEElementDescriptor from '../../THREEElementDescriptor';
 import ShapeAction from '../../../Shapes/ShapeAction';
 import propTypeInstanceOf from '../../../utils/propTypeInstanceOf';
 

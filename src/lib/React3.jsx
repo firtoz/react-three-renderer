@@ -1,12 +1,11 @@
 import React from 'react';
-import React3Renderer from './React3Renderer';
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
-
 import THREE from 'three';
 
-const { PropTypes } = React;
-
+import React3Renderer from './React3Renderer';
 import propTypeInstanceOf from './utils/propTypeInstanceOf';
+
+const { PropTypes } = React;
 
 class React3 extends React.Component {
   static propTypes = {
@@ -85,7 +84,7 @@ class React3 extends React.Component {
   };
 
   _render() {
-    const canvas = this.refs.canvas;
+    const canvas = this._canvas;
 
     const propsToClone = { ...this.props };
 
@@ -100,13 +99,17 @@ class React3 extends React.Component {
       </react3>, canvas);
   }
 
+  _canvasRef = (c) => {
+    this._canvas = c;
+  };
+
   render() {
     const {
       canvasKey,
     } = this.state;
 
     return (<canvas
-      ref="canvas"
+      ref={this._canvasRef}
       key={canvasKey}
       width={this.props.width}
       height={this.props.height}

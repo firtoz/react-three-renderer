@@ -1,7 +1,8 @@
-import Object3DDescriptor from '../Object3DDescriptor';
 import THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import Object3DDescriptor from '../Object3DDescriptor';
 
 class CubeCameraDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {

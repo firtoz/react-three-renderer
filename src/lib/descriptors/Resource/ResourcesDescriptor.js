@@ -1,7 +1,7 @@
 import THREE from 'three';
-import THREEElementDescriptor from '../THREEElementDescriptor';
 import invariant from 'fbjs/lib/invariant';
 
+import THREEElementDescriptor from '../THREEElementDescriptor';
 import ResourceContainer from '../../Resources/ResourceContainer';
 
 class ResourcesDescriptor extends THREEElementDescriptor {

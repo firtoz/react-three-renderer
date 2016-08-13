@@ -1,14 +1,12 @@
 import THREE from 'three';
 
-import THREEElementDescriptor from '../THREEElementDescriptor';
+import invariant from 'fbjs/lib/invariant';
+import PropTypes from 'react/lib/ReactPropTypes';
 
 import Uniform from '../../Uniform';
 import UniformContainer from '../../UniformContainer';
 import ResourceReference from '../../Resources/ResourceReference';
-
-import invariant from 'fbjs/lib/invariant';
-
-import PropTypes from 'react/lib/ReactPropTypes';
+import THREEElementDescriptor from '../THREEElementDescriptor';
 
 class UniformDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {
@@ -45,7 +43,7 @@ class UniformDescriptor extends THREEElementDescriptor {
     threeObject.value = props.value;
   }
 
-  setParent(threeObject:Uniform, parentObject3D) {
+  setParent(threeObject: Uniform, parentObject3D) {
     invariant(parentObject3D instanceof UniformContainer,
       'Parent is not a Uniform Container (<uniforms/>)');
 

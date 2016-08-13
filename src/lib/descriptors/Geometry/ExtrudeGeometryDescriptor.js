@@ -1,11 +1,10 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
-import ShapeResourceReference from '../../Resources/ShapeResourceReference';
 
 import PropTypes from 'react/lib/ReactPropTypes';
-
 import invariant from 'fbjs/lib/invariant';
 
+import GeometryDescriptorBase from './GeometryDescriptorBase';
+import ShapeResourceReference from '../../Resources/ShapeResourceReference';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class ExtrudeGeometryDescriptor extends GeometryDescriptorBase {

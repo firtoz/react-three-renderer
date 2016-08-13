@@ -72,9 +72,7 @@ module.exports = type => {
         };
 
         componentDidMount() {
-          const {
-            directionalLight,
-          } = this.refs;
+          const directionalLight = this._directionalLight;
 
           const {
             expectedCameraNear,
@@ -97,6 +95,10 @@ module.exports = type => {
           this.props.done();
         }
 
+        _directionalLightRef = (c) => {
+          this._directionalLight = c;
+        };
+
         render() {
           const {
             lightProps,
@@ -108,7 +110,7 @@ module.exports = type => {
           >
             <scene>
               <directionalLight
-                ref="directionalLight"
+                ref={this._directionalLightRef}
                 {...lightProps}
               />
             </scene>

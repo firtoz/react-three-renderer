@@ -1,5 +1,6 @@
-import Object3DDescriptor from '../Object3DDescriptor';
 import THREE from 'three';
+
+import Object3DDescriptor from '../Object3DDescriptor';
 
 class CameraDescriptorBase extends Object3DDescriptor {
   applyInitialProps(threeObject, props) {
@@ -14,7 +15,7 @@ class CameraDescriptorBase extends Object3DDescriptor {
     super.unmount(threeObject);
   }
 
-  beginPropertyUpdates(threeObject:THREE.Object3D) {
+  beginPropertyUpdates(threeObject: THREE.Object3D) {
     super.beginPropertyUpdates(threeObject);
 
     threeObject.userData._needsProjectionMatrixUpdate = false;

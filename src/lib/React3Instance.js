@@ -1,14 +1,15 @@
+/* eslint-env browser */
+
 import THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-import Viewport from './Viewport';
-import React3Module from './Module';
-import ResourceContainer from './Resources/ResourceContainer';
 import ReactUpdates from 'react/lib/ReactUpdates';
 
-import CameraUtils from './utils/CameraUtils';
-
+import Viewport from './Viewport';
+import React3Module from './Module';
 import React3Renderer from './React3Renderer';
+import ResourceContainer from './Resources/ResourceContainer';
+import CameraUtils from './utils/CameraUtils';
 import isWebglSupported from './utils/isWebglSupported';
 
 const rendererProperties = [
@@ -17,7 +18,7 @@ const rendererProperties = [
 ];
 
 class React3DInstance {
-  constructor(props, rendererInstance:React3Renderer) {
+  constructor(props, rendererInstance: React3Renderer) {
     const {
       mainCamera,
       onAnimate,
@@ -64,10 +65,8 @@ class React3DInstance {
     this._renderTrigger = (renderThisFrame) => {
       if (renderThisFrame) {
         this._render();
-      } else {
-        if (this._renderRequest === null) {
-          this._renderRequest = requestAnimationFrame(this._render);
-        }
+      } else if (this._renderRequest === null) {
+        this._renderRequest = requestAnimationFrame(this._render);
       }
     };
 
@@ -132,7 +131,7 @@ class React3DInstance {
     };
 
     this._renderer = isWebglSupported() ? new THREE.WebGLRenderer(rendererArgs)
-                                        : new THREE.CanvasRenderer(rendererArgs);
+      : new THREE.CanvasRenderer(rendererArgs);
 
     if (this._rendererUpdatedCallback) {
       this._rendererUpdatedCallback(this._renderer);
@@ -466,11 +465,11 @@ class React3DInstance {
     this._resourceContainers.splice(index, 1);
   }
 
-  addModule(module:React3Module) {
+  addModule(module: React3Module) {
     this._modules.push(module);
   }
 
-  removeModule(module:React3Module) {
+  removeModule(module: React3Module) {
     const index = this._modules.indexOf(module);
 
     if (process.env.NODE_ENV !== 'production') {
@@ -884,7 +883,7 @@ class React3DInstance {
 
     object.userData.events.emit('addedIntoRoot', object);
 
-    const current:THREE.Object3D = object;
+    const current: THREE.Object3D = object;
 
     const childrenMarkup = current.userData.markup.childrenMarkup;
 

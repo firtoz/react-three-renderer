@@ -1,6 +1,6 @@
 // Karma configuration
 
-import webpackConfig from './webpack.config.babel.js';
+import webpackConfig from './webpack.config.babel';
 
 const isCoverage = process.env.KARMA_COVERAGE === 'true';
 
@@ -33,6 +33,14 @@ export default (config) => {
       },
       {
         pattern: '../src/**/*.js',
+        included: false,
+      },
+      {
+        pattern: 'src/**/*.jsx',
+        included: false,
+      },
+      {
+        pattern: '../src/**/*.jsx',
         included: false,
       },
       // each file acts as entry point for the webpack configuration

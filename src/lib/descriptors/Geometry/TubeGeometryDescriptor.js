@@ -1,9 +1,8 @@
 import THREE from 'three';
 
-import GeometryDescriptorBase from './GeometryDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class TubeGeometryDescriptor extends GeometryDescriptorBase {

@@ -1,7 +1,8 @@
 import THREE from 'three';
-import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import GeometryDescriptorBase from './GeometryDescriptorBase';
 
 class RingGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
@@ -31,7 +32,7 @@ class RingGeometryDescriptor extends GeometryDescriptorBase {
       phiSegments,
       thetaStart,
       thetaLength,
-      } = props;
+    } = props;
 
     return new THREE.RingGeometry(
       innerRadius,

@@ -1,6 +1,7 @@
+import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
+
 import THREEElementDescriptor from './THREEElementDescriptor';
 import Module from '../Module';
-import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 
 // Returns class name of the object, if any.
 // Used for the subclass proptype checker

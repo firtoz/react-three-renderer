@@ -1,7 +1,6 @@
-import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 import BezierCurveToAction from '../../../Shapes/BezierCurveToAction';
 
 class BezierCurveToDescriptor extends ShapeActionDescriptorBase {
@@ -32,7 +31,7 @@ class BezierCurveToDescriptor extends ShapeActionDescriptorBase {
       cp2Y,
       aX,
       aY,
-      } = props;
+    } = props;
 
     return new BezierCurveToAction(
       cp1X,

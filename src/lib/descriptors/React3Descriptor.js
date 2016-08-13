@@ -1,14 +1,13 @@
-import React3DInstance from '../React3Instance';
-
-import THREEElementDescriptor from './THREEElementDescriptor';
+/* eslint-env browser */
 
 import THREE from 'three';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import warning from 'fbjs/lib/warning';
 import invariant from 'fbjs/lib/invariant';
 
+import THREEElementDescriptor from './THREEElementDescriptor';
+import React3DInstance from '../React3Instance';
 import propTypeInstanceOf from '../utils/propTypeInstanceOf';
 
 const propProxy = {

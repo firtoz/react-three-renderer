@@ -1,4 +1,5 @@
 import THREE from 'three';
+
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 class MeshDepthMaterialDescriptor extends MaterialDescriptorBase {

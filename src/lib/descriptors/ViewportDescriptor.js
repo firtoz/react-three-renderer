@@ -1,8 +1,7 @@
-import Viewport from '../Viewport';
-
-import THREEElementDescriptor from './THREEElementDescriptor';
-
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import Viewport from '../Viewport';
+import THREEElementDescriptor from './THREEElementDescriptor';
 
 class ViewportDescriptor extends THREEElementDescriptor {
   constructor(react3Instance) {

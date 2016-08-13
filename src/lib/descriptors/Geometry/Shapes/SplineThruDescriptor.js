@@ -1,9 +1,8 @@
 import THREE from 'three';
 
-import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
-
 import PropTypes from 'react/lib/ReactPropTypes';
 
+import ShapeActionDescriptorBase from './ShapeActionDescriptorBase';
 import SplineThruAction from '../../../Shapes/SplineThruAction';
 import propTypeInstanceOf from '../../../utils/propTypeInstanceOf';
 

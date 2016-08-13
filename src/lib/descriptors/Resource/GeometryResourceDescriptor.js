@@ -1,7 +1,7 @@
-import ResourceDescriptorBase from './ResourceDescriptorBase';
 import THREE from 'three';
-
 import invariant from 'fbjs/lib/invariant';
+
+import ResourceDescriptorBase from './ResourceDescriptorBase';
 
 class GeometryResourceDescriptor extends ResourceDescriptorBase {
   applyInitialProps(threeObject, props) {

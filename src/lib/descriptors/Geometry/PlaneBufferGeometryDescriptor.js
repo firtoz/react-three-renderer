@@ -1,7 +1,8 @@
 import THREE from 'three';
-import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
 class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
   constructor(react3Instance) {
