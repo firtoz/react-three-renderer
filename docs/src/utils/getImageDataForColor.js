@@ -1,9 +1,11 @@
 import { PNG } from 'pngjs2';
-import base64 from 'base64-stream';
+import fs from 'fs';
 
 const colorPromises = {};
 
-module.exports = function getImageDataForColor(colorValue) {
+// http://mikehadlow.blogspot.co.uk/2014/03/how-to-add-images-to-github-wiki.html
+
+module.exports = function getImageDataForColor(colorValue, numberString) {
   if (!colorPromises[colorValue]) {
     colorPromises[colorValue] = new Promise(resolve => {
       const png = new PNG({
@@ -35,18 +37,11 @@ module.exports = function getImageDataForColor(colorValue) {
         }
       }
 
+      const filename = `images/${numberString}.png`;
 
-      const base64Stream = png.pack().pipe(base64.encode());
+      png.pack().pipe(fs.createWriteStream(`wiki/${filename}`));
 
-      let result = '';
-
-      base64Stream.on('data', (data) => {
-        result += data;
-      });
-
-      base64Stream.on('end', () => {
-        resolve(result);
-      });
+      resolve(filename);
     });
   }
 

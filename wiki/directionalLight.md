@@ -144,7 +144,7 @@ Example warning message:
 ### color
 ``` one of types [THREE.Color, number, string] ```: The light color.
 
-**Default**: `0xffffff` ![0xffffff](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAvSURBVJXBwQnAMAADsbPp/is7BPIunBRgCEX6eLbxJwlXkYpUpCIVqUhFCjCEIh1kwAUXig8DxQAAAABJRU5ErkJggg==)
+**Default**: `0xffffff` [[images/0xffffff.png]]
 
 ### position
 ``` THREE.Vector3 ```: The position of the 3D object relative to the parent.

@@ -40,12 +40,12 @@ Defaults to `material`. Other example values:
 ### color
 ``` one of types [THREE.Color, number, string] ```
 
-**Default**: `0xffffff` ![0xffffff](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAvSURBVJXBwQnAMAADsbPp/is7BPIunBRgCEX6eLbxJwlXkYpUpCIVqUhFCjCEIh1kwAUXig8DxQAAAABJRU5ErkJggg==)
+**Default**: `0xffffff` [[images/0xffffff.png]]
 
 ### emissive
 ``` one of types [THREE.Color, number, string] ```
 
-**Default**: `0x000000` ![0x000000](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAkSURBVJXBAQEAMAzDIF7/nncNgYcTTDTRRBNNNNFEE0000UQfY7IBFwkI/wUAAAAASUVORK5CYII=)
+**Default**: `0x000000` [[images/0x000000.png]]
 
 ### wireframe
 ``` bool ```

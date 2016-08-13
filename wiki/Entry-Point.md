@@ -80,7 +80,7 @@ Is used as the first parameter for [THREE.WebGLRenderer#clearColor](http://three
 
 If the [`clearAlpha`](#clearalpha) and [`alpha`](#alpha) properties are set, `clearAlpha` will be used as the second parameter.
 
-**Default**: `0x000000` ![0x000000](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAkSURBVJXBAQEAMAzDIF7/nncNgYcTTDTRRBNNNNFEE0000UQfY7IBFwkI/wUAAAAASUVORK5CYII=)
+**Default**: `0x000000` [[images/0x000000.png]]
 
 ### clearAlpha
 ``` number ```: Used for the transparency of the canvas.

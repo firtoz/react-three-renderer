@@ -40,7 +40,7 @@ Defaults to `material`. Other example values:
 ### color
 ``` one of types [THREE.Color, number, string] ```
 
-**Default**: `0xffffff` ![0xffffff](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAvSURBVJXBwQnAMAADsbPp/is7BPIunBRgCEX6eLbxJwlXkYpUpCIVqUhFCjCEIh1kwAUXig8DxQAAAABJRU5ErkJggg==)
+**Default**: `0xffffff` [[images/0xffffff.png]]
 
 ### rotation
 ``` number ```

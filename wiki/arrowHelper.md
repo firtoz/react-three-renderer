@@ -78,7 +78,7 @@ Must be a unit vector.
 ### color
 ``` one of types [THREE.Color, number, string] ```: The color that will be used for the arrow materials.
 
-**Default**: `0xffff00` ![0xffff00](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAklEQVR4AewaftIAAAAuSURBVJXBQQrAMAzAMMfs/19OofQ8sDTAEkj08ezya4ZLIokkkkgiiSQaYAkkOoXCBBfUb0KpAAAAAElFTkSuQmCC)
+**Default**: `0xffff00` [[images/0xffff00.png]]
 
 ### length
 ``` number ```: The length of the arrow.

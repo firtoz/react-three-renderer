@@ -1,10 +1,20 @@
 import fs from 'fs';
 import path from 'path';
 import getImageDataForColor from './utils/getImageDataForColor';
+import rimraf from 'rimraf';
 
 // TODO: WRITE A REACTJS RENDERER TO GENERATE DOCUMENTATION
 // OH MY GOD YOU ARE A GENIUS
 //   I KISS YOU
+
+function clearImageDirectory() {
+  const imagePath = 'wiki/images';
+
+  if (fs.existsSync(imagePath)) {
+    rimraf.sync(imagePath);
+    fs.mkdirSync(imagePath);
+  }
+}
 
 const rightArrowSymbol = '»'; // was: '▸' but GitHub apparently does not like this
 
@@ -592,10 +602,9 @@ ${propTypes[propName].toString()}`;
 
                     defaultText += numberString;
 
-                    colorPromise = getImageDataForColor(propDefault)
+                    colorPromise = getImageDataForColor(propDefault, numberString)
                       .then(imageData =>
-                      ` ![${numberString}]` +
-                      `(data:image/png;base64,${imageData})`);
+                        ` [[${imageData}]]`);
                   } else if (propDefault instanceof Array) {
                     defaultText += `[${propDefault.join(', ')}]`;
                   } else {
@@ -768,6 +777,8 @@ function populateCategoryIntros(descriptors, allCategories) {
   });
 }
 module.exports = (done) => {
+  clearImageDirectory();
+
   // mock global variables for three.js
   GLOBAL.self = {};
 
