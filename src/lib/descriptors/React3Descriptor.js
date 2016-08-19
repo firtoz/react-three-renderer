@@ -35,6 +35,10 @@ const propProxy = {
     type: PropTypes.string,
     default: undefined,
   },
+  createRenderer: {
+    type: PropTypes.func,
+    default: undefined,
+  },
   onAnimate: {
     type: PropTypes.func,
     default: undefined,

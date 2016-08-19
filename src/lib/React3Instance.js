@@ -686,7 +686,13 @@ class React3DInstance {
       }
     }
 
-    this._createRenderer();
+    if (this._parameters.createRenderer) {
+      this._renderer = this._parameters.createRenderer();
+    }
+
+    if (!this._renderer) {
+      this._createRenderer();
+    }
   }
 
   updateGammaInput(gammaInput) {
@@ -719,6 +725,12 @@ class React3DInstance {
     this._parameters.mainCamera = mainCamera;
 
     this._mainCameraName = mainCamera;
+  }
+
+  updateCreateRenderer(createRenderer) {
+    this._parameters.createRenderer = createRenderer;
+
+    this.createRenderer = createRenderer;
   }
 
   updateOnAnimate(onAnimate) {
