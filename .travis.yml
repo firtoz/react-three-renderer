@@ -1,6 +1,7 @@
 sudo: required
 dist: trusty
 language: node_js
+group: edge
 node_js:
   - stable
 cache:
