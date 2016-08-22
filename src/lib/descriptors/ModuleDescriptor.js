@@ -2,6 +2,7 @@ import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 
 import THREEElementDescriptor from './THREEElementDescriptor';
 import Module from '../Module';
+import PropTypeError from '../utils/PropTypeError';
 
 // Returns class name of the object, if any.
 // Used for the subclass proptype checker
@@ -20,14 +21,14 @@ class ModuleDescriptor extends THREEElementDescriptor {
       const locationName = ReactPropTypeLocationNames[location];
 
       if (!props[propName]) {
-        return new Error(`Required ${locationName} \`${propFullName}\` ` +
+        return new PropTypeError(`Required ${locationName} \`${propFullName}\` ` +
           `was not specified in \`${componentName}\`.`);
       }
 
       if (!(props[propName].prototype instanceof Module)) {
         const actualClassName = getClassName(props[propName]);
 
-        return new Error(`Invalid ${locationName} \`${propFullName}\` ` +
+        return new PropTypeError(`Invalid ${locationName} \`${propFullName}\` ` +
           `of type \`${actualClassName}\` supplied to \`${componentName}\`, ` +
           'expected subclass of `Module`.');
       }

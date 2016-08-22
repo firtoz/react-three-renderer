@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 import THREE from 'three';
 import PropTypes from 'react/lib/ReactPropTypes';
 

@@ -50,12 +50,57 @@ function _arrayMove(array, oldIndex, newIndex) {
 }
 
 let setChildrenForInstrumentation = emptyFunction;
+let setContentChildForInstrumentation = emptyFunction;
+let getDebugID;
+
 if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+
+  const ReactInstanceMap = require('react/lib/ReactInstanceMap');
+
+  /* eslint-enable global-require */
+
+  getDebugID = function _(inst) {
+    if (!inst._debugID) {
+      // Check for ART-like instances. TODO: This is silly/gross.
+      const internal = ReactInstanceMap.get(inst);
+      if (internal) {
+        return internal._debugID;
+      }
+    }
+    return inst._debugID;
+  };
+
   setChildrenForInstrumentation = function _(children) {
     ReactInstrumentation.debugTool.onSetChildren(
       this._debugID,
       children ? Object.keys(children).map(key => children[key]._debugID) : []
     );
+  };
+
+  setContentChildForInstrumentation = function _(content) {
+    const hasExistingContent = this._contentDebugID !== null && this._contentDebugID !== undefined;
+    const debugID = this._debugID;
+    // This ID represents the inlined child that has no backing instance:
+    const contentDebugID = `CDID-${debugID}`;
+
+    if (content == null) {
+      if (hasExistingContent) {
+        ReactInstrumentation.debugTool.onUnmountComponent(this._contentDebugID);
+      }
+      this._contentDebugID = null;
+      return;
+    }
+
+    this._contentDebugID = contentDebugID;
+    if (hasExistingContent) {
+      ReactInstrumentation.debugTool.onBeforeUpdateComponent(contentDebugID, content);
+      ReactInstrumentation.debugTool.onUpdateComponent(contentDebugID);
+    } else {
+      ReactInstrumentation.debugTool.onBeforeMountComponent(contentDebugID, content, debugID);
+      ReactInstrumentation.debugTool.onMountComponent(contentDebugID);
+      ReactInstrumentation.debugTool.onSetChildren(debugID, [contentDebugID]);
+    }
   };
 }
 
@@ -78,8 +123,8 @@ class InternalComponent {
     this._renderedChildren = [];
     this._hostMarkup = null; // _hostNode
     this._hostParent = null;
-    this._rootNodeID = null;
-    this._hostID = null; // _domID
+    this._rootNodeID = 0;
+    this._hostID = 0; // _domID
     this._hostContainerInfo = null;
     this._threeObject = null;
     this._topLevelWrapper = null;
@@ -90,6 +135,8 @@ class InternalComponent {
 
     if (process.env.NODE_ENV !== 'production') {
       this._ancestorInfo = null;
+
+      setContentChildForInstrumentation.call(this, null);
     }
 
     this.threeElementDescriptor = react3RendererInstance.threeElementDescriptors[element.type];
@@ -139,8 +186,8 @@ class InternalComponent {
    * @return {object} The computed markup.
    */
   mountComponent(transaction, hostParent, hostContainerInfo, context) {
-    this._rootNodeID = `${this._react3RendererInstance.globalIdCounter++}`;
-    this._hostID = `${hostContainerInfo._idCounter++}`;
+    this._rootNodeID = this._react3RendererInstance.globalIdCounter++;
+    this._hostID = hostContainerInfo._idCounter++;
     this._hostParent = hostParent;
     this._hostContainerInfo = hostContainerInfo;
 
@@ -212,25 +259,36 @@ class InternalComponent {
     React3ComponentTree.precacheMarkup(this, this._markup);
     this._flags |= Flags.hasCachedChildMarkups;
 
-    if (process.env.NODE_ENV !== 'production') {
-      if (this._debugID) {
-        const callback = () => ReactInstrumentation.debugTool.onComponentHasMounted(this._debugID);
-        transaction.getReactMountReady().enqueue(callback, this);
-      }
-    }
-
     return markup;
   }
 
-  _reconcilerInstantiateChildren(nestedChildren, transaction, context) {
+  /**
+   * @see ReactMultiChild._reconcilerInstantiateChildren
+   * Cloned because it uses
+   * @see React3Renderer.instantiateChildren
+   *
+   * @param nestedChildren
+   * @param transaction
+   * @param context
+   * @returns {*}
+   * @private
+   */
+  _reconcilerInstantiateChildren(nestedChildren,
+                                 transaction,
+                                 context) {
     if (process.env.NODE_ENV !== 'production') {
+      const selfDebugID = getDebugID(this);
+
       if (this._currentElement) {
         const previousCurrent = ReactCurrentOwner.current;
 
         try {
           ReactCurrentOwner.current = this._currentElement._owner;
           return this._react3RendererInstance.instantiateChildren(
-            nestedChildren, transaction, context
+            nestedChildren,
+            transaction,
+            context,
+            selfDebugID
           );
         } finally {
           ReactCurrentOwner.current = previousCurrent;
@@ -238,10 +296,27 @@ class InternalComponent {
       }
     }
     return this._react3RendererInstance.instantiateChildren(
-      nestedChildren, transaction, context
+      nestedChildren,
+      transaction,
+      context,
+      0
     );
   }
 
+  /**
+   * @see ReactMultiChild._reconcilerUpdateChildren
+   * Cloned because it uses
+   * @see React3Renderer.updateChildren
+   *
+   * @param prevChildren
+   * @param nextNestedChildrenElements
+   * @param mountImages
+   * @param removedMarkups
+   * @param transaction
+   * @param context
+   * @returns {?Object}
+   * @private
+   */
   _reconcilerUpdateChildren(prevChildren,
                             nextNestedChildrenElements,
                             mountImages,
@@ -249,18 +324,22 @@ class InternalComponent {
                             transaction,
                             context) {
     let nextChildren;
+    let selfDebugID = 0;
+
     if (process.env.NODE_ENV !== 'production') {
+      selfDebugID = getDebugID(this);
+
       if (this._currentElement) {
         const previousCurrent = ReactCurrentOwner.current;
 
         try {
           ReactCurrentOwner.current = this._currentElement._owner;
-          nextChildren = flattenChildren(nextNestedChildrenElements, this._debugID);
+          nextChildren = flattenChildren(nextNestedChildrenElements, selfDebugID);
         } finally {
           ReactCurrentOwner.current = previousCurrent;
         }
 
-        return this._react3RendererInstance.updateChildren(
+        this._react3RendererInstance.updateChildren(
           prevChildren,
           nextChildren,
           mountImages,
@@ -268,13 +347,17 @@ class InternalComponent {
           transaction,
           this,
           this._hostContainerInfo,
-          context
+          context,
+          selfDebugID
         );
+
+        return nextChildren;
       }
     }
 
-    nextChildren = flattenChildren(nextNestedChildrenElements);
-    return this._react3RendererInstance.updateChildren(
+    nextChildren = flattenChildren(nextNestedChildrenElements, selfDebugID);
+
+    this._react3RendererInstance.updateChildren(
       prevChildren,
       nextChildren,
       mountImages,
@@ -282,14 +365,33 @@ class InternalComponent {
       transaction,
       this,
       this._hostContainerInfo,
-      context
+      context,
+      selfDebugID
     );
+
+    return nextChildren;
   }
 
+  /**
+   * @see ReactMultiChild.mountChildren
+   *
+   * Generates a "mount image" for each of the supplied children. In the case
+   * of `ReactDOMComponent`, a mount image is a string of markup.
+   *
+   * @param {?object} nestedChildren Nested child maps.
+   * @param transaction
+   * @param context
+   * @return {array} An array of mounted representations.
+   * @internal
+   */
   mountChildren(nestedChildren, transaction, context) {
     const children = this._reconcilerInstantiateChildren(
-      nestedChildren, transaction, context);
+      nestedChildren,
+      transaction,
+      context,
+    );
     this._renderedChildren = children;
+
     const mountImages = [];
     let index = 0;
 
@@ -297,15 +399,20 @@ class InternalComponent {
       const childrenNames = Object.keys(children);
       for (let i = 0; i < childrenNames.length; ++i) {
         const name = childrenNames[i];
-
         const child = children[name];
+        let selfDebugID = 0;
+
+        if (process.env.NODE_ENV !== 'production') {
+          selfDebugID = getDebugID(this);
+        }
 
         const mountImage = ReactReconciler.mountComponent(
           child,
           transaction,
           this,
           this._hostContainerInfo,
-          context
+          context,
+          selfDebugID
         );
 
         // const mountImage = ReactReconciler.mountComponent(child, rootID, transaction, context);
@@ -348,6 +455,19 @@ class InternalComponent {
     }
   }
 
+  /**
+   * @see ReactDOMComponent.updateComponent
+   *
+   * Updates a DOM component after it has already been allocated and
+   * attached to the DOM. Reconciles the root DOM node, then recurses.
+   *
+   * @param {ReactReconcileTransaction} transaction
+   * @param {ReactElement} prevElement
+   * @param {ReactElement} nextElement
+   * @param context
+   * @internal
+   * @overridable
+   */
   updateComponent(transaction, prevElement, nextElement, context) {
     const lastProps = prevElement.props;
     const nextProps = this._currentElement.props;
@@ -363,20 +483,16 @@ class InternalComponent {
     this._updateObjectProperties(lastProps, nextProps, transaction, context);
     if (!this._forceRemountOfComponent) {
       this._updateChildrenObjects(nextProps, transaction, processChildContext(context, this));
-
-      if (process.env.NODE_ENV !== 'production') {
-        if (this._debugID) {
-          const callback = () =>
-            ReactInstrumentation.debugTool.onComponentHasUpdated(this._debugID);
-          transaction.getReactMountReady().enqueue(callback, this);
-        }
-      }
     }
   }
 
   // see _updateDOMChildren
   _updateChildrenObjects(nextProps, transaction, context) {
     const nextChildren = nextProps.children || null;
+
+    if (process.env.NODE_ENV !== 'production') {
+      setContentChildForInstrumentation.call(this, null);
+    }
 
     this.updateChildren(nextChildren, transaction, context);
   }
@@ -460,12 +576,12 @@ class InternalComponent {
 
   /**
    * @see ReactDOMComponent.Mixin.unmountComponent
-   * node_modules/react/lib/ReactDOMComponent.js:732
    */
   unmountComponent(safely) {
     if (this._threeObject !== null) {
       this.threeElementDescriptor.componentWillUnmount(this._threeObject);
     }
+
     this.unmountChildren(safely);
     React3ComponentTree.uncacheMarkup(this);
 
@@ -475,12 +591,16 @@ class InternalComponent {
     }
 
     this._markup = null;
-    this._rootNodeID = null;
+    this._rootNodeID = 0;
 
     if (this._nodeWithLegacyProperties) {
       const node = this._nodeWithLegacyProperties;
       node._reactInternalComponent = null;
       this._nodeWithLegacyProperties = null;
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      setContentChildForInstrumentation.call(this, null);
     }
   }
 

@@ -81,7 +81,7 @@ function precacheChildMarkups(instance, markup) {
     const childInst = renderedChildren[childName];
     // TODO implement _domID
     const childID = getRenderedHostOrTextFromComponent(childInst)._hostID;
-    if (childID === null) {
+    if (childID === 0) {
       // We're currently unmounting this child in ReactMultiChild; skip it.
       continue;
     }
@@ -89,7 +89,7 @@ function precacheChildMarkups(instance, markup) {
     for (let j = 0; j < childrenMarkup.length; ++j) {
       const childMarkup = childrenMarkup[j];
 
-      if (childMarkup[ID_PROPERTY_NAME] === String(childID)) {
+      if (childMarkup[ID_PROPERTY_NAME] === childID) {
         precacheMarkup(childInst, childMarkup);
 
         continue outer; // eslint-disable-line no-labels

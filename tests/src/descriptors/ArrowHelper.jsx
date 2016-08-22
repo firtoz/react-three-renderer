@@ -13,10 +13,14 @@ module.exports = type => {
     it('Should warn for missing properties from ArrowHelper', () => {
       mockConsole.expect('Warning: Failed prop type: ' +
         'Required prop `origin` was not specified in `arrowHelper`.\n' +
-        '    in arrowHelper');
+        '    in arrowHelper\n' +
+        '    in scene\n' +
+        '    in react3');
       mockConsole.expect('Warning: Failed prop type: ' +
         'Required prop `dir` was not specified in `arrowHelper`.\n' +
-        '    in arrowHelper');
+        '    in arrowHelper\n' +
+        '    in scene\n' +
+        '    in react3');
 
       expect(() => {
         ReactDOM.render(<React3
