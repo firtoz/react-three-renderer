@@ -1,14 +1,14 @@
-import ReactDOMDebugTool from 'react/lib/ReactDOMDebugTool';
+import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 
-import ReactDOMUnknownPropertyDevtool from 'react/lib/ReactDOMUnknownPropertyDevtool';
-import ReactDOMNullInputValuePropDevtool from 'react/lib/ReactDOMNullInputValuePropDevtool';
+import ReactDOMUnknownPropertyHook from 'react/lib/ReactDOMUnknownPropertyHook';
+import ReactDOMNullInputValuePropHook from 'react/lib/ReactDOMNullInputValuePropHook';
 
 let devToolRemoved = false;
 
 function removeDevTool() {
   if (!devToolRemoved) {
-    ReactDOMDebugTool.removeDevtool(ReactDOMUnknownPropertyDevtool);
-    ReactDOMDebugTool.removeDevtool(ReactDOMNullInputValuePropDevtool);
+    ReactInstrumentation.debugTool.removeHook(ReactDOMUnknownPropertyHook);
+    ReactInstrumentation.debugTool.removeHook(ReactDOMNullInputValuePropHook);
 
     devToolRemoved = true;
 
@@ -21,8 +21,8 @@ function removeDevTool() {
 removeDevTool.restore = function restore() {
   devToolRemoved = false;
 
-  ReactDOMDebugTool.addDevtool(ReactDOMUnknownPropertyDevtool);
-  ReactDOMDebugTool.addDevtool(ReactDOMNullInputValuePropDevtool);
+  ReactInstrumentation.debugTool.addHook(ReactDOMUnknownPropertyHook);
+  ReactInstrumentation.debugTool.addHook(ReactDOMNullInputValuePropHook);
 };
 
 module.exports = removeDevTool;

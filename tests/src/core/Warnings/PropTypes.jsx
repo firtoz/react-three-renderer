@@ -24,25 +24,31 @@ module.exports = type => {
 
     mockConsole.expect('Warning: Failed prop type: Invalid prop `name` of type `number`' +
       ' supplied to `scene`, expected `string`.\n' +
-      '    in scene');
+      '    in scene\n' +
+      '    in react3');
     mockConsole.expect('Warning: Failed prop type: Invalid prop `position`' +
       ' of type `THREE.Vector2`' +
       ' supplied to `scene`, expected instance of `THREE.Vector3`.\n' +
-      '    in scene');
+      '    in scene\n' +
+      '    in react3');
     mockConsole.expect('Warning: Failed prop type: Invalid prop `rotation`' +
       ' of type `THREE.Vector3`' +
       ' supplied to `scene`, expected instance of `THREE.Euler`.\n' +
-      '    in scene');
+      '    in scene\n' +
+      '    in react3');
     mockConsole.expect('Warning: Failed prop type: Invalid prop `quaternion`' +
       ' of type `THREE.Euler`' +
       ' supplied to `scene`, expected instance of `THREE.Quaternion`.\n' +
-      '    in scene');
+      '    in scene\n' +
+      '    in react3');
     mockConsole.expect('Warning: Failed prop type: Invalid prop `renderOrder` of type `string`' +
       ' supplied to `scene`, expected `number`.\n' +
-      '    in scene');
+      '    in scene\n' +
+      '    in react3');
     mockConsole.expect('Warning: Failed prop type: Invalid prop `fog` of type `String`' +
       ' supplied to `scene`, expected instance of `THREE.Fog`.\n' +
-      '    in scene');
+      '    in scene\n' +
+      '    in react3');
 
     // should whine but still should work!
     mockConsole.expect('THREE.Euler: .setFromRotationMatrix() given unsupported order: undefined');

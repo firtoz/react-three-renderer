@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 import THREE from 'three';
 import reactElementWrapper from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
@@ -30,8 +28,18 @@ import ID_PROPERTY_NAME from './utils/idPropertyName';
 import removeDevTool from './utils/removeDevTool';
 
 let getDeclarationErrorAddendum;
-let getDisplayName;
 let staticDebugIdHack;
+let ReactComponentTreeHook;
+
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+
+  if (!ReactComponentTreeHook) {
+    ReactComponentTreeHook = require('react/lib/ReactComponentTreeHook');
+  }
+
+  /* eslint-enable global-require */
+}
 
 if (process.env.NODE_ENV !== 'production') {
   staticDebugIdHack = 0;
@@ -60,21 +68,6 @@ if (process.env.NODE_ENV !== 'production') {
       }
     }
     return '';
-  };
-
-  getDisplayName = (instance) => {
-    const element = instance._currentElement;
-    if (element == null) {
-      return '#empty';
-    } else if (typeof element === 'string' || typeof element === 'number') {
-      return '#text';
-    } else if (typeof element.type === 'string') {
-      return element.type;
-    } else if (instance.getName) {
-      return instance.getName() || 'Unknown';
-    }
-
-    return element.type.displayName || element.type.name || 'Unknown';
   };
 }
 
@@ -222,6 +215,9 @@ class React3Renderer {
   /**
    * @see ReactChildReconciler.updateChildren
    *
+   * Cloned because it uses
+   * @see React3Renderer.instantiateReactComponent
+   *
    * Updates the rendered children and returns a new set of children.
    *
    * @param {?object} prevChildren Previously initialized set of children.
@@ -232,6 +228,7 @@ class React3Renderer {
    * @param hostParent
    * @param hostContainerInfo
    * @param {object} context
+   * @param selfDebugID
    * @return {?object} A new set of child instances.
    * @internal
    */
@@ -242,7 +239,9 @@ class React3Renderer {
                  transaction,
                  hostParent,
                  hostContainerInfo,
-                 context) {
+                 context,
+                 selfDebugID // 0 in production and for roots
+  ) {
     // We currently don't have a way to track moves here but if we use iterators
     // instead of for..in we can zip the iterators and check if an item has
     // moved.
@@ -281,7 +280,8 @@ class React3Renderer {
               transaction,
               hostParent,
               hostContainerInfo,
-              context
+              context,
+              selfDebugID
             );
 
             mountImages.push(nextChildMountImage);
@@ -306,7 +306,8 @@ class React3Renderer {
             transaction,
             hostParent,
             hostContainerInfo,
-            context
+            context,
+            selfDebugID /* parentDebugID */
           );
 
           mountImages.push(nextChildMountImage);
@@ -441,28 +442,77 @@ class React3Renderer {
     }
   }
 
-  instantiateChild = (childInstances, child, name) => {
+  /**
+   * @see ReactChildReconciler.instantiateChild
+   * Cloned because it uses
+   * @see React3Renderer.instantiateReactComponent
+   *
+   * @param childInstances
+   * @param child
+   * @param name
+   * @param selfDebugID
+   */
+  instantiateChild = (childInstances, child, name, selfDebugID) => {
     // We found a component instance.
-    const keyUnique = childInstances[name] === undefined;
+    const keyUnique = (childInstances[name] === undefined);
     if (process.env.NODE_ENV !== 'production') {
-      warning(keyUnique,
-        'flattenChildren(...): Encountered two children with the same key, '
-        + '`%s`. Child keys must be unique; when two children share a key, only '
-        + 'the first child will be used.', KeyEscapeUtils.unescape(name));
+      if (!keyUnique) {
+        warning(
+          false,
+          'flattenChildren(...): Encountered two children with the same key, ' +
+          '`%s`. Child keys must be unique; when two children share a key, only ' +
+          'the first child will be used.%s',
+          KeyEscapeUtils.unescape(name),
+          ReactComponentTreeHook.getStackAddendumByID(selfDebugID)
+        );
+      }
     }
+
     if (child !== null && keyUnique) {
       childInstances[name] = this.instantiateReactComponent(child, true);
     }
   };
 
-  instantiateChildren(nestedChildNodes) {
+  /**
+   * @see ReactChildReconciler.instantiateChildren
+   * Cloned because it uses
+   * @see React3Renderer.instantiateChild
+   *
+   * Generates a "mount image" for each of the supplied children. In the case
+   * of `ReactDOMComponent`, a mount image is a string of markup.
+   *
+   * @param {?object} nestedChildNodes Nested child maps.
+   * @param transaction
+   * @param context
+   * @param selfDebugID
+   * @return {?object} A set of child instances.
+   * @internal
+   */
+  instantiateChildren(nestedChildNodes,
+                      transaction,
+                      context,
+                      selfDebugID // 0 in production and for roots
+  ) {
     if (nestedChildNodes === null) {
       return null;
     }
 
     const childInstances = {};
 
-    traverseAllChildren(nestedChildNodes, this.instantiateChild, childInstances);
+    if (process.env.NODE_ENV !== 'production') {
+      traverseAllChildren(
+        nestedChildNodes,
+        (childInsts, child, name) => this.instantiateChild(
+          childInsts,
+          child,
+          name,
+          selfDebugID
+        ),
+        childInstances
+      );
+    } else {
+      traverseAllChildren(nestedChildNodes, this.instantiateChild, childInstances);
+    }
 
     return childInstances;
   }
@@ -494,8 +544,8 @@ class React3Renderer {
   };
 
   // used by react devtools
-  nativeTagToRootNodeID = () => null;
-  hostTagToRootNodeID = () => null;
+  nativeTagToRootNodeID = () => 0;
+  hostTagToRootNodeID = () => 0;
 
   _mountImageIntoNode(markup,
                       container,
@@ -768,8 +818,12 @@ class React3Renderer {
       const containerHasNonRootReactChild = this.hasNonRootReactChild(container);
 
       // Check if the container itself is a React root node.
-      const isContainerReactRoot = container && container.userData && container.userData.markup &&
-        container.userData.markup[ID_PROPERTY_NAME];
+      const isContainerReactRoot = !!(
+        container
+        && container.userData
+        && container.userData.markup
+        && container.userData.markup[ID_PROPERTY_NAME]
+      );
 
       if (process.env.NODE_ENV !== 'production') {
         warning(
@@ -817,6 +871,10 @@ class React3Renderer {
 
   // see instantiateReactComponent.js
   /**
+   * @see #instantiateReactComponent
+   *
+   * Cloned because it uses
+   * @see InternalComponent
    *
    * @param _node ( from createElement )
    * @param {boolean} shouldHaveDebugID
@@ -911,15 +969,9 @@ class React3Renderer {
     instance._mountImage = null;
 
     if (process.env.NODE_ENV !== 'production') {
-      if (!isEmptyNode && shouldHaveDebugID) {
+      if (shouldHaveDebugID) {
         const debugID = `r3r${this._debugIdPrefix}-${this._nextDebugID++}`;
         instance._debugID = debugID;
-        const displayName = getDisplayName(instance);
-        ReactInstrumentation.debugTool.onSetDisplayName(debugID, displayName);
-        const owner = node && node._owner;
-        if (owner) {
-          ReactInstrumentation.debugTool.onSetOwner(debugID, owner._debugID);
-        }
       } else {
         instance._debugID = 0;
       }
@@ -937,6 +989,10 @@ class React3Renderer {
   }
 
   /**
+   * @see ReactMount._renderNewRootComponent
+   *
+   * Cloned because it uses
+   * @see React3Renderer.instantiateReactComponent
    *
    * @param nextElement
    * @param {THREE.Object3D | HTMLCanvasElement} container
@@ -962,16 +1018,6 @@ class React3Renderer {
 
     const componentInstance = this.instantiateReactComponent(nextElement, false);
 
-    if (process.env.NODE_ENV !== 'production') {
-      // Mute future events from the top level wrapper.
-      // It is an implementation detail that devtools should not know about.
-      componentInstance._debugID = 0;
-    }
-
-    // The initial render is synchronous but any updates that happen during
-    // rendering, in componentWillMount or componentDidMount, will be batched
-    // according to the current batching strategy.
-
     if (!ReactUpdates.ReactReconcileTransaction) {
       // If the ReactReconcileTransaction has not been injected
       // let's just use the defaults from ReactMount.
@@ -983,6 +1029,10 @@ class React3Renderer {
     if (process.env.NODE_ENV !== 'production') {
       devToolRemoved = removeDevTool();
     }
+
+    // The initial render is synchronous but any updates that happen during
+    // rendering, in componentWillMount or componentDidMount, will be batched
+    // according to the current batching strategy.
 
     ReactUpdates.batchedUpdates(
       this.batchedMountComponentIntoNode,
@@ -998,19 +1048,8 @@ class React3Renderer {
       }
     }
 
-    const wrapperID = componentInstance._instance.rootID = this.createReactRootID();
+    const wrapperID = componentInstance._instance.rootID;
     this._instancesByReactRootID[wrapperID] = componentInstance;
-
-    if (process.env.NODE_ENV !== 'production') {
-      const reactRootID = 0;
-      // Record the root element in case it later gets transplanted.
-      this.rootMarkupsByReactRootID[reactRootID] = getReactRootMarkupInContainer(container);
-
-      // The instance here is TopLevelWrapper so we report mount for its child.
-      ReactInstrumentation.debugTool.onMountRootComponent(
-        componentInstance._renderedComponent._debugID
-      );
-    }
 
     return componentInstance;
   }
@@ -1044,6 +1083,8 @@ class React3Renderer {
   };
 
   /**
+   * @see #mountComponentIntoNode
+   *
    * Mounts this component and inserts it into the DOM.
    *
    * @param {ReactComponent} wrapperInstance The instance to mount.
@@ -1062,7 +1103,8 @@ class React3Renderer {
       transaction,
       null,
       react3ContainerInfo(wrapperInstance, container),
-      context
+      context,
+      0 /* parentDebugID */
     );
 
     wrapperInstance._renderedComponent._topLevelWrapper = wrapperInstance;
