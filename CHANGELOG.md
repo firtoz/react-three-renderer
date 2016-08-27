@@ -1,6 +1,15 @@
 CHANGELOG
 ===========
 
+## 2.3.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.1...v2.3.2) )
+
+### Components
+- `<React3/>`:
+  - Added `canvasRef` property for easier access to the canvas
+
+### Testing
+- Added production testing
+
 ## 2.3.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.0...v2.3.1) )
 
 ### Core
@@ -18,19 +27,19 @@ CHANGELOG
 - Fix the default value for the `rotation` property of `<absEllipse/>`
 - Remove the `receiveShadow` property from light components
 - Add missing attributes to `<meshPhongMaterial/>`:
-  - [`lightMapIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#lightMapIntensity)
-  - [`aoMapIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#aoMapIntensity)
-  - [`emissiveIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#emissiveIntensity)
-  - [`bumpScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#bumpScale)
-  - [`displacementScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#displacementScale)
+  - [`lightMapIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#lightmapintensity)
+  - [`aoMapIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#aomapintensity)
+  - [`emissiveIntensity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#emissiveintensity)
+  - [`bumpScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#bumpscale)
+  - [`displacementScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#displacementscale)
   - [`reflectivity`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#reflectivity)
-  - [`displacementBias`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#displacementBias)
-  - [`refractionRatio`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#refractionRatio)
-  - [`normalScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#normalScale)
+  - [`displacementBias`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#displacementbias)
+  - [`refractionRatio`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#refractionratio)
+  - [`normalScale`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#normalscale)
   - [`shading`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#shading)
   - [`skinning`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#skinning)
-  - [`morphTargets`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphTargets)
-  - [`morphNormals`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphNormals)
+  - [`morphTargets`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphtargets)
+  - [`morphNormals`](https://github.com/toxicFork/react-three-renderer/wiki/meshPhongMaterial#morphnormals)
 - Fixed accidental swapping of `tubularSegments` and `radialSegments` attributes for `<torusKnotGeometry/>`
 
 ### Documentation

@@ -41,6 +41,15 @@ module.exports = (type) => {
     mockConsole.expect('THREE.WebGLRenderer	79');
   };
 
+  if (process.env.NODE_ENV === 'production') {
+    mockConsole.expectDev = function _() {
+    };
+  } else {
+    mockConsole.expectDev = function _(...args) {
+      this.expect(...args);
+    };
+  }
+
   before(() => {
     document.body.appendChild(testDiv);
 

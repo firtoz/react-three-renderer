@@ -426,7 +426,7 @@ module.exports = type => {
       </scene>
     </React3>, testDiv);
 
-    mockConsole.expect('Warning: Foreign prop onMouseEnter found in mesh.');
+    mockConsole.expectDev('Warning: Foreign prop onMouseEnter found in mesh.');
     mockConsole.expectThreeLog();
 
     sinon.assert.calledOnce(boxRef);
@@ -473,7 +473,7 @@ module.exports = type => {
     expect(meshRef.lastCall.args[0], 'It should be a different mesh').not.to.equal(
       meshRef.getCall(0).args[0]);
 
-    mockConsole.expect('Warning: updating prop ' +
+    mockConsole.expectDev('Warning: updating prop ' +
       'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
 
     const meshRef2 = sinon.spy();
@@ -515,7 +515,7 @@ module.exports = type => {
     expect(meshRef2.lastCall.args[0], 'It should be a different mesh').not.to.equal(
       meshRef.lastCall.args[0]);
 
-    mockConsole.expect('Warning: updating prop ' +
+    mockConsole.expectDev('Warning: updating prop ' +
       'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
   });
 
