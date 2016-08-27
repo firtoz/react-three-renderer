@@ -37,15 +37,13 @@ module.exports = type => {
       }
 
       render() {
-        return (<group>
-        </group>);
+        return (<group />);
       }
     }
 
     class ChildScene extends React.Component {
       render() {
-        return (<scene>
-        </scene>);
+        return (<scene />);
       }
     }
 

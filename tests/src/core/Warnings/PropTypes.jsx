@@ -22,30 +22,30 @@ module.exports = type => {
       />
     </React3>, testDiv);
 
-    mockConsole.expect('Warning: Failed prop type: Invalid prop `name` of type `number`' +
+    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `name` of type `number`' +
       ' supplied to `scene`, expected `string`.\n' +
       '    in scene\n' +
       '    in react3');
-    mockConsole.expect('Warning: Failed prop type: Invalid prop `position`' +
+    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `position`' +
       ' of type `THREE.Vector2`' +
       ' supplied to `scene`, expected instance of `THREE.Vector3`.\n' +
       '    in scene\n' +
       '    in react3');
-    mockConsole.expect('Warning: Failed prop type: Invalid prop `rotation`' +
+    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `rotation`' +
       ' of type `THREE.Vector3`' +
       ' supplied to `scene`, expected instance of `THREE.Euler`.\n' +
       '    in scene\n' +
       '    in react3');
-    mockConsole.expect('Warning: Failed prop type: Invalid prop `quaternion`' +
+    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `quaternion`' +
       ' of type `THREE.Euler`' +
       ' supplied to `scene`, expected instance of `THREE.Quaternion`.\n' +
       '    in scene\n' +
       '    in react3');
-    mockConsole.expect('Warning: Failed prop type: Invalid prop `renderOrder` of type `string`' +
+    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `renderOrder` of type `string`' +
       ' supplied to `scene`, expected `number`.\n' +
       '    in scene\n' +
       '    in react3');
-    mockConsole.expect('Warning: Failed prop type: Invalid prop `fog` of type `String`' +
+    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `fog` of type `String`' +
       ' supplied to `scene`, expected instance of `THREE.Fog`.\n' +
       '    in scene\n' +
       '    in react3');

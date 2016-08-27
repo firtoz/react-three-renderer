@@ -18,7 +18,7 @@ module.exports = type => {
       forceManualRender
     />, testDiv);
 
-    mockConsole.expect('Warning: The `forceManualRender` property requires the ' +
+    mockConsole.expectDev('Warning: The `forceManualRender` property requires the ' +
       '`onManualRenderTriggerCreated` property to be set.');
     mockConsole.expectThreeLog();
   });
@@ -74,7 +74,7 @@ module.exports = type => {
       forceManualRender
     />, testDiv);
 
-    mockConsole.expect('Warning: The `React3` component has `forceManualRender` property set, ' +
+    mockConsole.expectDev('Warning: The `React3` component has `forceManualRender` property set, ' +
       'but not `onManualRenderTriggerCreated`. You will not be able to update the view.');
 
     ReactDOM.render(<React3
@@ -102,7 +102,7 @@ module.exports = type => {
       forceManualRender
     />, testDiv);
 
-    mockConsole.expect('Warning: The `React3` component has `forceManualRender` property set, ' +
+    mockConsole.expectDev('Warning: The `React3` component has `forceManualRender` property set, ' +
       'but not `onManualRenderTriggerCreated`. You will not be able to update the view.');
 
     // update w/h, should not warn again
