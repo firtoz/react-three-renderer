@@ -89,6 +89,18 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     this._threeObject = null;
   }
 
+
+  /**
+   * @see ReactCompositeComponent.
+   *
+   * Cloned because it needs to set _threeObject and remove dev tool
+   *
+   * Call the component's `render` method and update the DOM accordingly.
+   *
+   * @param {ReactReconcileTransaction} transaction
+   * @param context
+   * @internal
+   */
   _updateRenderedComponent(transaction, context) {
     let devToolRemoved;
     if (process.env.NODE_ENV !== 'production') {
@@ -314,13 +326,6 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
         transaction.getReactMountReady().enqueue(invokeComponentDidMountWithTimer, this);
       } else {
         transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
-      }
-    }
-
-    if (process.env.NODE_ENV !== 'production') {
-      if (this._debugID) {
-        const callback = () => ReactInstrumentation.debugTool.onComponentHasMounted(this._debugID);
-        transaction.getReactMountReady().enqueue(callback, this);
       }
     }
 

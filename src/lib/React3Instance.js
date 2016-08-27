@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 import THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';

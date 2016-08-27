@@ -1,5 +1,6 @@
 import PropTypes from 'react/lib/ReactPropTypes';
 import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
+import PropTypeError from './PropTypeError';
 
 const ANONYMOUS = '<<anonymous>>';
 
@@ -26,7 +27,7 @@ function createChainableTypeChecker(validate) {
     if (props[propName] === undefined) {
       const locationName = ReactPropTypeLocationNames[location];
       if (isRequired) {
-        return new Error(`Required ${locationName} \`${propFullName}\`` +
+        return new PropTypeError(`Required ${locationName} \`${propFullName}\`` +
           ` was not specified in \`${componentName}\`.`);
       }
       return null;
@@ -52,7 +53,7 @@ function createInstanceTypeChecker(expectedClass) {
       const locationName = ReactPropTypeLocationNames[location];
       const expectedClassName = expectedClass.name || expectedClass.displayName || ANONYMOUS;
       const actualClassName = getClassName(props[propName]);
-      return new Error(`Invalid ${locationName} \`${propFullName}\` of type ` +
+      return new PropTypeError(`Invalid ${locationName} \`${propFullName}\` of type ` +
         `\`${actualClassName}\` supplied to \`${componentName}\`, expected ` +
         `instance of \`${expectedClassName}\`.`);
     }

@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 module.exports = () => {
   try {
     const canvas = document.createElement('canvas');
