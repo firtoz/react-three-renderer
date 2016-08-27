@@ -10,13 +10,22 @@ if (isCoverage) {
 
 const testFiles = [];
 
+let travisFoldName = 'karma';
+
 if (process.env.KARMA_TDD || process.env.KARMA_SRC) {
+  travisFoldName += '-src';
   testFiles.push('src/meta/MockConsole.js');
   testFiles.push('src/tests-src.js');
 }
 
 if (!isCoverage && !process.env.KARMA_TDD && process.env.KARMA_LIB) {
+  travisFoldName += '-lib';
+
   testFiles.push('src/tests-lib.js');
+}
+
+if (process.env.NODE_ENV === 'production') {
+  travisFoldName += '-prod';
 }
 
 export default (config) => {
@@ -110,6 +119,13 @@ export default (config) => {
           '--ignore-gpu-blacklist',
         ],
       },
+    };
+
+    configuration.plugins.push(require('karma-travis-fold-reporter'));
+
+    configuration.reporters.push('travis-fold');
+    configuration.travisFoldReporter = {
+      foldName: travisFoldName,
     };
 
     // http://swizec.com/blog/how-to-run-javascript-tests-in-chrome-on-travis/swizec/6647
