@@ -179,6 +179,9 @@ module.exports = {
           geometry: {
             isComponent: true,
           },
+          bufferGeometry: {
+            isComponent: true,
+          },
           boxGeometry: {
             isComponent: true,
           },

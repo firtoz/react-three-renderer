@@ -98,6 +98,7 @@ class SomeClass extends React.Component{
     * DataTexture
 * [[Geometries]]:
   * [[geometry]]: Creates a [THREE.Geometry](http://threejs.org/docs/#Reference/Extras.Geometries/Geometry)
+  * [[bufferGeometry]]: Creates a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Core/BufferGeometry)
   * [[boxGeometry]]: Creates a [THREE.BoxGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BoxGeometry)
   * [[sphereGeometry]]: Creates a [THREE.SphereGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/SphereGeometry)
   * [[parametricGeometry]]: Creates a [THREE.ParametricGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ParametricGeometry)

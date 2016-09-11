@@ -51,6 +51,7 @@ Then you can place these components inside to create and assign resources,
     * [[parametricGeometry]]: Creates a [THREE.ParametricGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ParametricGeometry)
     * [[sphereGeometry]]: Creates a [THREE.SphereGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/SphereGeometry)
     * [[boxGeometry]]: Creates a [THREE.BoxGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BoxGeometry)
+    * [[bufferGeometry]]: Creates a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Core/BufferGeometry)
     * [[geometry]]: Creates a [THREE.Geometry](http://threejs.org/docs/#Reference/Extras.Geometries/Geometry)
   * [[Textures]]:
     * [[texture]]: Creates a [THREE.Texture](http://threejs.org/docs/#Reference/Textures/Texture)

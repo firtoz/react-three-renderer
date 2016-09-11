@@ -31,6 +31,7 @@ import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDes
 import ShapeResourceDescriptor from './descriptors/Resource/ShapeResourceDescriptor';
 
 import GeometryDescriptor from './descriptors/Geometry/GeometryDescriptor';
+import BufferGeometryDescriptor from './descriptors/Geometry/BufferGeometryDescriptor';
 import BoxGeometryDescriptor from './descriptors/Geometry/BoxGeometryDescriptor';
 import SphereGeometryDescriptor from './descriptors/Geometry/SphereGeometryDescriptor';
 import ParametricGeometryDescriptor from './descriptors/Geometry/ParametricGeometryDescriptor';
@@ -125,6 +126,7 @@ class ElementDescriptorContainer {
       texture: new TextureDescriptor(react3RendererInstance),
 
       geometry: new GeometryDescriptor(react3RendererInstance),
+      bufferGeometry: new BufferGeometryDescriptor(react3RendererInstance),
       boxGeometry: new BoxGeometryDescriptor(react3RendererInstance),
       sphereGeometry: new SphereGeometryDescriptor(react3RendererInstance),
       parametricGeometry: new ParametricGeometryDescriptor(react3RendererInstance),
