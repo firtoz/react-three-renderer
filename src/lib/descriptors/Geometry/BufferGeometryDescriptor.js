@@ -30,7 +30,7 @@ class BufferGeometryDescriptor extends GeometryDescriptorBase {
         ]),
         update(threeObject, attributeValue) {
           if (attributeValue) {
-            threeObject.addAttribute(attributeName, attributeValue, 3);
+            threeObject.addAttribute(attributeName, attributeValue);
           } else {
             threeObject.removeAttribute(attributeName);
           }
