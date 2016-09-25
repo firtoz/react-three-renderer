@@ -1,16 +1,17 @@
 import THREE from 'three';
-import Object3DDescriptor from '../Object3DDescriptor';
-
 import PropTypes from 'react/lib/ReactPropTypes';
+
+import Object3DDescriptor from '../Object3DDescriptor';
+import propTypeInstanceOf from '../../../utils/propTypeInstanceOf';
 
 class GridHelperDescriptor extends Object3DDescriptor {
   constructor(react3Instance) {
     super(react3Instance);
 
     this.hasProp('size', {
-      type: PropTypes.number,
+      type: PropTypes.number.isRequired,
       update: this.triggerRemount,
-      default: 10,
+      default: 1,
     });
 
     this.hasProp('step', {
@@ -20,23 +21,33 @@ class GridHelperDescriptor extends Object3DDescriptor {
     });
 
     this.hasProp('colorCenterLine', {
-      type: PropTypes.number,
+      type: PropTypes.oneOfType([
+        propTypeInstanceOf(THREE.Color),
+        PropTypes.number,
+        PropTypes.string,
+      ]),
       update: (grid, color) => {
         grid.setColors(color, grid.color2);
       },
+      default: 0x444444,
       updateInitial: true,
     });
 
     this.hasProp('colorGrid', {
-      type: PropTypes.number,
+      type: PropTypes.oneOfType([
+        propTypeInstanceOf(THREE.Color),
+        PropTypes.number,
+        PropTypes.string,
+      ]),
       update: (grid, color) => {
         grid.setColors(grid.color1, color);
       },
+      default: 0x888888,
       updateInitial: true,
     });
   }
 
-  applyInitialProps(threeObject:THREE.Object3D, props) {
+  applyInitialProps(threeObject: THREE.Object3D, props) {
     super.applyInitialProps(threeObject, props);
   }
 
@@ -44,7 +55,7 @@ class GridHelperDescriptor extends Object3DDescriptor {
     const {
       size,
       step,
-      } = props;
+    } = props;
     return new THREE.GridHelper(size, step);
   }
 
