@@ -26,11 +26,8 @@ class GridHelperDescriptor extends Object3DDescriptor {
         PropTypes.number,
         PropTypes.string,
       ]),
-      update: (grid, color) => {
-        grid.setColors(color, grid.color2);
-      },
+      update: this.triggerRemount,
       default: 0x444444,
-      updateInitial: true,
     });
 
     this.hasProp('colorGrid', {
@@ -39,11 +36,8 @@ class GridHelperDescriptor extends Object3DDescriptor {
         PropTypes.number,
         PropTypes.string,
       ]),
-      update: (grid, color) => {
-        grid.setColors(grid.color1, color);
-      },
+      update: this.triggerRemount,
       default: 0x888888,
-      updateInitial: true,
     });
   }
 
