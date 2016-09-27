@@ -7,6 +7,8 @@ CHANGELOG
 - Added `<gridHelper>` ( #60 )
 - `<React3/>`:
   - Added `canvasRef` property for easier access to the canvas
+- `<ambientLight/>`:
+  - Add `intensity` prop ( #110 )
 
 ### Testing
 - Added production testing
