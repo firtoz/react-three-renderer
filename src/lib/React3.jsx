@@ -42,6 +42,7 @@ class React3 extends React.Component {
       PropTypes.bool,
       PropTypes.number,
     ]),
+    canvasRef: PropTypes.func,
   };
 
   static defaultProps = {
@@ -89,6 +90,7 @@ class React3 extends React.Component {
     const propsToClone = { ...this.props };
 
     delete propsToClone.canvasStyle;
+    delete propsToClone.canvasRef;
 
     this.react3Renderer.render(
       <react3
@@ -101,6 +103,9 @@ class React3 extends React.Component {
 
   _canvasRef = (c) => {
     this._canvas = c;
+    if (this.props.canvasRef) {
+      this.props.canvasRef(c);
+    }
   };
 
   render() {

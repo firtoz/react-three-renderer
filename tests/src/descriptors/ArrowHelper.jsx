@@ -11,12 +11,12 @@ module.exports = type => {
     const { testDiv, React3, mockConsole } = require('../utils/initContainer')(type);
 
     it('Should warn for missing properties from ArrowHelper', () => {
-      mockConsole.expect('Warning: Failed prop type: ' +
+      mockConsole.expectDev('Warning: Failed prop type: ' +
         'Required prop `origin` was not specified in `arrowHelper`.\n' +
         '    in arrowHelper\n' +
         '    in scene\n' +
         '    in react3');
-      mockConsole.expect('Warning: Failed prop type: ' +
+      mockConsole.expectDev('Warning: Failed prop type: ' +
         'Required prop `dir` was not specified in `arrowHelper`.\n' +
         '    in arrowHelper\n' +
         '    in scene\n' +

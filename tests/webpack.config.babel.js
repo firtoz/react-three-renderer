@@ -11,6 +11,31 @@ const babelLoaderConfig = {
   query: {},
 };
 
+function createEnvDefinePlugins(...args) {
+  return args.reduce((accumulator, arg) => {
+    if (process.env.hasOwnProperty(arg)) {
+      let wantedValue = process.env[arg];
+      if (typeof wantedValue === 'string'
+        && wantedValue !== 'true'
+        && wantedValue !== 'false') {
+        wantedValue = `'${wantedValue}'`;
+      }
+
+      /* eslint-disable no-console */
+      console.log(`Webpack config: creating env define for ${arg}: "${wantedValue}"`);
+      /* eslint-enable no-console */
+
+      return accumulator.concat([
+        new webpack.DefinePlugin({
+          [`process.env.${arg}`]: wantedValue,
+        }),
+      ]);
+    }
+
+    return accumulator;
+  }, []);
+}
+
 const webpackConfig = {
   devtool: 'inline-source-map',
   // *optional* isparta options: istanbul behind isparta will use it
@@ -32,13 +57,11 @@ const webpackConfig = {
       colors: true,
     },
   },
-  plugins: process.env.TRAVIS ? [
-    new webpack.DefinePlugin({
-      'process.env': {
-        TRAVIS: process.env.TRAVIS,
-      },
-    }),
-  ] : [],
+  plugins: createEnvDefinePlugins(
+    'TRAVIS',
+    'NODE_ENV',
+    'KARMA_TDD'
+  ),
   resolve: {
     extensions: [
       '',

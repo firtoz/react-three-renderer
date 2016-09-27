@@ -136,6 +136,11 @@ Example warning message:
 
 **Default**: `500`
 
+### intensity
+``` number ```
+
+**Default**: `1`
+
 ### color
 ``` one of types [THREE.Color, number, string] ```: The light color.
 

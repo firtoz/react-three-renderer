@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
+import sinon from 'sinon';
 
 module.exports = type => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
@@ -8,17 +9,17 @@ module.exports = type => {
   const { expect } = chai;
 
   it('Mounts with prop warnings', () => {
-    mockConsole.expect('Warning: Failed prop type: ' +
+    mockConsole.expectDev('Warning: Failed prop type: ' +
       'Required prop `width` was not specified in `React3`.\n' +
       '    in React3');
-    mockConsole.expect('Warning: Failed prop type: ' +
+    mockConsole.expectDev('Warning: Failed prop type: ' +
       'Required prop `height` was not specified in `React3`.\n' +
       '    in React3');
 
-    mockConsole.expect('Warning: Failed prop type: ' +
+    mockConsole.expectDev('Warning: Failed prop type: ' +
       'Required prop `width` was not specified in `react3`.\n' +
       '    in react3');
-    mockConsole.expect('Warning: Failed prop type: ' +
+    mockConsole.expectDev('Warning: Failed prop type: ' +
       'Required prop `height` was not specified in `react3`.\n' +
       '    in react3');
 
@@ -30,7 +31,12 @@ module.exports = type => {
   });
 
   it('Mounts without warnings', () => {
-    const react3Instance = ReactDOM.render(<React3
+    const reactInstanceRef = sinon.spy();
+    const canvasRef = sinon.spy();
+
+    ReactDOM.render(<React3
+      ref={reactInstanceRef}
+      canvasRef={canvasRef}
       width={800}
       height={600}
     />, testDiv);
@@ -38,7 +44,7 @@ module.exports = type => {
     mockConsole.expectThreeLog();
 
     expect(testDiv.firstChild).to.be.an.instanceOf(HTMLCanvasElement);
-    const canvas = ReactDOM.findDOMNode(react3Instance);
+    const canvas = canvasRef.lastCall.args[0];
     expect(canvas).to.equal(testDiv.firstChild);
 
     expect(canvas.userData).to.exist();

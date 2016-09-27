@@ -29,7 +29,11 @@ This component can have the following children:
     'Additional Attributes': {
       children: {
         canvasStyle: {
-          description: '``` any ``` The style properties to be passed onto the canvas.',
+          description: '``` any ```: The style properties to be passed onto the canvas element.',
+        },
+        canvasRef: {
+          description: '``` function ```:' +
+          ' Used to get a reference for the canvas element.',
         },
       },
     },

@@ -283,7 +283,10 @@ Hopefully that will not be necessary; but please do let me know if
 ## Additional Attributes:
 
 ### canvasStyle
-``` any ``` The style properties to be passed onto the canvas.
+``` any ```: The style properties to be passed onto the canvas element.
+
+### canvasRef
+``` function ```: Used to get a reference for the canvas element.
 
 ## Static functions:
 

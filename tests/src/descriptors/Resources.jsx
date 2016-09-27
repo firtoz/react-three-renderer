@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
+
 const { expect } = chai;
 
 module.exports = type => {
@@ -8,7 +9,7 @@ module.exports = type => {
     const { testDiv, React3, mockConsole } = require('../utils/initContainer')(type);
 
     it('should give warnings for items with resourceId properties outside resources', () => {
-      mockConsole.expect('Warning: Found <meshBasicMaterial> with a resourceId property, ' +
+      mockConsole.expectDev('Warning: Found <meshBasicMaterial> with a resourceId property, ' +
         'but it was not placed within a <resources/> element.');
       mockConsole.expectThreeLog();
 
@@ -35,6 +36,18 @@ module.exports = type => {
 
     it('should give warnings for items ' +
       'without resourceId properties inside resources', () => {
+      let errorMessage;
+
+      if (process.env.NODE_ENV !== 'production') {
+        errorMessage = 'Resource container can only hold resources.' +
+          ' Found children without `resourceId` properties:' +
+          ' <meshBasicMaterial/>, <meshPhongMaterial/>.';
+      } else {
+        errorMessage = 'Minified exception occurred; use the non-minified' +
+          ' dev environment for the full error message and additional' +
+          ' helpful warnings.';
+      }
+
       expect(() => {
         ReactDOM.render((<React3
           width={800}
@@ -56,9 +69,7 @@ module.exports = type => {
             />
           </resources>
         </React3>), testDiv);
-      }).to.throw('Resource container can only hold resources.' +
-        ' Found children without `resourceId` properties:' +
-        ' <meshBasicMaterial/>, <meshPhongMaterial/>.');
+      }).to.throw(errorMessage);
     });
   });
 };
