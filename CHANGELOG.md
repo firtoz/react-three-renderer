@@ -3,6 +3,9 @@ CHANGELOG
 
 ## 2.3.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.1...v2.3.2) )
 
+### Docs
+- Added LICENSE ( MIT )
+
 ### Components
 - Added `<gridHelper>` ( #60 )
 - `<React3/>`:
