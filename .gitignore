@@ -1,5 +1,4 @@
 /node_modules
-.idea/dictionaries/
+.idea/
 /lib/
-.idea/jsLinters/
 .eslintcache
