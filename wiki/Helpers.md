@@ -7,7 +7,7 @@
 * [[cameraHelper]]: Creates a [THREE.CameraHelper](http://threejs.org/docs/#Reference/Extras.Helpers/CameraHelper)
 * [[axisHelper]]: Creates a [THREE.AxisHelper](http://threejs.org/docs/#Reference/Extras.Helpers/AxisHelper)
 * [[arrowHelper]]: Creates a [THREE.ArrowHelper](http://threejs.org/docs/#Reference/Extras.Helpers/ArrowHelper)
-* [[gridHelper]]: Creates a [THREE.Object3D](http://threejs.org/docs/#Reference/Core/Object3D)
+* [[gridHelper]]: Creates a [THREE.GridHelper](https://threejs.org/docs/index.html#Reference/Extras.Helpers/GridHelper)
 * TODO:
   * BoundingBoxHelper
   * BoxHelper

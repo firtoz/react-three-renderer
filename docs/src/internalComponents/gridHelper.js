@@ -1,8 +1,8 @@
 import object3D from './object3D';
 
 class gridHelper extends object3D {
-  getDescription() {
-    return 'Creates a [THREE.AxisHelper](https://threejs.org/docs/index.html#Reference/Extras.Helpers/GridHelper)';
+  getIntro() {
+    return 'Creates a [THREE.GridHelper](https://threejs.org/docs/index.html#Reference/Extras.Helpers/GridHelper)';
   }
 
   getAttributesText() {
