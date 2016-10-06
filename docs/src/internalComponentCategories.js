@@ -241,10 +241,12 @@ module.exports = {
           textGeometry: {
             isComponent: true,
           },
+          shapeGeometry: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeGeometry', // BoxGeometry
-          'ShapeGeometry', // hmmm
         ],
       },
       Shapes: {
