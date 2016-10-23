@@ -26,6 +26,6 @@
 * [[tubeGeometry]]: Creates a [THREE.TubeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry)
 * [[dodecahedronGeometry]]: Creates a [THREE.DodecahedronGeometry](http://threejs.org/docs/index.html#Reference/Extras.Geometries/DodecahedronGeometry)
 * [[textGeometry]]: Creates a [THREE.TextGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry)
+* [[shapeGeometry]]: Creates a [THREE.ShapeGeometry](https://threejs.org/docs/#Reference/Geometries/ShapeGeometry)
 * TODO:
   * CubeGeometry
-  * ShapeGeometry

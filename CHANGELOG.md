@@ -1,11 +1,24 @@
 CHANGELOG
 ===========
 
-## 2.3.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.1...v2.3.2) )
+## 2.3.3 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.2...v2.3.3) )
 
 ### Components
+- Added `<shapeGeometry>` ( #114 )
+- Fixed a bug which would cause a crash when you changed some properties on components
+ whose children used ref functions
+
+## 2.3.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.1...v2.3.2) )
+
+### Docs
+- Added LICENSE ( MIT )
+
+### Components
+- Added `<gridHelper>` ( #60 )
 - `<React3/>`:
   - Added `canvasRef` property for easier access to the canvas
+- `<ambientLight/>`:
+  - Add `intensity` prop ( #110 )
 
 ### Testing
 - Added production testing

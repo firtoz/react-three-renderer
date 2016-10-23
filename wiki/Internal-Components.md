@@ -58,13 +58,13 @@ class SomeClass extends React.Component{
     * [[cameraHelper]]: Creates a [THREE.CameraHelper](http://threejs.org/docs/#Reference/Extras.Helpers/CameraHelper)
     * [[axisHelper]]: Creates a [THREE.AxisHelper](http://threejs.org/docs/#Reference/Extras.Helpers/AxisHelper)
     * [[arrowHelper]]: Creates a [THREE.ArrowHelper](http://threejs.org/docs/#Reference/Extras.Helpers/ArrowHelper)
+    * [[gridHelper]]: Creates a [THREE.GridHelper](https://threejs.org/docs/index.html#Reference/Extras.Helpers/GridHelper)
     * TODO:
       * BoundingBoxHelper
       * BoxHelper
       * DirectionalLightHelper
       * EdgesHelper
       * FaceNormalsHelper
-      * GridHelper
       * HemisphereLightHelper
       * PointLightHelper
       * SpotLightHelper
@@ -119,9 +119,9 @@ class SomeClass extends React.Component{
   * [[tubeGeometry]]: Creates a [THREE.TubeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry)
   * [[dodecahedronGeometry]]: Creates a [THREE.DodecahedronGeometry](http://threejs.org/docs/index.html#Reference/Extras.Geometries/DodecahedronGeometry)
   * [[textGeometry]]: Creates a [THREE.TextGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry)
+  * [[shapeGeometry]]: Creates a [THREE.ShapeGeometry](https://threejs.org/docs/#Reference/Geometries/ShapeGeometry)
   * TODO:
     * CubeGeometry
-    * ShapeGeometry
 * [[Shapes]]:
   * [[shape]]: Creates a [THREE.Shape](http://threejs.org/docs/#Reference/Extras.Core/Shape)
     * [[moveTo]]: Calls [THREE.Path#moveTo](http://threejs.org/docs/#Reference/Extras.Core/Path.moveTo) on the parent shape

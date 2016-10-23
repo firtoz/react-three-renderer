@@ -5,4 +5,5 @@ module.exports = (type) => {
   require('./DirectionalLight')(type);
   require('./PointLight')(type);
   require('./ArrowHelper')(type);
+  require('./Shapes')(type);
 };

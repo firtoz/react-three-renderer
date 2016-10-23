@@ -91,6 +91,9 @@ module.exports = {
               arrowHelper: {
                 isComponent: true,
               },
+              gridHelper: {
+                isComponent: true,
+              },
             },
             TODO: [
               'BoundingBoxHelper',
@@ -98,7 +101,6 @@ module.exports = {
               'DirectionalLightHelper',
               'EdgesHelper',
               'FaceNormalsHelper',
-              'GridHelper',
               'HemisphereLightHelper',
               'PointLightHelper',
               'SpotLightHelper',
@@ -242,10 +244,12 @@ module.exports = {
           textGeometry: {
             isComponent: true,
           },
+          shapeGeometry: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeGeometry', // BoxGeometry
-          'ShapeGeometry', // hmmm
         ],
       },
       Shapes: {

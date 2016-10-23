@@ -66,7 +66,7 @@ function mockPropTypes() {
     constructor(type, isRequired = false) {
       this._type = type;
 
-      this._isRequired = !!isRequired;
+      this._isRequired = isRequired;
       if (!isRequired) {
         this.isRequired = new PropType(type, true);
       }

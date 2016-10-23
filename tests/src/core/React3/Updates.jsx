@@ -474,7 +474,8 @@ module.exports = type => {
       meshRef.getCall(0).args[0]);
 
     mockConsole.expectDev('Warning: updating prop ' +
-      'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
+      `onMouseEnter ( ${(function onMouseEnter() {
+      }).toString()} ) for MeshDescriptor`);
 
     const meshRef2 = sinon.spy();
 
@@ -516,7 +517,8 @@ module.exports = type => {
       meshRef.lastCall.args[0]);
 
     mockConsole.expectDev('Warning: updating prop ' +
-      'onMouseEnter ( function onMouseEnter() {} ) for MeshDescriptor');
+      `onMouseEnter ( ${(function onMouseEnter() {
+      }).toString()} ) for MeshDescriptor`);
   });
 
   it('updates state of components', () => {
