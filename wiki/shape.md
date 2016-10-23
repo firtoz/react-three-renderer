@@ -4,8 +4,9 @@
 
 Creates a [THREE.Shape](http://threejs.org/docs/#Reference/Extras.Core/Shape)
 
-Place this within [[&lt;extrudeGeometry&gt;|extrudeGeometry]]
-    or [&lt;resources&gt;](resources).
+Place this within [[&lt;extrudeGeometry&gt;|extrudeGeometry]],
+    [[&lt;shapeGeometry&gt;|shapeGeometry]],
+    or [[&lt;resources&gt;|resources]].
 
 ## Attributes
 

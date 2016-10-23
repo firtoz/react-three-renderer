@@ -4,7 +4,9 @@ import dirtyChai from 'dirty-chai';
 
 if (process.env.KARMA_TDD) {
   sourceMapSupport.install({ // eslint-disable-line no-undef
-    handleUncaughtExceptions: false,
+    handleUncaughtExceptions: true,
+    environment: 'node',
+    hookRequire: true,
   });
 }
 

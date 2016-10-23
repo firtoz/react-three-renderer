@@ -1,8 +1,8 @@
-import DocInfo from '../DocInfo';
+import geometry from './geometry';
 
-class shapeGeometry extends DocInfo {
-  getDescription() {
-    return '';
+class shapeGeometry extends geometry {
+  getIntro() {
+    return 'Creates a [THREE.ShapeGeometry](https://threejs.org/docs/#Reference/Geometries/ShapeGeometry)';
   }
 
   getAttributesText() {
