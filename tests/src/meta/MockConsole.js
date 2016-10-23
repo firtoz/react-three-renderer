@@ -7,7 +7,9 @@ import MockConsole from '../utils/MockConsole';
 
 if (process.env.KARMA_TDD) {
   sourceMapSupport.install({ // eslint-disable-line no-undef
-    handleUncaughtExceptions: false,
+    handleUncaughtExceptions: true,
+    environment: 'node',
+    hookRequire: true,
   });
 }
 
