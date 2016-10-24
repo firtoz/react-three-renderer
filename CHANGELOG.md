@@ -7,6 +7,7 @@ CHANGELOG
 - Added `<shapeGeometry>` ( #114 )
 - Fixed a bug which would cause a crash when you changed some properties on components
  whose children used ref functions
+- Added `<bufferGeometry>` ( #105 #119 )
 
 ## 2.3.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.1...v2.3.2) )
 
