@@ -8,7 +8,7 @@ class shape extends DocInfo {
   getDescription() {
     return `Place this within [[&lt;extrudeGeometry&gt;|extrudeGeometry]],
     [[&lt;shapeGeometry&gt;|shapeGeometry]],
-    or [&lt;resources&gt;](resources).`;
+    or [[&lt;resources&gt;|resources]].`;
   }
 
   getAttributesText() {
