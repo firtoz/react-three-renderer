@@ -785,13 +785,10 @@ class React3DInstance {
     }
 
     if (contextLossExtension && this._canvas) {
-      this._canvas.addEventListener('webglcontextlost', () => {
-        // this should recreate the canvas
-        this._recreateCanvasCallback();
-      }, false);
-
       // noinspection JSUnresolvedFunction
       contextLossExtension.loseContext();
+
+      this._recreateCanvasCallback();
     } else {
       this._recreateCanvasCallback();
     }

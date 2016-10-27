@@ -592,4 +592,86 @@ module.exports = type => {
       'The state should have changed correct number of times'
     ).to.equal(9);
   });
+
+  it('Calls canvasRef when the props update', () => {
+    const canvasRef = sinon.spy();
+
+    ReactDOM.render(<React3
+      canvasRef={canvasRef}
+      width={800}
+      height={600}
+    />, testDiv);
+
+    mockConsole.expectThreeLog();
+
+    const canvas = canvasRef.lastCall.args[0];
+    expect(canvas).to.equal(testDiv.firstChild);
+
+    const secondCanvasRef = sinon.spy();
+
+    ReactDOM.render(<React3
+      canvasRef={secondCanvasRef}
+      width={800}
+      height={600}
+    />, testDiv);
+
+    expect(canvasRef.callCount).to.equal(2);
+    expect(canvasRef.lastCall.args[0]).to.be.null(); // ref removed
+
+    expect(secondCanvasRef.callCount).to.equal(1);
+    expect(secondCanvasRef.lastCall.args[0]).to.equal(testDiv.firstChild); // call on the newer one
+  });
+
+  it('Does not call canvasRef again when changing simple properties', () => {
+    const canvasRef = sinon.spy();
+
+    ReactDOM.render(<React3
+      canvasRef={canvasRef}
+      width={800}
+      height={600}
+    />, testDiv);
+
+    mockConsole.expectThreeLog();
+
+    expect(canvasRef.lastCall.args[0]).to.equal(testDiv.firstChild);
+
+    ReactDOM.render(<React3
+      canvasRef={canvasRef}
+      width={400}
+      height={400}
+    />, testDiv);
+
+    expect(canvasRef.callCount).to.equal(1);
+  });
+
+  it('Calls canvasRef when the canvas remounts', () => {
+    const canvasRef = sinon.spy();
+
+    ReactDOM.render(<React3
+      canvasRef={canvasRef}
+      width={800}
+      height={600}
+    />, testDiv);
+
+    mockConsole.expectThreeLog();
+
+    expect(canvasRef.lastCall.args[0]).to.equal(testDiv.firstChild);
+
+    const oldCanvas = canvasRef.lastCall.args[0];
+
+    ReactDOM.render(<React3
+      canvasRef={canvasRef}
+      width={800}
+      height={600}
+      antialias
+    />, testDiv);
+
+    mockConsole.expectThreeLog();
+
+    // canvas should have remounted
+    expect(oldCanvas).not.to.equal(testDiv.firstChild);
+
+    expect(canvasRef.callCount).to.equal(3); // unmount and remount!
+    expect(canvasRef.lastCall.args[0]).to.equal(testDiv.firstChild);
+  });
 };
