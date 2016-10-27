@@ -2,9 +2,7 @@
 
 # gridHelper
 
-Creates a [THREE.Object3D](http://threejs.org/docs/#Reference/Core/Object3D)
-
-Creates a [THREE.AxisHelper](https://threejs.org/docs/index.html#Reference/Extras.Helpers/GridHelper)
+Creates a [THREE.GridHelper](https://threejs.org/docs/index.html#Reference/Extras.Helpers/GridHelper)
 
 ## Attributes
 

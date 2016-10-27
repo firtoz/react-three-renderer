@@ -181,6 +181,9 @@ module.exports = {
           geometry: {
             isComponent: true,
           },
+          bufferGeometry: {
+            isComponent: true,
+          },
           boxGeometry: {
             isComponent: true,
           },
@@ -241,10 +244,12 @@ module.exports = {
           textGeometry: {
             isComponent: true,
           },
+          shapeGeometry: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeGeometry', // BoxGeometry
-          'ShapeGeometry', // hmmm
         ],
       },
       Shapes: {

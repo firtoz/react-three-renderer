@@ -1,6 +1,17 @@
 CHANGELOG
 ===========
 
+## 2.3.3 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.2...v2.3.3) )
+
+### Components
+- Added `<shapeGeometry>` ( #114 )
+- Fixed a bug which would cause a crash when you changed some properties on components
+ whose children used ref functions
+- Added `<bufferGeometry>` ( #105 #119 )
+
+### Core
+- Fixed bug which would not allow you to get a canvas reference through the `canvasRef` property in some conditions ( #115 )
+
 ## 2.3.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.1...v2.3.2) )
 
 ### Docs

@@ -7,6 +7,10 @@ import emptyFunction from 'fbjs/lib/emptyFunction';
 import flattenChildren from 'react/lib/flattenChildren';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
 import ReactInstrumentation from 'react/lib/ReactInstrumentation';
+
+import ReactElement from 'react/lib/ReactElement';
+import ReactRef from 'react/lib/ReactRef';
+
 import Flags from './React3ComponentFlags';
 
 import ID_PROPERTY_NAME from './utils/idPropertyName';
@@ -574,12 +578,40 @@ class InternalComponent {
     this.threeElementDescriptor.completePropertyUpdates(this._threeObject);
   }
 
+  _removeAllChildRefs() {
+    const renderedChildren = this._renderedChildren;
+
+    if (renderedChildren) {
+      const renderedChildrenKeys = Object.keys(renderedChildren);
+
+      for (let i = 0; i < renderedChildrenKeys.length; ++i) {
+        const name = renderedChildrenKeys[i];
+
+        const renderedChild = renderedChildren[name];
+
+        if (renderedChild && renderedChild._currentElement && renderedChild._currentElement.ref) {
+          ReactRef.detachRefs(renderedChild, renderedChild._currentElement);
+
+          renderedChild._currentElement = ReactElement.cloneElement(renderedChild._currentElement, {
+            ref: null,
+          });
+        }
+
+        renderedChild._removeAllChildRefs();
+      }
+    }
+  }
+
   /**
    * @see ReactDOMComponent.Mixin.unmountComponent
    */
   unmountComponent(safely) {
     if (this._threeObject !== null) {
       this.threeElementDescriptor.componentWillUnmount(this._threeObject);
+    }
+
+    if (this._forceRemountOfComponent) {
+      this._removeAllChildRefs(); // prevent attaching of refs to children
     }
 
     this.unmountChildren(safely);

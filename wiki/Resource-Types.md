@@ -31,6 +31,7 @@ Then you can place these components inside to create and assign resources,
   * [[Shapes]]:
     * [[shape]]: Creates a [THREE.Shape](http://threejs.org/docs/#Reference/Extras.Core/Shape)
   * [[Geometries]]:
+    * [[shapeGeometry]]: Creates a [THREE.ShapeGeometry](https://threejs.org/docs/#Reference/Geometries/ShapeGeometry)
     * [[textGeometry]]: Creates a [THREE.TextGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry)
     * [[dodecahedronGeometry]]: Creates a [THREE.DodecahedronGeometry](http://threejs.org/docs/index.html#Reference/Extras.Geometries/DodecahedronGeometry)
     * [[tubeGeometry]]: Creates a [THREE.TubeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry)
@@ -51,6 +52,7 @@ Then you can place these components inside to create and assign resources,
     * [[parametricGeometry]]: Creates a [THREE.ParametricGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ParametricGeometry)
     * [[sphereGeometry]]: Creates a [THREE.SphereGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/SphereGeometry)
     * [[boxGeometry]]: Creates a [THREE.BoxGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BoxGeometry)
+    * [[bufferGeometry]]: Creates a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Core/BufferGeometry)
     * [[geometry]]: Creates a [THREE.Geometry](http://threejs.org/docs/#Reference/Extras.Geometries/Geometry)
   * [[Textures]]:
     * [[texture]]: Creates a [THREE.Texture](http://threejs.org/docs/#Reference/Textures/Texture)

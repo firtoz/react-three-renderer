@@ -66,6 +66,20 @@ class React3 extends React.Component {
     this._render();
   }
 
+  componentWillReceiveProps(newProps) {
+    const lastProps = this.props;
+
+    if (lastProps.canvasRef !== newProps.canvasRef) {
+      if (lastProps.canvasRef) {
+        lastProps.canvasRef(null);
+      }
+
+      if (newProps.canvasRef) {
+        newProps.canvasRef(this._canvas);
+      }
+    }
+  }
+
   shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate;
 
   componentDidUpdate() {

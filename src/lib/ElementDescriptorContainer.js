@@ -31,6 +31,7 @@ import TextureResourceDescriptor from './descriptors/Resource/TextureResourceDes
 import ShapeResourceDescriptor from './descriptors/Resource/ShapeResourceDescriptor';
 
 import GeometryDescriptor from './descriptors/Geometry/GeometryDescriptor';
+import BufferGeometryDescriptor from './descriptors/Geometry/BufferGeometryDescriptor';
 import BoxGeometryDescriptor from './descriptors/Geometry/BoxGeometryDescriptor';
 import SphereGeometryDescriptor from './descriptors/Geometry/SphereGeometryDescriptor';
 import ParametricGeometryDescriptor from './descriptors/Geometry/ParametricGeometryDescriptor';
@@ -51,6 +52,7 @@ import ExtrudeGeometryDescriptor from './descriptors/Geometry/ExtrudeGeometryDes
 import TubeGeometryDescriptor from './descriptors/Geometry/TubeGeometryDescriptor';
 import DodecahedronGeometryDescriptor from './descriptors/Geometry/DodecahedronGeometryDescriptor';
 import TextGeometryDescriptor from './descriptors/Geometry/TextGeometryDescriptor';
+import ShapeGeometryDescriptor from './descriptors/Geometry/ShapeGeometryDescriptor';
 
 import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
 import MoveToDescriptor from './descriptors/Geometry/Shapes/MoveToDescriptor';
@@ -126,6 +128,7 @@ class ElementDescriptorContainer {
       texture: new TextureDescriptor(react3RendererInstance),
 
       geometry: new GeometryDescriptor(react3RendererInstance),
+      bufferGeometry: new BufferGeometryDescriptor(react3RendererInstance),
       boxGeometry: new BoxGeometryDescriptor(react3RendererInstance),
       sphereGeometry: new SphereGeometryDescriptor(react3RendererInstance),
       parametricGeometry: new ParametricGeometryDescriptor(react3RendererInstance),
@@ -146,6 +149,7 @@ class ElementDescriptorContainer {
       tubeGeometry: new TubeGeometryDescriptor(react3RendererInstance),
       dodecahedronGeometry: new DodecahedronGeometryDescriptor(react3RendererInstance),
       textGeometry: new TextGeometryDescriptor(react3RendererInstance),
+      shapeGeometry: new ShapeGeometryDescriptor(react3RendererInstance),
 
       shape: new ShapeDescriptor(react3RendererInstance),
       moveTo: new MoveToDescriptor(react3RendererInstance),
