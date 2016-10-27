@@ -42,6 +42,14 @@ class Object3DDescriptor extends THREEElementDescriptor {
       default: new THREE.Euler(),
     });
 
+    this.hasProp('matrix', {
+      type: propTypeInstanceOf(THREE.Matrix4),
+      update(threeObject, matrix) {
+        threeObject.matrix.copy(matrix);
+      },
+      default: new THREE.Matrix4(),
+    });
+
     this.hasProp('quaternion', {
       type: propTypeInstanceOf(THREE.Quaternion),
       update: copyUpdate('quaternion'),
@@ -119,6 +127,10 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
     if (props.rotation) {
       threeObject.rotation.copy(props.rotation);
+    }
+
+    if (props.matrix) {
+      threeObject.matrix.copy(props.matrix);
     }
 
     if (props.quaternion) {
