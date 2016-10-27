@@ -82,7 +82,7 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
   }
 
   getOptions(props) {
-    const options = super.getOptions();
+    const options = super.getOptions(props);
 
     [
       'steps',
