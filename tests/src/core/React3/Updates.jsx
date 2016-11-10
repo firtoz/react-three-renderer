@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
-import THREE from 'three';
+import * as THREE from 'three';
 import sinon from 'sinon';
 import { EventEmitter } from 'events';
 

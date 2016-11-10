@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PathDescriptorBase from './PathDescriptorBase';
 import resource from '../../decorators/resource';

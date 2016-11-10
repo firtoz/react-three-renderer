@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -50,7 +50,8 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
     const extraTypes = [
       PropTypes.bool, // bevelEnabled
       propTypeInstanceOf(THREE.CurvePath), // extrudePath
-      propTypeInstanceOf(THREE.TubeGeometry.FrenetFrames), // frames
+      // propTypeInstanceOf(THREE.TubeGeometry.FrenetFrames), // frames
+      PropTypes.object, // frames
     ];
 
     extraNames.forEach((propName, i) => {
