@@ -48,12 +48,12 @@ Defaults to `material`. Other example values:
 **Default**: `1`
 
 ### linecap
-``` one of [round] ```
+``` one of ['round'] ```
 
 **Default**: `'round'`
 
 ### linejoin
-``` one of [round] ```
+``` one of ['round'] ```
 
 **Default**: `'round'`
 

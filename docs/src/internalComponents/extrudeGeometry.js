@@ -19,18 +19,20 @@ This is to prevent having to remount the component every time anything changes.
   getAttributesText() {
     return {
       ...super.getAttributesText(),
-      shapes: '',
       settings: '',
       amount: '',
       bevelThickness: '',
       bevelSize: '',
       bevelSegments: '',
       bevelEnabled: '',
-      curveSegments: '',
       steps: '',
       extrudePath: '',
-      UVGenerator: '',
       frames: '',
+
+      shapes: 'Array of shapes, or a single shape THREE.Shape',
+      curveSegments: 'Default is 12 (not used in three.js at the moment)',
+      material: 'Index of the material in a material list',
+      UVGenerator: 'A UV generator, defaults to ExtrudeGeometry\'s WorldUVGenerator',
     };
   }
 }

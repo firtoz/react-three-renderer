@@ -9,7 +9,7 @@ Creates a [THREE.WebGLRenderer](http://threejs.org/docs/#Reference/Renderers/Web
 ## Attributes
 
 ### context
-``` one of [2d, 3d] ``` *``` required ```*: The rendering context.
+``` one of ['2d', '3d'] ``` *``` required ```*: The rendering context.
 
 Currently only '3d' is supported.
 
@@ -134,7 +134,7 @@ Preferred value: window.devicePixelRatio.
 **Default**: `1`
 
 ### precision
-``` one of [highp, mediump, lowp] ```: Sets the precision of the renderer.
+``` one of ['highp', 'mediump', 'lowp'] ```: Sets the precision of the renderer.
 
 See [THREE.WebGLRenderer#precision](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).
 

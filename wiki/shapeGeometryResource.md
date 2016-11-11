@@ -15,7 +15,7 @@ Have the [resourceId](#resourceid) property point to a [shape resource](shape),
 **Default**: `''`
 
 ### type
-``` one of [points, spacedPoints, shape] ``` *``` required ```*: The shape type.
+``` one of ['points', 'spacedPoints', 'shape'] ``` *``` required ```*: The shape type.
 
 **Default**: `''`
 
