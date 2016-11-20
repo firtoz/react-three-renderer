@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
-import THREE from 'three';
+import * as THREE from 'three';
 
 import { expect } from 'chai';
 

@@ -547,8 +547,12 @@ function getComponentInfo(componentName, propTypes) {
     fs.writeFileSync(infoPath, `import DocInfo from '../DocInfo';
 
 class ${componentName} extends DocInfo {
+  getIntro() {
+    return '';
+  }
+
   getDescription() {
-    return ${'``'};
+    return '';
   }
 
   getAttributesText() {

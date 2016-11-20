@@ -35,7 +35,7 @@ Here's a simple example that implements the [getting started scene for three.js]
 ```js
 import React from 'react';
 import React3 from 'react-three-renderer';
-import THREE from 'three';
+import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
 class Simple extends React.Component {

@@ -5,29 +5,25 @@ import PropTypes from 'react/lib/ReactPropTypes';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
-class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
+class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
     this.hasColor();
-    this.hasColor('specular', 0x111111);
     this.hasColor('emissive', 0x000000);
     this.hasWireframe();
 
-    this.hasProp('shininess', {
-      type: PropTypes.number,
-      simple: true,
-      default: 30,
-    });
-
-    this.hasProp('metal', {
-      type: PropTypes.bool,
-      update: (threeObject, metal) => {
-        threeObject.metal = metal;
-        threeObject.needsUpdate = true;
-      },
-      default: false,
-    });
+    [
+      'roughness',
+      'metalness',
+    ]
+      .forEach(propName => {
+        this.hasProp(propName, {
+          type: PropTypes.number,
+          simple: true,
+          default: 0.5,
+        });
+      });
 
     [
       'lightMapIntensity',
@@ -35,7 +31,6 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
       'emissiveIntensity',
       'bumpScale',
       'displacementScale',
-      'reflectivity',
     ]
       .forEach(propName => {
         this.hasProp(propName, {
@@ -114,14 +109,14 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     const materialDescription = super.getMaterialDescription(props);
 
     [
-      'shininess',
+      'roughness',
+      'metalness',
 
       'lightMapIntensity',
       'aoMapIntensity',
       'emissiveIntensity',
       'bumpScale',
       'displacementScale',
-      'reflectivity',
 
       'displacementBias',
 
@@ -146,8 +141,8 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
   construct(props) {
     const materialDescription = this.getMaterialDescription(props);
 
-    return new THREE.MeshPhongMaterial(materialDescription);
+    return new THREE.MeshStandardMaterial(materialDescription);
   }
 }
 
-module.exports = MeshPhongMaterialDescriptor;
+module.exports = MeshStandardMaterialDescriptor;
