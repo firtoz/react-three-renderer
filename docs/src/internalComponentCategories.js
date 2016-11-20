@@ -74,9 +74,11 @@ module.exports = {
               pointLight: {
                 isComponent: true,
               },
+              HemisphereLight: {
+                isComponent: true,
+              },
             },
             TODO: [
-              'HemisphereLight', // SEE lights demo
               'Light', // SEE lights demo
             ],
           },

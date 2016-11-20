@@ -188,10 +188,10 @@ class LightDescriptorBase extends Object3DDescriptor {
     }
   }
 
-  hasColor() {
+  hasColor(colorType = 'color') {
     this._hasColor = true;
 
-    this.hasProp('color', {
+    this.hasProp(colorType, {
       type: PropTypes.oneOfType([
         propTypeInstanceOf(THREE.Color),
         PropTypes.number,

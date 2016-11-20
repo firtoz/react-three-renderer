@@ -22,6 +22,7 @@ import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
 import SpotLightDescriptor from './descriptors/Light/SpotLightDescriptor';
 import PointLightDescriptor from './descriptors/Light/PointLightDescriptor';
+import HemisphereLightDescriptor from './descriptors/Light/HemisphereLightDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
@@ -61,7 +62,6 @@ import BezierCurveToDescriptor from './descriptors/Geometry/Shapes/BezierCurveTo
 import QuadraticCurveToDescriptor from './descriptors/Geometry/Shapes/QuadraticCurveToDescriptor';
 import AbsArcDescriptor from './descriptors/Geometry/Shapes/AbsArcDescriptor';
 import AbsEllipseDescriptor from './descriptors/Geometry/Shapes/AbsEllipseDescriptor';
-import HoleDescriptor from './descriptors/Geometry/Shapes/HoleDescriptor';
 import SplineThruDescriptor from './descriptors/Geometry/Shapes/SplineThruDescriptor';
 
 import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
@@ -158,13 +158,13 @@ class ElementDescriptorContainer {
       quadraticCurveTo: new QuadraticCurveToDescriptor(react3RendererInstance),
       absArc: new AbsArcDescriptor(react3RendererInstance),
       absEllipse: new AbsEllipseDescriptor(react3RendererInstance),
-      hole: new HoleDescriptor(react3RendererInstance),
       splineThru: new SplineThruDescriptor(react3RendererInstance),
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
       spotLight: new SpotLightDescriptor(react3RendererInstance),
       pointLight: new PointLightDescriptor(react3RendererInstance),
+      hemisphereLight: new HemisphereLightDescriptor(react3RendererInstance),
 
       resources: new ResourcesDescriptor(react3RendererInstance),
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),
