@@ -50,8 +50,11 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
     const extraTypes = [
       PropTypes.bool, // bevelEnabled
       propTypeInstanceOf(THREE.CurvePath), // extrudePath
-      // propTypeInstanceOf(THREE.TubeGeometry.FrenetFrames), // frames
-      PropTypes.object, // frames
+      PropTypes.shape({
+        tangents: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)),
+        normals: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)),
+        binormals: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)),
+      }), // frames
     ];
 
     extraNames.forEach((propName, i) => {
