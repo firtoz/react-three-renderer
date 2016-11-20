@@ -29,12 +29,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "fbjs": "0.8.4",
-    "three": "^0.82.1"
+    "fbjs": "0.8.4"
   },
   "peerDependencies": {
     "react": "~15.3.0",
-    "three": ">=0.80.0"
+    "three": "~0.82.1"
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
