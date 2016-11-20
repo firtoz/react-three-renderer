@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import PolyhedronGeometryDescriptorBase from './PolyhedronGeometryDescriptorBase';
 
 class OctahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {

@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 
 import THREEElementDescriptor from '../THREEElementDescriptor';

@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import warning from 'fbjs/lib/warning';

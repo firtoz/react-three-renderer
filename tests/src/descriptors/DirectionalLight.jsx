@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
 import sinon from 'sinon';
-import THREE from 'three';
+import * as THREE from 'three';
 
 module.exports = type => {
   const { expect } = chai;

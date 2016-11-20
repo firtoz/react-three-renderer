@@ -22,6 +22,7 @@ import AmbientLightDescriptor from './descriptors/Light/AmbientLightDescriptor';
 import DirectionalLightDescriptor from './descriptors/Light/DirectionalLightDescriptor';
 import SpotLightDescriptor from './descriptors/Light/SpotLightDescriptor';
 import PointLightDescriptor from './descriptors/Light/PointLightDescriptor';
+import HemisphereLightDescriptor from './descriptors/Light/HemisphereLightDescriptor';
 
 import ResourcesDescriptor from './descriptors/Resource/ResourcesDescriptor';
 import GeometryResourceDescriptor from './descriptors/Resource/GeometryResourceDescriptor';
@@ -68,6 +69,7 @@ import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescr
 import MeshBasicMaterialDescriptor from './descriptors/Material/MeshBasicMaterialDescriptor';
 import MeshPhongMaterialDescriptor from './descriptors/Material/MeshPhongMaterialDescriptor';
 import MeshLambertMaterialDescriptor from './descriptors/Material/MeshLambertMaterialDescriptor';
+import MeshStandardMaterialDescriptor from './descriptors/Material/MeshStandardMaterialDescriptor';
 import ShaderMaterialDescriptor from './descriptors/Material/ShaderMaterialDescriptor';
 import RawShaderMaterialDescriptor from './descriptors/Material/RawShaderMaterialDescriptor';
 import TextureDescriptor from './descriptors/Material/TextureDescriptor';
@@ -116,6 +118,7 @@ class ElementDescriptorContainer {
       meshBasicMaterial: new MeshBasicMaterialDescriptor(react3RendererInstance),
       meshPhongMaterial: new MeshPhongMaterialDescriptor(react3RendererInstance),
       meshLambertMaterial: new MeshLambertMaterialDescriptor(react3RendererInstance),
+      meshStandardMaterial: new MeshStandardMaterialDescriptor(react3RendererInstance),
       pointsMaterial: new PointsMaterialDescriptor(react3RendererInstance),
       shaderMaterial: new ShaderMaterialDescriptor(react3RendererInstance),
       rawShaderMaterial: new RawShaderMaterialDescriptor(react3RendererInstance),
@@ -165,6 +168,7 @@ class ElementDescriptorContainer {
       directionalLight: new DirectionalLightDescriptor(react3RendererInstance),
       spotLight: new SpotLightDescriptor(react3RendererInstance),
       pointLight: new PointLightDescriptor(react3RendererInstance),
+      hemisphereLight: new HemisphereLightDescriptor(react3RendererInstance),
 
       resources: new ResourcesDescriptor(react3RendererInstance),
       materialResource: new MaterialResourceDescriptor(react3RendererInstance),

@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import reactElementWrapper from 'react/lib/ReactElement';
 import ReactInstanceMap from 'react/lib/ReactInstanceMap';
 import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
