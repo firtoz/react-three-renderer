@@ -21,8 +21,10 @@ class ModuleDescriptor extends THREEElementDescriptor {
       const locationName = ReactPropTypeLocationNames[location];
 
       if (!props[propName]) {
-        return new PropTypeError(`Required ${locationName} \`${propFullName}\` ` +
-          `was not specified in \`${componentName}\`.`);
+        return new PropTypeError(
+          `The ${locationName} \`${propFullName}\` is marked as required in ` +
+          `\`${componentName}\`, but its value is \`undefined\`.`
+        );
       }
 
       if (!(props[propName].prototype instanceof Module)) {

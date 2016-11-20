@@ -1,15 +1,14 @@
-import ReactReconciler from 'react/lib/ReactReconciler';
-import ReactMultiChild from 'react/lib/ReactMultiChild';
-
 import invariant from 'fbjs/lib/invariant';
 import emptyFunction from 'fbjs/lib/emptyFunction';
 
 import flattenChildren from 'react/lib/flattenChildren';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
-import ReactInstrumentation from 'react/lib/ReactInstrumentation';
-
 import ReactElement from 'react/lib/ReactElement';
-import ReactRef from 'react/lib/ReactRef';
+
+import ReactInstrumentation from 'react-dom/lib/ReactInstrumentation';
+import ReactReconciler from 'react-dom/lib/ReactReconciler';
+import ReactMultiChild from 'react-dom/lib/ReactMultiChild';
+import ReactRef from 'react-dom/lib/ReactRef';
 
 import Flags from './React3ComponentFlags';
 
@@ -60,7 +59,7 @@ let getDebugID;
 if (process.env.NODE_ENV !== 'production') {
   /* eslint-disable global-require */
 
-  const ReactInstanceMap = require('react/lib/ReactInstanceMap');
+  const ReactInstanceMap = require('react-dom/lib/ReactInstanceMap');
 
   /* eslint-enable global-require */
 

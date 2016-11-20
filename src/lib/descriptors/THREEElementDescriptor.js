@@ -1,6 +1,5 @@
 import invariant from 'fbjs/lib/invariant';
 
-import ReactPropTypeLocations from 'react/lib/ReactPropTypeLocations';
 import warning from 'fbjs/lib/warning';
 
 import events from 'events';
@@ -424,7 +423,7 @@ if (process.env.NODE_ENV !== 'production') {
       _checkPropTypes(element.type,
         this.propTypes,
         props,
-        ReactPropTypeLocations.prop,
+        'prop',
         owner,
         element,
         debugID);

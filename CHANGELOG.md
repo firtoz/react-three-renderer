@@ -4,7 +4,8 @@ CHANGELOG
 ## 3.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.3...v3.0.0) )
 
 ### Core
-- Fix compatibility for `three@~0.82.1`! ( #126 )
+- Fix compatibility for `three@~0.82.1`! ( #126 Fixes #106 #124 )
+- Fix compatibility for `react@15.4.0`! ( Fixes #118 )
 
 ### Components
 - Added `<hemisphereLight>` ( #126 )

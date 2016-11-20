@@ -10,17 +10,17 @@ module.exports = type => {
 
   it('Mounts with prop warnings', () => {
     mockConsole.expectDev('Warning: Failed prop type: ' +
-      'Required prop `width` was not specified in `React3`.\n' +
+      'The prop `width` is marked as required in `React3`, but its value is `undefined`.\n' +
       '    in React3');
     mockConsole.expectDev('Warning: Failed prop type: ' +
-      'Required prop `height` was not specified in `React3`.\n' +
+      'The prop `height` is marked as required in `React3`, but its value is `undefined`.\n' +
       '    in React3');
 
     mockConsole.expectDev('Warning: Failed prop type: ' +
-      'Required prop `width` was not specified in `react3`.\n' +
+      'The prop `width` is marked as required in `react3`, but its value is `undefined`.\n' +
       '    in react3');
     mockConsole.expectDev('Warning: Failed prop type: ' +
-      'Required prop `height` was not specified in `react3`.\n' +
+      'The prop `height` is marked as required in `react3`, but its value is `undefined`.\n' +
       '    in react3');
 
     mockConsole.expectThreeLog();

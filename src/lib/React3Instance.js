@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-import ReactUpdates from 'react/lib/ReactUpdates';
+
+import ReactUpdates from 'react-dom/lib/ReactUpdates';
 
 import Viewport from './Viewport';
 import React3Module from './Module';

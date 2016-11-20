@@ -1,11 +1,14 @@
-import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
 import ReactElement from 'react/lib/ReactElement';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
+
 import invariant from 'fbjs/lib/invariant';
-import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import emptyObject from 'fbjs/lib/emptyObject';
 import warning from 'fbjs/lib/warning';
+
+import ReactCompositeComponent from 'react-dom/lib/ReactCompositeComponent';
+import ReactInstanceMap from 'react-dom/lib/ReactInstanceMap';
+import ReactInstrumentation from 'react-dom/lib/ReactInstrumentation';
+
 import removeDevTool from './utils/removeDevTool';
 
 class ReactCompositeComponentMixinImpl {
@@ -13,7 +16,7 @@ class ReactCompositeComponentMixinImpl {
 
 ReactCompositeComponentMixinImpl.prototype = {
   ...ReactCompositeComponentMixinImpl.prototype,
-  ...ReactCompositeComponent.Mixin,
+  ...ReactCompositeComponent,
 };
 
 function warnIfInvalidElement(Component, element) {
