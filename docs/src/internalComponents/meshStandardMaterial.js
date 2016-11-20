@@ -13,29 +13,6 @@ class meshStandardMaterial extends MaterialInfo {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
-      transparent: '',
-      alphaTest: '',
-      side: '',
-      opacity: '',
-      visible: '',
-      resourceId: '',
-      emissive: '',
-      wireframe: '',
-      wireframeLinewidth: '',
-      roughness: '',
-      metalness: '',
-      lightMapIntensity: '',
-      aoMapIntensity: '',
-      emissiveIntensity: '',
-      bumpScale: '',
-      displacementScale: '',
-      displacementBias: '',
-      refractionRatio: '',
-      normalScale: '',
-      shading: '',
-      skinning: '',
-      morphTargets: '',
-      morphNormals: '',
     };
   }
 }

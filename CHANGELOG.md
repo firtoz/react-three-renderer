@@ -1,6 +1,17 @@
 CHANGELOG
 ===========
 
+## 3.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.3...v3.0.0) )
+
+### Core
+- Fix compatibility for `three@~0.82.1`! ( #126 )
+
+### Components
+- Added `<hemisphereLight>` ( #126 )
+- Added `<meshStandardMaterial>` ( #126 )
+- ExtrudeGeometry:
+  - Change type validation for `frames`
+
 ## 2.3.3 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.2...v2.3.3) )
 
 ### Components
