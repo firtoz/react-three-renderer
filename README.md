@@ -11,8 +11,6 @@ Would you like to know more? [See the wiki](https://github.com/toxicFork/react-t
 
 > Currently supported react version: `15.3.1` ( things break fast when you fly this close to the sun )
 
-> Currently supported three version: `0.79.0` ( need to update babel config to work better with rollup )
-
 [![Join the chat at https://gitter.im/toxicFork/react-three-renderer](https://badges.gitter.im/toxicFork/react-three-renderer.svg)](https://gitter.im/toxicFork/react-three-renderer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg)](https://travis-ci.org/toxicFork/react-three-renderer)
 
 [![npm](https://nodei.co/npm/react-three-renderer.svg?downloads=true)](https://nodei.co/npm/react-three-renderer/)
@@ -21,7 +19,7 @@ Installation
 ============
 
 ```
-npm install --save react@15.3.1 react-dom@15.3.1 three@0.79.0
+npm install --save react@15.3.1 react-dom@15.3.1 three@0.82.1
 npm install --save react-three-renderer
 ```
 
