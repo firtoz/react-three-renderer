@@ -1,23 +1,25 @@
 import * as THREE from 'three';
 import reactElementWrapper from 'react/lib/ReactElement';
-import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-import ReactInstanceHandles from 'react/lib/ReactInstanceHandles';
-import ReactReconciler from 'react/lib/ReactReconciler';
-import ReactUpdates from 'react/lib/ReactUpdates';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
-import ReactUpdateQueue from 'react/lib/ReactUpdateQueue';
 import ReactComponent from 'react/lib/ReactComponent';
-import ReactInjection from 'react/lib/ReactInjection';
-import ReactReconcileTransaction from 'react/lib/ReactReconcileTransaction';
-import ReactDefaultBatchingStrategy from 'react/lib/ReactDefaultBatchingStrategy';
 import KeyEscapeUtils from 'react/lib/KeyEscapeUtils';
-import traverseAllChildren from 'react/lib/traverseAllChildren';
-import getHostComponentFromComposite from 'react/lib/getHostComponentFromComposite';
-import shouldUpdateReactComponent from 'react/lib/shouldUpdateReactComponent';
-import ReactInstrumentation from 'react/lib/ReactInstrumentation';
+
 import emptyObject from 'fbjs/lib/emptyObject';
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
+
+import ReactInstanceMap from 'react-dom/lib/ReactInstanceMap';
+import ReactReconciler from 'react-dom/lib/ReactReconciler';
+import ReactUpdates from 'react-dom/lib/ReactUpdates';
+import ReactUpdateQueue from 'react-dom/lib/ReactUpdateQueue';
+import ReactInjection from 'react-dom/lib/ReactInjection';
+import ReactReconcileTransaction from 'react-dom/lib/ReactReconcileTransaction';
+import ReactDefaultBatchingStrategy from 'react-dom/lib/ReactDefaultBatchingStrategy';
+import traverseAllChildren from 'react-dom/lib/traverseAllChildren';
+import getHostComponentFromComposite from 'react-dom/lib/getHostComponentFromComposite';
+import shouldUpdateReactComponent from 'react-dom/lib/shouldUpdateReactComponent';
+import ReactInstrumentation from 'react-dom/lib/ReactInstrumentation';
+
 import react3ContainerInfo from './React3ContainerInfo';
 import EventDispatcher from './utils/EventDispatcher';
 import InternalComponent from './InternalComponent';
@@ -98,11 +100,12 @@ function unmountComponentFromNode(instance, container, safely) {
 
 class TopLevelWrapper extends ReactComponent {
   render() {
-    // this.props is actually a ReactElement
-    return this.props;
+    return this.props.child;
   }
 
   static isReactComponent = {};
+
+  static isReactTopLevelWrapper = true;
 }
 
 if (process.env.NODE_ENV !== 'production') {
@@ -408,8 +411,23 @@ class React3Renderer {
       if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined'
         && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
         this._devToolsRendererDefinition = {
-          CurrentOwner: ReactCurrentOwner,
-          InstanceHandles: ReactInstanceHandles,
+          ComponentTree: {
+            getClosestInstanceFromNode(node) {
+              return React3ComponentTree.getClosestInstanceFromMarkup(node);
+            },
+            getNodeFromInstance(instInput) {
+              let inst = instInput;
+              // inst is an internal instance (but could be a composite)
+              while (inst._renderedComponent) {
+                inst = inst._renderedComponent;
+              }
+              if (inst) {
+                return React3ComponentTree.getMarkupFromInstance(inst);
+              }
+
+              return null;
+            },
+          },
           Mount: this,
           Reconciler: ReactReconciler,
           TextComponent: InternalComponent,
@@ -594,11 +612,11 @@ class React3Renderer {
     if (process.env.NODE_ENV !== 'production') {
       const hostInstance = React3ComponentTree.getInstanceFromMarkup(firstChild);
       if (hostInstance._debugID !== 0) {
-        ReactInstrumentation.debugTool.onHostOperation(
-          hostInstance._debugID,
-          'mount',
-          markup.toString()
-        );
+        ReactInstrumentation.debugTool.onHostOperation({
+          instanceID: hostInstance._debugID,
+          type: 'mount',
+          payload: markup.toString(),
+        });
       }
     }
   }
@@ -652,8 +670,10 @@ class React3Renderer {
       }
     }
 
-    const nextWrappedElement = reactElementWrapper(TopLevelWrapper,
-      null, null, null, null, null, nextElement);
+    const nextWrappedElement = reactElementWrapper.createElement(
+      TopLevelWrapper,
+      { child: nextElement }
+    );
 
     let nextContext;
     if (parentComponent) {
@@ -667,7 +687,7 @@ class React3Renderer {
 
     if (prevComponent) {
       const prevWrappedElement = prevComponent._currentElement;
-      const prevElement = prevWrappedElement.props;
+      const prevElement = prevWrappedElement.props.child;
       if (shouldUpdateReactComponent(prevElement, nextElement)) {
         const publicInst = prevComponent._renderedComponent.getPublicInstance();
         const updatedCallback = callback &&

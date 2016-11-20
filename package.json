@@ -29,10 +29,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "fbjs": "0.8.4"
+    "fbjs": "0.8.6"
   },
   "peerDependencies": {
-    "react": "~15.3.0",
+    "react": "~15.4.0",
+    "react-dom": "~15.4.0",
     "three": "~0.82.1"
   },
   "devDependencies": {
@@ -75,8 +76,8 @@
     "mocha": "3.1.2",
     "mocha-loader": "1.0.0",
     "pngjs2": "2.0.0",
-    "react": "15.3.1",
-    "react-dom": "15.3.1",
+    "react": "15.4.0",
+    "react-dom": "15.4.0",
     "sinon": "2.0.0-pre",
     "source-map-support": "0.4.6",
     "stream-to-string": "1.1.0",
