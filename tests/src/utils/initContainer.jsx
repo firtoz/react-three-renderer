@@ -22,6 +22,7 @@ module.exports = (type) => {
     return undefined;
   }
 
+  /* eslint-disable import/no-unresolved */
   let React3;
   switch (type) {
     case 'src':
@@ -34,11 +35,12 @@ module.exports = (type) => {
       expect(false, 'Invalid test type');
       break;
   }
+  /* eslint-enable import/no-unresolved */
 
   const mockConsole = new MockConsole();
 
   mockConsole.expectThreeLog = () => {
-    mockConsole.expect('THREE.WebGLRenderer	79');
+    mockConsole.expect('THREE.WebGLRenderer	82');
   };
 
   if (process.env.NODE_ENV === 'production') {

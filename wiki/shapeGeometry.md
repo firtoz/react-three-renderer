@@ -53,7 +53,14 @@ once sent to GPU.
 ``` number ```: Index of the material in a material list
 
 ### UVGenerator
-``` shape of {"generateTopUV":{"_type":"function","_isRequired":false,"isRequired":{"_type":"function","_isRequired":true}},"generateSideWallUV":{"_type":"function","_isRequired":false,"isRequired":{"_type":"function","_isRequired":true}}} ```: A UV generator, defaults to ExtrudeGeometry's WorldUVGenerator
+```
+shape of 
+{
+	generateTopUV: function,
+	generateSideWallUV: function
+}
+```
+A UV generator, defaults to ExtrudeGeometry's WorldUVGenerator
 
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].

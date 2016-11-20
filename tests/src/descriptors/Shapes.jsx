@@ -1,5 +1,5 @@
 import React from 'react';
-import THREE from 'three';
+import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import chai from 'chai';

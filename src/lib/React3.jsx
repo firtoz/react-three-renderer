@@ -1,6 +1,6 @@
 import React from 'react';
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
-import THREE from 'three';
+import * as THREE from 'three';
 
 import React3Renderer from './React3Renderer';
 import propTypeInstanceOf from './utils/propTypeInstanceOf';

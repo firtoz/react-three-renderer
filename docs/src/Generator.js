@@ -78,6 +78,10 @@ function mockPropTypes() {
         req = ' *``` required ```*';
       }
 
+      if (this._type.indexOf('\n') !== -1) {
+        return `${'```'}\n${this._type}\n${'```'}${req}`;
+      }
+
       return `${'```'} ${this._type} ${'```'}${req}`;
     }
   }
@@ -122,14 +126,81 @@ function mockPropTypes() {
     new PropType(`object of ${instanceType.displayName || instanceType.name
     || instanceType._type || instanceType}`);
 
-  ReactPropTypes.oneOf = (values) => new PropType(`one of [${values.join(', ')}]`);
+  ReactPropTypes.oneOf = (values) => new PropType(`one of [${values.map(value => {
+    if (typeof value === 'string') {
+      return `'${value}'`;
+    }
+
+    return value;
+  }).join(', ')}]`);
 
   ReactPropTypes.oneOfType = (values) =>
     new PropType(`one of types [${values.map(value => value.displayName
       || value.name || value._type || value
     ).join(', ')}]`);
 
-  ReactPropTypes.shape = (shape) => new PropType(`shape of ${JSON.stringify(shape)}`);
+  ReactPropTypes.shape = (shape) => {
+    function describeShape(shapeToDescribe) {
+      const result = {};
+
+      Object.keys(shapeToDescribe).forEach(shapeKey => {
+        const value = shapeToDescribe[shapeKey];
+
+        if (value.isShape) {
+          result[shapeKey] = value.rawShape;
+        } else {
+          result[shapeKey] = `${value}`.replace(/\s*`+\s*/g, '');
+        }
+      });
+
+      return result;
+    }
+
+    function tab(numTabs) {
+      let result = '';
+
+      for (let i = 0; i < numTabs; ++i) {
+        result += '\t';
+      }
+
+      return result;
+    }
+
+    function stringify(obj, numTabs = 0, ignoreFirstTab = false) {
+      // like JSON.stringify but without quotes
+
+      if (typeof obj === 'object') {
+        let result = '';
+
+        if (!ignoreFirstTab) {
+          result = `${tab(numTabs)}{`;
+        } else {
+          result = '{';
+        }
+
+        Object.keys(obj).forEach((key, idx) => {
+          const valueString = stringify(obj[key], numTabs + 1, true);
+          if (idx !== 0) {
+            result += ',';
+          }
+          result += `\n${tab(numTabs + 1)}${key}: ${valueString}`;
+        });
+
+        result += `\n${tab(numTabs)}}`;
+
+        return result;
+      }
+
+      return `${obj}`;
+    }
+
+    const result = new PropType(`shape of \n${stringify(describeShape(shape))}`);
+
+    result.isShape = true;
+    result.rawShape = describeShape(shape);
+
+    return result;
+  };
 }
 
 function buildCategories() {
@@ -562,13 +633,19 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
             propDetailText += '\n\n';
           }
 
-          propDetailText += `### ${propName}
-${propTypes[propName].toString()}`;
+          const typeString = propTypes[propName].toString();
+          propDetailText += `### ${propName}\n${typeString}`;
 
           const propDescription = attributesText[propName];
 
           if (propDescription && propDescription.length > 0) {
-            propDetailText += `: ${propDescription}`;
+            if (typeString.indexOf('\n') === -1) {
+              propDetailText += ': ';
+            } else {
+              propDetailText += '\n';
+            }
+
+            propDetailText += `${propDescription}`;
           }
 
           return Promise.resolve()
@@ -802,6 +879,14 @@ module.exports = (done) => {
       };
 
       THREE[key].displayName = `THREE.${key}`;
+
+      const threeClass = THREE[key];
+
+      Object.keys(value).forEach(objectKey => {
+        threeClass[objectKey] = {};
+        threeClass[objectKey].toString = () => `THREE.${key}.${objectKey}`;
+        threeClass[objectKey].isMockedThreeKey = true;
+      });
 
       return;
     }
