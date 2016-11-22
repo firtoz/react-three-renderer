@@ -62,6 +62,7 @@ import BezierCurveToDescriptor from './descriptors/Geometry/Shapes/BezierCurveTo
 import QuadraticCurveToDescriptor from './descriptors/Geometry/Shapes/QuadraticCurveToDescriptor';
 import AbsArcDescriptor from './descriptors/Geometry/Shapes/AbsArcDescriptor';
 import AbsEllipseDescriptor from './descriptors/Geometry/Shapes/AbsEllipseDescriptor';
+import HoleDescriptor from './descriptors/Geometry/Shapes/HoleDescriptor';
 import SplineThruDescriptor from './descriptors/Geometry/Shapes/SplineThruDescriptor';
 
 import PointsMaterialDescriptor from './descriptors/Material/PointsMaterialDescriptor';
@@ -158,6 +159,7 @@ class ElementDescriptorContainer {
       quadraticCurveTo: new QuadraticCurveToDescriptor(react3RendererInstance),
       absArc: new AbsArcDescriptor(react3RendererInstance),
       absEllipse: new AbsEllipseDescriptor(react3RendererInstance),
+      hole: new HoleDescriptor(react3RendererInstance),
       splineThru: new SplineThruDescriptor(react3RendererInstance),
 
       ambientLight: new AmbientLightDescriptor(react3RendererInstance),
