@@ -35,7 +35,6 @@ class LightDescriptorBase extends Object3DDescriptor {
 
     this.removeProp('receiveShadow');
 
-    this._hasColor = false;
     this._hasDirection = false;
 
     if (process.env.NODE_ENV !== 'production') {
@@ -188,10 +187,8 @@ class LightDescriptorBase extends Object3DDescriptor {
     }
   }
 
-  hasColor() {
-    this._hasColor = true;
-
-    this.hasProp('color', {
+  hasColor(colorType = 'color', defaultValue = 0xffffff) {
+    this.hasProp(colorType, {
       type: PropTypes.oneOfType([
         propTypeInstanceOf(THREE.Color),
         PropTypes.number,
@@ -200,7 +197,7 @@ class LightDescriptorBase extends Object3DDescriptor {
       update(threeObject, newColor) {
         threeObject.color.set(newColor);
       },
-      default: 0xffffff,
+      default: defaultValue,
     });
   }
 

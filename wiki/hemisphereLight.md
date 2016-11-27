@@ -136,8 +136,8 @@ Example warning message:
 
 **Default**: `500`
 
-### color
-``` one of types [THREE.Color, number, string] ```: The light color.
+### skyColor
+``` one of types [THREE.Color, number, string] ```
 
 **Default**: `0xffffff` [[images/0xffffff.png]]
 
