@@ -277,8 +277,8 @@ class InternalComponent {
    * @private
    */
   _reconcilerInstantiateChildren(nestedChildren,
-                                 transaction,
-                                 context) {
+    transaction,
+    context) {
     if (process.env.NODE_ENV !== 'production') {
       const selfDebugID = getDebugID(this);
 
@@ -321,11 +321,11 @@ class InternalComponent {
    * @private
    */
   _reconcilerUpdateChildren(prevChildren,
-                            nextNestedChildrenElements,
-                            mountImages,
-                            removedMarkups,
-                            transaction,
-                            context) {
+    nextNestedChildrenElements,
+    mountImages,
+    removedMarkups,
+    transaction,
+    context) {
     let nextChildren;
     let selfDebugID = 0;
 

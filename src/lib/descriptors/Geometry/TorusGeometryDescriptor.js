@@ -14,7 +14,7 @@ class TorusGeometryDescriptor extends GeometryDescriptorBase {
       'radialSegments',
       'tubularSegments',
       'arc',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

@@ -2,7 +2,7 @@ import React from 'react';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
-module.exports = type => {
+module.exports = (type) => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
 
   it('Shows helpful warnings with correct class names', () => {

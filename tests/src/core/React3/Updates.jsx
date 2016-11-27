@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import sinon from 'sinon';
 import { EventEmitter } from 'events';
 
-module.exports = type => {
+module.exports = (type) => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
 
   const { expect } = chai;

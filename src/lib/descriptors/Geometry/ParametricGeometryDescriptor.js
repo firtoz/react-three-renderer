@@ -10,7 +10,7 @@ class ParametricGeometryDescriptor extends GeometryDescriptorBase {
     [
       'slices',
       'stacks',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,

@@ -17,7 +17,7 @@ class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
       'roughness',
       'metalness',
     ]
-      .forEach(propName => {
+      .forEach((propName) => {
         this.hasProp(propName, {
           type: PropTypes.number,
           simple: true,
@@ -32,7 +32,7 @@ class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
       'bumpScale',
       'displacementScale',
     ]
-      .forEach(propName => {
+      .forEach((propName) => {
         this.hasProp(propName, {
           type: PropTypes.number,
           update(threeObject, propValue) {
@@ -46,7 +46,7 @@ class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
     [
       'displacementBias',
     ]
-      .forEach(propName => {
+      .forEach((propName) => {
         this.hasProp(propName, {
           type: PropTypes.number,
           update(threeObject, propValue) {
@@ -60,7 +60,7 @@ class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
     [
       'refractionRatio',
     ]
-      .forEach(propName => {
+      .forEach((propName) => {
         this.hasProp(propName, {
           type: PropTypes.number,
           update(threeObject, propValue) {
@@ -93,7 +93,7 @@ class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
       'skinning',
       'morphTargets',
       'morphNormals',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.bool,
         update(threeObject, propValue) {

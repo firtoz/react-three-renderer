@@ -24,7 +24,7 @@ class MeshDescriptor extends Object3DDescriptor {
     return mesh;
   }
 
-  _invalidChild = child => {
+  _invalidChild = (child) => {
     const invalid = !(
       child instanceof THREE.Material ||
       child instanceof ResourceReference ||

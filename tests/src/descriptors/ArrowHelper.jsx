@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import chai from 'chai';
 
-module.exports = type => {
+module.exports = (type) => {
   const { expect } = chai;
 
   describe('ArrowHelperDescriptor', () => {

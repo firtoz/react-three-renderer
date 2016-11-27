@@ -236,14 +236,14 @@ class React3Renderer {
    * @internal
    */
   updateChildren(prevChildren,
-                 nextChildren,
-                 mountImages,
-                 removedMarkups,
-                 transaction,
-                 hostParent,
-                 hostContainerInfo,
-                 context,
-                 selfDebugID // 0 in production and for roots
+    nextChildren,
+    mountImages,
+    removedMarkups,
+    transaction,
+    hostParent,
+    hostContainerInfo,
+    context,
+    selfDebugID // 0 in production and for roots
   ) {
     // We currently don't have a way to track moves here but if we use iterators
     // instead of for..in we can zip the iterators and check if an item has
@@ -507,9 +507,9 @@ class React3Renderer {
    * @internal
    */
   instantiateChildren(nestedChildNodes,
-                      transaction,
-                      context,
-                      selfDebugID // 0 in production and for roots
+    transaction,
+    context,
+    selfDebugID // 0 in production and for roots
   ) {
     if (nestedChildNodes === null) {
       return null;
@@ -566,10 +566,10 @@ class React3Renderer {
   hostTagToRootNodeID = () => 0;
 
   _mountImageIntoNode(markup,
-                      container,
-                      instance,
-                      shouldReuseMarkup,
-                      transaction) { // eslint-disable-line no-unused-vars
+    container,
+    instance,
+    shouldReuseMarkup,
+    transaction) { // eslint-disable-line no-unused-vars
     // TODO try to do server-side rendering for THREE
 
     if (!container.userData) {

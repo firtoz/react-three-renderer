@@ -11,7 +11,7 @@ class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
     [
       'width',
       'height',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.updateCacheAndReplace.bind(this, propName),
@@ -22,7 +22,7 @@ class PlaneBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
     [
       'widthSegments',
       'heightSegments',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

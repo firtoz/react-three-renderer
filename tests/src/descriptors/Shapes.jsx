@@ -6,7 +6,7 @@ import chai from 'chai';
 
 const { expect } = chai;
 
-module.exports = type => {
+module.exports = (type) => {
   describe('Shapes', () => {
     const { testDiv, React3, mockConsole } = require('../utils/initContainer')(type);
 

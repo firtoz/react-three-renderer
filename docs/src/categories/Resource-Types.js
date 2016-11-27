@@ -9,7 +9,7 @@ module.exports = {
     };
 
     this.resourceTypes
-      .forEach(resourceType => {
+      .forEach((resourceType) => {
         let parent = resourceType.parent;
         const ancestors = [];
 

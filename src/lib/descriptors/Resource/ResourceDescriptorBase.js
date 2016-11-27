@@ -63,7 +63,7 @@ class ResourceDescriptorBase extends THREEElementDescriptor {
   };
 
   unmount(threeObject) {
-    threeObject.userData._eventCleanupQueue.forEach(cleanup => {
+    threeObject.userData._eventCleanupQueue.forEach((cleanup) => {
       cleanup();
     });
 

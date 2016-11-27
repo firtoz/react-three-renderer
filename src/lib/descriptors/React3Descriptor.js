@@ -146,7 +146,7 @@ class React3Descriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
-    Object.keys(propProxy).forEach(propName => {
+    Object.keys(propProxy).forEach((propName) => {
       const info = propProxy[propName];
       const propNameFirstLetterCapital = propName[0].toUpperCase() + propName.substr(1);
 

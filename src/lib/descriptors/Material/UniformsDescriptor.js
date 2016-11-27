@@ -22,7 +22,7 @@ class UniformsDescriptor extends THREEElementDescriptor {
   }
 
   addChildren(threeObject, children) {
-    children.forEach(child => {
+    children.forEach((child) => {
       invariant(child instanceof Uniform,
         'The <uniforms/> component can only have <uniform/> elements as children.');
     });

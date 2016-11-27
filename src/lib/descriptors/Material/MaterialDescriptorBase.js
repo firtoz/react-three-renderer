@@ -67,7 +67,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   getMaterialDescription(props) {
     const materialDescription = {};
 
-    this._colors.forEach(colorPropName => {
+    this._colors.forEach((colorPropName) => {
       if (props.hasOwnProperty(colorPropName)) {
         materialDescription[colorPropName] = props[colorPropName];
       }

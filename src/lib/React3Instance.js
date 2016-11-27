@@ -186,7 +186,7 @@ class React3DInstance {
       renderer.shadowMap.debug = parameters.shadowMapDebug;
     }
 
-    rendererProperties.forEach(propertyName => {
+    rendererProperties.forEach((propertyName) => {
       if (parameters.hasOwnProperty(propertyName)) {
         renderer[propertyName] = parameters[propertyName];
       }
@@ -227,7 +227,7 @@ class React3DInstance {
     if (objectsByName) {
       const idToObjectMap = objectsByName.values;
       result = Object.keys(idToObjectMap)
-        .map((name) => idToObjectMap[name]);
+        .map(name => idToObjectMap[name]);
     } else {
       result = [];
     }
@@ -348,7 +348,7 @@ class React3DInstance {
       }
 
       this._renderer.clear();
-      this._viewports.forEach(viewport => {
+      this._viewports.forEach((viewport) => {
         let viewportCamera = null;
 
         if (viewport.cameraName) {
@@ -903,7 +903,7 @@ class React3DInstance {
   }
 
   allMaterialsNeedUpdate(dispose) {
-    this._materials.forEach(material => {
+    this._materials.forEach((material) => {
       if (dispose) {
         material.dispose();
       } else {

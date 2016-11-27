@@ -4,13 +4,13 @@ import ShapeAction from './ShapeAction';
 
 class AbsEllipseAction extends ShapeAction {
   constructor(x,
-              y,
-              xRadius,
-              yRadius,
-              startAngle,
-              endAngle,
-              clockwise,
-              rotation) {
+    y,
+    xRadius,
+    yRadius,
+    startAngle,
+    endAngle,
+    clockwise,
+    rotation) {
     super();
 
     this.x = x;

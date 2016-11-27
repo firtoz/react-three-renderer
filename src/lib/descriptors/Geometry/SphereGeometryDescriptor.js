@@ -16,7 +16,7 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
     [
       'widthSegments',
       'heightSegments',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
@@ -29,7 +29,7 @@ class SphereGeometryDescriptor extends BufferGeometryDescriptorBase {
       'phiLength',
       'thetaStart',
       'thetaLength',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.updateCacheAndReplace.bind(this, propName),

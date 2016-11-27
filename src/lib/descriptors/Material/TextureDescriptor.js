@@ -43,7 +43,7 @@ class TextureDescriptor extends THREEElementDescriptor {
     [
       'wrapS',
       'wrapT',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.oneOf([
           THREE.RepeatWrapping,
@@ -89,7 +89,7 @@ class TextureDescriptor extends THREEElementDescriptor {
       'onLoad',
       'onProgress',
       'onError',
-    ].forEach(eventName => {
+    ].forEach((eventName) => {
       this.hasProp(eventName, {
         type: PropTypes.func,
         update() {

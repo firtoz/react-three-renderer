@@ -73,7 +73,7 @@ class GeometryWithShapesDescriptor extends GeometryDescriptorBase {
       'curveSegments',
       'material',
       'UVGenerator',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       if (props.hasOwnProperty(propName)) {
         options[propName] = props[propName];
       }
@@ -106,7 +106,7 @@ class GeometryWithShapesDescriptor extends GeometryDescriptorBase {
 
     const shapeCache = [];
 
-    children.forEach(child => {
+    children.forEach((child) => {
       if (child instanceof ShapeResourceReference) {
         const shapeIndex = shapeCache.length;
 
@@ -171,7 +171,7 @@ class GeometryWithShapesDescriptor extends GeometryDescriptorBase {
   );
 
   unmount(geometry) {
-    geometry.userData._resourceListenerCleanupFunctions.forEach(listener => {
+    geometry.userData._resourceListenerCleanupFunctions.forEach((listener) => {
       listener();
     });
 

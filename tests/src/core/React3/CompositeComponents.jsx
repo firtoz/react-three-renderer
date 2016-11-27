@@ -6,7 +6,7 @@ import sinon from 'sinon';
 
 const { PropTypes } = React;
 
-module.exports = type => {
+module.exports = (type) => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
 
   const { expect } = chai;

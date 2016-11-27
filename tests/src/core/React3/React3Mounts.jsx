@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import chai from 'chai';
 import sinon from 'sinon';
 
-module.exports = type => {
+module.exports = (type) => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
 
   const { expect } = chai;

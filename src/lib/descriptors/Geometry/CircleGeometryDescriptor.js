@@ -13,7 +13,7 @@ class CircleGeometryDescriptor extends GeometryDescriptorBase {
       'segments',
       'thetaStart',
       'thetaLength',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

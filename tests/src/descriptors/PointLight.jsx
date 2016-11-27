@@ -5,7 +5,7 @@ import chai from 'chai';
 
 const { expect } = chai;
 
-module.exports = type => {
+module.exports = (type) => {
   describe('PointLightDescriptor', () => {
     const { testDiv, React3, mockConsole, requireHelper } = require('../utils/initContainer')(type);
 
@@ -15,7 +15,13 @@ module.exports = type => {
     class TestComponent extends React.Component {
       static propTypes = {
         done: React.PropTypes.func,
-        lightProps: React.PropTypes.any,
+        lightProps: React.PropTypes.shape({
+          shadowCameraFov: React.PropTypes.number,
+          shadowCameraAspect: React.PropTypes.number,
+          shadowCameraNear: React.PropTypes.number,
+          shadowCameraFar: React.PropTypes.number,
+          shadowBias: React.PropTypes.number,
+        }),
         expectedCameraNear: React.PropTypes.number,
         expectedCameraFar: React.PropTypes.number,
 

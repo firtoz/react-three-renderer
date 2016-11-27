@@ -38,7 +38,7 @@ module.exports = class MockConsole {
     this._events.removeAllListeners();
 
     if (ignoreChecks) {
-      this._messages.forEach(message => {
+      this._messages.forEach((message) => {
         let func = null;
 
         switch (message.args.type) {

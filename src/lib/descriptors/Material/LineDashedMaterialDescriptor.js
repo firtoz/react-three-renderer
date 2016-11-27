@@ -14,7 +14,7 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
       'linewidth',
       'scale',
       'gapSize',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         simple: true,
@@ -32,7 +32,7 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
     [
       'linecap',
       'linejoin',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.oneOf([
           'round',

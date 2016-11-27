@@ -25,7 +25,7 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
       'bevelSize',
       'bevelSegments',
       'extrudeMaterial',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: (threeObject, value) => {
@@ -98,7 +98,7 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
       'extrudePath',
       'frames',
       'extrudeMaterial',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       if (props.hasOwnProperty(propName)) {
         options[propName] = props[propName];
       }

@@ -16,7 +16,7 @@ class PointLightDescriptor extends LightDescriptorBase {
     [
       'intensity',
       'decay',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         simple: true,

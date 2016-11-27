@@ -8,7 +8,7 @@ class RawShaderMaterialDescriptor extends ShaderMaterialDescriptor {
 
     [
       'alphaTest',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.removeProp(propName);
     });
   }

@@ -40,7 +40,7 @@ class PathDescriptorBase extends THREEElementDescriptor {
     }
 
     // apply all actions in order
-    children.forEach(child => {
+    children.forEach((child) => {
       this.performChildAction(threeObject, child);
     });
   }
@@ -61,7 +61,7 @@ class PathDescriptorBase extends THREEElementDescriptor {
     this.triggerRemount(threeObject);
   }
 
-  _invalidChild = child => {
+  _invalidChild = (child) => {
     const invalid = !(
       child instanceof ShapeAction
     );

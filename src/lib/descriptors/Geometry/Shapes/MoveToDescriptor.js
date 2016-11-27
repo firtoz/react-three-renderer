@@ -10,7 +10,7 @@ class MoveToDescriptor extends ShapeActionDescriptorBase {
     [
       'x',
       'y',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,

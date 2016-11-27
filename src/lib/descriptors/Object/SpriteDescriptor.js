@@ -17,7 +17,7 @@ class SpriteDescriptor extends Object3DDescriptor {
     return sprite;
   }
 
-  _invalidChild = child => {
+  _invalidChild = (child) => {
     const invalid = !(
       child instanceof THREE.SpriteMaterial ||
       child instanceof ResourceReference

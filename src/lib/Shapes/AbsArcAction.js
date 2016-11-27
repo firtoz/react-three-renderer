@@ -4,11 +4,11 @@ import ShapeAction from './ShapeAction';
 
 class AbsArcAction extends ShapeAction {
   constructor(x,
-              y,
-              radius,
-              startAngle,
-              endAngle,
-              clockwise) {
+    y,
+    radius,
+    startAngle,
+    endAngle,
+    clockwise) {
     super();
 
     this.x = x;

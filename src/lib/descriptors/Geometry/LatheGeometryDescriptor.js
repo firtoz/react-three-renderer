@@ -12,7 +12,7 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
       'segments',
       'phiStart',
       'phiLength',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

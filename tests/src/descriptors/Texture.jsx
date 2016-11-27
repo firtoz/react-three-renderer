@@ -6,7 +6,7 @@ import sinon from 'sinon';
 
 const WANTED_URL = 'http://lorempixel.com/1/1/';
 
-module.exports = type => {
+module.exports = (type) => {
   describe('TextureDescriptor', () => {
     const { testDiv, React3, mockConsole } = require('../utils/initContainer')(type);
 

@@ -14,7 +14,7 @@ class BufferGeometryDescriptor extends GeometryDescriptorBase {
       'faceVertexUvs',
       'faces',
       'dynamic',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.removeProp(propName);
     });
 
@@ -22,7 +22,7 @@ class BufferGeometryDescriptor extends GeometryDescriptorBase {
       'position',
       'normal',
       'color',
-    ].forEach(attributeName => {
+    ].forEach((attributeName) => {
       this.hasProp(attributeName, {
         type: PropTypes.oneOfType([
           propTypeInstanceOf(THREE.BufferAttribute),

@@ -12,7 +12,7 @@ function SceneWrapper(props) {
 }
 
 SceneWrapper.propTypes = {
-  children: React.PropTypes.any,
+  children: React.PropTypes.node,
 };
 
 module.exports = SceneWrapper;

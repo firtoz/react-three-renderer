@@ -8,12 +8,16 @@ import propTypeInstanceOf from './utils/propTypeInstanceOf';
 const { PropTypes } = React;
 
 class React3 extends React.Component {
+
+  /* eslint-disable react/no-unused-prop-types */
   static propTypes = {
     context: PropTypes.string,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    children: PropTypes.any,
+    children: PropTypes.node,
+    /* eslint-disable react/forbid-prop-types */
     canvasStyle: PropTypes.any,
+    /* eslint-enable react/forbid-prop-types */
     gammaInput: PropTypes.bool,
     gammaOutput: PropTypes.bool,
     sortObjects: PropTypes.bool,
@@ -44,6 +48,8 @@ class React3 extends React.Component {
     ]),
     canvasRef: PropTypes.func,
   };
+  /* eslint-enable react/no-unused-prop-types */
+
 
   static defaultProps = {
     context: '3d',

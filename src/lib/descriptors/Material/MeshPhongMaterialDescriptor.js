@@ -37,7 +37,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
       'displacementScale',
       'reflectivity',
     ]
-      .forEach(propName => {
+      .forEach((propName) => {
         this.hasProp(propName, {
           type: PropTypes.number,
           update(threeObject, propValue) {
@@ -51,7 +51,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     [
       'displacementBias',
     ]
-      .forEach(propName => {
+      .forEach((propName) => {
         this.hasProp(propName, {
           type: PropTypes.number,
           update(threeObject, propValue) {
@@ -65,7 +65,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     [
       'refractionRatio',
     ]
-      .forEach(propName => {
+      .forEach((propName) => {
         this.hasProp(propName, {
           type: PropTypes.number,
           update(threeObject, propValue) {
@@ -98,7 +98,7 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
       'skinning',
       'morphTargets',
       'morphNormals',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.bool,
         update(threeObject, propValue) {

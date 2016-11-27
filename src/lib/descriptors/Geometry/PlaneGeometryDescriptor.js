@@ -11,7 +11,7 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
     [
       'width',
       'height',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
@@ -22,7 +22,7 @@ class PlaneGeometryDescriptor extends GeometryDescriptorBase {
     [
       'widthSegments',
       'heightSegments',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

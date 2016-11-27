@@ -13,7 +13,7 @@ class CircleBufferGeometryDescriptor extends BufferGeometryDescriptorBase {
       'segments',
       'thetaStart',
       'thetaLength',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.updateCacheAndReplace.bind(this, propName),

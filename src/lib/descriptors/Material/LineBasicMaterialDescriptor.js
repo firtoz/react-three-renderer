@@ -20,7 +20,7 @@ class LineBasicMaterialDescriptor extends MaterialDescriptorBase {
     [
       'linecap',
       'linejoin',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.oneOf([
           'round',

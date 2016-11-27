@@ -49,7 +49,7 @@ function resource(descriptor) {
         if (process.env.NODE_ENV !== 'production') {
           invariant(!!threeObject.userData._resourceId,
             'All resources inside <resources> should have the "resourceId" property. ' +
-            'Current resource: <${threeObject.userData.react3internalComponent._elementType}>');
+            `Current resource: <${threeObject.userData.react3internalComponent._elementType}>`);
         } else {
           invariant(!!threeObject.userData._resourceId);
         }
