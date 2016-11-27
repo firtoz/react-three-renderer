@@ -12,6 +12,7 @@ class hemisphereLight extends LightInfo {
   getAttributesText(descriptor, componentName) {
     return {
       ...super.getAttributesText(descriptor, componentName),
+      skyColor: '',
       groundColor: '',
       intensity: '',
     };
