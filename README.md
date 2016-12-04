@@ -19,7 +19,7 @@ Installation
 ============
 
 ```
-npm install --save react@15.4.0 react-dom@15.4.0 three@0.82.1
+npm install --save react@15.4.1 react-dom@15.4.1 three@0.82.1
 npm install --save react-three-renderer
 ```
 
