@@ -8,7 +8,7 @@ CHANGELOG
 - Fix compatibility for `react@15.4.0`! ( Fixes #118 )
 
 ### Components
-- Added `<hemisphereLight>` ( #126 )
+- Added `<hemisphereLight>` ( #126 #129 )
 - Added `<meshStandardMaterial>` ( #126 )
 - ExtrudeGeometry:
   - Change type validation for `frames`
