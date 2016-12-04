@@ -1,3 +1,5 @@
+/* eslint no-debugger: 0 */
+/* eslint no-restricted-syntax: 0 */
 import THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
@@ -13,6 +15,21 @@ import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 class TextureDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance: React3Renderer) {
     super(react3RendererInstance);
+
+    this.hasProp('slot', {
+      type: PropTypes.string,
+      updateInitial: true,
+      update: (threeObject, slot, hasProperty) => {
+        const supportedSlots = ['map', 'bumpMap'];
+
+        if (hasProperty && supportedSlots.indexOf(slot) !== -1) {
+          threeObject.userData._materialSlot = slot;
+        } else {
+          threeObject.userData._materialSlot = 'map';
+        }
+      },
+      default: 'map',
+    });
 
     this.hasProp('repeat', {
       type: propTypeInstanceOf(THREE.Vector2),
@@ -172,9 +189,15 @@ class TextureDescriptor extends THREEElementDescriptor {
       'Parent is not a material or a uniform');
 
     if (parentObject3D instanceof THREE.Material) {
-      invariant(parentObject3D.map === null || parentObject3D.map === undefined,
-        'Parent already has a texture');
-      parentObject3D.map = texture;
+      const { _materialSlot } = texture.userData;
+
+      invariant(
+        parentObject3D[_materialSlot] === null ||
+        parentObject3D[_materialSlot] === undefined,
+        'Parent already has a texture in slot "%s"', _materialSlot
+      );
+      parentObject3D[_materialSlot] = texture;
+
       // dispose to force a recreate
       parentObject3D.needsUpdate = true;
     } else { // Uniform as per the assert above

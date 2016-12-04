@@ -1,3 +1,5 @@
+/* eslint no-unused-expressions: 0 */
+
 import React from 'react';
 import THREE from 'three';
 import ReactDOM from 'react-dom';
@@ -170,6 +172,101 @@ module.exports = type => {
       sinon.assert.calledOnce(imageLoaderInstance.setCrossOrigin);
 
       sinon.assert.calledWith(imageLoaderInstance.setCrossOrigin, '');
+    });
+
+    it('Should update the provided parent slot', () => {
+      imageLoaderLoadStub = sinon.stub(THREE, 'ImageLoader', ImageLoaderMock);
+
+      mockConsole.expectThreeLog();
+      let materialThreeObject;
+
+      ReactDOM.render((<React3
+        width={800}
+        height={600}
+        mainCamera="mainCamera"
+        forceManualRender
+        onManualRenderTriggerCreated={() => {}}
+      >
+        <scene>
+          <perspectiveCamera
+            position={new THREE.Vector3(0, 0, 5)}
+            fov={75}
+            aspect={800 / 600}
+            near={0.1}
+            far={1000}
+            name="mainCamera"
+          />
+          <mesh>
+            <boxGeometry
+              width={2}
+              height={2}
+              depth={2}
+            />
+            <meshBasicMaterial
+              ref={threeObject => (materialThreeObject = threeObject)}
+              color={0xff0000}
+            >
+              <texture
+                url={WANTED_URL}
+                crossOrigin=""
+                slot="bumpMap"
+              />
+            </meshBasicMaterial>
+          </mesh>
+        </scene>
+      </React3>), testDiv);
+
+      expect(materialThreeObject.bumpMap).to.exist;
+    });
+
+    it('Should be possible to have multiple textures in one material', () => {
+      imageLoaderLoadStub = sinon.stub(THREE, 'ImageLoader', ImageLoaderMock);
+
+      mockConsole.expectThreeLog();
+      let materialThreeObject;
+
+      ReactDOM.render((<React3
+        width={800}
+        height={600}
+        mainCamera="mainCamera"
+        forceManualRender
+        onManualRenderTriggerCreated={() => {}}
+      >
+        <scene>
+          <perspectiveCamera
+            position={new THREE.Vector3(0, 0, 5)}
+            fov={75}
+            aspect={800 / 600}
+            near={0.1}
+            far={1000}
+            name="mainCamera"
+          />
+          <mesh>
+            <boxGeometry
+              width={2}
+              height={2}
+              depth={2}
+            />
+            <meshBasicMaterial
+              ref={threeObject => (materialThreeObject = threeObject)}
+              color={0xff0000}
+            >
+              <texture
+                url={WANTED_URL}
+                crossOrigin=""
+              />
+              <texture
+                url={WANTED_URL}
+                crossOrigin=""
+                slot="bumpMap"
+              />
+            </meshBasicMaterial>
+          </mesh>
+        </scene>
+      </React3>), testDiv);
+
+      expect(materialThreeObject.map).to.exist;
+      expect(materialThreeObject.bumpMap).to.exist;
     });
   });
 };
