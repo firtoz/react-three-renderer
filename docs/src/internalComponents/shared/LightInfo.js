@@ -10,7 +10,7 @@ class LightInfo extends Object3DInfo {
         'rotation',
         'quaternion',
         'lookAt',
-      ].forEach(propName => {
+      ].forEach((propName) => {
         attributesText[propName] = `${attributesText[propName]}
 
 Additionally, updating this property will trigger an update for the light target position.`;

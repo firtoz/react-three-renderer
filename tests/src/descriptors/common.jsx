@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
-import THREE from 'three';
+import * as THREE from 'three';
 
 import { expect } from 'chai';
 
-module.exports = type => {
+module.exports = (type) => {
   describe('Common-Props', () => {
     const { testDiv, React3, mockConsole } = require('../utils/initContainer')(type);
 
@@ -23,7 +23,7 @@ module.exports = type => {
 
       mockConsole.once('empty', done);
 
-      const nameRef = (hint) => (entity) => {
+      const nameRef = hint => (entity) => {
         if (!entity) {
           return;
         }

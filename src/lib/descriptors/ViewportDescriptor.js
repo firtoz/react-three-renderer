@@ -12,7 +12,7 @@ class ViewportDescriptor extends THREEElementDescriptor {
       'y',
       'width',
       'height',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         simple: true,

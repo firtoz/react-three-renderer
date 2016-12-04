@@ -51,8 +51,8 @@ class SomeClass extends React.Component{
     * [[directionalLight]]: Creates a [THREE.DirectionalLight](http://threejs.org/docs/#Reference/Lights/DirectionalLight)
     * [[spotLight]]: Creates a [THREE.SpotLight](http://threejs.org/docs/#Reference/Lights/SpotLight)
     * [[pointLight]]: Creates a [THREE.PointLight](http://threejs.org/docs/#Reference/Lights/PointLight)
+    * [[hemisphereLight]]: Creates a [THREE.HemisphereLight](https://threejs.org/docs/#Reference/Lights/HemisphereLight)
     * TODO:
-      * HemisphereLight
       * Light
   * [[Helpers]]:
     * [[cameraHelper]]: Creates a [THREE.CameraHelper](http://threejs.org/docs/#Reference/Extras.Helpers/CameraHelper)
@@ -84,6 +84,7 @@ class SomeClass extends React.Component{
     * [[uniforms]]: A container for [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms).
       * [[uniform]]: A single uniform value for a shader material.
   * [[rawShaderMaterial]]: Creates a [THREE.RawShaderMaterial](http://threejs.org/docs/#Reference/Materials/RawShaderMaterial).
+  * [[meshStandardMaterial]]: Creates a [THREE.MeshStandardMaterial](https://threejs.org/docs/#Reference/Materials/MeshStandardMaterial)
   * TODO:
     * Material
     * MeshFaceMaterial

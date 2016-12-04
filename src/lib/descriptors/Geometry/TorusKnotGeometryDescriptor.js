@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -16,7 +16,7 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
       'p',
       'q',
       'heightScale',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

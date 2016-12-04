@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
 import sinon from 'sinon';
-import THREE from 'three';
+import * as THREE from 'three';
 
-module.exports = type => {
+module.exports = (type) => {
   const { expect } = chai;
 
   describe('DirectionalLightDescriptor', () => {
@@ -51,7 +51,14 @@ module.exports = type => {
       class TestComponent extends React.Component {
         static propTypes = {
           done: React.PropTypes.func,
-          lightProps: React.PropTypes.any,
+          lightProps: React.PropTypes.shape({
+            shadowCameraLeft: React.PropTypes.number,
+            shadowCameraRight: React.PropTypes.number,
+            shadowCameraTop: React.PropTypes.number,
+            shadowCameraBottom: React.PropTypes.number,
+            shadowCameraNear: React.PropTypes.number,
+            shadowCameraFar: React.PropTypes.number,
+          }),
           expectedCameraNear: React.PropTypes.number,
           expectedCameraFar: React.PropTypes.number,
 

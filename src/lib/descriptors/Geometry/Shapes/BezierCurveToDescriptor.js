@@ -14,7 +14,7 @@ class BezierCurveToDescriptor extends ShapeActionDescriptorBase {
       'cp2Y',
       'aX',
       'aY',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,

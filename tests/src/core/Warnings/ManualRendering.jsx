@@ -1,5 +1,5 @@
 import React from 'react';
-import THREE from 'three';
+import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
 import chai from 'chai';
@@ -7,7 +7,7 @@ import sinon from 'sinon';
 
 const { expect } = chai;
 
-module.exports = type => {
+module.exports = (type) => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
 
   it('Shows warnings when manual rendering is forced but no trigger property is set', () => {
@@ -132,7 +132,7 @@ module.exports = type => {
     />, testDiv);
   });
 
-  it('Fills in manual trigger with a function', done => {
+  it('Fills in manual trigger with a function', (done) => {
     function manualTriggerCallback(func) {
       expect(func).to.be.a('function');
       expect(func.length).to.equal(1);
@@ -151,7 +151,7 @@ module.exports = type => {
     mockConsole.expectThreeLog();
   });
 
-  it('Does not call onAnimate if manual rendering is forced', done => {
+  it('Does not call onAnimate if manual rendering is forced', (done) => {
     const onAnimate = sinon.spy();
     const manualTriggerCallback = sinon.spy();
 
@@ -175,7 +175,7 @@ module.exports = type => {
     }, 500);
   });
 
-  it('Does call onAnimate once per frame for manual rendering', done => {
+  it('Does call onAnimate once per frame for manual rendering', (done) => {
     const onAnimate = sinon.spy();
 
     function manualTriggerCallback(trigger) {
@@ -218,7 +218,7 @@ module.exports = type => {
   });
 
   it('Manual rendering trigger with default arguments' +
-    ' should only render within animation frame', done => {
+    ' should only render within animation frame', (done) => {
     const onAnimate = sinon.spy();
     const onRendererUpdated = sinon.spy();
 

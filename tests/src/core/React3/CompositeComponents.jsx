@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
-import THREE from 'three';
+import * as THREE from 'three';
 import sinon from 'sinon';
 
 const { PropTypes } = React;
 
-module.exports = type => {
+module.exports = (type) => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
 
   const { expect } = chai;

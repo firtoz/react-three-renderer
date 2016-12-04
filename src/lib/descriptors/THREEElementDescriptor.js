@@ -1,6 +1,5 @@
 import invariant from 'fbjs/lib/invariant';
 
-import ReactPropTypeLocations from 'react/lib/ReactPropTypeLocations';
 import warning from 'fbjs/lib/warning';
 
 import events from 'events';
@@ -216,7 +215,7 @@ class THREEElementDescriptor {
     threeObject.userData.events = eventsForObject;
     threeObject.userData._descriptor = this;
 
-    this._updateInitial.forEach(propertyName => {
+    this._updateInitial.forEach((propertyName) => {
       if (props.hasOwnProperty(propertyName)) {
         this.propUpdates[propertyName](threeObject, props[propertyName], true);
       } else {
@@ -230,7 +229,7 @@ class THREEElementDescriptor {
       }
     });
 
-    this._simpleProperties.forEach(propertyName => {
+    this._simpleProperties.forEach((propertyName) => {
       if (props.hasOwnProperty(propertyName)) {
         threeObject[propertyName] = props[propertyName];
       }
@@ -339,7 +338,7 @@ class THREEElementDescriptor {
   }
 
   registerSimpleProperties(propertyNames) {
-    propertyNames.forEach(propName => {
+    propertyNames.forEach((propName) => {
       if (this._simpleProperties.indexOf(propName) === -1) {
         this._simpleProperties.push(propName);
       }
@@ -424,7 +423,7 @@ if (process.env.NODE_ENV !== 'production') {
       _checkPropTypes(element.type,
         this.propTypes,
         props,
-        ReactPropTypeLocations.prop,
+        'prop',
         owner,
         element,
         debugID);

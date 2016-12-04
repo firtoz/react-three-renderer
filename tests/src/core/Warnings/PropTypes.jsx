@@ -1,8 +1,8 @@
 import React from 'react';
-import THREE from 'three';
+import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
-module.exports = type => {
+module.exports = (type) => {
   const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
 
   it('Shows helpful warnings with correct class names', () => {
@@ -27,18 +27,18 @@ module.exports = type => {
       '    in scene\n' +
       '    in react3');
     mockConsole.expectDev('Warning: Failed prop type: Invalid prop `position`' +
-      ' of type `THREE.Vector2`' +
-      ' supplied to `scene`, expected instance of `THREE.Vector3`.\n' +
+      ' of type `Vector2`' +
+      ' supplied to `scene`, expected instance of `Vector3`.\n' +
       '    in scene\n' +
       '    in react3');
     mockConsole.expectDev('Warning: Failed prop type: Invalid prop `rotation`' +
-      ' of type `THREE.Vector3`' +
-      ' supplied to `scene`, expected instance of `THREE.Euler`.\n' +
+      ' of type `Vector3`' +
+      ' supplied to `scene`, expected instance of `Euler`.\n' +
       '    in scene\n' +
       '    in react3');
     mockConsole.expectDev('Warning: Failed prop type: Invalid prop `quaternion`' +
-      ' of type `THREE.Euler`' +
-      ' supplied to `scene`, expected instance of `THREE.Quaternion`.\n' +
+      ' of type `Euler`' +
+      ' supplied to `scene`, expected instance of `Quaternion`.\n' +
       '    in scene\n' +
       '    in react3');
     mockConsole.expectDev('Warning: Failed prop type: Invalid prop `renderOrder` of type `string`' +
@@ -46,7 +46,7 @@ module.exports = type => {
       '    in scene\n' +
       '    in react3');
     mockConsole.expectDev('Warning: Failed prop type: Invalid prop `fog` of type `String`' +
-      ' supplied to `scene`, expected instance of `THREE.Fog`.\n' +
+      ' supplied to `scene`, expected instance of `Fog`.\n' +
       '    in scene\n' +
       '    in react3');
 

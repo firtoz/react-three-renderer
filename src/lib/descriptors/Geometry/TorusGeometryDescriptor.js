@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -14,7 +14,7 @@ class TorusGeometryDescriptor extends GeometryDescriptorBase {
       'radialSegments',
       'tubularSegments',
       'arc',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

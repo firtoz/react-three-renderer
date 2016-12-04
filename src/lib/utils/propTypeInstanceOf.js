@@ -27,8 +27,10 @@ function createChainableTypeChecker(validate) {
     if (props[propName] === undefined) {
       const locationName = ReactPropTypeLocationNames[location];
       if (isRequired) {
-        return new PropTypeError(`Required ${locationName} \`${propFullName}\`` +
-          ` was not specified in \`${componentName}\`.`);
+        return new PropTypeError(
+          `The ${locationName} \`${propFullName}\` is marked as required in ` +
+          `\`${componentName}\`, but its value is \`undefined\`.`
+        );
       }
       return null;
     }

@@ -1,11 +1,14 @@
-import ReactCompositeComponent from 'react/lib/ReactCompositeComponent';
 import ReactElement from 'react/lib/ReactElement';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
+
 import invariant from 'fbjs/lib/invariant';
-import ReactInstanceMap from 'react/lib/ReactInstanceMap';
-import ReactInstrumentation from 'react/lib/ReactInstrumentation';
 import emptyObject from 'fbjs/lib/emptyObject';
 import warning from 'fbjs/lib/warning';
+
+import ReactCompositeComponent from 'react-dom/lib/ReactCompositeComponent';
+import ReactInstanceMap from 'react-dom/lib/ReactInstanceMap';
+import ReactInstrumentation from 'react-dom/lib/ReactInstrumentation';
+
 import removeDevTool from './utils/removeDevTool';
 
 class ReactCompositeComponentMixinImpl {
@@ -13,7 +16,7 @@ class ReactCompositeComponentMixinImpl {
 
 ReactCompositeComponentMixinImpl.prototype = {
   ...ReactCompositeComponentMixinImpl.prototype,
-  ...ReactCompositeComponent.Mixin,
+  ...ReactCompositeComponent,
 };
 
 function warnIfInvalidElement(Component, element) {
@@ -160,9 +163,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
    * @internal
    */
   mountComponent(transaction,
-                 hostParent,
-                 hostContainerInfo,
-                 context) {
+    hostParent,
+    hostContainerInfo,
+    context) {
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;
     this._hostParent = hostParent;
@@ -333,9 +336,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   _constructComponent(doConstruct,
-                      publicProps,
-                      publicContext,
-                      updateQueue) {
+    publicProps,
+    publicContext,
+    updateQueue) {
     if (process.env.NODE_ENV !== 'production') {
       ReactCurrentOwner.current = this;
       try {
@@ -359,9 +362,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   _constructComponentWithoutOwner(doConstruct,
-                                  publicProps,
-                                  publicContext,
-                                  updateQueue) {
+    publicProps,
+    publicContext,
+    updateQueue) {
     const Component = this._currentElement.type;
     let instanceOrElement;
     if (doConstruct) {

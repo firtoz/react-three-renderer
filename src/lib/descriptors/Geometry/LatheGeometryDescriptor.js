@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import GeometryDescriptorBase from './GeometryDescriptorBase';
@@ -12,7 +12,7 @@ class LatheGeometryDescriptor extends GeometryDescriptorBase {
       'segments',
       'phiStart',
       'phiLength',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

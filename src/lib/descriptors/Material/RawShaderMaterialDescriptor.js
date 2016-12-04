@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import ShaderMaterialDescriptor from './ShaderMaterialDescriptor';
 
@@ -8,7 +8,7 @@ class RawShaderMaterialDescriptor extends ShaderMaterialDescriptor {
 
     [
       'alphaTest',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.removeProp(propName);
     });
   }

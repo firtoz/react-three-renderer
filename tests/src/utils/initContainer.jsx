@@ -8,6 +8,7 @@ const { expect } = chai;
 module.exports = (type) => {
   const testDiv = document.createElement('div');
 
+  /* eslint-disable import/no-dynamic-require */
   function requireHelper(path) {
     switch (type) {
       case 'src':
@@ -22,25 +23,14 @@ module.exports = (type) => {
     return undefined;
   }
 
-  /* eslint-disable import/no-unresolved */
-  let React3;
-  switch (type) {
-    case 'src':
-      React3 = require('../../../src/lib/React3');
-      break;
-    case 'lib':
-      React3 = require('../../../lib/React3');
-      break;
-    default:
-      expect(false, 'Invalid test type');
-      break;
-  }
-  /* eslint-enable import/no-unresolved */
+  /* eslint-enable import/no-dynamic-require */
+
+  const React3 = requireHelper('React3');
 
   const mockConsole = new MockConsole();
 
   mockConsole.expectThreeLog = () => {
-    mockConsole.expect('THREE.WebGLRenderer	79');
+    mockConsole.expect('THREE.WebGLRenderer\t82');
   };
 
   if (process.env.NODE_ENV === 'production') {

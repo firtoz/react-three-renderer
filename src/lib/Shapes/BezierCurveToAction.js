@@ -1,11 +1,11 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import ShapeAction from './ShapeAction';
 
 class BezierCurveToAction extends ShapeAction {
   constructor(cp1X, cp1Y,
-              cp2X, cp2Y,
-              aX, aY) {
+    cp2X, cp2Y,
+    aX, aY) {
     super();
 
     this.cp1X = cp1X;

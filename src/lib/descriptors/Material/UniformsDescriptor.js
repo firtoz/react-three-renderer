@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
 
@@ -22,7 +22,7 @@ class UniformsDescriptor extends THREEElementDescriptor {
   }
 
   addChildren(threeObject, children) {
-    children.forEach(child => {
+    children.forEach((child) => {
       invariant(child instanceof Uniform,
         'The <uniforms/> component can only have <uniform/> elements as children.');
     });

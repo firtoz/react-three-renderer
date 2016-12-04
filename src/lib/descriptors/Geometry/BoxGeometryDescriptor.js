@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -12,7 +12,7 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
       'width',
       'height',
       'depth',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,
@@ -24,7 +24,7 @@ class BoxGeometryDescriptor extends GeometryDescriptorBase {
       'widthSegments',
       'heightSegments',
       'depthSegments',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,

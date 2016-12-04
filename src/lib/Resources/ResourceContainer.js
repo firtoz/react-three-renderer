@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 class ResourceContainer extends THREE.Object3D {
   constructor() {

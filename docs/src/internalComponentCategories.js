@@ -74,9 +74,11 @@ module.exports = {
               pointLight: {
                 isComponent: true,
               },
+              hemisphereLight: {
+                isComponent: true,
+              },
             },
             TODO: [
-              'HemisphereLight', // SEE lights demo
               'Light', // SEE lights demo
             ],
           },
@@ -153,6 +155,9 @@ module.exports = {
             },
           },
           rawShaderMaterial: {
+            isComponent: true,
+          },
+          meshStandardMaterial: {
             isComponent: true,
           },
         },

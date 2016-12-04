@@ -97,7 +97,7 @@ function mockPropTypes() {
     'any',
     'element',
     'node',
-  ].forEach(type => {
+  ].forEach((type) => {
     ReactPropTypes[type] = new PropType(type);
   });
 
@@ -118,15 +118,15 @@ function mockPropTypes() {
     return propType;
   };
 
-  ReactPropTypes.instanceOf = (instanceType) =>
+  ReactPropTypes.instanceOf = instanceType =>
     new PropType(`${instanceType.displayName || instanceType.name
     || instanceType._type || instanceType}`);
 
-  ReactPropTypes.objectOf = (instanceType) =>
+  ReactPropTypes.objectOf = instanceType =>
     new PropType(`object of ${instanceType.displayName || instanceType.name
     || instanceType._type || instanceType}`);
 
-  ReactPropTypes.oneOf = (values) => new PropType(`one of [${values.map(value => {
+  ReactPropTypes.oneOf = values => new PropType(`one of [${values.map((value) => {
     if (typeof value === 'string') {
       return `'${value}'`;
     }
@@ -134,7 +134,7 @@ function mockPropTypes() {
     return value;
   }).join(', ')}]`);
 
-  ReactPropTypes.oneOfType = (values) =>
+  ReactPropTypes.oneOfType = values =>
     new PropType(`one of types [${values.map(value => value.displayName
       || value.name || value._type || value
     ).join(', ')}]`);
@@ -143,7 +143,7 @@ function mockPropTypes() {
     function describeShape(shapeToDescribe) {
       const result = {};
 
-      Object.keys(shapeToDescribe).forEach(shapeKey => {
+      Object.keys(shapeToDescribe).forEach((shapeKey) => {
         const value = shapeToDescribe[shapeKey];
 
         if (value.isShape) {
@@ -247,7 +247,10 @@ function buildCategories() {
           const normalizedNodeName = normalizeFilename(childName);
           try {
             const moduleName = `./categories/${normalizedNodeName}`;
+            /* eslint-disable import/no-dynamic-require */
             const loadedModule = require(moduleName);
+            /* eslint-enable import/no-dynamic-require */
+
             if (childData === true) {
               // noinspection NodeRequireContents
               childData = loadedModule;
@@ -386,7 +389,7 @@ function writeCategories(allCategories, descriptors, filesToWrite, prefix) {
           if (attributesToCopy.length > 0) {
             nodeFileContents += '\n\n## Attributes\n\n';
 
-            attributesToCopy.forEach(attributeName => {
+            attributesToCopy.forEach((attributeName) => {
               nodeFileContents += `${attributesContents[attributeName]}`;
             });
           }
@@ -494,7 +497,7 @@ ${attributeInfo.description}`;
       nodeContents += ` ${intro}`;
     }
 
-    nodeContents += `\n`;
+    nodeContents += '\n';
 
     const ancestry = [];
 
@@ -547,8 +550,12 @@ function getComponentInfo(componentName, propTypes) {
     fs.writeFileSync(infoPath, `import DocInfo from '../DocInfo';
 
 class ${componentName} extends DocInfo {
+  getIntro() {
+    return '';
+  }
+
   getDescription() {
-    return ${'``'};
+    return '';
   }
 
   getAttributesText() {
@@ -563,7 +570,9 @@ module.exports = ${componentName};
 `, 'utf8');
   }
 
+  /* eslint-disable import/no-dynamic-require */
   return require(infoPath);
+  /* eslint-enable import/no-dynamic-require */
 }
 
 function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
@@ -575,7 +584,7 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
       const requiredProps = [];
       const optionalProps = [];
 
-      Object.keys(propTypes).forEach(propName => {
+      Object.keys(propTypes).forEach((propName) => {
         if (propTypes[propName]._isRequired) {
           requiredProps.push(propName);
         } else {
@@ -694,7 +703,7 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
               }
 
               return '';
-            }).then(defaultText => {
+            }).then((defaultText) => {
               propDetailText += defaultText;
 
               attributesContents[propName] = propDetailText;
@@ -767,7 +776,7 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
         componentInfo,
         descriptor,
         componentName)
-        .then(finalAttributesText => {
+        .then((finalAttributesText) => {
           fileContents += finalAttributesText;
 
           if (category) {
@@ -793,7 +802,7 @@ function writeDescriptors(descriptors, allCategories, filesToWrite, prefix) {
           const ensureNotesHeaderAdded = () => {
             if (!hasNotes) {
               hasNotes = true;
-              fileContents += `\n\n## Notes:`;
+              fileContents += '\n\n## Notes:';
             }
           };
 
@@ -863,7 +872,7 @@ module.exports = (done) => {
 
   const THREE = require('three');
 
-  Object.keys(THREE).forEach(key => {
+  Object.keys(THREE).forEach((key) => {
     const value = THREE[key];
     if (value && value.prototype) {
       THREE[key] = class MockedClass extends value {
@@ -882,7 +891,7 @@ module.exports = (done) => {
 
       const threeClass = THREE[key];
 
-      Object.keys(value).forEach(objectKey => {
+      Object.keys(value).forEach((objectKey) => {
         threeClass[objectKey] = {};
         threeClass[objectKey].toString = () => `THREE.${key}.${objectKey}`;
         threeClass[objectKey].isMockedThreeKey = true;

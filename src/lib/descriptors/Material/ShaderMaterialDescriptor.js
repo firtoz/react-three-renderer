@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -12,7 +12,7 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
     [
       'vertexShader',
       'fragmentShader',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.string.isRequired,
         update: this.triggerRemount,

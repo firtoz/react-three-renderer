@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
 import PropTypes from 'react/lib/ReactPropTypes';
@@ -69,7 +69,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     [
       'frustumCulled',
       'visible',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.bool,
         simple: true,
@@ -137,7 +137,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
    * @param {Array} children
    */
   addChildren(threeObject, children) {
-    children.forEach(child => {
+    children.forEach((child) => {
       threeObject.add(child);
     });
   }

@@ -10,3 +10,4 @@ Thanks for the help:
 * [@jardakotesovec](https://github.com/jardakotesovec)
 * [@pepjo](https://github.com/pepjo)
 * [@Colmea](https://github.com/Colmea)
+* [@foorjdev](https://github.com/foorjdev)

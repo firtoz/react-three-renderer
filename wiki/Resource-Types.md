@@ -65,6 +65,7 @@ Then you can place these components inside to create and assign resources,
     * [[rawShaderMaterial]]: Creates a [THREE.RawShaderMaterial](http://threejs.org/docs/#Reference/Materials/RawShaderMaterial).
     * [[shaderMaterial]]: Creates a [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial)
     * [[pointsMaterial]]: Creates a [THREE.PointsMaterial](http://threejs.org/docs/#Reference/Materials/PointsMaterial)
+    * [[meshStandardMaterial]]: Creates a [THREE.MeshStandardMaterial](https://threejs.org/docs/#Reference/Materials/MeshStandardMaterial)
     * [[meshLambertMaterial]]: Creates a [THREE.MeshLambertMaterial](http://threejs.org/docs/#Reference/Materials/MeshLambertMaterial)
     * [[meshPhongMaterial]]: Creates a [THREE.MeshPhongMaterial](http://threejs.org/docs/#Reference/Materials/MeshPhongMaterial)
     * [[meshBasicMaterial]]: Creates a [THREE.MeshBasicMaterial](http://threejs.org/docs/#Reference/Materials/MeshBasicMaterial)

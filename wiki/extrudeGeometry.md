@@ -99,7 +99,14 @@ A UV generator, defaults to ExtrudeGeometry's WorldUVGenerator
 ``` THREE.CurvePath ```
 
 ### frames
-``` THREE.TubeGeometry.FrenetFrames ```
+```
+shape of 
+{
+	tangents: array of THREE.Vector3,
+	normals: array of THREE.Vector3,
+	binormals: array of THREE.Vector3
+}
+```
 
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].

@@ -8,15 +8,6 @@ class meshNormalMaterial extends MaterialInfo {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
-
-      transparent: '',
-      alphaTest: '',
-      side: '',
-      opacity: '',
-      visible: '',
-      resourceId: '',
-      wireframe: '',
-      wireframeLinewidth: '',
     };
   }
 }

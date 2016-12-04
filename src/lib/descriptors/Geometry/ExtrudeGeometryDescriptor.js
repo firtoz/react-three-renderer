@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -25,7 +25,7 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
       'bevelSize',
       'bevelSegments',
       'extrudeMaterial',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: (threeObject, value) => {
@@ -50,7 +50,11 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
     const extraTypes = [
       PropTypes.bool, // bevelEnabled
       propTypeInstanceOf(THREE.CurvePath), // extrudePath
-      propTypeInstanceOf(THREE.TubeGeometry.FrenetFrames), // frames
+      PropTypes.shape({
+        tangents: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)),
+        normals: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)),
+        binormals: PropTypes.arrayOf(propTypeInstanceOf(THREE.Vector3)),
+      }), // frames
     ];
 
     extraNames.forEach((propName, i) => {
@@ -94,7 +98,7 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
       'extrudePath',
       'frames',
       'extrudeMaterial',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       if (props.hasOwnProperty(propName)) {
         options[propName] = props[propName];
       }

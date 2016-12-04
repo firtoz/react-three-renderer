@@ -1,10 +1,10 @@
 import React from 'react';
-import THREE from 'three';
+import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import chai from 'chai';
 
-module.exports = type => {
+module.exports = (type) => {
   const { expect } = chai;
 
   describe('ArrowHelperDescriptor', () => {
@@ -12,12 +12,14 @@ module.exports = type => {
 
     it('Should warn for missing properties from ArrowHelper', () => {
       mockConsole.expectDev('Warning: Failed prop type: ' +
-        'Required prop `origin` was not specified in `arrowHelper`.\n' +
+        'The prop `origin` is marked as required in `arrowHelper`,' +
+        ' but its value is `undefined`.\n' +
         '    in arrowHelper\n' +
         '    in scene\n' +
         '    in react3');
       mockConsole.expectDev('Warning: Failed prop type: ' +
-        'Required prop `dir` was not specified in `arrowHelper`.\n' +
+        'The prop `dir` is marked as required in `arrowHelper`,' +
+        ' but its value is `undefined`.\n' +
         '    in arrowHelper\n' +
         '    in scene\n' +
         '    in react3');

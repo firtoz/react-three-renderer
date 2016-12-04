@@ -11,11 +11,45 @@
     "no-underscore-dangle": 0,
     "no-prototype-builtins": 0,
     "no-continue": 0,
+    "class-methods-use-this": 0,
     "linebreak-style": 0,
+    "no-bitwise": 0,
+    "no-plusplus": 0,
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "ignore"
+      }
+    ],
     "no-param-reassign": [
       2,
       {
         "props": false
+      }
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "VariableDeclarator": 1,
+        "outerIIFEBody": 1,
+        // MemberExpression: null,
+        // CallExpression: {
+        // parameters: null,
+        // },
+        "FunctionDeclaration": {
+          "parameters": "first",
+          "body": 1
+        },
+        "FunctionExpression": {
+          "parameters": 1,
+          "body": 1
+        }
       }
     ]
   }

@@ -14,7 +14,7 @@ class AbsEllipseDescriptor extends ShapeActionDescriptorBase {
       'yRadius',
       'startAngle',
       'endAngle',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,

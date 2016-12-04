@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
 import PropTypes from 'react/lib/ReactPropTypes';
@@ -43,7 +43,7 @@ class TextureDescriptor extends THREEElementDescriptor {
     [
       'wrapS',
       'wrapT',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.oneOf([
           THREE.RepeatWrapping,
@@ -89,7 +89,7 @@ class TextureDescriptor extends THREEElementDescriptor {
       'onLoad',
       'onProgress',
       'onError',
-    ].forEach(eventName => {
+    ].forEach((eventName) => {
       this.hasProp(eventName, {
         type: PropTypes.func,
         update() {

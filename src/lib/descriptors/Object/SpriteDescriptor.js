@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 
 import Object3DDescriptor from './Object3DDescriptor';
@@ -17,7 +17,7 @@ class SpriteDescriptor extends Object3DDescriptor {
     return sprite;
   }
 
-  _invalidChild = child => {
+  _invalidChild = (child) => {
     const invalid = !(
       child instanceof THREE.SpriteMaterial ||
       child instanceof ResourceReference

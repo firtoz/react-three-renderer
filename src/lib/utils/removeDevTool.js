@@ -1,7 +1,6 @@
-import ReactInstrumentation from 'react/lib/ReactInstrumentation';
-
-import ReactDOMUnknownPropertyHook from 'react/lib/ReactDOMUnknownPropertyHook';
-import ReactDOMNullInputValuePropHook from 'react/lib/ReactDOMNullInputValuePropHook';
+import ReactInstrumentation from 'react-dom/lib/ReactInstrumentation';
+import ReactDOMUnknownPropertyHook from 'react-dom/lib/ReactDOMUnknownPropertyHook';
+import ReactDOMNullInputValuePropHook from 'react-dom/lib/ReactDOMNullInputValuePropHook';
 
 let devToolRemoved = false;
 

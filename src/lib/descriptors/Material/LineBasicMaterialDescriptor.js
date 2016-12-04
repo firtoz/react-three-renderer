@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 
 import PropTypes from 'react/lib/ReactPropTypes';
 
@@ -20,7 +20,7 @@ class LineBasicMaterialDescriptor extends MaterialDescriptorBase {
     [
       'linecap',
       'linejoin',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.oneOf([
           'round',

@@ -9,7 +9,7 @@ class PolyhedronGeometryDescriptorBase extends GeometryDescriptorBase {
     [
       'radius',
       'detail',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,

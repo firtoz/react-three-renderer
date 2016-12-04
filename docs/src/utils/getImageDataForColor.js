@@ -7,7 +7,7 @@ const colorPromises = {};
 
 module.exports = function getImageDataForColor(colorValue, numberString) {
   if (!colorPromises[colorValue]) {
-    colorPromises[colorValue] = new Promise(resolve => {
+    colorPromises[colorValue] = new Promise((resolve) => {
       const png = new PNG({
         width: 12,
         height: 12,

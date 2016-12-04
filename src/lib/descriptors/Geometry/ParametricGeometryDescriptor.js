@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import GeometryDescriptorBase from './GeometryDescriptorBase';
@@ -10,7 +10,7 @@ class ParametricGeometryDescriptor extends GeometryDescriptorBase {
     [
       'slices',
       'stacks',
-    ].forEach(propName => {
+    ].forEach((propName) => {
       this.hasProp(propName, {
         type: PropTypes.number.isRequired,
         update: this.triggerRemount,

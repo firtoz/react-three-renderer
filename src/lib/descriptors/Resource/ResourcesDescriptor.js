@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 
 import THREEElementDescriptor from '../THREEElementDescriptor';
@@ -13,7 +13,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
     const parentMarkup = threeObject.userData.markup.parentMarkup;
     const parentEvents = parentMarkup.threeObject.userData.events;
 
-    threeObject.resourceIds.forEach(id => {
+    threeObject.resourceIds.forEach((id) => {
       parentEvents.emit('resource.removed', {
         id,
         distance: 0,
@@ -25,7 +25,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
   }
 
   addChildren(threeObject, children) {
-    children.forEach(child => {
+    children.forEach((child) => {
       const resourceId = child.userData._resourceId;
 
       if (process.env.NODE_ENV !== 'production') {
@@ -80,7 +80,7 @@ class ResourcesDescriptor extends THREEElementDescriptor {
 
     parentObject.userData._resources = threeObject;
 
-    threeObject.resourceIds.forEach(id => {
+    threeObject.resourceIds.forEach((id) => {
       parentEvents.emit('resource.added', {
         id,
         distance: 0,
