@@ -15,6 +15,15 @@ Used as the first parameter for [TextureLoader.load](http://threejs.org/docs/#Re
 
 **Default**: `''`
 
+### slot
+``` string ```: The material property in which the texture will be applied.
+
+Currently supported values:
+* map
+* bumpMap (you can configure `bumpScale` using the material prop `bumpScale`)
+
+**Default**: `'map'`
+
 ### repeat
 ``` THREE.Vector2 ```: Sets the [repeat property of the Texture](http://threejs.org/docs/#Reference/Textures/Texture.repeat).
 
@@ -73,7 +82,7 @@ Default: `(0, 0)`.
 
 ## Notes:
 
-If you would like to assign this texture to a material, 
+If you would like to assign this texture to a material,
 you can do this by declaring the texture within:
 
 ```jsx
