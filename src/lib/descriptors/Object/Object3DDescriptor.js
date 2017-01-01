@@ -183,6 +183,29 @@ class Object3DDescriptor extends THREEElementDescriptor {
   hideHighlight(threeObject) {
     threeObject.userData.events.emit('hideHighlight');
   }
+
+  mountedIntoRoot(threeObject, parentObject) {
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(parentObject instanceof THREE.Object3D,
+        'Can mount objects only into other objects');
+
+      invariant(parentObject.children.length === 0, 'Can mount objects only into other objects' +
+        ' which have no other children');
+    }
+
+    parentObject.add(threeObject);
+
+    threeObject.userData._isRootObject = true;
+  }
+
+
+  unmount(threeObject) {
+    if (threeObject.userData._isRootObject) {
+      threeObject.parent.remove(threeObject);
+    }
+
+    return super.unmount(threeObject);
+  }
 }
 
 module.exports = Object3DDescriptor;

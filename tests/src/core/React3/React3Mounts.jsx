@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import chai from 'chai';
 import sinon from 'sinon';
+import * as THREE from 'three';
 
 module.exports = (type) => {
-  const { testDiv, React3, mockConsole } = require('../../utils/initContainer')(type);
+  const { testDiv, React3, mockConsole, requireHelper } = require('../../utils/initContainer')(type);
 
   const { expect } = chai;
 
@@ -129,5 +130,146 @@ module.exports = (type) => {
         <scene />
       </React3>
     </div>, testDiv);
+  });
+
+  describe('manual rendering', () => {
+    let canvas;
+    let React3Renderer;
+
+    const onRecreateCanvas = () => {
+    };
+
+    before(() => {
+      canvas = document.createElement('canvas');
+      React3Renderer = requireHelper('React3Renderer');
+
+      testDiv.appendChild(canvas);
+    });
+
+    describe('react3', () => {
+      let react3Renderer;
+      before(() => {
+        react3Renderer = new React3Renderer();
+      });
+
+      it('can be rendered into a canvas', () => {
+        const react3Ref = sinon.spy();
+
+        mockConsole.expectThreeLog();
+
+        react3Renderer.render(
+          (<react3
+            context="3d"
+            width={50}
+            height={50}
+            onRecreateCanvas={onRecreateCanvas}
+            ref={react3Ref}
+          />), canvas);
+
+        expect(react3Ref.callCount).to.equal(1);
+      });
+
+      after(() => {
+        react3Renderer.dispose();
+      });
+    });
+
+    describe('objects', () => {
+      let react3Renderer;
+
+      beforeEach(() => {
+        react3Renderer = new React3Renderer();
+      });
+
+      it('can be rendered into other objects', () => {
+        const containerObject = new THREE.Object3D();
+
+        const object3dRef = sinon.spy();
+
+        react3Renderer.render((<object3D ref={object3dRef} />), containerObject);
+
+        expect(object3dRef.callCount).to.equal(1);
+
+        expect(object3dRef.lastCall.args[0], 'Object should be a child of the container')
+          .to.equal(containerObject.children[0]);
+      });
+
+      it('can be rendered into deeper objects', () => {
+        const containerObject = new THREE.Object3D();
+
+        const object3dRef = sinon.spy();
+        const secondObject3dRef = sinon.spy();
+
+        react3Renderer.render((<object3D ref={object3dRef}>
+          <object3D ref={secondObject3dRef} />
+        </object3D>), containerObject);
+
+        expect(object3dRef.callCount).to.equal(1);
+        expect(secondObject3dRef.callCount).to.equal(1);
+
+        expect(object3dRef.lastCall.args[0], 'Object should be a child of the container')
+          .to.equal(containerObject.children[0]);
+
+        expect(secondObject3dRef.lastCall.args[0], 'The second object should be a child of the first object')
+          .to.equal(object3dRef.lastCall.args[0].children[0]);
+      });
+
+      it('can be unmounted from other objects', () => {
+        const containerObject = new THREE.Object3D();
+
+        const object3dRef = sinon.spy();
+
+        react3Renderer.render((<object3D ref={object3dRef} />), containerObject);
+        react3Renderer.unmountComponentAtNode(containerObject);
+
+        expect(object3dRef.callCount).to.equal(2);
+        expect(object3dRef.lastCall.args[0], 'Object should be removed from the container')
+          .to.be.null();
+        expect(containerObject.children.length).to.equal(0);
+      });
+
+      it('cannot be unmounted from non-root objects', () => {
+        const containerObject = new THREE.Object3D();
+
+        const object3dRef = sinon.spy();
+        const secondObject3dRef = sinon.spy();
+
+        react3Renderer.render((<object3D ref={object3dRef}>
+          <object3D ref={secondObject3dRef} />
+        </object3D>), containerObject);
+
+        mockConsole.expectDev('Warning: unmountComponentAtNode(): The node you\'re' +
+          ' attempting to unmount was rendered by React and is not a top-level container.' +
+          ' You may have accidentally passed in a React root node instead of its container.');
+
+        react3Renderer.unmountComponentAtNode(object3dRef.lastCall.args[0]);
+
+        react3Renderer.unmountComponentAtNode(secondObject3dRef.lastCall.args[0]);
+      });
+
+      it('cannot be mounted if it does not extend object3d', () => {
+        const containerObject = new THREE.Mesh();
+
+        containerObject.geometry.dispose();
+        containerObject.geometry = undefined;
+
+        const geometryRef = sinon.spy();
+        react3Renderer.render((<geometry
+          ref={geometryRef}
+          vertices={[]}
+        />), containerObject);
+
+        mockConsole.expectDev('Warning: This type (GeometryDescriptor) cannot be mounted as a root element.' +
+          ' Please mount classes that derive from object3D or react3');
+      });
+
+      afterEach(() => {
+        react3Renderer.dispose();
+      });
+    });
+
+    after(() => {
+      testDiv.removeChild(canvas);
+    });
   });
 };

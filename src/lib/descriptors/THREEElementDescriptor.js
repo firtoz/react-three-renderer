@@ -270,6 +270,11 @@ class THREEElementDescriptor {
 
   }
 
+  mountedIntoRoot(threeObject, parentObject) { // eslint-disable-line no-unused-vars
+    warning(false, `This type (${this.constructor.name}) cannot be mounted as a root element.` +
+      ' Please mount classes that derive from object3D or react3');
+  }
+
   unmount(threeObject) {
     const markup = threeObject.userData.markup;
 

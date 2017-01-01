@@ -72,7 +72,7 @@ module.exports = class MockConsole {
 
     if (_messages.length > 0) {
       assert(false, `Messages received but not expected:
-${_messages.map(({ args, stack }, i) => `${i}: ${this._printArgs(args, stack)}`).join('\n')}`);
+${_messages.map(({ args, error }, i) => `${i}: ${this._printArgs(args, error)}`).join('\n')}`);
     } else if (_expectedMessages.length > 0) {
       assert(false, `Messages expected but not received:
 ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n')}`);
@@ -108,7 +108,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
 
     args.type = 'LOG';
 
-    this._messageReceived(args, new Error().stack);
+    this._messageReceived(args, new Error());
   }
 
   /**
@@ -122,7 +122,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
 
     args.type = 'WARNING';
 
-    this._messageReceived(args, new Error().stack);
+    this._messageReceived(args, new Error());
   }
 
   /**
@@ -136,7 +136,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
 
     args.type = 'ERROR';
 
-    this._messageReceived(args, new Error().stack);
+    this._messageReceived(args, new Error());
   }
 
   /* private methods */
@@ -144,31 +144,31 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
   /**
    *
    * @param args {Array.<*>}
-   * @param [stack]
+   * @param [error]
    * @returns {string}
    * @private
    */
-  _printArgs(args, stack) {
+  _printArgs(args, error) {
     return `[${args.type || 'LOG'}]|${args.map(arg =>
       util.inspect(arg, {}))
-      .join('\t')}${stack ? `\n${stack}\n` : ''}`;
+      .join('\t')}${error ? `\n${error.stack}\n` : ''}`;
   }
 
   /**
    *
    * @param args {Array.<*>}
-   * @param [stack]
+   * @param [error]
    * @returns {string}
    * @private
    */
-  _messageReceived(args, stack) {
+  _messageReceived(args, error) {
     const {
       _messages,
       _expectedMessages,
     } = this;
 
     if (_expectedMessages.length > 0) {
-      this._checkMessage(_expectedMessages.shift(), { args, stack });
+      this._checkMessage(_expectedMessages.shift(), { args, error });
 
       if (_expectedMessages.length === 0) {
         this._events.emit('empty');
@@ -176,7 +176,7 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
     } else {
       _messages.push({
         args,
-        stack,
+        error,
       });
     }
   }
@@ -185,10 +185,10 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
    *
    * @param expectedArgs {Array.<*>}
    * @param actualArgs
-   * @param stack
+   * @param error
    * @private
    */
-  _checkMessage(expectedArgs, { args: actualArgs, stack }) {
+  _checkMessage(expectedArgs, { args: actualArgs, error }) {
     const expectedMessage = `${expectedArgs.join('\t')}`;
     const actualMessage = `${actualArgs.join('\t')}`;
 
@@ -201,6 +201,8 @@ ${_expectedMessages.map((args, i) => `${i}: ${this._printArgs(args)}`).join('\n'
       // reset state to reduce additional errors
       _messages.length = 0;
       _expectedMessages.length = 0;
+
+      const stack = error.stack;
 
       assert(false, `Log error, expected message:
 > ${expectedMessage}

@@ -582,12 +582,12 @@ class React3Renderer {
       };
     }
 
-    const rootImage = markup;
+    const childImage = markup;
 
     const rootMarkup = {
       threeObject: container,
       parentMarkup: null,
-      childrenMarkup: [rootImage],
+      childrenMarkup: [childImage],
       toJSON: () => '---MARKUP---',
     };
 
@@ -597,14 +597,18 @@ class React3Renderer {
       markup: rootMarkup,
     });
 
-    rootImage.parentMarkup = rootMarkup;
+    childImage.parentMarkup = rootMarkup;
 
-    const descriptorForChild = this.threeElementDescriptors[rootImage.elementType];
-    descriptorForChild.setParent(rootImage.threeObject, rootMarkup.threeObject);
+    const descriptorForChild = this.threeElementDescriptors[childImage.elementType];
+
+    const threeObject = childImage.threeObject;
+    const parentObject = rootMarkup.threeObject;
+
+    descriptorForChild.setParent(threeObject, parentObject);
 
     // all objects now added can be marked as added to scene now!
 
-    rootImage.threeObject.mountedIntoRoot();
+    descriptorForChild.mountedIntoRoot(threeObject, parentObject);
 
     const firstChild = container.userData.markup.childrenMarkup[0];
     React3ComponentTree.precacheMarkup(instance, firstChild);
