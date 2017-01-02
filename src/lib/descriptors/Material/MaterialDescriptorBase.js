@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import THREEElementDescriptor from '../THREEElementDescriptor';
@@ -59,6 +60,25 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       type: PropTypes.bool,
       simple: true,
       default: true,
+    });
+
+    this.hasProp('map', {
+      type: propTypeInstanceOf(THREE.Texture),
+      update(threeObject, map) {
+        threeObject.userData._mapProperty = map;
+
+        if (!threeObject.userData._hasTextureChild) {
+          if (threeObject.map !== map) {
+            threeObject.needsUpdate = true;
+          }
+          threeObject.map = map;
+        } else {
+          warning(map === undefined, 'The material already has a' +
+            ' texture assigned to it as a child therefore the \'map\' property will have no effect');
+        }
+      },
+      updateInitial: true,
+      default: undefined,
     });
 
     this._colors = [];
@@ -123,6 +143,8 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   applyInitialProps(threeObject, props) {
     threeObject.userData = {
       ...threeObject.userData,
+      _hasTextureChild: false,
+      _mapProperty: undefined,
     };
 
     super.applyInitialProps(threeObject, props);
@@ -218,10 +240,8 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   invalidChildInternal(child) {
-    const invalid = !(child instanceof THREE.Texture
+    return !(child instanceof THREE.Texture
     || child instanceof ResourceReference);
-
-    return invalid;
   }
 
   _invalidChild = child => this.invalidChildInternal(child);
