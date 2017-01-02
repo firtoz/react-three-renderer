@@ -51,6 +51,46 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       default: THREE.FrontSide,
     });
 
+    this.hasProp('depthTest', {
+      type: PropTypes.bool,
+      simple: true,
+      default: true,
+    });
+
+    this.hasProp('depthWrite', {
+      type: PropTypes.bool,
+      simple: true,
+      default: true,
+    });
+
+    this.hasProp('blending', {
+      type: PropTypes.oneOf([
+        THREE.NoBlending,
+        THREE.NormalBlending,
+        THREE.AdditiveBlending,
+        THREE.SubtractiveBlending,
+        THREE.MultiplyBlending,
+        THREE.CustomBlending,
+      ]),
+      simple: true,
+      default: THREE.NormalBlending,
+    });
+
+    this.hasProp('depthFunc', {
+      type: PropTypes.oneOf([
+        THREE.NeverDepth,
+        THREE.AlwaysDepth,
+        THREE.LessDepth,
+        THREE.LessEqualDepth,
+        THREE.EqualDepth,
+        THREE.GreaterEqualDepth,
+        THREE.GreaterDepth,
+        THREE.NotEqualDepth,
+      ]),
+      simple: true,
+      default: THREE.LessEqualDepth,
+    });
+
     this.hasProp('opacity', {
       type: PropTypes.number,
       simple: true,
