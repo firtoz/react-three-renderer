@@ -1,6 +1,11 @@
 CHANGELOG
 ===========
 
+## 3.0.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.0...v3.0.1) )
+
+### Components
+- Added `map`, `depthTest`, `depthWrite`, `blending`, `depthFunc`, `vertexColors` properties to materials (#138, #132)
+
 ## 3.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.3...v3.0.0) )
 
 ### Core
