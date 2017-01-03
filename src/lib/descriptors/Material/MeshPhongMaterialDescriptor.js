@@ -110,6 +110,15 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
     });
 
     this.hasMap();
+    this.hasMap('lightMap');
+    this.hasMap('aoMap');
+    this.hasMap('emissiveMap');
+    this.hasMap('bumpMap');
+    this.hasMap('normalMap');
+    this.hasMap('displacementMap');
+    this.hasMap('specularMap');
+    this.hasMap('alphaMap');
+    this.hasMap('envMap');
   }
 
   getMaterialDescription(props) {

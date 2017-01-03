@@ -8,6 +8,8 @@ class MeshDepthMaterialDescriptor extends MaterialDescriptorBase {
 
     this.hasWireframe();
     this.hasMap();
+    this.hasMap('alphaMap');
+    this.hasMap('displacementMap');
   }
 
   construct(props) {

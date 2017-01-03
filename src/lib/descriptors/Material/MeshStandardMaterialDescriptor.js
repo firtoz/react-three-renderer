@@ -105,6 +105,16 @@ class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
     });
 
     this.hasMap();
+    this.hasMap('lightMap');
+    this.hasMap('aoMap');
+    this.hasMap('emissiveMap');
+    this.hasMap('bumpMap');
+    this.hasMap('normalMap');
+    this.hasMap('displacementMap');
+    this.hasMap('roughnessMap');
+    this.hasMap('metalnessMap');
+    this.hasMap('alphaMap');
+    this.hasMap('envMap');
   }
 
   getMaterialDescription(props) {

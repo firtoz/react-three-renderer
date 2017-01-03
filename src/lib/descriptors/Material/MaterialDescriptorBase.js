@@ -113,22 +113,32 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     });
 
     this._colors = [];
+    this._supportedMaps = {};
   }
 
-  hasMap() {
-    this.hasProp('map', {
-      type: propTypeInstanceOf(THREE.Texture),
-      update(threeObject, map) {
-        threeObject.userData._mapProperty = map;
+  hasMap(mapPropertyName = 'map') {
+    this._supportedMaps[mapPropertyName] = true;
 
-        if (!threeObject.userData._hasTextureChild) {
-          if (threeObject.map !== map) {
+    this.hasProp(mapPropertyName, {
+      type: propTypeInstanceOf(THREE.Texture),
+      update(threeObject, value) {
+        threeObject.userData[`_${mapPropertyName}}Property`] = value;
+
+        if (!threeObject.userData[`_has${mapPropertyName}}TextureChild`]) {
+          if (threeObject[mapPropertyName] !== value) {
             threeObject.needsUpdate = true;
           }
-          threeObject.map = map;
+          threeObject[mapPropertyName] = value;
         } else {
-          warning(map === null, 'The material already has a' +
-            ' texture assigned to it as a child therefore the \'map\' property will have no effect');
+          let slotInfo = 'texture';
+
+          if (mapPropertyName !== 'map') {
+            slotInfo += `with a '${mapPropertyName}' slot`;
+          }
+
+          warning(value === null, 'The material already has a' +
+            ` ${slotInfo} assigned to it as a child;` +
+            ` therefore the '${mapPropertyName}' property will have no effect`);
         }
       },
       updateInitial: true,
@@ -196,7 +206,6 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     threeObject.userData = {
       ...threeObject.userData,
       _hasTextureChild: false,
-      _mapProperty: undefined,
     };
 
     super.applyInitialProps(threeObject, props);
