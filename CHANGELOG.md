@@ -5,6 +5,7 @@ CHANGELOG
 
 ### Components
 - Added `map`, `depthTest`, `depthWrite`, `blending`, `depthFunc`, `vertexColors` properties to materials (#138, #132)
+- Added `slot` property to textures (#134)
 
 ## 3.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.3...v3.0.0) )
 

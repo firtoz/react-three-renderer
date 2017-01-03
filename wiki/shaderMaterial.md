@@ -6,12 +6,6 @@ Creates a [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/Sh
 
 ## Attributes
 
-### vertexShader
-``` string ``` *``` required ```*: The vertex shader code.
-
-### fragmentShader
-``` string ``` *``` required ```*: The fragment shader code.
-
 ### slot
 ``` string ```: This decides which property of the mesh the material should be assigned to.
 
@@ -63,13 +57,16 @@ Defaults to `material`. Other example values:
 
 **Default**: `true`
 
-### map
-``` THREE.Texture ```
-
 ### vertexColors
 ``` one of [THREE.NoColors, THREE.FaceColors, THREE.VertexColors] ```
 
 **Default**: `THREE.NoColors`
+
+### vertexShader
+``` string ```: The vertex shader code.
+
+### fragmentShader
+``` string ```: The fragment shader code.
 
 ### uniforms
 ``` any ```: The uniforms to be used for the shader.

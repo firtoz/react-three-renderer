@@ -12,3 +12,4 @@ Thanks for the help:
 * [@Colmea](https://github.com/Colmea)
 * [@foorjdev](https://github.com/foorjdev)
 * [@kevzettler](https://github.com/kevzettler)
+* [@carlosbaraza](https://github.com/carlosbaraza)

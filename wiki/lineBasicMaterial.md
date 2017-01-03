@@ -57,9 +57,6 @@ Defaults to `material`. Other example values:
 
 **Default**: `true`
 
-### map
-``` THREE.Texture ```
-
 ### vertexColors
 ``` one of [THREE.NoColors, THREE.FaceColors, THREE.VertexColors] ```
 

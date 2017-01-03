@@ -16,11 +16,7 @@ Used as the first parameter for [TextureLoader.load](http://threejs.org/docs/#Re
 **Default**: `''`
 
 ### slot
-``` string ```: The material property in which the texture will be applied.
-
-Currently supported values:
-* map
-* bumpMap (you can configure `bumpScale` using the material prop `bumpScale`)
+``` one of ['map', 'specularMap', 'lightMap', 'aoMap', 'emissiveMap', 'bumpMap', 'normalMap', 'displacementMap', 'roughnessMap', 'metalnessMap', 'alphaMap', 'envMap'] ```
 
 **Default**: `'map'`
 
@@ -82,7 +78,7 @@ Default: `(0, 0)`.
 
 ## Notes:
 
-If you would like to assign this texture to a material,
+If you would like to assign this texture to a material, 
 you can do this by declaring the texture within:
 
 ```jsx

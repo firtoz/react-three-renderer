@@ -57,9 +57,6 @@ Defaults to `material`. Other example values:
 
 **Default**: `true`
 
-### map
-``` THREE.Texture ```
-
 ### vertexColors
 ``` one of [THREE.NoColors, THREE.FaceColors, THREE.VertexColors] ```
 
@@ -79,6 +76,31 @@ Defaults to `material`. Other example values:
 ``` number ```
 
 **Default**: `1`
+
+### map
+``` THREE.Texture ```
+
+**Default**: `null`
+
+### aoMap
+``` THREE.Texture ```
+
+**Default**: `null`
+
+### specularMap
+``` THREE.Texture ```
+
+**Default**: `null`
+
+### alphaMap
+``` THREE.Texture ```
+
+**Default**: `null`
+
+### envMap
+``` THREE.Texture ```
+
+**Default**: `null`
 
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
