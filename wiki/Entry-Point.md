@@ -280,6 +280,32 @@ You can use this property without [forceManualRender](#forcemanualrender)
 Hopefully that will not be necessary; but please do let me know if
  you find a use case for it!
 
+### customRenderer
+``` function ```: Allows a custom renderer to be used instead of WebGLRenderer.
+
+The first parameter of this function will be an object containing these properties:
+- canvas
+- precision
+- alpha
+- premultipliedAlpha
+- antialias
+- stencil
+- preserveDrawingBuffer
+- depth
+- logarithmicDepthBuffer
+
+The object returned from this function should expose the same API as a WebGLRenderer.
+
+An example function that will just create a WebGLRenderer (i.e. no change from original behaviour):
+
+```js
+function customRenderer(rendererArgs) {
+  return new THREE.WebGLRenderer(rendererArgs);
+}
+```
+
+> **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
+
 ## Additional Attributes:
 
 ### canvasStyle

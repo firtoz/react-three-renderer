@@ -129,8 +129,12 @@ class React3DInstance {
       logarithmicDepthBuffer: parameters.logarithmicDepthBuffer,
     };
 
-    this._renderer = isWebglSupported() ? new THREE.WebGLRenderer(rendererArgs)
-      : new THREE.CanvasRenderer(rendererArgs);
+    if (this._parameters.customRenderer) {
+      this._renderer = this._parameters.customRenderer(rendererArgs);
+    } else {
+      this._renderer = isWebglSupported() ? new THREE.WebGLRenderer(rendererArgs)
+        : new THREE.CanvasRenderer(rendererArgs);
+    }
 
     if (this._rendererUpdatedCallback) {
       this._rendererUpdatedCallback(this._renderer);
@@ -717,6 +721,16 @@ class React3DInstance {
     this._parameters.mainCamera = mainCamera;
 
     this._mainCameraName = mainCamera;
+  }
+
+  updateCustomRenderer(customRenderer) {
+    this._parameters.customRenderer = customRenderer;
+
+    if (!this._renderer) {
+      return;
+    }
+
+    this.refreshRenderer();
   }
 
   updateOnAnimate(onAnimate) {

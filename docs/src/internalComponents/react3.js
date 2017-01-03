@@ -80,6 +80,28 @@ class react3 extends DocInfo {
       'See [THREE.WebGLRenderer#antialias]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).\n\n' +
       `${canvasRecreationWarning}`,
+      customRenderer: 'Allows a custom renderer to be used instead of WebGLRenderer.\n\n' +
+      `The first parameter of this function will be an object containing these properties:
+- canvas
+- precision
+- alpha
+- premultipliedAlpha
+- antialias
+- stencil
+- preserveDrawingBuffer
+- depth
+- logarithmicDepthBuffer
+
+The object returned from this function should expose the same API as a WebGLRenderer.
+
+An example function that will just create a WebGLRenderer (i.e. no change from original behaviour):
+
+${'```'}js
+function customRenderer(rendererArgs) {
+  return new THREE.WebGLRenderer(rendererArgs);
+}
+${'```'}\n\n` +
+      `${canvasRecreationWarning}`,
       stencil: 'Toggles the stencil property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#stencil]' +
       '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.stencil).\n\n' +

@@ -674,4 +674,62 @@ module.exports = (type) => {
     expect(canvasRef.callCount).to.equal(3); // unmount and remount!
     expect(canvasRef.lastCall.args[0]).to.equal(testDiv.firstChild);
   });
+
+  it('can use a custom renderer', () => {
+    let lastRenderer = null;
+
+    function customWebGLRenderer(args) {
+      lastRenderer = new THREE.WebGLRenderer(args);
+
+      return lastRenderer;
+    }
+
+    const rendererUpdatedSpy = sinon.spy();
+
+    ReactDOM.render(<React3
+      width={800}
+      height={600}
+
+      customRenderer={customWebGLRenderer}
+
+      onRendererUpdated={rendererUpdatedSpy}
+    />, testDiv);
+
+    mockConsole.expectThreeLog();
+
+    expect(lastRenderer).not.to.be.null();
+    expect(rendererUpdatedSpy.lastCall.args[0]).to.equal(lastRenderer);
+
+    lastRenderer = null;
+
+    class FunkyRenderer {
+      constructor() {
+        this.setSize = sinon.spy();
+
+        this.extensions = {
+          get: sinon.spy(),
+        };
+
+        this.dispose = sinon.spy();
+      }
+    }
+
+    function customFunkyRenderer(args) {
+      lastRenderer = new FunkyRenderer(args);
+
+      return lastRenderer;
+    }
+
+    ReactDOM.render(<React3
+      width={800}
+      height={600}
+
+      customRenderer={customFunkyRenderer}
+
+      onRendererUpdated={rendererUpdatedSpy}
+    />, testDiv);
+
+    expect(lastRenderer).not.to.be.null();
+    expect(rendererUpdatedSpy.lastCall.args[0]).to.equal(lastRenderer);
+  });
 };

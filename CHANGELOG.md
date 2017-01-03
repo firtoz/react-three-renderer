@@ -7,6 +7,7 @@ CHANGELOG
 - Added `map`, `depthTest`, `depthWrite`, `blending`, `depthFunc`, `vertexColors` properties to materials (#138, #132)
 - Added `slot` property to textures (#134)
 - Added `matrix` property to scene objects (#122)
+- Added `customRenderer` property to `React3` (#55)
 
 ## 3.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.3...v3.0.0) )
 

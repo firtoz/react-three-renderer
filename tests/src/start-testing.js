@@ -18,7 +18,7 @@ module.exports = (type) => {
       require('./core/React3/React3Mounts')(type);
 
       describe('ManualRendering', () => {
-        require('./core/Warnings/ManualRendering')(type);
+        require('./core/React3/ManualRendering')(type);
       });
 
       describe('Updates', () => {
