@@ -506,7 +506,7 @@ class InternalComponent {
 
     remountTrigger.wantRemount = false;
 
-    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject);
+    this.threeElementDescriptor.beginPropertyUpdates(this._threeObject, nextProps);
 
     if (process.env.NODE_ENV !== 'production') {
       this.threeElementDescriptor.checkPropTypes(this._currentElement,

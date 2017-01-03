@@ -8,4 +8,5 @@ module.exports = (type) => {
   require('./PointLight')(type);
   require('./ArrowHelper')(type);
   require('./Shapes')(type);
+  require('./Object3D')(type);
 };
