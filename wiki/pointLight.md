@@ -21,6 +21,11 @@ Creates a [THREE.PointLight](http://threejs.org/docs/#Reference/Lights/PointLigh
 
 **Default**: `new THREE.Vector3(1, 1, 1)`
 
+### matrix
+``` THREE.Matrix4 ```
+
+**Default**: `new THREE.Matrix4()`
+
 ### frustumCulled
 ``` bool ```: Whether the 3D object will be culled by the camera frustum or not.
 

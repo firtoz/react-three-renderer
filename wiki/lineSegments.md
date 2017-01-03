@@ -36,6 +36,11 @@ This object can contain [[Materials]] and [[Geometries]].
 ### lookAt
 ``` THREE.Vector3 ```
 
+### matrix
+``` THREE.Matrix4 ```
+
+**Default**: `new THREE.Matrix4()`
+
 ### frustumCulled
 ``` bool ```
 

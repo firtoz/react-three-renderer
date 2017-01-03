@@ -36,6 +36,11 @@ Creates a [THREE.HemisphereLight](https://threejs.org/docs/#Reference/Lights/Hem
 
 If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
 
+### matrix
+``` THREE.Matrix4 ```
+
+**Default**: `new THREE.Matrix4()`
+
 ### frustumCulled
 ``` bool ```: Whether the 3D object will be culled by the camera frustum or not.
 
