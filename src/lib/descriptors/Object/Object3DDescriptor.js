@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import THREEElementDescriptor from '../THREEElementDescriptor';
@@ -8,6 +9,27 @@ import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 function _arrayMove(array, oldIndex, newIndex) {
   array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
+}
+
+function validateMatrixProp(nextProps, threeObject) {
+  if (nextProps && nextProps.hasOwnProperty('matrix')) {
+    [
+      'position',
+      'rotation',
+      'quaternion',
+      'scale',
+      'lookAt',
+    ].find((unwantedProp) => {
+      if (nextProps.hasOwnProperty(unwantedProp)) {
+        warning(false, `The ${threeObject.type} should not have a` +
+          ` '${unwantedProp}' property if it has a 'matrix' property.`);
+
+        return true;
+      }
+
+      return false;
+    });
+  }
 }
 
 class Object3DDescriptor extends THREEElementDescriptor {
@@ -42,14 +64,6 @@ class Object3DDescriptor extends THREEElementDescriptor {
       default: new THREE.Euler(),
     });
 
-    this.hasProp('matrix', {
-      type: propTypeInstanceOf(THREE.Matrix4),
-      update(threeObject, matrix) {
-        threeObject.applyMatrix(matrix);
-      },
-      default: new THREE.Matrix4(),
-    });
-
     this.hasProp('quaternion', {
       type: propTypeInstanceOf(THREE.Quaternion),
       update: copyUpdate('quaternion'),
@@ -72,6 +86,19 @@ class Object3DDescriptor extends THREEElementDescriptor {
         }
       },
       default: undefined,
+    });
+
+    this.hasProp('matrix', {
+      type: propTypeInstanceOf(THREE.Matrix4),
+      update(threeObject, matrix) {
+        threeObject.matrix.copy(matrix);
+
+        threeObject.matrix.decompose(
+          threeObject.position,
+          threeObject.quaternion,
+          threeObject.scale);
+      },
+      default: new THREE.Matrix4(),
     });
 
     [
@@ -110,6 +137,12 @@ class Object3DDescriptor extends THREEElementDescriptor {
     });
   }
 
+  beginPropertyUpdates(threeObject, nextProps) {
+    if (process.env.NODE_ENV !== 'production') {
+      validateMatrixProp(nextProps, threeObject);
+    }
+  }
+
   construct() {
     return new THREE.Object3D();
   }
@@ -117,32 +150,38 @@ class Object3DDescriptor extends THREEElementDescriptor {
   applyInitialProps(threeObject, props) {
     super.applyInitialProps(threeObject, props);
 
-    if (props.position) {
-      threeObject.position.copy(props.position);
-    }
-
-    if (props.scale) {
-      threeObject.scale.copy(props.scale);
-    }
-
-    if (props.rotation) {
-      threeObject.rotation.copy(props.rotation);
+    if (process.env.NODE_ENV !== 'production') {
+      validateMatrixProp(props, threeObject);
     }
 
     if (props.matrix) {
-      threeObject.applyMatrix(props.matrix);
-    }
+      threeObject.matrix.copy(props.matrix);
+    } else {
+      if (props.position) {
+        threeObject.position.copy(props.position);
+      }
 
-    if (props.quaternion) {
-      threeObject.quaternion.copy(props.quaternion);
+      if (props.scale) {
+        threeObject.scale.copy(props.scale);
+      }
+
+      if (props.rotation) {
+        threeObject.rotation.copy(props.rotation);
+      }
+
+      if (props.quaternion) {
+        threeObject.quaternion.copy(props.quaternion);
+      }
+
+      if (props.lookAt) {
+        threeObject.lookAt(props.lookAt);
+      }
     }
 
     if (props.lookAt) {
       threeObject.userData._lookAt = props.lookAt;
-      threeObject.lookAt(props.lookAt);
     }
   }
-
 
   /**
    * @param threeObject
