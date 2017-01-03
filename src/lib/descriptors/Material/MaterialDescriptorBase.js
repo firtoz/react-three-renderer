@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import THREEElementDescriptor from '../THREEElementDescriptor';
@@ -50,6 +51,46 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       default: THREE.FrontSide,
     });
 
+    this.hasProp('depthTest', {
+      type: PropTypes.bool,
+      simple: true,
+      default: true,
+    });
+
+    this.hasProp('depthWrite', {
+      type: PropTypes.bool,
+      simple: true,
+      default: true,
+    });
+
+    this.hasProp('blending', {
+      type: PropTypes.oneOf([
+        THREE.NoBlending,
+        THREE.NormalBlending,
+        THREE.AdditiveBlending,
+        THREE.SubtractiveBlending,
+        THREE.MultiplyBlending,
+        THREE.CustomBlending,
+      ]),
+      simple: true,
+      default: THREE.NormalBlending,
+    });
+
+    this.hasProp('depthFunc', {
+      type: PropTypes.oneOf([
+        THREE.NeverDepth,
+        THREE.AlwaysDepth,
+        THREE.LessDepth,
+        THREE.LessEqualDepth,
+        THREE.EqualDepth,
+        THREE.GreaterEqualDepth,
+        THREE.GreaterDepth,
+        THREE.NotEqualDepth,
+      ]),
+      simple: true,
+      default: THREE.LessEqualDepth,
+    });
+
     this.hasProp('opacity', {
       type: PropTypes.number,
       simple: true,
@@ -61,7 +102,48 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       default: true,
     });
 
+    this.hasProp('vertexColors', {
+      type: PropTypes.oneOf([
+        THREE.NoColors,
+        THREE.FaceColors,
+        THREE.VertexColors,
+      ]),
+      simple: true,
+      default: THREE.NoColors,
+    });
+
     this._colors = [];
+    this._supportedMaps = {};
+  }
+
+  hasMap(mapPropertyName = 'map') {
+    this._supportedMaps[mapPropertyName] = true;
+
+    this.hasProp(mapPropertyName, {
+      type: propTypeInstanceOf(THREE.Texture),
+      update(threeObject, value) {
+        threeObject.userData[`_${mapPropertyName}}Property`] = value;
+
+        if (!threeObject.userData[`_has${mapPropertyName}}TextureChild`]) {
+          if (threeObject[mapPropertyName] !== value) {
+            threeObject.needsUpdate = true;
+          }
+          threeObject[mapPropertyName] = value;
+        } else {
+          let slotInfo = 'texture';
+
+          if (mapPropertyName !== 'map') {
+            slotInfo += `with a '${mapPropertyName}' slot`;
+          }
+
+          warning(value === null, 'The material already has a' +
+            ` ${slotInfo} assigned to it as a child;` +
+            ` therefore the '${mapPropertyName}' property will have no effect`);
+        }
+      },
+      updateInitial: true,
+      default: null,
+    });
   }
 
   getMaterialDescription(props) {
@@ -123,6 +205,7 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   applyInitialProps(threeObject, props) {
     threeObject.userData = {
       ...threeObject.userData,
+      _hasTextureChild: false,
     };
 
     super.applyInitialProps(threeObject, props);
@@ -218,10 +301,8 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
   }
 
   invalidChildInternal(child) {
-    const invalid = !(child instanceof THREE.Texture
+    return !(child instanceof THREE.Texture
     || child instanceof ResourceReference);
-
-    return invalid;
   }
 
   _invalidChild = child => this.invalidChildInternal(child);

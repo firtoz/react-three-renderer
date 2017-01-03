@@ -1,6 +1,14 @@
 CHANGELOG
 ===========
 
+## 3.0.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.0...v3.0.1) )
+
+### Components
+- Added `map`, `depthTest`, `depthWrite`, `blending`, `depthFunc`, `vertexColors` properties to materials (#138, #132)
+- Added `slot` property to textures (#134)
+- Added `matrix` property to scene objects (#122)
+- Added `customRenderer` property to `React3` (#55)
+
 ## 3.0.0 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v2.3.3...v3.0.0) )
 
 ### Core
@@ -8,7 +16,7 @@ CHANGELOG
 - Fix compatibility for `react@15.4.0`! ( Fixes #118 )
 
 ### Components
-- Added `<hemisphereLight>` ( #126 )
+- Added `<hemisphereLight>` ( #126 #129 )
 - Added `<meshStandardMaterial>` ( #126 )
 - ExtrudeGeometry:
   - Change type validation for `frames`

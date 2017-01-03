@@ -14,7 +14,7 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
       'fragmentShader',
     ].forEach((propName) => {
       this.hasProp(propName, {
-        type: PropTypes.string.isRequired,
+        type: PropTypes.string,
         update: this.triggerRemount,
       });
     });
@@ -53,16 +53,14 @@ class ShaderMaterialDescriptor extends MaterialDescriptorBase {
   }
 
   invalidChildInternal(child) {
-    const invalid = !(child instanceof UniformContainer || super.invalidChildInternal(child));
-
-    return invalid;
+    return !(child instanceof UniformContainer || super.invalidChildInternal(child));
   }
 
   applyInitialProps(threeObject, props) {
     super.applyInitialProps(threeObject, props);
 
     if (!props.hasOwnProperty('uniforms')) {
-      threeObject.uniforms = undefined;
+      threeObject.uniforms = {};
     }
   }
 }

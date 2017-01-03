@@ -13,31 +13,33 @@ if (process.env.KARMA_TDD) {
 chai.use(dirtyChai);
 
 module.exports = (type) => {
-  describe(`${type}/React3`, () => {
-    require('./core/React3/React3Mounts')(type);
-  });
+  describe(`${type}`, () => {
+    describe('React3', () => {
+      require('./core/React3/React3Mounts')(type);
 
-  describe(`${type}/React3/ManualRendering`, () => {
-    require('./core/Warnings/ManualRendering')(type);
-  });
+      describe('ManualRendering', () => {
+        require('./core/React3/ManualRendering')(type);
+      });
 
-  describe(`${type}/React3/Updates`, () => {
-    require('./core/React3/Updates')(type);
-  });
+      describe('Updates', () => {
+        require('./core/React3/Updates')(type);
+      });
 
-  describe(`${type}/React3/CompositeComponents`, () => {
-    require('./core/React3/CompositeComponents')(type);
-  });
+      describe('CompositeComponents', () => {
+        require('./core/React3/CompositeComponents')(type);
+      });
 
-  describe(`${type}/React3/Context`, () => {
-    require('./core/React3/Context')(type);
-  });
+      describe('Context', () => {
+        require('./core/React3/Context')(type);
+      });
+    });
 
-  describe(`${type}/Warnings`, () => {
-    require('./core/Warnings/PropTypes')(type);
-  });
+    describe('Warnings', () => {
+      require('./core/Warnings/PropTypes')(type);
+    });
 
-  describe(`${type}/Descriptors`, () => {
-    require('./descriptors/index')(type);
+    describe('Descriptors', () => {
+      require('./descriptors/index')(type);
+    });
   });
 };

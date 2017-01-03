@@ -12,8 +12,9 @@ function clearImageDirectory() {
 
   if (fs.existsSync(imagePath)) {
     del.sync(imagePath);
-    fs.mkdirSync(imagePath);
   }
+
+  fs.mkdirSync(imagePath);
 }
 
 const rightArrowSymbol = '»'; // was: '▸' but GitHub apparently does not like this

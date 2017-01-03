@@ -42,16 +42,6 @@ class LineDashedMaterialDescriptor extends MaterialDescriptorBase {
       });
     });
 
-    this.hasProp('vertexColors', {
-      type: PropTypes.oneOf([
-        THREE.NoColors,
-        THREE.FaceColors,
-        THREE.VertexColors,
-      ]),
-      simple: true,
-      default: THREE.NoColors,
-    });
-
     this.hasProp('fog', {
       type: PropTypes.bool,
       update(threeObject, fog, existsInProps) {

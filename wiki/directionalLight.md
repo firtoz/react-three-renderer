@@ -167,6 +167,11 @@ Additionally, updating this property will trigger an update for the light target
 
 **Default**: `new THREE.Quaternion()`
 
+### matrix
+``` THREE.Matrix4 ```
+
+**Default**: `new THREE.Matrix4()`
+
 ### lookAt
 ``` THREE.Vector3 ```: The target position for the 3D object to look at.
 

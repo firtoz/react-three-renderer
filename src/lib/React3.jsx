@@ -18,6 +18,7 @@ class React3 extends React.Component {
     /* eslint-disable react/forbid-prop-types */
     canvasStyle: PropTypes.any,
     /* eslint-enable react/forbid-prop-types */
+    customRenderer: PropTypes.func,
     gammaInput: PropTypes.bool,
     gammaOutput: PropTypes.bool,
     sortObjects: PropTypes.bool,

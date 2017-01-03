@@ -15,6 +15,11 @@ Used as the first parameter for [TextureLoader.load](http://threejs.org/docs/#Re
 
 **Default**: `''`
 
+### slot
+``` one of ['map', 'specularMap', 'lightMap', 'aoMap', 'emissiveMap', 'bumpMap', 'normalMap', 'displacementMap', 'roughnessMap', 'metalnessMap', 'alphaMap', 'envMap'] ```
+
+**Default**: `'map'`
+
 ### repeat
 ``` THREE.Vector2 ```: Sets the [repeat property of the Texture](http://threejs.org/docs/#Reference/Textures/Texture.repeat).
 

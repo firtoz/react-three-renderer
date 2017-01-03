@@ -29,6 +29,26 @@ Defaults to `material`. Other example values:
 
 **Default**: `THREE.FrontSide`
 
+### depthTest
+``` bool ```
+
+**Default**: `true`
+
+### depthWrite
+``` bool ```
+
+**Default**: `true`
+
+### blending
+``` one of [THREE.NoBlending, THREE.NormalBlending, THREE.AdditiveBlending, THREE.SubtractiveBlending, THREE.MultiplyBlending, THREE.CustomBlending] ```
+
+**Default**: `THREE.NormalBlending`
+
+### depthFunc
+``` one of [THREE.NeverDepth, THREE.AlwaysDepth, THREE.LessDepth, THREE.LessEqualDepth, THREE.EqualDepth, THREE.GreaterEqualDepth, THREE.GreaterDepth, THREE.NotEqualDepth] ```
+
+**Default**: `THREE.LessEqualDepth`
+
 ### opacity
 ``` number ```
 
@@ -36,6 +56,11 @@ Defaults to `material`. Other example values:
 ``` bool ```
 
 **Default**: `true`
+
+### vertexColors
+``` one of [THREE.NoColors, THREE.FaceColors, THREE.VertexColors] ```
+
+**Default**: `THREE.NoColors`
 
 ### color
 ``` one of types [THREE.Color, number, string] ```
@@ -57,10 +82,10 @@ Defaults to `material`. Other example values:
 
 **Default**: `true`
 
-### vertexColors
-``` one of [THREE.NoColors, THREE.FaceColors, THREE.VertexColors] ```
+### map
+``` THREE.Texture ```
 
-**Default**: `THREE.NoColors`
+**Default**: `null`
 
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].

@@ -8,14 +8,15 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
 
     this.hasColor();
     this.hasWireframe();
+    this.hasMap();
+    this.hasMap('aoMap');
+    this.hasMap('specularMap');
+    this.hasMap('alphaMap');
+    this.hasMap('envMap');
   }
 
   construct(props) {
     const materialDescription = this.getMaterialDescription(props);
-
-    if (props.hasOwnProperty('map')) {
-      materialDescription.map = props.map;
-    }
 
     return new THREE.MeshBasicMaterial(materialDescription);
   }

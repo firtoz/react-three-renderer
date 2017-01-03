@@ -128,6 +128,7 @@ class LightDescriptorBase extends Object3DDescriptor {
     this.removeProp('rotation');
     this.removeProp('quaternion');
     this.removeProp('lookAt');
+    this.removeProp('matrix');
 
     this.hasProp('position', {
       type: propTypeInstanceOf(THREE.Vector3),
@@ -161,6 +162,21 @@ class LightDescriptorBase extends Object3DDescriptor {
         light.userData._needsDirectionUpdate = true;
       },
       default: new THREE.Quaternion(),
+    });
+
+    this.hasProp('matrix', {
+      type: propTypeInstanceOf(THREE.Matrix4),
+      update(light, matrix) {
+        light.matrix.copy(matrix);
+
+        light.matrix.decompose(
+          light.position,
+          light.quaternion,
+          light.scale);
+
+        light.userData._needsDirectionUpdate = true;
+      },
+      default: new THREE.Matrix4(),
     });
 
     this.hasProp('lookAt', {
