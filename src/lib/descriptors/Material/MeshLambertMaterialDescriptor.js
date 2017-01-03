@@ -10,6 +10,7 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
     this.hasColor();
     this.hasColor('emissive', 0);
     this.hasWireframe();
+    this.hasMap();
   }
 
 
@@ -37,7 +38,7 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
     super.applyInitialProps(threeObject, props);
 
     if (!props.hasOwnProperty('map')) {
-      threeObject.map = undefined;
+      threeObject.map = null;
     }
   }
 }

@@ -102,25 +102,6 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
       default: true,
     });
 
-    this.hasProp('map', {
-      type: propTypeInstanceOf(THREE.Texture),
-      update(threeObject, map) {
-        threeObject.userData._mapProperty = map;
-
-        if (!threeObject.userData._hasTextureChild) {
-          if (threeObject.map !== map) {
-            threeObject.needsUpdate = true;
-          }
-          threeObject.map = map;
-        } else {
-          warning(map === undefined, 'The material already has a' +
-            ' texture assigned to it as a child therefore the \'map\' property will have no effect');
-        }
-      },
-      updateInitial: true,
-      default: undefined,
-    });
-
     this.hasProp('vertexColors', {
       type: PropTypes.oneOf([
         THREE.NoColors,
@@ -132,6 +113,27 @@ class MaterialDescriptorBase extends THREEElementDescriptor {
     });
 
     this._colors = [];
+  }
+
+  hasMap() {
+    this.hasProp('map', {
+      type: propTypeInstanceOf(THREE.Texture),
+      update(threeObject, map) {
+        threeObject.userData._mapProperty = map;
+
+        if (!threeObject.userData._hasTextureChild) {
+          if (threeObject.map !== map) {
+            threeObject.needsUpdate = true;
+          }
+          threeObject.map = map;
+        } else {
+          warning(map === null, 'The material already has a' +
+            ' texture assigned to it as a child therefore the \'map\' property will have no effect');
+        }
+      },
+      updateInitial: true,
+      default: null,
+    });
   }
 
   getMaterialDescription(props) {

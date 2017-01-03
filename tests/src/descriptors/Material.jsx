@@ -4,12 +4,105 @@ import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import chai from 'chai';
 
-
 module.exports = (type) => {
   const { expect } = chai;
 
   describe('MaterialDescriptor', () => {
     const { testDiv, React3, mockConsole } = require('../utils/initContainer')(type);
+
+    it('Should have same defaults as the material constructors', () => {
+      const materialRef = sinon.spy();
+
+      // warmup
+
+      ReactDOM.render((<React3
+        width={800}
+        height={600}
+        mainCamera="mainCamera"
+      >
+        <scene>
+          <mesh>
+            <boxGeometry
+              width={2}
+              height={2}
+              depth={2}
+            />
+          </mesh>
+        </scene>
+      </React3>), testDiv);
+
+      mockConsole.expectThreeLog();
+
+      [
+        'LineBasicMaterial',
+        'LineDashedMaterial',
+        'MeshBasicMaterial',
+        'MeshDepthMaterial',
+        'MeshLambertMaterial',
+        'MeshPhongMaterial',
+        'MeshStandardMaterial',
+        'PointsMaterial',
+        'ShaderMaterial',
+        'SpriteMaterial',
+        'RawShaderMaterial',
+        // 'MeshPhysicalMaterial', // TODO
+      ].forEach((materialType) => {
+        const r3rDescriptorName = `${materialType.replace(/^\w/, l => l.toLowerCase())}`;
+
+        const material = new THREE[materialType]();
+
+        ReactDOM.render((<React3
+          width={800}
+          height={600}
+          mainCamera="mainCamera"
+        >
+          <scene>
+            <mesh>
+              <boxGeometry
+                width={2}
+                height={2}
+                depth={2}
+              />
+              {React.createElement(r3rDescriptorName, {
+                ref: materialRef,
+              })}
+            </mesh>
+          </scene>
+        </React3>), testDiv);
+
+        const r3rMaterial = materialRef.lastCall.args[0];
+
+        const materialKeys = Object.keys(material);
+
+        const failures = [];
+
+        materialKeys.forEach((key) => {
+          if (key === 'uuid' || key === 'userData') {
+            // these should be different
+            return;
+          }
+
+          try {
+            expect(r3rMaterial[key]).to.deep.equal(material[key]);
+          } catch (e) {
+            failures.push({
+              key,
+              expected: material[key],
+              actual: r3rMaterial[key],
+              error: e,
+            });
+          }
+        });
+
+        if (failures.length > 0) {
+          // console.error('Failures', failures);
+
+          const allFailureMessages = `[\n${failures.map(failure => `'${failure.key}': '${failure.error.message}'`).join(',\n\t')}\n]`;
+
+          throw new Error(`Mismatching keys for ${materialType}: ${allFailureMessages}`);
+        }
+      });
+    });
 
     it('Should be able to reference texture children', () => {
       const materialRef = sinon.spy();

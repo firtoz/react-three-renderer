@@ -8,6 +8,7 @@ class MeshBasicMaterialDescriptor extends MaterialDescriptorBase {
 
     this.hasColor();
     this.hasWireframe();
+    this.hasMap();
   }
 
   construct(props) {

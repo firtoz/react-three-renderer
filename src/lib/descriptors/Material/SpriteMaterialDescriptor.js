@@ -27,6 +27,8 @@ class SpriteMaterialDescriptor extends MaterialDescriptorBase {
       updateInitial: true,
       default: false,
     });
+
+    this.hasMap();
   }
 
   construct(props) {

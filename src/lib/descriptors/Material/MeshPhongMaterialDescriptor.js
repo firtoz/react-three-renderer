@@ -108,6 +108,8 @@ class MeshPhongMaterialDescriptor extends MaterialDescriptorBase {
         default: false,
       });
     });
+
+    this.hasMap();
   }
 
   getMaterialDescription(props) {

@@ -39,6 +39,8 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
       updateInitial: true,
       default: true,
     });
+
+    this.hasMap();
   }
 
   construct(props) {
