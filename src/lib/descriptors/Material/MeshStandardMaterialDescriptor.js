@@ -103,6 +103,8 @@ class MeshStandardMaterialDescriptor extends MaterialDescriptorBase {
         default: false,
       });
     });
+
+    this.hasMap();
   }
 
   getMaterialDescription(props) {

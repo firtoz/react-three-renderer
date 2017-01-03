@@ -7,6 +7,7 @@ class MeshDepthMaterialDescriptor extends MaterialDescriptorBase {
     super(react3RendererInstance);
 
     this.hasWireframe();
+    this.hasMap();
   }
 
   construct(props) {

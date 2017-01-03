@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
+import warning from 'fbjs/lib/warning';
 import PropTypes from 'react/lib/ReactPropTypes';
 
 import resource from '../decorators/resource';
@@ -167,23 +168,30 @@ class TextureDescriptor extends THREEElementDescriptor {
   }
 
   setParent(texture, parentObject3D) {
-    invariant(parentObject3D instanceof THREE.Material
-      || parentObject3D instanceof Uniform,
-      'Parent is not a material or a uniform');
-
     if (parentObject3D instanceof THREE.Material) {
-      invariant(parentObject3D.map === null || parentObject3D.map === undefined,
-        'Parent already has a texture');
+      parentObject3D.userData._hasTextureChild = true;
+
+      if (parentObject3D.userData._mapProperty) {
+        warning(false, 'The material already has a' +
+          ' map property but a texture is being added as a child.' +
+          ' The child will override the property.');
+      } else {
+        invariant(parentObject3D.map === null || parentObject3D.map === undefined,
+          'Parent already has a texture');
+      }
+
       parentObject3D.map = texture;
       // dispose to force a recreate
       parentObject3D.needsUpdate = true;
-    } else { // Uniform as per the assert above
+    } else if (parentObject3D instanceof Uniform) { // Uniform as per the assert above
       parentObject3D.setValue(texture);
+    } else {
+      invariant(false,
+        'Parent of a texture is not a material nor a uniform, it needs to be one of them.');
     }
 
     super.setParent(texture, parentObject3D);
   }
-
 
   applyInitialProps(threeObject, props) {
     threeObject.userData = {
@@ -199,7 +207,14 @@ class TextureDescriptor extends THREEElementDescriptor {
     // could either be a resource description or an actual texture
     if (parent instanceof THREE.Material) {
       if (parent.map === texture) {
-        parent.map = null;
+        parent.userData._hasTextureChild = false;
+
+        if (parent.userData._mapProperty) {
+          // restore the map property
+          parent.map = parent.userData._mapProperty;
+        } else {
+          parent.map = null;
+        }
         // dispose to force a recreate
         parent.needsUpdate = true;
       }
