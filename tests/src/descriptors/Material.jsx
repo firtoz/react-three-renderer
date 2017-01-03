@@ -112,7 +112,7 @@ module.exports = (type) => {
         </scene>
       </React3>), testDiv);
 
-      mockConsole.expect('Warning: The material already has a map property' +
+      mockConsole.expectDev('Warning: The material already has a map property' +
         ' but a texture is being added as a child. The child will override the property.');
 
       mockConsole.expectThreeLog();
@@ -181,7 +181,7 @@ module.exports = (type) => {
         </scene>
       </React3>), testDiv);
 
-      mockConsole.expect('Warning: The material already has a map property' +
+      mockConsole.expectDev('Warning: The material already has a map property' +
         ' but a texture is being added as a child. The child will override the property.');
 
       expect(materialRef.lastCall.args[0].map,
@@ -244,7 +244,7 @@ module.exports = (type) => {
 
       const secondTexture = new THREE.Texture();
 
-      mockConsole.expect('Warning: The material already has a texture assigned to it' +
+      mockConsole.expectDev('Warning: The material already has a texture assigned to it' +
         ' as a child therefore the \'map\' property will have no effect');
 
       ReactDOM.render((<React3
