@@ -15,6 +15,47 @@ class TextureDescriptor extends THREEElementDescriptor {
   constructor(react3RendererInstance: React3Renderer) {
     super(react3RendererInstance);
 
+    this.hasProp('slot', {
+      type: PropTypes.oneOf([
+        'map',
+        'specularMap',
+        'lightMap',
+        'aoMap',
+        'emissiveMap',
+        'bumpMap',
+        'normalMap',
+        'displacementMap',
+        'roughnessMap',
+        'metalnessMap',
+        'alphaMap',
+        'envMap',
+      ]),
+      updateInitial: true,
+      update: (texture, slot) => {
+        const lastSlot = texture.userData._materialSlot;
+        texture.userData._materialSlot = slot;
+
+        if (texture.userData.markup) {
+          const parentMarkup = texture.userData.markup.parentMarkup;
+          if (parentMarkup) {
+            const parent = parentMarkup.threeObject;
+
+            if (parent instanceof THREE.Material) {
+              if (process.env.NODE_ENV !== 'production') {
+                this.validateParentSlot(parent, slot);
+              }
+
+              // remove from previous slot and assign to new slot
+              // TODO add test for this
+              this.removeFromSlotOfMaterial(parent, lastSlot, texture);
+              this.addToSlotOfMaterial(parent, slot, texture);
+            }
+          }
+        }
+      },
+      default: 'map',
+    });
+
     this.hasProp('repeat', {
       type: propTypeInstanceOf(THREE.Vector2),
       updateInitial: true,
@@ -167,30 +208,23 @@ class TextureDescriptor extends THREEElementDescriptor {
     return result;
   }
 
-  setParent(texture, parentObject3D) {
-    if (parentObject3D instanceof THREE.Material) {
-      parentObject3D.userData._hasTextureChild = true;
+  setParent(texture, parent) {
+    if (parent instanceof THREE.Material) {
+      const { _materialSlot: slot } = texture.userData;
 
-      if (parentObject3D.userData._mapProperty) {
-        warning(false, 'The material already has a' +
-          ' map property but a texture is being added as a child.' +
-          ' The child will override the property.');
-      } else {
-        invariant(parentObject3D.map === null || parentObject3D.map === undefined,
-          'Parent already has a texture');
+      if (process.env.NODE_ENV !== 'production') {
+        this.validateParentSlot(parent, slot);
       }
 
-      parentObject3D.map = texture;
-      // dispose to force a recreate
-      parentObject3D.needsUpdate = true;
-    } else if (parentObject3D instanceof Uniform) { // Uniform as per the assert above
-      parentObject3D.setValue(texture);
+      this.addToSlotOfMaterial(parent, slot, texture);
+    } else if (parent instanceof Uniform) { // Uniform as per the assert above
+      parent.setValue(texture);
     } else {
       invariant(false,
         'Parent of a texture is not a material nor a uniform, it needs to be one of them.');
     }
 
-    super.setParent(texture, parentObject3D);
+    super.setParent(texture, parent);
   }
 
   applyInitialProps(threeObject, props) {
@@ -204,20 +238,11 @@ class TextureDescriptor extends THREEElementDescriptor {
   unmount(texture) {
     const parent = texture.userData.markup.parentMarkup.threeObject;
 
+    const { _materialSlot: slot } = texture.userData;
+
     // could either be a resource description or an actual texture
     if (parent instanceof THREE.Material) {
-      if (parent.map === texture) {
-        parent.userData._hasTextureChild = false;
-
-        if (parent.userData._mapProperty) {
-          // restore the map property
-          parent.map = parent.userData._mapProperty;
-        } else {
-          parent.map = null;
-        }
-        // dispose to force a recreate
-        parent.needsUpdate = true;
-      }
+      this.removeFromSlotOfMaterial(parent, slot, texture);
     } else if (parent instanceof Uniform) {
       if (parent.value === texture) {
         parent.setValue(null);
@@ -227,6 +252,54 @@ class TextureDescriptor extends THREEElementDescriptor {
     texture.dispose();
 
     super.unmount(texture);
+  }
+
+  removeFromSlotOfMaterial(material, slot, texture) {
+    if (material[slot] === texture) {
+      material.userData[`_has${slot}}TextureChild`] = false;
+
+      if (material.userData[`_${slot}}Property`]) {
+        // restore the map property
+        material[slot] = material.userData[`_${slot}}Property`];
+      } else {
+        material[slot] = null;
+      }
+
+      material.needsUpdate = true;
+    }
+  }
+
+  addToSlotOfMaterial(material, slot, texture) {
+    material.userData[`_has${slot}}TextureChild`] = true;
+
+    if (material.userData[`_${slot}}Property`]) {
+      let slotInfo = 'texture';
+
+      if (slot !== 'map') {
+        slotInfo += `with a '${slot}' slot`;
+      }
+
+      warning(false, 'The material already has a' +
+        ` '${slot}' property but a ${slotInfo} is being added as a child.` +
+        ' The child will override the property.');
+    } else {
+      // removing invariant to enable slot swapping
+    }
+
+    if (material[slot] !== texture) {
+      material[slot] = texture;
+    }
+  }
+
+  validateParentSlot(parent, slot) {
+    const react3internalComponent = parent.userData.react3internalComponent;
+    if (react3internalComponent) {
+      const descriptor = react3internalComponent.threeElementDescriptor;
+      if (descriptor && !descriptor._supportedMaps[slot]) {
+        // TODO add test for this
+        warning(false, `A texture cannot be assigned as a '${slot}' to '${parent.type}'`);
+      }
+    }
   }
 
   highlight(threeObject) {

@@ -11,6 +11,12 @@ class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
     this.hasColor('emissive', 0);
     this.hasWireframe();
     this.hasMap();
+    this.hasMap('lightMap');
+    this.hasMap('aoMap');
+    this.hasMap('emissiveMap');
+    this.hasMap('specularMap');
+    this.hasMap('alphaMap');
+    this.hasMap('envMap');
   }
 
 
