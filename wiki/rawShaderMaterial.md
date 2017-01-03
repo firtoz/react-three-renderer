@@ -64,6 +64,11 @@ Defaults to `material`. Other example values:
 ### map
 ``` THREE.Texture ```
 
+### vertexColors
+``` one of [THREE.NoColors, THREE.FaceColors, THREE.VertexColors] ```
+
+**Default**: `THREE.NoColors`
+
 ### uniforms
 ``` any ```: The uniforms to be used for the shader.
 

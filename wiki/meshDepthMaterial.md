@@ -60,6 +60,11 @@ Defaults to `material`. Other example values:
 ### map
 ``` THREE.Texture ```
 
+### vertexColors
+``` one of [THREE.NoColors, THREE.FaceColors, THREE.VertexColors] ```
+
+**Default**: `THREE.NoColors`
+
 ### wireframe
 ``` bool ```
 

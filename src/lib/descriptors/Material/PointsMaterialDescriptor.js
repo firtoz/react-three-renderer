@@ -39,16 +39,6 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
       updateInitial: true,
       default: true,
     });
-
-    this.hasProp('vertexColors', {
-      type: PropTypes.oneOf([
-        THREE.NoColors,
-        THREE.FaceColors,
-        THREE.VertexColors,
-      ]),
-      simple: true,
-      default: THREE.NoColors,
-    });
   }
 
   construct(props) {
