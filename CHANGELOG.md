@@ -1,6 +1,11 @@
 CHANGELOG
 ===========
 
+## 3.0.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.1...v3.0.2) )
+
+### Components
+- Fix an invalid assertion that prevents the usage of uniforms in shaderMaterial
+
 ## 3.0.1 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.0...v3.0.1) )
 
 ### Components
