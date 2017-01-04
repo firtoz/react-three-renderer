@@ -49,8 +49,6 @@ class UniformDescriptor extends THREEElementDescriptor {
 
     const name = threeObject.name;
 
-    invariant(parentObject3D[name] === undefined, 'Parent already has uniforms');
-
     super.setParent(threeObject, parentObject3D);
 
     parentObject3D.uniforms[name] = {
