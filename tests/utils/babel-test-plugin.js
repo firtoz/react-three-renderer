@@ -27,6 +27,11 @@ export default (babel) => {
         pathNode.end - pathNode.start);
 
       try {
+        // (function(){
+        //     let func = /* ORIGINAL_FUNCTION */;
+        //     func.toString = decodeURI(/* encodeURI(expectedToString) */);
+        //     return func;
+        // })();
         path.replaceWith(
           t.expressionStatement(t.callExpression(
             t.functionExpression(null,
@@ -80,6 +85,7 @@ export default (babel) => {
       }
 
       if (printParent) {
+        // used for debugging
         try {
           console.log(babel.transformFromAst(// eslint-disable-line
             t.file(
