@@ -39,12 +39,12 @@ gulp.task('doc', (done) => {
 gulp.task('eslint', () => {
   let failures = 0;
 
-  return gulp.src(['./*', './src/**/*', './docs/src/**/*', './tests/src/**/*'].reduce((result, current) => {
+  return gulp.src(['./*', './src/**/*', './docs/src/**/*', './tests/**/*'].reduce((result, current) => {
     result.push(`${current}.js`);
     result.push(`${current}.jsx`);
 
     return result;
-  }, []))
+  }, []).concat(['!./tests/coverage/**/*']))
     .pipe(cache('eslint'))
     .pipe(eslint({
       cache: true,
@@ -56,7 +56,7 @@ gulp.task('eslint', () => {
         // If a file has errors/warnings remove uncache it
         delete cache.caches.eslint[path.resolve(result.filePath)];
 
-        failures++;
+        failures += result.warningCount + result.errorCount;
       }
     }))
     .pipe(eslint.results(() => {

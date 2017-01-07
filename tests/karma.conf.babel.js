@@ -18,7 +18,7 @@ export default (config) => {
   }
 
   if (options.coverage && options.type !== 'src') {
-    throw new Error('Can run test-driven-development or coverage only config with a \'src\' type');
+    throw new Error('Can run coverage only config with a \'src\' type');
   }
 
   const webpackConfig = webpackConfigurator(options);
@@ -41,7 +41,24 @@ export default (config) => {
     travisFoldName += '-prod';
   }
 
-  console.log('Current test config: ', travisFoldName);
+  console.log('Current test config: ', travisFoldName); // eslint-disable-line
+
+  const plugins = [
+    require('karma-webpack'),
+    require('karma-mocha'),
+    require('karma-spec-reporter'),
+    require('karma-chrome-launcher'),
+    require('karma-sourcemap-loader'),
+  ];
+
+  const reporters = [
+    'spec',
+  ];
+
+  if (options.coverage) {
+    plugins.push(require('karma-coverage'));
+    reporters.push('coverage');
+  }
 
   const configuration = {
     browsers: [
@@ -88,9 +105,7 @@ export default (config) => {
       return map;
     }, {}),
 
-    reporters: [
-      'spec',
-    ].concat(options.coverage ? ['coverage'] : []),
+    reporters,
 
     coverageReporter: {
       type: 'html',
@@ -107,15 +122,7 @@ export default (config) => {
       noInfo: true,
     },
 
-    plugins: [
-      require('karma-webpack'),
-      require('karma-mocha'),
-      require('karma-spec-reporter'),
-      require('karma-chrome-launcher'),
-      require('karma-sourcemap-loader'),
-    ].concat(options.coverage ? [
-      require('karma-coverage'),
-    ] : []),
+    plugins,
   };
 
   if (process.env.TRAVIS) {
@@ -160,7 +167,7 @@ export default (config) => {
       configuration.client.mocha = {
         ...configuration.client.mocha,
         ...options.mocha,
-      }
+      };
     }
   }
 

@@ -119,4 +119,4 @@ export default (options) => {
   }
 
   return webpackConfig;
-}
+};
