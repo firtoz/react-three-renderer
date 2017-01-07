@@ -12,17 +12,20 @@ import minimist from 'minimist';
 
 /* eslint-enable import/no-extraneous-dependencies */
 
+function emptyTask(done) {
+  done();
+}
 
 gulp.task('clean-lib', () => del(['lib/']));
 
 /* eslint-disable global-require */
 
-gulp.task('babel', gulp.series('clean-lib'), () => gulp.src([
+gulp.task('babel', gulp.series('clean-lib', () => gulp.src([
   'src/lib/**/*.js',
   'src/lib/**/*.jsx',
 ])
   .pipe(babel(require('./package.json').babel))
-  .pipe(gulp.dest('lib/')));
+  .pipe(gulp.dest('lib/'))), emptyTask);
 
 gulp.task('doc', (done) => {
   // require the generator here
@@ -107,9 +110,6 @@ gulp.task('karma-lib', karmaSingle({
   type: 'lib',
 }));
 
-function emptyTask(done) {
-  done();
-}
 
 gulp.task('karma', gulp.series('karma-src', 'karma-lib'), emptyTask);
 
