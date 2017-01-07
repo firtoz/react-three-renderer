@@ -8,10 +8,6 @@
  * @returns {*}
  */
 export default (babel) => {
-  if (!process.env.KARMA_TDD) {
-    return {};
-  }
-
   const printParent = false;
 
   const { types: t } = babel;

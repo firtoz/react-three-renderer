@@ -12,6 +12,12 @@ export default (options) => {
     query: {},
   };
 
+  if (options.tdd) {
+    babelLoaderConfig.query.plugins = [
+      require.resolve('./utils/babel-test-plugin.js'),
+    ];
+  }
+
   function createEnvDefinePlugins(...args) {
     return args.reduce((accumulator, option) => {
       const values = [];
