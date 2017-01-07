@@ -1,34 +1,48 @@
 // Karma configuration
 
-import webpackConfig from './webpack.config.babel';
-
-const isCoverage = process.env.KARMA_COVERAGE === 'true';
-
-if (isCoverage) {
-  console.warn('Coverage enabled.'); // eslint-disable-line
-}
-
-const testFiles = [];
-
-let travisFoldName = 'karma';
-
-if (process.env.KARMA_TDD || process.env.KARMA_SRC) {
-  travisFoldName += '-src';
-  testFiles.push('src/meta/MockConsole.js');
-  testFiles.push('src/tests-src.js');
-}
-
-if (!isCoverage && !process.env.KARMA_TDD && process.env.KARMA_LIB) {
-  travisFoldName += '-lib';
-
-  testFiles.push('src/tests-lib.js');
-}
-
-if (process.env.NODE_ENV === 'production') {
-  travisFoldName += '-prod';
-}
+import webpackConfigurator from './webpack.config.babel';
 
 export default (config) => {
+  const options = config.options;
+
+  if (options.type !== 'src' && options.type !== 'lib') {
+    throw new Error(`Unsupported type for karma options, expected 'src' or 'lib' but found '${options.type}'`);
+  }
+
+  if (options.coverage) {
+    console.warn('Coverage enabled.'); // eslint-disable-line
+  }
+
+  if (options.tdd) {
+    console.warn('🔧🔧🔧 Test-driven-development 🔧🔧🔧'); // eslint-disable-line
+  }
+
+  if (options.coverage && options.type !== 'src') {
+    throw new Error('Can run test-driven-development or coverage only config with a \'src\' type');
+  }
+
+  const webpackConfig = webpackConfigurator(options);
+
+  const testFiles = [];
+
+  let travisFoldName = 'karma';
+
+  if (options.type === 'src') {
+    travisFoldName += '-src';
+    testFiles.push('src/meta/MockConsole.js');
+    testFiles.push('src/tests-src.js');
+  } else if (options.type === 'lib') {
+    travisFoldName += '-lib';
+
+    testFiles.push('src/tests-lib.js');
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    travisFoldName += '-prod';
+  }
+
+  console.log('Current test config: ', travisFoldName);
+
   const configuration = {
     browsers: [
       'Chrome',
@@ -76,7 +90,7 @@ export default (config) => {
 
     reporters: [
       'spec',
-    ].concat(isCoverage ? ['coverage'] : []),
+    ].concat(options.coverage ? ['coverage'] : []),
 
     coverageReporter: {
       type: 'html',
@@ -99,7 +113,7 @@ export default (config) => {
       require('karma-spec-reporter'),
       require('karma-chrome-launcher'),
       require('karma-sourcemap-loader'),
-    ].concat(isCoverage ? [
+    ].concat(options.coverage ? [
       require('karma-coverage'),
     ] : []),
   };
@@ -141,9 +155,16 @@ export default (config) => {
         reporter: 'html', // debug
       },
     };
+
+    if (options.mocha) {
+      configuration.client.mocha = {
+        ...configuration.client.mocha,
+        ...options.mocha,
+      }
+    }
   }
 
-  if (process.env.KARMA_TDD) {
+  if (options.tdd) {
     configuration.autoWatch = true;
     configuration.autoWatchBatchDelay = 0;
     configuration.usePolling = true;

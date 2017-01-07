@@ -865,10 +865,10 @@ module.exports = (done) => {
   clearImageDirectory();
 
   // mock global variables for three.js
-  GLOBAL.self = {};
+  global.self = {};
 
   // mock global variables for internal component propTypes
-  GLOBAL.HTMLCanvasElement = class HTMLCanvasElement {
+  global.HTMLCanvasElement = class HTMLCanvasElement {
   };
 
   const THREE = require('three');
