@@ -119,6 +119,7 @@ gulp.task('karma-prod', gulp.series('karma-src-prod', 'karma-lib-prod'), emptyTa
 
 gulp.task('test', gulp.series(
   'eslint',
+  'babel',
   'karma',
   'karma-prod'
 ), emptyTask);

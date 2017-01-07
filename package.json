@@ -5,7 +5,7 @@
   "main": "./lib/React3.js",
   "scripts": {
     "compile": "gulp babel",
-    "prepublish": "in-publish && (npm run compile && npm test) || not-in-publish",
+    "prepublish": "in-publish && npm test || not-in-publish",
     "test": "gulp test"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
@@ -93,7 +93,7 @@
   "homepage": "https://github.com/toxicFork/react-three-renderer#readme",
   "config": {
     "ghooks": {
-      "pre-commit": "echo Running eslint before commit && gulp eslint"
+      "pre-commit": "gulp eslint"
     }
   }
 }
