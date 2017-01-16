@@ -20,6 +20,7 @@ class Object3DInfo extends DocInfo {
       '> **WARNING**: If you use the same material for multiple objects and some of them' +
       ' receive shadows and some do not, it may cause adverse side effects. In that case,' +
       ' it is recommended to use different materials.',
+      up: 'Up direction for the object',
     };
   }
 }
