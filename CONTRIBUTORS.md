@@ -15,3 +15,4 @@ Thanks for the help:
 * [@carlosbaraza](https://github.com/carlosbaraza)
 * [@martunta](https://github.com/martunta)
 * [@netpro2k](https://github.com/netpro2k)
+* [@johnrees](https://github.com/johnrees)
