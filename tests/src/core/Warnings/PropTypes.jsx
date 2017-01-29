@@ -45,8 +45,7 @@ module.exports = (type) => {
       ' supplied to `scene`, expected `number`.\n' +
       '    in scene\n' +
       '    in react3');
-    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `fog` of type `String`' +
-      ' supplied to `scene`, expected instance of `Fog`.\n' +
+    mockConsole.expectDev('Warning: Failed prop type: Invalid prop `fog` supplied to `scene`.\n' +
       '    in scene\n' +
       '    in react3');
 
