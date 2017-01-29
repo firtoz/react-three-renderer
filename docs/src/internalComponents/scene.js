@@ -12,7 +12,8 @@ class scene extends object3D {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
-      fog: 'The [fog](http://threejs.org/docs/#Reference/Scenes/Scene.fog) variable for the scene.',
+      fog: 'The [fog](http://threejs.org/docs/#Reference/Scenes/Scene.fog) variable for the scene.\n\n' +
+      'Use a [THREE.Fog](https://threejs.org/docs/#Reference/Scenes/Fog) for linear fog, or a [THREE.FogExp2](https://threejs.org/docs/#Reference/Scenes/FogExp2) for exponential fog.',
     };
   }
 }

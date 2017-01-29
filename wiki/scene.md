@@ -68,7 +68,9 @@ If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Refe
 **Default**: `false`
 
 ### fog
-``` THREE.Fog ```: The [fog](http://threejs.org/docs/#Reference/Scenes/Scene.fog) variable for the scene.
+``` one of types [THREE.Fog, THREE.FogExp2] ```: The [fog](http://threejs.org/docs/#Reference/Scenes/Scene.fog) variable for the scene.
+
+Use a [THREE.Fog](https://threejs.org/docs/#Reference/Scenes/Fog) for linear fog, or a [THREE.FogExp2](https://threejs.org/docs/#Reference/Scenes/FogExp2) for exponential fog.
 
 ===
 
