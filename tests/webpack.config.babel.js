@@ -112,7 +112,7 @@ export default (options) => {
     },
   };
 
-  if (process.env.KARMA_COVERAGE === 'true') {
+  if (options.coverage) {
     const srcResolve = path.resolve('src');
 
     babelLoaderConfig.exclude.push(srcResolve);
