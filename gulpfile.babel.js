@@ -136,7 +136,7 @@ gulp.task('tdd', (done) => {
     grep: '',
   });
 
-  if (argv.grep !== '') {
+  if (argv.grep !== '' && argv.grep !== undefined) {
     log(`Using test filter: '${argv.grep}'`);
   }
 
