@@ -93,7 +93,7 @@
   "homepage": "https://github.com/toxicFork/react-three-renderer#readme",
   "config": {
     "ghooks": {
-      "pre-commit": "gulp eslint"
+      "pre-commit": "gulp eslint-before-commit"
     }
   }
 }

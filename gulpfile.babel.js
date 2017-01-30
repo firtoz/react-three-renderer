@@ -6,7 +6,7 @@ import del from 'del';
 import path from 'path';
 import eslint from 'gulp-eslint';
 import cache from 'gulp-cached';
-import { log, PluginError } from 'gulp-util';
+import { log, PluginError, colors } from 'gulp-util';
 import { Server as KarmaServer } from 'karma';
 import minimist from 'minimist';
 
@@ -68,6 +68,13 @@ gulp.task('eslint', () => {
       }
     }));
 });
+
+gulp.task('eslint-before-commit', gulp.series((done) => {
+  log(colors.bgGreen('Running eslint before commit'));
+
+  done();
+}, 'eslint'));
+
 
 function karma(options) {
   return function karmaTask(done) {
