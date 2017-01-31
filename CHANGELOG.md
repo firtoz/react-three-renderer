@@ -1,6 +1,16 @@
 CHANGELOG
 ===========
 
+## 3.0.3 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.2...v3.0.3))
+
+### Core
+- Fix building and testing on Windows (sorry!)
+  - Use more gulp and less bash
+- Test that yarn works too (yep)
+
+### Components
+- Fix type of `scene.fog` property (#144)
+
 ## 3.0.2 ( [see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.1...v3.0.2) )
 
 ### Components
