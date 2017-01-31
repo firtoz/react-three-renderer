@@ -5,23 +5,8 @@
   "main": "./lib/React3.js",
   "scripts": {
     "compile": "gulp babel",
-    "prepublish": "not-in-install && npm run compile && npm test || in-install",
-    "test": "npm run test-internal -loglevel silent && npm run test-prod -loglevel silent",
-    "test-internal": "npm run eslint-internal -loglevel silent && npm run karma-src -loglevel silent && npm run karma-lib -loglevel silent",
-    "test-prod": "bash -c \"(export NODE_ENV=production; npm run test-internal --loglevel silent)\"",
-    "karma-single": "karma start ./tests/karma.conf.js --single-run",
-    "karma": "karma start ./tests/karma.conf.js",
-    "karma-prod": "bash -c \"(export NODE_ENV=production; npm run karma -loglevel silent)\"",
-    "karma-src": "bash -c \"(export KARMA_SRC=true; npm run karma-single -loglevel silent)\"",
-    "karma-lib": "bash -c \"(export KARMA_LIB=true; npm run karma-single -loglevel silent)\"",
-    "karma-src-prod": "bash -c \"(export NODE_ENV=production; npm run karma-src -loglevel silent)\"",
-    "karma-lib-prod": "bash -c \"(export NODE_ENV=production; npm run karma-lib -loglevel silent)\"",
-    "eslint-internal": "eslint --cache ./src/ ./docs/src/ ./tests/src/ --ext .js --ext .jsx",
-    "eslint": "npm run eslint-internal -loglevel silent || true",
-    "eslint-fix": "eslint --cache ./src/ ./docs/src/ ./tests/src/ --ext .js --ext .jsx --fix || true",
-    "tdd": "bash -c \"(export KARMA_TDD=true; npm run karma)\"",
-    "tdd-prod": "bash -c \"(export KARMA_TDD=true; npm run karma-prod)\"",
-    "cover": "bash -c \"(export KARMA_COVERAGE=true; npm run karma-src)\""
+    "prepublish": "in-publish && npm test || not-in-publish",
+    "test": "gulp test"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
   "keywords": [
@@ -60,10 +45,12 @@
     "eslint-plugin-react": "6.7.1",
     "estraverse-fb": "1.3.1",
     "ghooks": "1.3.2",
-    "gulp": "3.9.1",
+    "gulp": "gulpjs/gulp#4.0",
     "gulp-babel": "6.1.2",
-    "gulp-util": "3.0.7",
-    "in-publish": "2.0.0",
+    "gulp-cached": "^1.1.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-util": "3.0.8",
+    "in-publish": "^2.0.0",
     "isparta-loader": "2.0.0",
     "karma": "1.3.0",
     "karma-chai": "0.1.0",
@@ -106,7 +93,7 @@
   "homepage": "https://github.com/toxicFork/react-three-renderer#readme",
   "config": {
     "ghooks": {
-      "pre-commit": "echo Running eslint before commit && npm run eslint-internal -loglevel silent"
+      "pre-commit": "gulp eslint-before-commit"
     }
   }
 }

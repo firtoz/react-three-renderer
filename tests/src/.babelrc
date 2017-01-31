@@ -5,7 +5,6 @@
     "react"
   ],
   "plugins": [
-    "../utils/babel-test-plugin.js",
     "transform-decorators-legacy"
   ]
 }
