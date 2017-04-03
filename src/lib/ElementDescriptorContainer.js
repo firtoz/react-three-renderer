@@ -54,6 +54,7 @@ import TubeGeometryDescriptor from './descriptors/Geometry/TubeGeometryDescripto
 import DodecahedronGeometryDescriptor from './descriptors/Geometry/DodecahedronGeometryDescriptor';
 import TextGeometryDescriptor from './descriptors/Geometry/TextGeometryDescriptor';
 import ShapeGeometryDescriptor from './descriptors/Geometry/ShapeGeometryDescriptor';
+import EdgesGeometryDescriptor from './descriptors/Geometry/EdgesGeometryDescriptor';
 
 import ShapeDescriptor from './descriptors/Geometry/Shapes/ShapeDescriptor';
 import MoveToDescriptor from './descriptors/Geometry/Shapes/MoveToDescriptor';
@@ -153,6 +154,7 @@ class ElementDescriptorContainer {
       dodecahedronGeometry: new DodecahedronGeometryDescriptor(react3RendererInstance),
       textGeometry: new TextGeometryDescriptor(react3RendererInstance),
       shapeGeometry: new ShapeGeometryDescriptor(react3RendererInstance),
+      edgesGeometry: new EdgesGeometryDescriptor(react3RendererInstance),
 
       shape: new ShapeDescriptor(react3RendererInstance),
       moveTo: new MoveToDescriptor(react3RendererInstance),
