@@ -79,9 +79,15 @@
     "sinon": "2.4.1",
     "source-map-support": "0.4.15",
     "stream-to-string": "1.1.0",
+<<<<<<< HEAD
     "three": "0.86.0",
     "webpack": "3.4.1",
     "webpack-dev-server": "2.6.1"
+=======
+    "three": "0.84.0",
+    "webpack": "1.13.3",
+    "webpack-dev-server": "1.16.2"
+>>>>>>> Add some missing props
   },
   "repository": {
     "type": "git",

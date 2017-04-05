@@ -1,10 +1,36 @@
+import React from 'react';
 import * as THREE from 'three';
 import invariant from 'fbjs/lib/invariant';
 
 import ResourceReference from '../../Resources/ResourceReference';
 import Object3DDescriptor from './Object3DDescriptor';
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
 
 class MeshDescriptor extends Object3DDescriptor {
+  constructor() {
+    super();
+    this.hasProp('geometry', {
+      type: React.PropTypes.oneOf([
+        propTypeInstanceOf(THREE.Geometry),
+        propTypeInstanceOf(THREE.BufferGeometry),
+        propTypeInstanceOf(THREE.InstancedBufferGeometry),
+      ]),
+      update(threeObject, geometry) {
+        threeObject.geometry = geometry;
+      },
+      default: null,
+    });
+
+    this.hasProp('drawMode', {
+      type: React.PropTypes.number,
+      update(threeObject, drawMode) {
+        threeObject.drawMode = drawMode;
+        threeObject.needsUpdate = true;
+      },
+      default: null,
+    });
+  }
+
   construct(props) {
     const geometry = props.hasOwnProperty('geometry') ? props.geometry : undefined;
     const material = props.hasOwnProperty('material') ? props.material : undefined;
@@ -22,6 +48,14 @@ class MeshDescriptor extends Object3DDescriptor {
     }
 
     return mesh;
+  }
+
+  applyInitialProps(threeObject, props) {
+    super.applyInitialProps(threeObject, props);
+
+    if (props.drawMode !== undefined && props.drawMode !== null) {
+      threeObject.drawMode = props.drawMode;
+    }
   }
 
   _invalidChild = (child) => {

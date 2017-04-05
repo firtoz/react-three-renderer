@@ -56,6 +56,14 @@ class Object3DDescriptor extends THREEElementDescriptor {
       default: new THREE.Vector3(),
     });
 
+    this.hasProp('up', {
+      type: propTypeInstanceOf(THREE.Vector3),
+      update(threeObject, up) {
+        threeObject.up.copy(up);
+      },
+      default: new THREE.Vector3(),
+    });
+
     this.hasProp('rotation', {
       type: propTypeInstanceOf(THREE.Euler),
       update(threeObject, rotation) {
@@ -117,6 +125,14 @@ class Object3DDescriptor extends THREEElementDescriptor {
       simple: true,
     });
 
+    this.hasProp('layers', {
+      type: PropTypes.number,
+      update(threeObject, layers) {
+        threeObject.layers.mask = layers;
+      },
+      default: 1,
+    });
+
     this.hasProp('castShadow', {
       type: PropTypes.bool,
       simple: true,
@@ -156,6 +172,11 @@ class Object3DDescriptor extends THREEElementDescriptor {
 
     if (props.matrix) {
       threeObject.matrix.copy(props.matrix);
+
+      threeObject.matrix.decompose(
+        threeObject.position,
+        threeObject.quaternion,
+        threeObject.scale);
     } else {
       if (props.position) {
         threeObject.position.copy(props.position);
@@ -178,8 +199,16 @@ class Object3DDescriptor extends THREEElementDescriptor {
       }
     }
 
+    if (props.up) {
+      threeObject.up.copy(props.up);
+    }
+
     if (props.lookAt) {
       threeObject.userData._lookAt = props.lookAt;
+    }
+
+    if (props.layers !== undefined) {
+      threeObject.layers.mask = props.layers;
     }
   }
 

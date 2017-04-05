@@ -27,6 +27,7 @@ class React3DInstance {
       onRendererUpdated,
       onManualRenderTriggerCreated,
       forceManualRender,
+      customRender,
     } = props;
 
     this._parameters = { ...props };
@@ -49,6 +50,7 @@ class React3DInstance {
     this._rendererUpdatedCallback = onRendererUpdated;
     this._manualRenderTriggerCallback = onManualRenderTriggerCreated;
     this._forceManualRender = forceManualRender;
+    this._customRender = customRender;
 
     this._warnedAboutManualRendering = false;
 
@@ -391,7 +393,12 @@ class React3DInstance {
   };
 
   _renderScene(camera) {
-    this._renderer.render(this._scene, camera);
+    if (this._customRender) {
+      this._customRender(this._renderer, this._scene, camera);
+    } else {
+      this._renderer.render(this._scene, camera);
+    }
+
 
     if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_REACT_ADDON_HOOKS === 'true') {
       if (this._highlightObjectId !== null) {
@@ -739,6 +746,10 @@ class React3DInstance {
     this._parameters.onAnimate = onAnimate;
 
     this._onAnimate = onAnimate;
+  }
+
+  updateCustomRender(func) {
+    this._customRender = func;
   }
 
   updateClearColor(clearColor) {
