@@ -15,4 +15,8 @@ SceneWrapper.propTypes = {
   children: React.PropTypes.node,
 };
 
+SceneWrapper.defaultProps = {
+  children: undefined,
+};
+
 module.exports = SceneWrapper;

@@ -24,6 +24,9 @@ module.exports = (type) => {
         ]),
       };
 
+      static defaultProps = {
+        children: undefined,
+      };
 
       render() {
         return (<scene>

@@ -8,9 +8,12 @@ class ShapeGeometryDescriptor extends GeometryWithShapesDescriptor {
     const shapes = threeObject.userData._shapeCache.filter(shape => !!shape)
       .concat(threeObject.userData._shapesFromProps);
 
-    threeObject.fromGeometry(new THREE.ShapeGeometry(shapes, {
-      ...threeObject.userData._options,
-    }));
+    if (threeObject.userData._options.hasOwnProperty('curveSegments')) {
+      threeObject.fromGeometry(
+        new THREE.ShapeGeometry(shapes, threeObject.userData._options.curveSegments));
+    } else {
+      threeObject.fromGeometry(new THREE.ShapeGeometry(shapes));
+    }
   }
 }
 

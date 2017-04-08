@@ -21,6 +21,12 @@ module.exports = (type) => {
         onError: React.PropTypes.func,
       };
 
+      static defaultProps = {
+        url: undefined,
+        done: undefined,
+        onError: undefined,
+      };
+
       _onTextureLoad = () => {
         if (this.props.done) {
           this.props.done();

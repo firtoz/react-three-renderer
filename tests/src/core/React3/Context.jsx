@@ -21,6 +21,11 @@ module.exports = (type) => {
         passToContext: PropTypes.string,
       };
 
+      static defaultProps = {
+        children: undefined,
+        passToContext: undefined,
+      };
+
       static childContextTypes = {
         testText: PropTypes.string,
         testText2: PropTypes.string,

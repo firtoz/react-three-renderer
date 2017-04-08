@@ -3,7 +3,7 @@ import webpack from 'webpack';
 
 export default (options) => {
   const babelLoaderConfig = {
-    loader: 'babel',
+    loader: 'babel-loader',
     exclude: [
       /node_modules/,
       path.join(__dirname, '..', 'lib'),
@@ -77,15 +77,6 @@ export default (options) => {
 
   const webpackConfig = {
     devtool: 'inline-source-map',
-    // *optional* isparta options: istanbul behind isparta will use it
-    isparta: {
-      embedSource: true,
-      noAutoWrap: true,
-      // these babel options will be passed only to isparta and not to babel-loader
-      babel: {
-        //   presets: ['es2015', 'stage-0', 'react']
-      },
-    },
     module: {
       loaders: [
         babelLoaderConfig,
@@ -105,9 +96,9 @@ export default (options) => {
     ),
     resolve: {
       extensions: [
-        '',
-        '.js',
         '.jsx',
+        '.js',
+        '*',
       ],
     },
   };
@@ -120,7 +111,13 @@ export default (options) => {
     webpackConfig.module.preLoaders = [{
       test: /\.jsx?$/,
       include: srcResolve,
-      loader: 'isparta',
+      loader: 'isparta-loader',
+      options: {
+        isparta: {
+          embedSource: true,
+          noAutoWrap: true,
+        },
+      },
     }];
   }
 

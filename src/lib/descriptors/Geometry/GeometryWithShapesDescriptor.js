@@ -24,8 +24,6 @@ class GeometryWithShapesDescriptor extends GeometryDescriptorBase {
 
     const optionNames = [
       'curveSegments',
-      'material',
-      'UVGenerator',
     ];
 
     const optionTypes = [
@@ -71,8 +69,6 @@ class GeometryWithShapesDescriptor extends GeometryDescriptorBase {
 
     [
       'curveSegments',
-      'material',
-      'UVGenerator',
     ].forEach((propName) => {
       if (props.hasOwnProperty(propName)) {
         options[propName] = props[propName];

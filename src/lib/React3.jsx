@@ -10,6 +10,7 @@ const { PropTypes } = React;
 class React3 extends React.Component {
 
   /* eslint-disable react/no-unused-prop-types */
+  /* eslint-disable react/require-default-props */
   static propTypes = {
     context: PropTypes.string,
     width: PropTypes.number.isRequired,
@@ -49,6 +50,7 @@ class React3 extends React.Component {
     ]),
     canvasRef: PropTypes.func,
   };
+  /* eslint-enable react/require-default-props */
   /* eslint-enable react/no-unused-prop-types */
 
 

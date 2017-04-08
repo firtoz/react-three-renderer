@@ -69,6 +69,9 @@ module.exports = (type) => {
         };
 
         static defaultProps = {
+          done: undefined,
+          lightProps: undefined,
+
           expectedCameraNear: LightDescriptorBase.defaultShadowCameraNear,
           expectedCameraFar: LightDescriptorBase.defaultShadowCameraFar,
 

@@ -37,11 +37,28 @@ const CompositeTypes = {
 };
 
 function shouldConstruct(Component) {
-  return (!!Component.prototype && Component.prototype.isReactComponent);
+  return !!(Component.prototype && Component.prototype.isReactComponent);
 }
 
 function isPureComponent(Component) {
   return !!(Component.prototype && Component.prototype.isPureReactComponent);
+}
+
+// Separated into a function to contain deoptimizations caused by try/finally.
+function measureLifeCyclePerf(fn, debugID, timerType) {
+  if (debugID === 0) {
+    // Top-level wrappers (see ReactMount) and empty components (see
+    // ReactDOMEmptyComponent) are invisible to hooks and devtools.
+    // Both are implementation details that should go away in the future.
+    return fn();
+  }
+
+  ReactInstrumentation.debugTool.onBeginLifeCycleTimer(debugID, timerType);
+  try {
+    return fn();
+  } finally {
+    ReactInstrumentation.debugTool.onEndLifeCycleTimer(debugID, timerType);
+  }
 }
 
 let invokeComponentDidMountWithTimer;
@@ -180,6 +197,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
 
     // Initialize the public class
     const doConstruct = shouldConstruct(Component);
+
     let inst = this._constructComponent(
       doConstruct,
       publicProps,
@@ -190,7 +208,7 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     let renderedElement;
 
     // Support functional components
-    if (!doConstruct && (inst == null || inst.render == null)) {
+    if (!doConstruct && (!inst || !inst.render)) {
       renderedElement = inst;
       warnIfInvalidElement(Component, renderedElement);
       invariant(
@@ -301,7 +319,8 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     }
     let initialState = inst.state;
     if (initialState === undefined) {
-      inst.state = initialState = null;
+      initialState = null;
+      inst.state = initialState;
     }
     if (!(typeof initialState === 'object' && !Array.isArray(initialState))) {
       if (process.env.NODE_ENV !== 'production') {
@@ -366,51 +385,21 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
     publicContext,
     updateQueue) {
     const Component = this._currentElement.type;
-    let instanceOrElement;
+
     if (doConstruct) {
       if (process.env.NODE_ENV !== 'production') {
-        if (this._debugID !== 0) {
-          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
-            this._debugID,
-            'ctor'
-          );
-        }
+        return measureLifeCyclePerf(() => new Component(publicProps, publicContext, updateQueue), this._debugID, 'ctor');
       }
-      instanceOrElement = new Component(publicProps, publicContext, updateQueue);
-      if (process.env.NODE_ENV !== 'production') {
-        if (this._debugID !== 0) {
-          ReactInstrumentation.debugTool.onEndLifeCycleTimer(
-            this._debugID,
-            'ctor'
-          );
-        }
-      }
-    } else {
-      // This can still be an instance in case of factory components
-      // but we'll count this as time spent rendering as the more common case.
-      if (process.env.NODE_ENV !== 'production') {
-        if (this._debugID !== 0) {
-          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(
-            this._debugID,
-            'render'
-          );
-        }
-      }
-
-      /* eslint-disable new-cap */
-      instanceOrElement = Component(publicProps, publicContext, updateQueue);
-      /* eslint-enable */
-
-      if (process.env.NODE_ENV !== 'production') {
-        if (this._debugID !== 0) {
-          ReactInstrumentation.debugTool.onEndLifeCycleTimer(
-            this._debugID,
-            'render'
-          );
-        }
-      }
+      return new Component(publicProps, publicContext, updateQueue);
     }
-    return instanceOrElement;
+
+    // This can still be an instance in case of factory components
+    // but we'll count this as time spent rendering as the more common case.
+    if (process.env.NODE_ENV !== 'production') {
+      return measureLifeCyclePerf(() => Component(publicProps, publicContext, updateQueue), this._debugID, 'render');
+    }
+
+    return Component(publicProps, publicContext, updateQueue);
   }
 
   /**

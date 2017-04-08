@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
-import * as THREE from 'three';
 
 import { expect } from 'chai';
 
@@ -78,13 +77,7 @@ module.exports = (type) => {
     });
 
     it('should not trigger remount on initial props updates', () => {
-      const originalPolyhedron = THREE.PolyhedronGeometry;
-
-      const polyhedronGeometryStub = sinon.stub(THREE, 'PolyhedronGeometry',
-        class PolyStub extends originalPolyhedron {
-
-        }
-      );
+      const polyhedronGeometryRef = sinon.spy();
 
       ReactDOM.render((<React3
         width={800}
@@ -94,6 +87,7 @@ module.exports = (type) => {
         <scene>
           <mesh>
             <polyhedronGeometry
+              ref={polyhedronGeometryRef}
               vertices={[
                 1,
                 2,
@@ -120,11 +114,11 @@ module.exports = (type) => {
 
       mockConsole.expectThreeLog();
 
-      sinon.assert.calledOnce(polyhedronGeometryStub);
+      sinon.assert.calledOnce(polyhedronGeometryRef);
 
-      expect(polyhedronGeometryStub.lastCall.args[0].length,
+      expect(polyhedronGeometryRef.lastCall.args[0].parameters.vertices.length,
         'Should use the correct vertices property on first call').to.equal(9);
-      expect(polyhedronGeometryStub.lastCall.args[0][0],
+      expect(polyhedronGeometryRef.lastCall.args[0].parameters.vertices[0],
         'Should use the correct values for vertices on first call').to.equal(1);
 
       ReactDOM.render((<React3
@@ -135,6 +129,8 @@ module.exports = (type) => {
         <scene>
           <mesh>
             <polyhedronGeometry
+              ref={polyhedronGeometryRef}
+
               vertices={[
                 10,
                 20,
@@ -161,16 +157,14 @@ module.exports = (type) => {
 
       // it should now call the constructor again because it's using
       // a different array for vertices and indices
-      sinon.assert.calledTwice(polyhedronGeometryStub);
+      sinon.assert.calledTwice(polyhedronGeometryRef);
 
-      expect(polyhedronGeometryStub.lastCall.args[0].length,
+      expect(polyhedronGeometryRef.lastCall.args[0].parameters.vertices.length,
         'Should use the correct vertices property on last call').to.equal(9);
-      expect(polyhedronGeometryStub.lastCall.args[0][0],
+      expect(polyhedronGeometryRef.lastCall.args[0].parameters.vertices[0],
         'Should use the correct values for vertices on last call').to.equal(10);
-      expect(polyhedronGeometryStub.lastCall.args[0][1],
+      expect(polyhedronGeometryRef.lastCall.args[0].parameters.vertices[1],
         'Should use the correct values for vertices on last call').to.equal(20);
-
-      polyhedronGeometryStub.restore();
     });
   });
 };

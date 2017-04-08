@@ -852,10 +852,10 @@ class React3Renderer {
           'was rendered by React and is not a top-level container. %s',
           (
             isContainerReactRoot ?
-            'You may have accidentally passed in a React root node instead ' +
-            'of its container.' :
-            'Instead, have the parent component update its state and ' +
-            'rerender in order to remove this component.'
+              'You may have accidentally passed in a React root node instead ' +
+              'of its container.' :
+              'Instead, have the parent component update its state and ' +
+              'rerender in order to remove this component.'
           )
         );
       }
@@ -917,25 +917,32 @@ class React3Renderer {
     } else if (typeof node === 'object') {
       const element = node;
 
-      if (!(element && (typeof element.type === 'function'
-        || typeof element.type === 'string'))) {
+      const type = element.type;
+      if (
+        typeof type !== 'function' &&
+        typeof type !== 'string'
+      ) {
+        let info = '';
         if (process.env.NODE_ENV !== 'production') {
-          if (element.type == null) {
-            invariant(false, 'Element type is invalid:' +
-              ' expected a string (for built-in components)' +
-              ' or a class/function (for composite components)' +
-              ' but got: %s.%s', element.type, getDeclarationErrorAddendum(element._owner));
-          } else {
-            invariant(false, 'Element type is invalid:' +
-              ' expected a string (for built-in components)' +
-              ' or a class/function (for composite components)' +
-              ' but got: %s.%s', typeof element.type, getDeclarationErrorAddendum(element._owner));
+          if (
+            type === undefined ||
+            (typeof type === 'object' &&
+            type !== null &&
+            Object.keys(type).length === 0)
+          ) {
+            info +=
+              ' You likely forgot to export your component from the file ' +
+              'it\'s defined in.';
           }
-        } else if (element.type == null) {
-          invariant(element.type, getDeclarationErrorAddendum(element._owner));
-        } else {
-          invariant(typeof element.type, getDeclarationErrorAddendum(element._owner));
         }
+        info += getDeclarationErrorAddendum(element._owner);
+        invariant(
+          false,
+          'Element type is invalid: expected a string (for built-in components) ' +
+          'or a class/function (for composite components) but got: %s.%s',
+          (type === null || type === undefined) ? type : typeof type,
+          info,
+        );
       }
 
       // Special case string values
@@ -990,8 +997,7 @@ class React3Renderer {
 
     if (process.env.NODE_ENV !== 'production') {
       if (shouldHaveDebugID) {
-        const debugID = `r3r${this._debugIdPrefix}-${this._nextDebugID++}`;
-        instance._debugID = debugID;
+        instance._debugID = `r3r${this._debugIdPrefix}-${this._nextDebugID++}`;
       } else {
         instance._debugID = 0;
       }
@@ -1084,9 +1090,9 @@ class React3Renderer {
    * @param {*} context que?
    */
   batchedMountComponentIntoNode = (componentInstance,
-                                   container,
-                                   shouldReuseMarkup,
-                                   context) => {
+    container,
+    shouldReuseMarkup,
+    context) => {
     const transaction = ReactUpdates.ReactReconcileTransaction.getPooled(
       !shouldReuseMarkup
     );
@@ -1114,10 +1120,10 @@ class React3Renderer {
    * @param {*} context
    */
   mountComponentIntoNode = (wrapperInstance,
-                            container,
-                            transaction,
-                            shouldReuseMarkup,
-                            context) => {
+    container,
+    transaction,
+    shouldReuseMarkup,
+    context) => {
     const markup = ReactReconciler.mountComponent(
       wrapperInstance,
       transaction,

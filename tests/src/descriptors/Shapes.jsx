@@ -12,6 +12,44 @@ module.exports = (type) => {
 
     let shapeGeometryStub = null;
 
+    class ShapeGeometryParametersStub {
+      constructor(parametersSpy) {
+        const params = {};
+
+        let keySeed = 0;
+
+        this.oldPrototype = THREE.ShapeGeometry.prototype;
+
+        const newPrototype = Object.create(this.oldPrototype);
+
+        Object.defineProperty(newPrototype, 'parameters', {
+          get() {
+            if (!this._key) {
+              return {};
+            }
+
+            return params[this._key];
+          },
+          set(newParams) {
+            if (!this._key) {
+              this._key = keySeed;
+              keySeed++;
+            }
+
+            params[this._key] = newParams;
+
+            parametersSpy(newParams);
+          },
+        });
+
+        THREE.ShapeGeometry.prototype = newPrototype;
+      }
+
+      restore() {
+        THREE.ShapeGeometry.prototype = this.oldPrototype;
+      }
+    }
+
     afterEach(() => {
       if (shapeGeometryStub) {
         shapeGeometryStub.restore();
@@ -34,19 +72,10 @@ module.exports = (type) => {
         rectShape,
       ];
 
-      const OriginalShapeGeometry = THREE.ShapeGeometry;
+      const parametersSpy = sinon.spy();
 
-      const spy = sinon.spy();
+      shapeGeometryStub = new ShapeGeometryParametersStub(parametersSpy);
 
-      class ShapeGeometryMock extends OriginalShapeGeometry {
-        constructor(inputShapes, options) {
-          super(inputShapes, options);
-
-          spy(inputShapes, options);
-        }
-      }
-
-      shapeGeometryStub = sinon.stub(THREE, 'ShapeGeometry', ShapeGeometryMock);
       mockConsole.expectThreeLog();
 
       ReactDOM.render((<React3
@@ -67,9 +96,9 @@ module.exports = (type) => {
         </scene>
       </React3>), testDiv);
 
-      sinon.assert.calledOnce(spy);
+      sinon.assert.calledOnce(parametersSpy);
 
-      expect(spy.lastCall.args[0][0],
+      expect(parametersSpy.lastCall.args[0].shapes[0],
         'Shapes should be passed to the constructor of ShapeGeometry').to.equal(shapes[0]);
     });
 
@@ -77,21 +106,13 @@ module.exports = (type) => {
       const rectLength = 120;
       const rectWidth = 40;
 
-      const OriginalShapeGeometry = THREE.ShapeGeometry;
+      const parametersSpy = sinon.spy();
 
-      const shapeGeometrySpy = sinon.spy();
-      const shapeRef = sinon.spy();
+      shapeGeometryStub = new ShapeGeometryParametersStub(parametersSpy);
 
-      class ShapeGeometryMock extends OriginalShapeGeometry {
-        constructor(shapes, options) {
-          super(shapes, options);
-
-          shapeGeometrySpy(shapes, options);
-        }
-      }
-
-      shapeGeometryStub = sinon.stub(THREE, 'ShapeGeometry', ShapeGeometryMock);
       mockConsole.expectThreeLog();
+
+      const shapeRef = sinon.spy();
 
       ReactDOM.render((<React3
         width={800}
@@ -133,11 +154,11 @@ module.exports = (type) => {
       </React3>), testDiv);
 
       // the constructor gets called only once and should have the shape in it
-      sinon.assert.calledOnce(shapeGeometrySpy);
+      sinon.assert.calledOnce(parametersSpy);
 
-      expect(shapeGeometrySpy.firstCall.args[0].length).to.equal(1);
+      expect(parametersSpy.firstCall.args[0].shapes.length).to.equal(1);
 
-      const shape = shapeGeometrySpy.firstCall.args[0][0];
+      const shape = parametersSpy.firstCall.args[0].shapes[0];
 
       expect(shapeRef.lastCall.args[0]).to.equal(shape);
 
@@ -172,19 +193,10 @@ module.exports = (type) => {
     });
 
     it('Should set options from props', () => {
-      const OriginalShapeGeometry = THREE.ShapeGeometry;
+      const parametersSpy = sinon.spy();
 
-      const spy = sinon.spy();
+      shapeGeometryStub = new ShapeGeometryParametersStub(parametersSpy);
 
-      class ShapeGeometryMock extends OriginalShapeGeometry {
-        constructor(shapes, options) {
-          super(shapes, options);
-
-          spy(shapes, options);
-        }
-      }
-
-      shapeGeometryStub = sinon.stub(THREE, 'ShapeGeometry', ShapeGeometryMock);
       mockConsole.expectThreeLog();
 
       ReactDOM.render((<React3
@@ -199,17 +211,15 @@ module.exports = (type) => {
           <mesh>
             <shapeGeometry
               curveSegments={1}
-              material={2}
             />
             <meshBasicMaterial />
           </mesh>
         </scene>
       </React3>), testDiv);
 
-      sinon.assert.calledOnce(spy);
+      sinon.assert.calledOnce(parametersSpy);
 
-      expect(spy.firstCall.args[1].curveSegments).to.equal(1);
-      expect(spy.firstCall.args[1].material).to.equal(2);
+      expect(parametersSpy.firstCall.args[0].curveSegments).to.equal(1);
 
       ReactDOM.render((<React3
         width={800}
@@ -223,38 +233,28 @@ module.exports = (type) => {
           <mesh>
             <shapeGeometry
               curveSegments={3}
-              material={4}
             />
             <meshBasicMaterial />
           </mesh>
         </scene>
       </React3>), testDiv);
 
-      sinon.assert.calledTwice(spy);
+      sinon.assert.calledTwice(parametersSpy);
 
-      expect(spy.lastCall.args[1].curveSegments).to.equal(3);
-      expect(spy.lastCall.args[1].material).to.equal(4);
+      expect(parametersSpy.lastCall.args[0].curveSegments).to.equal(3);
     });
 
     it('Should update shapes from children', () => {
       const rectLength = 120;
       const rectWidth = 40;
 
-      const OriginalShapeGeometry = THREE.ShapeGeometry;
-
-      const shapeGeometrySpy = sinon.spy();
       const shapeRef = sinon.spy();
       const secondShapeRef = sinon.spy();
 
-      class ShapeGeometryMock extends OriginalShapeGeometry {
-        constructor(shapes, options) {
-          super(shapes, options);
+      const parametersSpy = sinon.spy();
 
-          shapeGeometrySpy(shapes, options);
-        }
-      }
+      shapeGeometryStub = new ShapeGeometryParametersStub(parametersSpy);
 
-      shapeGeometryStub = sinon.stub(THREE, 'ShapeGeometry', ShapeGeometryMock);
       mockConsole.expectThreeLog();
 
       ReactDOM.render((<React3
@@ -297,11 +297,11 @@ module.exports = (type) => {
       </React3>), testDiv);
 
       // the constructor gets called only once and should have the shape in it
-      sinon.assert.calledOnce(shapeGeometrySpy);
+      sinon.assert.calledOnce(parametersSpy);
 
-      expect(shapeGeometrySpy.firstCall.args[0].length).to.equal(1);
+      expect(parametersSpy.firstCall.args[0].shapes.length).to.equal(1);
 
-      let shape = shapeGeometrySpy.firstCall.args[0][0];
+      let shape = parametersSpy.firstCall.args[0].shapes[0];
 
       expect(shapeRef.lastCall.args[0]).to.equal(shape);
 

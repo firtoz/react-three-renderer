@@ -18,6 +18,23 @@ class ExtrudeGeometryDescriptor extends GeometryWithShapesDescriptor {
       default: undefined,
     });
 
+    this.hasProp('UVGenerator', {
+      type: PropTypes.shape({
+        generateTopUV: PropTypes.func,
+        generateSideWallUV: PropTypes.func,
+      }),
+      update: (threeObject, value) => {
+        if (value === undefined) {
+          delete threeObject.userData._options.UVGenerator;
+        } else {
+          threeObject.userData._options.UVGenerator = value;
+        }
+
+        threeObject.userData._needsToRefreshGeometry = true;
+      },
+      default: undefined,
+    });
+
     [
       'steps',
       'amount',

@@ -131,7 +131,7 @@ gulp.task('test', gulp.series(
   'karma-prod'
 ), emptyTask);
 
-gulp.task('tdd', (done) => {
+function runTdd(done) {
   const argv = minimist(process.argv.slice(2), {
     grep: '',
   });
@@ -147,7 +147,11 @@ gulp.task('tdd', (done) => {
       grep: argv.grep,
     },
   })(done);
-});
+}
+
+gulp.task('tdd', runTdd);
+
+gulp.task('tdd-prod', gulp.series(envProd, runTdd, restoreNodeEnv), emptyTask);
 
 gulp.task('cover', karmaSingle({
   type: 'src',
