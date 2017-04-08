@@ -65,7 +65,7 @@ class React3DInstance {
       if (renderThisFrame) {
         this._render();
       } else if (this._renderRequest === null) {
-        this._renderRequest = requestAnimationFrame(this._render);
+        this._renderRequest = typeof requestAnimationFrame === 'function' ? requestAnimationFrame(this._render) : null;
       }
     };
 
