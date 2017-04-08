@@ -103,7 +103,7 @@ module.exports = (type) => {
       });
 
       it('Should call image loader with the URL and no cross origin', () => {
-        const loadStub = sinon.stub(THREE.TextureLoader.prototype, 'load', loadSpy);
+        const loadStub = sinon.stub(THREE.TextureLoader.prototype, 'load').callsFake(loadSpy);
 
         try {
           mockConsole.expect('Cross origin (set: false): undefined');
@@ -123,7 +123,7 @@ module.exports = (type) => {
       });
 
       it('Should set cross origin property for image loader', () => {
-        const loadStub = sinon.stub(THREE.TextureLoader.prototype, 'load', loadSpy);
+        const loadStub = sinon.stub(THREE.TextureLoader.prototype, 'load').callsFake(loadSpy);
 
         try {
           mockConsole.expect('Cross origin (set: true): \'\'');
