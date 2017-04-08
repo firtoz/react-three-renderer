@@ -36,7 +36,7 @@ Then you can place these components inside to create and assign resources,
     * [[dodecahedronGeometry]]: Creates a [THREE.DodecahedronGeometry](http://threejs.org/docs/index.html#Reference/Extras.Geometries/DodecahedronGeometry)
     * [[tubeGeometry]]: Creates a [THREE.TubeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry)
     * [[extrudeGeometry]]: Creates a [THREE.ExtrudeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ExtrudeGeometry)
-    * [[torusKnotGeometry]]: Creates a [THREE.TorusKnotGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TorusKnotGeometry)
+    * [[torusKnotGeometry]]: Creates a [THREE.TorusKnotGeometry](https://threejs.org/docs/#Reference/Geometries/TorusKnotGeometry)
     * [[torusGeometry]]: Creates a [THREE.TorusGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TorusGeometry)
     * [[latheGeometry]]: Creates a [THREE.LatheGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/LatheGeometry)
     * [[cylinderGeometry]]: Creates a [THREE.CylinderGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/CylinderGeometry)

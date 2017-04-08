@@ -2,7 +2,7 @@
 
 # torusKnotGeometry
 
-Creates a [THREE.TorusKnotGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TorusKnotGeometry)
+Creates a [THREE.TorusKnotGeometry](https://threejs.org/docs/#Reference/Geometries/TorusKnotGeometry)
 
 ## Attributes
 
@@ -44,20 +44,32 @@ once sent to GPU.
 ### radius
 ``` number ```
 
+**Default**: `100`
+
 ### tube
 ``` number ```
+
+**Default**: `40`
 
 ### tubularSegments
 ``` number ```
 
+**Default**: `64`
+
 ### radialSegments
 ``` number ```
 
+**Default**: `8`
+
 ### p
-``` number ```
+``` number ```: determines, how many times the geometry winds around its axis of rotational symmetry.
+
+**Default**: `2`
 
 ### q
-``` number ```
+``` number ```: determines, how many times the geometry winds around a circle in the interior of the torus.
+
+**Default**: `3`
 
 ### heightScale
 ``` number ```

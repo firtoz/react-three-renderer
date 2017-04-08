@@ -129,7 +129,7 @@ See [THREE.WebGLRenderer#shadowMapDebug](http://threejs.org/docs/#Reference/Rend
 ### pixelRatio
 ``` number ```: The pixel ratio of the renderer.
 
-Preferred value: window.devicePixelRatio.
+Preferred value: `window.devicePixelRatio`. Recommended for High DPI screens (e.g. Retina).
 
 **Default**: `1`
 

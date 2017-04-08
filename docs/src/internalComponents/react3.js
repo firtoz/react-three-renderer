@@ -61,7 +61,7 @@ class react3 extends DocInfo {
       onRecreateCanvas: 'This callback gets called every time the canvas is recreated.\n\n' +
       'This is currently internal usage only. This helps toggling of [antialias](#antialias).',
       pixelRatio: 'The pixel ratio of the renderer.\n\n' +
-      'Preferred value: window.devicePixelRatio.',
+      'Preferred value: `window.devicePixelRatio`. Recommended for High DPI screens (e.g. Retina).',
       width: 'The width of the canvas and the default viewport.',
       height: 'The height of the canvas and the default viewport.',
       precision: 'Sets the precision of the renderer.\n\n' +
