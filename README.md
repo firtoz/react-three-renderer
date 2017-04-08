@@ -9,7 +9,7 @@ Would you like to know more? [See the wiki](https://github.com/toxicFork/react-t
 
 > This is still an experimental and work in progress project, use at your own risk!
 
-> Currently supported react version: `15.4.1` ( things break fast when you fly this close to the sun )
+> Currently supported react version: `15.5.3` ( things break fast when you fly this close to the sun )
 
 [![Join the chat at https://gitter.im/toxicFork/react-three-renderer](https://badges.gitter.im/toxicFork/react-three-renderer.svg)](https://gitter.im/toxicFork/react-three-renderer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg)](https://travis-ci.org/toxicFork/react-three-renderer)
 
@@ -19,7 +19,7 @@ Installation
 ============
 
 ```
-npm install --save react@15.4.1 react-dom@15.4.1 three@0.82.1
+npm install --save react@15.5.3 react-dom@15.5.3 three@0.84.0
 npm install --save react-three-renderer
 ```
 

@@ -18,9 +18,9 @@
     "fbjs": "0.8.12"
   },
   "peerDependencies": {
-    "react": "~15.4.0",
-    "react-dom": "~15.4.0",
-    "three": "~0.82.1"
+    "react": "~15.5.3",
+    "react-dom": "~15.5.3",
+    "three": "~0.84.0"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",

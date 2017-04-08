@@ -58,8 +58,8 @@ once sent to GPU.
 ### curveSegments
 ``` number ```: Default is 12 (not used in three.js at the moment)
 
-### material
-``` number ```: Index of the material in a material list
+### settings
+``` any ```
 
 ### UVGenerator
 ```
@@ -70,9 +70,6 @@ shape of
 }
 ```
 A UV generator, defaults to ExtrudeGeometry's WorldUVGenerator
-
-### settings
-``` any ```
 
 ### steps
 ``` number ```
