@@ -31,6 +31,7 @@ Then you can place these components inside to create and assign resources,
   * [[Shapes]]:
     * [[shape]]: Creates a [THREE.Shape](http://threejs.org/docs/#Reference/Extras.Core/Shape)
   * [[Geometries]]:
+    * [[edgesGeometry]]: Creates a [THREE.EdgesGeometry](https://threejs.org/docs/#Reference/Geometries/EdgesGeometry)
     * [[shapeGeometry]]: Creates a [THREE.ShapeGeometry](https://threejs.org/docs/#Reference/Geometries/ShapeGeometry)
     * [[textGeometry]]: Creates a [THREE.TextGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry)
     * [[dodecahedronGeometry]]: Creates a [THREE.DodecahedronGeometry](http://threejs.org/docs/index.html#Reference/Extras.Geometries/DodecahedronGeometry)

@@ -252,6 +252,9 @@ module.exports = {
           shapeGeometry: {
             isComponent: true,
           },
+          edgesGeometry: {
+            isComponent: true,
+          },
         },
         TODO: [
           'CubeGeometry', // BoxGeometry
