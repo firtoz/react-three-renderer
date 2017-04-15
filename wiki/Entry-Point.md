@@ -328,5 +328,5 @@ You are encouraged to use [refs](https://facebook.github.io/react/docs/more-abou
 
 ===
 
-|**[View Source](../blob/master/src/lib/React3.js)**|
+|**[View Source](../blob/master/src/lib/React3.jsx)**|
  ---|
