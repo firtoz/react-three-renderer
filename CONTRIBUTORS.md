@@ -18,3 +18,4 @@ Thanks for the help:
 * [@johnrees](https://github.com/johnrees)
 * [@epilande](https://github.com/epilande)
 * [@mr-kenhoff](https://github.com/mr-kenhoff)
+* [@nathanbosse](https://github.com/nathanbosse)

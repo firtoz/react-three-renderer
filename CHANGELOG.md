@@ -1,6 +1,11 @@
 CHANGELOG
 ===========
 
+## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.0...master))
+
+### Components
+- Fix `minFilter` property of `texture` (#166)
+
 ## 3.1.0 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.2...v3.1.0))
 
 This is a strange release that was slightly frustrating to implement.
