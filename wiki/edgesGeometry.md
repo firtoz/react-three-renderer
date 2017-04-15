@@ -7,7 +7,7 @@ Creates a [THREE.EdgesGeometry](https://threejs.org/docs/#Reference/Geometries/E
 ## Attributes
 
 ### geometry
-Any geometry object.
+``` one of types [THREE.Geometry, THREE.BufferGeometry] ``` *``` required ```*: Any geometry object.
 
 ### name
 ``` string ```: Name for this geometry.

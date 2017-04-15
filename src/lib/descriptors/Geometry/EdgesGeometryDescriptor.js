@@ -4,6 +4,8 @@ import PropTypes from 'react/lib/ReactPropTypes';
 
 import BufferGeometryDescriptorBase from './BufferGeometryDescriptorBase';
 
+import propTypeInstanceOf from '../../utils/propTypeInstanceOf';
+
 class EdgesGeometryDescriptor extends BufferGeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
@@ -15,9 +17,9 @@ class EdgesGeometryDescriptor extends BufferGeometryDescriptorBase {
     });
 
     this.hasProp('geometry', {
-      type: PropTypes.oneOf([
-        THREE.Geometry,
-        THREE.BufferGeometry,
+      type: PropTypes.oneOfType([
+        propTypeInstanceOf(THREE.Geometry),
+        propTypeInstanceOf(THREE.BufferGeometry),
       ]).isRequired,
       update: this.updateCacheAndReplace.bind(this, 'geometry'),
       default: undefined,
