@@ -7,7 +7,10 @@
     "compile": "gulp babel",
     "prepublish": "in-publish && npm test || not-in-publish",
     "test": "gulp test",
-    "precommit": "gulp eslint-before-commit"
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint"
   },
   "author": "Firtina \"toxicFork\" Ozbalikci",
   "keywords": [
@@ -62,6 +65,7 @@
     "karma-spec-reporter": "0.0.30",
     "karma-travis-fold-reporter": "1.0.1",
     "karma-webpack": "2.0.3",
+    "lint-staged": "^3.4.0",
     "mocha": "3.2.0",
     "mocha-loader": "1.1.1",
     "pngjs2": "2.0.0",
