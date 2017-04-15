@@ -5,6 +5,7 @@ CHANGELOG
 
 ### Components
 - Fix `minFilter` property of `texture` (#166)
+- Add `edgesGeometry` (#159)
 
 ## 3.1.0 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.2...v3.1.0))
 

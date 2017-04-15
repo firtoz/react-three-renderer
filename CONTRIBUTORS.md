@@ -19,3 +19,4 @@ Thanks for the help:
 * [@epilande](https://github.com/epilande)
 * [@mr-kenhoff](https://github.com/mr-kenhoff)
 * [@nathanbosse](https://github.com/nathanbosse)
+* [@ValentinHolgado](https://github.com/ValentinHolgado)
