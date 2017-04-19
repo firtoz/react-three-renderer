@@ -46,6 +46,10 @@ class PointsMaterialDescriptor extends MaterialDescriptorBase {
   construct(props) {
     const materialDescription = this.getMaterialDescription(props);
 
+    if (props.hasOwnProperty('map')) {
+      materialDescription.map = props.map;
+    }
+
     return new THREE.PointsMaterial(materialDescription);
   }
 }
