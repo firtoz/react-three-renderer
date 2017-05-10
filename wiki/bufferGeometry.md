@@ -2,7 +2,7 @@
 
 # bufferGeometry
 
-Creates a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Core/BufferGeometry)
+Creates a [THREE.BufferGeometry](https://threejs.org/docs/#api/core/BufferGeometry)
 
 ## Attributes
 

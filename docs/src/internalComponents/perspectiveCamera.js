@@ -2,7 +2,7 @@ import camera from './camera';
 
 class perspectiveCamera extends camera {
   getIntro() {
-    return 'Creates a [THREE.PerspectiveCamera](http://threejs.org/docs/#Reference/Cameras/PerspectiveCamera)';
+    return 'Creates a [THREE.PerspectiveCamera](https://threejs.org/docs/#api/cameras/PerspectiveCamera)';
   }
 
   getDescription() {

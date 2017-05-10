@@ -2,7 +2,7 @@
 
 # spriteMaterial
 
-Creates a [THREE.SpriteMaterial](http://threejs.org/docs/#Reference/Materials/SpriteMaterial)
+Creates a [THREE.SpriteMaterial](https://threejs.org/docs/#api/materials/SpriteMaterial)
 
 ## Attributes
 

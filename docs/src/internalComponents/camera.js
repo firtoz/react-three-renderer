@@ -2,7 +2,7 @@ import object3D from './object3D';
 
 class camera extends object3D {
   getIntro() {
-    return 'Creates a [THREE.Camera](http://threejs.org/docs/#Reference/Cameras/Camera)';
+    return 'Creates a [THREE.Camera](https://threejs.org/docs/#api/cameras/Camera)';
   }
 
   getDescription() {
@@ -12,7 +12,7 @@ class camera extends object3D {
   getAttributesText() {
     return {
       ...super.getAttributesText(),
-      name: 'The [name](http://threejs.org/docs/#Reference/Core/Object3D.name) property of the camera.\n\n' +
+      name: 'The [name](https://threejs.org/docs/#api/core/Object3D.name) property of the camera.\n\n' +
       'This gets used by [&lt;react3/&gt;](react3), [&lt;viewport/&gt;](viewport), or' +
       ' [&lt;cameraHelper&gt;](cameraHelper).',
       near: 'Camera frustum near plane.',

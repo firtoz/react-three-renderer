@@ -2,7 +2,7 @@ import object3D from './object3D';
 
 class mesh extends object3D {
   getIntro() {
-    return 'Creates a [THREE.Mesh](http://threejs.org/docs/#Reference/Objects/Mesh)';
+    return 'Creates a [THREE.Mesh](https://threejs.org/docs/#api/objects/Mesh)';
   }
 
   getDescription() {

@@ -2,7 +2,7 @@
 
 # meshStandardMaterial
 
-Creates a [THREE.MeshStandardMaterial](https://threejs.org/docs/#Reference/Materials/MeshStandardMaterial)
+Creates a [THREE.MeshStandardMaterial](https://threejs.org/docs/#api/materials/MeshStandardMaterial)
 
 ## Attributes
 

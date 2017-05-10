@@ -4,7 +4,7 @@
 
 See [React3](Entry-Point). Handles renderer and canvas configuration.
 
-Creates a [THREE.WebGLRenderer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer).
+Creates a [THREE.WebGLRenderer](https://threejs.org/docs/#api/renderers/WebGLRenderer).
 
 ## Attributes
 
@@ -33,21 +33,21 @@ This is currently internal usage only. This helps toggling of [antialias](#antia
 ### gammaInput
 ``` bool ```: Controls renderer gamma input.
 
-See [THREE.WebGLRenderer#gammaInput](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.gammaInput).
+See [THREE.WebGLRenderer#gammaInput](https://threejs.org/docs/#api/renderers/WebGLRenderer.gammaInput).
 
 **Default**: `false`
 
 ### gammaOutput
 ``` bool ```: Controls renderer gamma output.
 
-See [THREE.WebGLRenderer#gammaOutput](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.gammaOutput).
+See [THREE.WebGLRenderer#gammaOutput](https://threejs.org/docs/#api/renderers/WebGLRenderer.gammaOutput).
 
 **Default**: `false`
 
 ### sortObjects
 ``` bool ```: Controls renderer object sorting.
 
-See [THREE.WebGLRenderer#sortObjects](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.sortObjects).
+See [THREE.WebGLRenderer#sortObjects](https://threejs.org/docs/#api/renderers/WebGLRenderer.sortObjects).
 
 **Default**: `true`
 
@@ -64,7 +64,7 @@ If this value is not set, the scene can be rendered into the [&lt;viewport/&gt;]
 ### clearColor
 ``` one of types [THREE.Color, number, string] ```: The clear color of the renderer.
 
-Is used as the first parameter for [THREE.WebGLRenderer#clearColor](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setClearColor).
+Is used as the first parameter for [THREE.WebGLRenderer#clearColor](https://threejs.org/docs/#api/renderers/WebGLRenderer.setClearColor).
 
 If the [`clearAlpha`](#clearalpha) and [`alpha`](#alpha) properties are set, `clearAlpha` will be used as the second parameter.
 
@@ -75,7 +75,7 @@ If the [`clearAlpha`](#clearalpha) and [`alpha`](#alpha) properties are set, `cl
 
 Expected range: 0 to 1, where 0 is clear and 1 is opaque.
 
-Is used as the second parameter for [THREE.WebGLRenderer#clearColor](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setClearColor).
+Is used as the second parameter for [THREE.WebGLRenderer#clearColor](https://threejs.org/docs/#api/renderers/WebGLRenderer.setClearColor).
 
 If the [`clearColor`](#clearcolor) property is set, that will be passed as the first parameter.
 
@@ -84,7 +84,7 @@ Requires the [`alpha`](#alpha) property to be set.
 ### alpha
 ``` bool ```: Toggles alpha setting of the renderer.
 
-See [THREE.WebGLRenderer#alpha](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).
+See [THREE.WebGLRenderer#alpha](https://threejs.org/docs/#api/renderers/WebGLRenderer.alpha).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
@@ -93,7 +93,7 @@ See [THREE.WebGLRenderer#alpha](http://threejs.org/docs/#Reference/Renderers/Web
 ### shadowMapEnabled
 ``` bool ```: Toggles shadowMap usage.
 
-See [THREE.WebGLRenderer#shadowMapEnabled](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapEnabled).
+See [THREE.WebGLRenderer#shadowMapEnabled](https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapEnabled).
 
 > **WARNING**: Updating this value will force all materials to refresh.
 
@@ -102,7 +102,7 @@ See [THREE.WebGLRenderer#shadowMapEnabled](http://threejs.org/docs/#Reference/Re
 ### shadowMapType
 ``` one of [THREE.BasicShadowMap, THREE.PCFShadowMap, THREE.PCFSoftShadowMap] ```: Controls the shadowMap type.
 
-See [THREE.WebGLRenderer#shadowMapType](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapType).
+See [THREE.WebGLRenderer#shadowMapType](https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapType).
 
 > **WARNING**: Updating this value will force all materials to refresh.
 
@@ -111,7 +111,7 @@ See [THREE.WebGLRenderer#shadowMapType](http://threejs.org/docs/#Reference/Rende
 ### shadowMapCullFace
 ``` one of [THREE.CullFaceNone, THREE.CullFaceBack, THREE.CullFaceFront, THREE.CullFaceFrontBack] ```: Controls shadowMap face culling.
 
-See [THREE.WebGLRenderer#shadowMapCullFace](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapCullFace).
+See [THREE.WebGLRenderer#shadowMapCullFace](https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapCullFace).
 
 > **WARNING**: Updating this value will force all materials to refresh.
 
@@ -120,7 +120,7 @@ See [THREE.WebGLRenderer#shadowMapCullFace](http://threejs.org/docs/#Reference/R
 ### shadowMapDebug
 ``` bool ```: Toggles shadowMap debugging.
 
-See [THREE.WebGLRenderer#shadowMapDebug](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapDebug).
+See [THREE.WebGLRenderer#shadowMapDebug](https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapDebug).
 
 > **WARNING**: Updating this value will force all materials to refresh.
 
@@ -136,7 +136,7 @@ Preferred value: `window.devicePixelRatio`. Recommended for High DPI screens (e.
 ### precision
 ``` one of ['highp', 'mediump', 'lowp'] ```: Sets the precision of the renderer.
 
-See [THREE.WebGLRenderer#precision](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).
+See [THREE.WebGLRenderer#precision](https://threejs.org/docs/#api/renderers/WebGLRenderer.precision).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
@@ -145,7 +145,7 @@ See [THREE.WebGLRenderer#precision](http://threejs.org/docs/#Reference/Renderers
 ### premultipliedAlpha
 ``` bool ```: Toggles the premultipliedAlpha setting of the renderer.
 
-See [THREE.WebGLRenderer#premultipliedAlpha](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.premultipliedAlpha).
+See [THREE.WebGLRenderer#premultipliedAlpha](https://threejs.org/docs/#api/renderers/WebGLRenderer.premultipliedAlpha).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
@@ -154,7 +154,7 @@ See [THREE.WebGLRenderer#premultipliedAlpha](http://threejs.org/docs/#Reference/
 ### antialias
 ``` one of types [bool, number] ```: Toggles anti-aliasing of the renderer.
 
-See [THREE.WebGLRenderer#antialias](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).
+See [THREE.WebGLRenderer#antialias](https://threejs.org/docs/#api/renderers/WebGLRenderer.antialias).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
@@ -163,7 +163,7 @@ See [THREE.WebGLRenderer#antialias](http://threejs.org/docs/#Reference/Renderers
 ### stencil
 ``` bool ```: Toggles the stencil property of the renderer.
 
-See [THREE.WebGLRenderer#stencil](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.stencil).
+See [THREE.WebGLRenderer#stencil](https://threejs.org/docs/#api/renderers/WebGLRenderer.stencil).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
@@ -172,7 +172,7 @@ See [THREE.WebGLRenderer#stencil](http://threejs.org/docs/#Reference/Renderers/W
 ### preserveDrawingBuffer
 ``` bool ```: Toggles the preserveDrawingBuffer property of the renderer.
 
-See [THREE.WebGLRenderer#preserveDrawingBuffer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).
+See [THREE.WebGLRenderer#preserveDrawingBuffer](https://threejs.org/docs/#api/renderers/WebGLRenderer.preserveDrawingBuffer).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
@@ -181,7 +181,7 @@ See [THREE.WebGLRenderer#preserveDrawingBuffer](http://threejs.org/docs/#Referen
 ### depth
 ``` bool ```: Toggles the depth property of the renderer.
 
-See [THREE.WebGLRenderer#depth](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.depth).
+See [THREE.WebGLRenderer#depth](https://threejs.org/docs/#api/renderers/WebGLRenderer.depth).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 
@@ -190,7 +190,7 @@ See [THREE.WebGLRenderer#depth](http://threejs.org/docs/#Reference/Renderers/Web
 ### logarithmicDepthBuffer
 ``` bool ```: Toggles the logarithmicDepthBuffer property of the renderer.
 
-See [THREE.WebGLRenderer#logarithmicDepthBuffer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).
+See [THREE.WebGLRenderer#logarithmicDepthBuffer](https://threejs.org/docs/#api/renderers/WebGLRenderer.logarithmicDepthBuffer).
 
 > **WARNING**: Updating this value will re-create the whole canvas, which can be expensive.
 

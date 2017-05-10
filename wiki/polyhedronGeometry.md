@@ -2,7 +2,7 @@
 
 # polyhedronGeometry
 
-Creates a [THREE.PolyhedronGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PolyhedronGeometry)
+Creates a [THREE.PolyhedronGeometry](https://threejs.org/docs/#api/geometries/PolyhedronGeometry)
 
 ## Attributes
 
@@ -24,22 +24,22 @@ Creates a [THREE.PolyhedronGeometry](http://threejs.org/docs/#Reference/Extras.G
 **Default**: `''`
 
 ### colors
-``` array of THREE.Color ```: See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).
+``` array of THREE.Color ```: See [THREE.Geometry#colors](https://threejs.org/docs/#api/core/Geometry.colors).
 
 **Default**: `[]`
 
 ### faceVertexUvs
-``` array of (array of (array of THREE.Vector2)) ```: See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).
+``` array of (array of (array of THREE.Vector2)) ```: See [THREE.Geometry#faceVertexUvs](https://threejs.org/docs/#api/core/Geometry.faceVertexUvs).
 
 **Default**: `[]`
 
 ### faces
-``` array of THREE.Face3 ```: See [THREE.Geometry#faces](http://threejs.org/docs/#Reference/Core/Geometry.faces).
+``` array of THREE.Face3 ```: See [THREE.Geometry#faces](https://threejs.org/docs/#api/core/Geometry.faces).
 
 **Default**: `[]`
 
 ### dynamic
-``` bool ```: See [THREE.Geometry#dynamic](http://threejs.org/docs/#Reference/Core/Geometry.dynamic).
+``` bool ```: See [THREE.Geometry#dynamic](https://threejs.org/docs/#api/core/Geometry.dynamic).
 
 Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
 

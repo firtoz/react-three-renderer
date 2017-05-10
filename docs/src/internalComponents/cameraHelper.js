@@ -2,7 +2,7 @@ import object3D from './object3D';
 
 class cameraHelper extends object3D {
   getIntro() {
-    return 'Creates a [THREE.CameraHelper](http://threejs.org/docs/#Reference/Extras.Helpers/CameraHelper)';
+    return 'Creates a [THREE.CameraHelper](https://threejs.org/docs/#api/helpers/CameraHelper)';
   }
 
   getDescription() {

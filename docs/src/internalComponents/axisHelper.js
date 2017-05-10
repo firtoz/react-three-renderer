@@ -2,7 +2,7 @@ import object3D from './object3D';
 
 class axisHelper extends object3D {
   getIntro() {
-    return 'Creates a [THREE.AxisHelper](http://threejs.org/docs/#Reference/Extras.Helpers/AxisHelper)';
+    return 'Creates a [THREE.AxisHelper](https://threejs.org/docs/#api/helpers/AxisHelper)';
   }
 
   getDescription() {

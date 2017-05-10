@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class torusKnotGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.TorusKnotGeometry](https://threejs.org/docs/#Reference/Geometries/TorusKnotGeometry)';
+    return 'Creates a [THREE.TorusKnotGeometry](https://threejs.org/docs/#api/geometries/TorusKnotGeometry)';
   }
 
   getDescription() {

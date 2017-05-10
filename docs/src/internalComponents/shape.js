@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class shape extends DocInfo {
   getIntro() {
-    return 'Creates a [THREE.Shape](http://threejs.org/docs/#Reference/Extras.Core/Shape)';
+    return 'Creates a [THREE.Shape](https://threejs.org/docs/#api/extras/core/Shape)';
   }
 
   getDescription() {

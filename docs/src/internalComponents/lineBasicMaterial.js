@@ -2,7 +2,7 @@ import MaterialInfo from './shared/MaterialInfo';
 
 class lineBasicMaterial extends MaterialInfo {
   getIntro() {
-    return 'Creates a [THREE.LineBasicMaterial](http://threejs.org/docs/#Reference/Materials/LineBasicMaterial)';
+    return 'Creates a [THREE.LineBasicMaterial](https://threejs.org/docs/#api/materials/LineBasicMaterial)';
   }
 
   getAttributesText() {

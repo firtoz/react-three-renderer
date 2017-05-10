@@ -2,7 +2,7 @@
 
 # texture
 
-Creates a [THREE.Texture](http://threejs.org/docs/#Reference/Textures/Texture)
+Creates a [THREE.Texture](https://threejs.org/docs/#api/textures/Texture)
 
 ## Attributes
 
@@ -11,7 +11,7 @@ Creates a [THREE.Texture](http://threejs.org/docs/#Reference/Textures/Texture)
 
 Currently textures can be loaded from URLs only.
 
-Used as the first parameter for [TextureLoader.load](http://threejs.org/docs/#Reference/Loaders/TextureLoader.load)
+Used as the first parameter for [TextureLoader.load](https://threejs.org/docs/#api/loaders/TextureLoader.load)
 
 **Default**: `''`
 
@@ -21,14 +21,14 @@ Used as the first parameter for [TextureLoader.load](http://threejs.org/docs/#Re
 **Default**: `'map'`
 
 ### repeat
-``` THREE.Vector2 ```: Sets the [repeat property of the Texture](http://threejs.org/docs/#Reference/Textures/Texture.repeat).
+``` THREE.Vector2 ```: Sets the [repeat property of the Texture](https://threejs.org/docs/#api/textures/Texture.repeat).
 
 Default: `(1, 1)`.
 
 **Default**: `new THREE.Vector2(1, 1)`
 
 ### offset
-``` THREE.Vector2 ```: Sets the [offset property of the Texture](http://threejs.org/docs/#Reference/Textures/Texture.offset).
+``` THREE.Vector2 ```: Sets the [offset property of the Texture](https://threejs.org/docs/#api/textures/Texture.offset).
 
 Default: `(0, 0)`.
 
@@ -50,7 +50,7 @@ Default: `(0, 0)`.
 **Default**: `1`
 
 ### crossOrigin
-``` string ```: Sets the [crossOrigin property of the TextureLoader](http://threejs.org/docs/#Reference/Loaders/TextureLoader.crossOrigin).
+``` string ```: Sets the [crossOrigin property of the TextureLoader](https://threejs.org/docs/#api/loaders/TextureLoader.crossOrigin).
 
 ### onLoad
 ``` function ```: Callback to be called when the texture was loaded.

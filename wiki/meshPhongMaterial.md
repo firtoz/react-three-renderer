@@ -2,7 +2,7 @@
 
 # meshPhongMaterial
 
-Creates a [THREE.MeshPhongMaterial](http://threejs.org/docs/#Reference/Materials/MeshPhongMaterial)
+Creates a [THREE.MeshPhongMaterial](https://threejs.org/docs/#api/materials/MeshPhongMaterial)
 
 ## Attributes
 

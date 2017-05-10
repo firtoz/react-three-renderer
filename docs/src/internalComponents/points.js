@@ -2,7 +2,7 @@ import object3D from './object3D';
 
 class points extends object3D {
   getIntro() {
-    return 'Creates a [THREE.Points](http://threejs.org/docs/#Reference/Objects/Points)';
+    return 'Creates a [THREE.Points](https://threejs.org/docs/#api/objects/Points)';
   }
 
   getDescription() {

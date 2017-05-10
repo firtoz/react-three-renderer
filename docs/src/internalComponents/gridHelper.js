@@ -2,7 +2,7 @@ import object3D from './object3D';
 
 class gridHelper extends object3D {
   getIntro() {
-    return 'Creates a [THREE.GridHelper](https://threejs.org/docs/index.html#Reference/Extras.Helpers/GridHelper)';
+    return 'Creates a [THREE.GridHelper](https://threejs.org/docs/#api/helpers/GridHelper)';
   }
 
   getAttributesText() {

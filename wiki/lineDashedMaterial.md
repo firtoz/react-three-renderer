@@ -2,7 +2,7 @@
 
 # lineDashedMaterial
 
-Creates a [THREE.LineDashedMaterial](http://threejs.org/docs/#Reference/Materials/LineDashedMaterial)
+Creates a [THREE.LineDashedMaterial](https://threejs.org/docs/#api/materials/LineDashedMaterial)
 
 ## Attributes
 

@@ -2,7 +2,7 @@
 
 # mesh
 
-Creates a [THREE.Mesh](http://threejs.org/docs/#Reference/Objects/Mesh)
+Creates a [THREE.Mesh](https://threejs.org/docs/#api/objects/Mesh)
 
 This object can contain [[Materials]] and [[Geometries]].
 
@@ -36,7 +36,7 @@ This object can contain [[Materials]] and [[Geometries]].
 ### lookAt
 ``` THREE.Vector3 ```: The target position for the 3D object to look at.
 
-If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
+If this property is set, [`THREE.Object3D#lookAt`](https://threejs.org/docs/#api/core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
 
 ### matrix
 ``` THREE.Matrix4 ```

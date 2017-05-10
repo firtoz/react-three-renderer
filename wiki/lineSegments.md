@@ -2,7 +2,7 @@
 
 # lineSegments
 
-Creates a [THREE.LineSegments](http://threejs.org/docs/#Reference/Objects/LineSegments)
+Creates a [THREE.LineSegments](https://threejs.org/docs/#api/objects/LineSegments)
 
 This object can contain [[Materials]] and [[Geometries]].
 
