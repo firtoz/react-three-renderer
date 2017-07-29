@@ -1,7 +1,9 @@
 CHANGELOG
 ===========
 
-## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.0...master))
+## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.1...master))
+
+## 3.1.1 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.0...v3.1.1))
 
 ### Documentation
 - Fix (hopefully) all three.js documentation links (#177)
