@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class extrudeGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.ExtrudeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ExtrudeGeometry)';
+    return 'Creates a [THREE.ExtrudeGeometry](https://threejs.org/docs/#api/geometries/ExtrudeGeometry)';
   }
 
   getDescription() {
@@ -10,7 +10,7 @@ class extrudeGeometry extends geometry {
  or a [&lt;shapeResource&gt;](shapeResource) within.
 
 ## Implementation details:
-The geometry is wrapped within a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BufferGeometry).
+The geometry is wrapped within a [THREE.BufferGeometry](https://threejs.org/docs/#api/core/BufferGeometry).
 
 This is to prevent having to remount the component every time anything changes.
  `;

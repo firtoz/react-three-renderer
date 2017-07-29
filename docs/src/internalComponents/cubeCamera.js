@@ -2,7 +2,7 @@ import camera from './camera';
 
 class cubeCamera extends camera {
   getIntro() {
-    return 'Creates a [THREE.CubeCamera](http://threejs.org/docs/#Reference/Cameras/CubeCamera)';
+    return 'Creates a [THREE.CubeCamera](https://threejs.org/docs/#api/cameras/CubeCamera)';
   }
 
   getDescription() {

@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class edgesGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.EdgesGeometry](https://threejs.org/docs/#Reference/Geometries/EdgesGeometry)';
+    return 'Creates a [THREE.EdgesGeometry](https://threejs.org/docs/#api/geometries/EdgesGeometry)';
   }
 
   getDescription() {

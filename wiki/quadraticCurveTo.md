@@ -2,7 +2,7 @@
 
 # quadraticCurveTo
 
-Calls [THREE.Path#quadraticCurveTo](http://threejs.org/docs/#Reference/Extras.Core/Path.quadraticCurveTo) on the parent shape
+Calls [THREE.Path#quadraticCurveTo](https://threejs.org/docs/#api/extras/core/Path.quadraticCurveTo) on the parent shape
 
 ## Attributes
 

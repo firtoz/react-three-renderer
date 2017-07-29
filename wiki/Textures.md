@@ -4,7 +4,7 @@
 
 ## Components
 
-* [[texture]]: Creates a [THREE.Texture](http://threejs.org/docs/#Reference/Textures/Texture)
+* [[texture]]: Creates a [THREE.Texture](https://threejs.org/docs/#api/textures/Texture)
 * TODO:
   * CubeTexture
   * CompressedTexture

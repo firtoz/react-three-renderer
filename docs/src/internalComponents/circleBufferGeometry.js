@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class circleBufferGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.CircleBufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/CircleBufferGeometry)';
+    return 'Creates a [THREE.CircleBufferGeometry](https://threejs.org/docs/#api/geometries/CircleBufferGeometry)';
   }
 
   getDescription() {

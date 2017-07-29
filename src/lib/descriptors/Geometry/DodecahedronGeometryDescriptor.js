@@ -22,7 +22,7 @@ class DodecahedronGeometryDescriptor extends GeometryDescriptorBase {
   }
 
   construct(props) {
-    // props from http://threejs.org/docs/index.html#Reference/Extras.Geometries/DodecahedronGeometry:
+    // props from https://threejs.org/docs/#api/geometries/DodecahedronGeometry:
     const {
       radius, // number
       detail, // number

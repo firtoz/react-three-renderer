@@ -2,7 +2,7 @@
 
 # uniforms
 
-A container for [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms).
+A container for [THREE.ShaderMaterial#uniforms](https://threejs.org/docs/#api/materials/ShaderMaterial.uniforms).
 
 Any modifications to uniforms will result in the recompilation of the shader.
 

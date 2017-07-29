@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class viewport extends DocInfo {
   getIntro() {
-    return 'See [THREE.WebGLRenderer.setViewport](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setViewport)';
+    return 'See [THREE.WebGLRenderer.setViewport](https://threejs.org/docs/#api/renderers/WebGLRenderer.setViewport)';
   }
 
   getDescription() {

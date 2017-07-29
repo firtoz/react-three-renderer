@@ -2,7 +2,7 @@
 
 # rawShaderMaterial
 
-Creates a [THREE.RawShaderMaterial](http://threejs.org/docs/#Reference/Materials/RawShaderMaterial).
+Creates a [THREE.RawShaderMaterial](https://threejs.org/docs/#api/materials/RawShaderMaterial).
 
 This is very similar to [[ShaderMaterial]], except that
 the vertex and fragment shader code will be exactly copied without any modifications.
@@ -69,7 +69,7 @@ Defaults to `material`. Other example values:
 ### uniforms
 ``` any ```: The uniforms to be used for the shader.
 
-See [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms)
+See [THREE.ShaderMaterial#uniforms](https://threejs.org/docs/#api/materials/ShaderMaterial.uniforms)
 
 ### wireframe
 ``` bool ```

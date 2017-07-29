@@ -2,7 +2,7 @@ import camera from './camera';
 
 class orthographicCamera extends camera {
   getIntro() {
-    return 'Creates a [THREE.OrthographicCamera](http://threejs.org/docs/#Reference/Cameras/OrthographicCamera)';
+    return 'Creates a [THREE.OrthographicCamera](https://threejs.org/docs/#api/cameras/OrthographicCamera)';
   }
 
   getDescription() {

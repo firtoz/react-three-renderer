@@ -2,7 +2,7 @@
 
 # cubeCamera
 
-Creates a [THREE.CubeCamera](http://threejs.org/docs/#Reference/Cameras/CubeCamera)
+Creates a [THREE.CubeCamera](https://threejs.org/docs/#api/cameras/CubeCamera)
 
 ## Attributes
 
@@ -10,7 +10,7 @@ Creates a [THREE.CubeCamera](http://threejs.org/docs/#Reference/Cameras/CubeCame
 ``` number ``` *``` required ```*
 
 ### name
-``` string ```: The [name](http://threejs.org/docs/#Reference/Core/Object3D.name) property of the camera.
+``` string ```: The [name](https://threejs.org/docs/#api/core/Object3D.name) property of the camera.
 
 This gets used by [&lt;react3/&gt;](react3), [&lt;viewport/&gt;](viewport), or [&lt;cameraHelper&gt;](cameraHelper).
 
@@ -39,7 +39,7 @@ This gets used by [&lt;react3/&gt;](react3), [&lt;viewport/&gt;](viewport), or [
 ### lookAt
 ``` THREE.Vector3 ```: The target position for the 3D object to look at.
 
-If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
+If this property is set, [`THREE.Object3D#lookAt`](https://threejs.org/docs/#api/core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
 
 ### matrix
 ``` THREE.Matrix4 ```

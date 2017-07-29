@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class absArc extends DocInfo {
   getIntro() {
-    return 'Calls [THREE.Path#absArc](http://threejs.org/docs/#Reference/Extras.Core/Path.absarc) on the parent shape';
+    return 'Calls [THREE.Path#absArc](https://threejs.org/docs/#api/extras/core/Path.absarc) on the parent shape';
   }
 
   getDescription() {

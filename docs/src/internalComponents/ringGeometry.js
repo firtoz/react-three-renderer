@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class ringGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.RingGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/RingGeometry)';
+    return 'Creates a [THREE.RingGeometry](https://threejs.org/docs/#api/geometries/RingGeometry)';
   }
 
   getDescription() {

@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class sphereGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.SphereGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/SphereGeometry)';
+    return 'Creates a [THREE.SphereGeometry](https://threejs.org/docs/#api/geometries/SphereGeometry)';
   }
 
   getDescription() {

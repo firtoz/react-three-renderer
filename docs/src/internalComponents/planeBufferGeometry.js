@@ -11,7 +11,7 @@ class planeBufferGeometry extends geometry {
   }
 
   getIntro() {
-    return 'Creates a [THREE.PlaneBufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PlaneBufferGeometry)';
+    return 'Creates a [THREE.PlaneBufferGeometry](https://threejs.org/docs/#api/geometries/PlaneBufferGeometry)';
   }
 
   getDescription() {

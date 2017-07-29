@@ -3,7 +3,7 @@ import DocInfo from '../DocInfo';
 class absEllipse extends DocInfo {
   getIntro() {
     return 'Calls [THREE.Path#absEllipse]' +
-      '(http://threejs.org/docs/#Reference/Extras.Core/Path.absellipse) on the parent shape';
+      '(https://threejs.org/docs/#api/extras/core/Path.absellipse) on the parent shape';
   }
 
   getDescription() {

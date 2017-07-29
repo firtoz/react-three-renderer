@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class lineSegments extends geometry {
   getIntro() {
-    return 'Creates a [THREE.LineSegments](http://threejs.org/docs/#Reference/Objects/LineSegments)';
+    return 'Creates a [THREE.LineSegments](https://threejs.org/docs/#api/objects/LineSegments)';
   }
 
   getDescription() {

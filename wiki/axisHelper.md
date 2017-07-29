@@ -2,7 +2,7 @@
 
 # axisHelper
 
-Creates a [THREE.AxisHelper](http://threejs.org/docs/#Reference/Extras.Helpers/AxisHelper)
+Creates a [THREE.AxisHelper](https://threejs.org/docs/#api/helpers/AxisHelper)
 
 An axis object to visualize the the 3 axes in a simple way.
 
@@ -38,7 +38,7 @@ The X axis is red. The Y axis is green. The Z axis is blue.
 ### lookAt
 ``` THREE.Vector3 ```: The target position for the 3D object to look at.
 
-If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
+If this property is set, [`THREE.Object3D#lookAt`](https://threejs.org/docs/#api/core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
 
 ### matrix
 ``` THREE.Matrix4 ```

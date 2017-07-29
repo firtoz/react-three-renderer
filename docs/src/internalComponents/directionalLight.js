@@ -2,7 +2,7 @@ import LightInfo from './shared/LightInfo';
 
 class directionalLight extends LightInfo {
   getIntro() {
-    return 'Creates a [THREE.DirectionalLight](http://threejs.org/docs/#Reference/Lights/DirectionalLight)';
+    return 'Creates a [THREE.DirectionalLight](https://threejs.org/docs/#api/lights/DirectionalLight)';
   }
 
   getDescription() {

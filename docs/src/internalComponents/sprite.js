@@ -2,7 +2,7 @@ import object3D from './object3D';
 
 class sprite extends object3D {
   getIntro() {
-    return 'Creates a [THREE.Sprite](http://threejs.org/docs/#Reference/Objects/Sprite)';
+    return 'Creates a [THREE.Sprite](https://threejs.org/docs/#api/objects/Sprite)';
   }
 
   getDescription() {

@@ -3,7 +3,7 @@ import shaderMaterial from './shaderMaterial';
 class rawShaderMaterial extends shaderMaterial {
   getIntro() {
     return 'Creates a [THREE.RawShaderMaterial]' +
-      '(http://threejs.org/docs/#Reference/Materials/RawShaderMaterial).';
+      '(https://threejs.org/docs/#api/materials/RawShaderMaterial).';
   }
 
   getDescription() {

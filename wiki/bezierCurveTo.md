@@ -2,7 +2,7 @@
 
 # bezierCurveTo
 
-Calls [THREE.Path#bezierCurveTo](http://threejs.org/docs/#Reference/Extras.Core/Path.bezierCurveTo) on the parent shape
+Calls [THREE.Path#bezierCurveTo](https://threejs.org/docs/#api/extras/core/Path.bezierCurveTo) on the parent shape
 
 This creates a bezier curve from the last offset to x and y with
 cp1X, cp1Y and cp1X, cp1Y as control points and updates the offset to x and y.

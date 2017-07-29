@@ -2,7 +2,7 @@
 
 # moveTo
 
-Calls [THREE.Path#moveTo](http://threejs.org/docs/#Reference/Extras.Core/Path.moveTo) on the parent shape
+Calls [THREE.Path#moveTo](https://threejs.org/docs/#api/extras/core/Path.moveTo) on the parent shape
 
 ## Attributes
 

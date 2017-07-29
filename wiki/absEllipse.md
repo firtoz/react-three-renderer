@@ -2,7 +2,7 @@
 
 # absEllipse
 
-Calls [THREE.Path#absEllipse](http://threejs.org/docs/#Reference/Extras.Core/Path.absellipse) on the parent shape
+Calls [THREE.Path#absEllipse](https://threejs.org/docs/#api/extras/core/Path.absellipse) on the parent shape
 
 ## Attributes
 

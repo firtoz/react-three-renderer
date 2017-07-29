@@ -28,7 +28,7 @@ Usage
 The default export of the module is a react component. When mounted, any children of it will be placed into the three.js
 environment.
 
-Here's a simple example that implements the [getting started scene for three.js](http://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene).
+Here's a simple example that implements the [getting started scene for three.js](https://threejs.org/docs/#manual/introduction/Creating-a-scene).
 
 ```js
 import React from 'react';

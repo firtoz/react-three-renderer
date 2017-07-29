@@ -2,7 +2,7 @@ import LightInfo from './shared/LightInfo';
 
 class spotLight extends LightInfo {
   getIntro() {
-    return 'Creates a [THREE.SpotLight](http://threejs.org/docs/#Reference/Lights/SpotLight)';
+    return 'Creates a [THREE.SpotLight](https://threejs.org/docs/#api/lights/SpotLight)';
   }
 
   getDescription() {

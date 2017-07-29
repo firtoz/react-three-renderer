@@ -2,13 +2,13 @@
 
 # extrudeGeometry
 
-Creates a [THREE.ExtrudeGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/ExtrudeGeometry)
+Creates a [THREE.ExtrudeGeometry](https://threejs.org/docs/#api/geometries/ExtrudeGeometry)
 
 In order to create shapes to extrude, place a [&lt;shape&gt;](shape)
  or a [&lt;shapeResource&gt;](shapeResource) within.
 
 ## Implementation details:
-The geometry is wrapped within a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BufferGeometry).
+The geometry is wrapped within a [THREE.BufferGeometry](https://threejs.org/docs/#api/core/BufferGeometry).
 
 This is to prevent having to remount the component every time anything changes.
  
@@ -21,27 +21,27 @@ This is to prevent having to remount the component every time anything changes.
 **Default**: `''`
 
 ### vertices
-``` array of THREE.Vector3 ```: See [THREE.Geometry#vertices](http://threejs.org/docs/#Reference/Core/Geometry.vertices).
+``` array of THREE.Vector3 ```: See [THREE.Geometry#vertices](https://threejs.org/docs/#api/core/Geometry.vertices).
 
 **Default**: `[]`
 
 ### colors
-``` array of THREE.Color ```: See [THREE.Geometry#colors](http://threejs.org/docs/#Reference/Core/Geometry.colors).
+``` array of THREE.Color ```: See [THREE.Geometry#colors](https://threejs.org/docs/#api/core/Geometry.colors).
 
 **Default**: `[]`
 
 ### faceVertexUvs
-``` array of (array of (array of THREE.Vector2)) ```: See [THREE.Geometry#faceVertexUvs](http://threejs.org/docs/#Reference/Core/Geometry.faceVertexUvs).
+``` array of (array of (array of THREE.Vector2)) ```: See [THREE.Geometry#faceVertexUvs](https://threejs.org/docs/#api/core/Geometry.faceVertexUvs).
 
 **Default**: `[]`
 
 ### faces
-``` array of THREE.Face3 ```: See [THREE.Geometry#faces](http://threejs.org/docs/#Reference/Core/Geometry.faces).
+``` array of THREE.Face3 ```: See [THREE.Geometry#faces](https://threejs.org/docs/#api/core/Geometry.faces).
 
 **Default**: `[]`
 
 ### dynamic
-``` bool ```: See [THREE.Geometry#dynamic](http://threejs.org/docs/#Reference/Core/Geometry.dynamic).
+``` bool ```: See [THREE.Geometry#dynamic](https://threejs.org/docs/#api/core/Geometry.dynamic).
 
 Set to true if attribute buffers will need to change in runtime (using "dirty" flags).
 

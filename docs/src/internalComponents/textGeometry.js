@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class textGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.TextGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry)';
+    return 'Creates a [THREE.TextGeometry](https://threejs.org/docs/#api/geometries/TextGeometry)';
   }
 
   getDescription() {

@@ -2,7 +2,7 @@
 
 # pointLight
 
-Creates a [THREE.PointLight](http://threejs.org/docs/#Reference/Lights/PointLight)
+Creates a [THREE.PointLight](https://threejs.org/docs/#api/lights/PointLight)
 
 ## Attributes
 
