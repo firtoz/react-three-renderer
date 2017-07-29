@@ -18,9 +18,9 @@
     "fbjs": "0.8.12"
   },
   "peerDependencies": {
-    "react": "~15.5.3",
-    "react-dom": "~15.5.3",
-    "three": "~0.84.0"
+    "react": "~15.5.4",
+    "react-dom": "~15.5.4",
+    "three": "~0.86.0"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
@@ -63,12 +63,12 @@
     "mocha": "3.2.0",
     "mocha-loader": "1.1.1",
     "pngjs2": "2.0.0",
-    "react": "15.5.3",
-    "react-dom": "15.5.3",
+    "react": "15.5.4",
+    "react-dom": "15.5.4",
     "sinon": "2.1.0",
     "source-map-support": "0.4.14",
     "stream-to-string": "1.1.0",
-    "three": "0.84.0",
+    "three": "0.86.0",
     "webpack": "2.3.3",
     "webpack-dev-server": "2.4.2"
   },
