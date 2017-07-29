@@ -2,7 +2,7 @@
 
 # pointsMaterial
 
-Creates a [THREE.PointsMaterial](http://threejs.org/docs/#Reference/Materials/PointsMaterial)
+Creates a [THREE.PointsMaterial](https://threejs.org/docs/#api/materials/PointsMaterial)
 
 ## Attributes
 

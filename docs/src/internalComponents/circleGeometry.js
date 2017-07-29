@@ -3,7 +3,7 @@ import geometry from './geometry';
 class circleGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.CircleGeometry]' +
-      '(http://threejs.org/docs/#Reference/Extras.Geometries/CircleGeometry)';
+      '(https://threejs.org/docs/#api/geometries/CircleGeometry)';
   }
 
   getDescription() {

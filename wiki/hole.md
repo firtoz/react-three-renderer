@@ -2,7 +2,7 @@
 
 # hole
 
-Adds a hole into a parent shape, see [THREE.Shape#holes](http://threejs.org/docs/#Reference/Extras.Core/Shape.holes)
+Adds a hole into a parent shape, see [THREE.Shape#holes](https://threejs.org/docs/#api/extras/core/Shape.holes)
 
 It creates a path and accepts path actions e.g. [[moveTo]], [[lineTo]], and so on.
 

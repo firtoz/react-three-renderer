@@ -4,6 +4,6 @@
 
 ## Components
 
-* [[orthographicCamera]]: Creates a [THREE.OrthographicCamera](http://threejs.org/docs/#Reference/Cameras/OrthographicCamera)
-* [[perspectiveCamera]]: Creates a [THREE.PerspectiveCamera](http://threejs.org/docs/#Reference/Cameras/PerspectiveCamera)
-* [[cubeCamera]]: Creates a [THREE.CubeCamera](http://threejs.org/docs/#Reference/Cameras/CubeCamera)
+* [[orthographicCamera]]: Creates a [THREE.OrthographicCamera](https://threejs.org/docs/#api/cameras/OrthographicCamera)
+* [[perspectiveCamera]]: Creates a [THREE.PerspectiveCamera](https://threejs.org/docs/#api/cameras/PerspectiveCamera)
+* [[cubeCamera]]: Creates a [THREE.CubeCamera](https://threejs.org/docs/#api/cameras/CubeCamera)

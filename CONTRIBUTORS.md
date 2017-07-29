@@ -17,3 +17,8 @@ Thanks for the help:
 * [@netpro2k](https://github.com/netpro2k)
 * [@johnrees](https://github.com/johnrees)
 * [@epilande](https://github.com/epilande)
+* [@mr-kenhoff](https://github.com/mr-kenhoff)
+* [@nathanbosse](https://github.com/nathanbosse)
+* [@ValentinHolgado](https://github.com/ValentinHolgado)
+* [@lukas-linhart](https://github.com/lukas-linhart)
+* [@AndrewRayCode](https://github.com/AndrewRayCode)

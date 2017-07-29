@@ -56,7 +56,7 @@ class TextGeometryDescriptor extends GeometryDescriptorBase {
   }
 
   construct(props) {
-    // props from http://threejs.org/docs/#Reference/Extras.Geometries/TextGeometry:
+    // props from https://threejs.org/docs/#api/geometries/TextGeometry:
     const {
       text, // string
 

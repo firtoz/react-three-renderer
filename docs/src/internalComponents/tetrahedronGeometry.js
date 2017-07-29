@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class tetrahedronGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.TetrahedronGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TetrahedronGeometry)';
+    return 'Creates a [THREE.TetrahedronGeometry](https://threejs.org/docs/#api/geometries/TetrahedronGeometry)';
   }
 
   getDescription() {

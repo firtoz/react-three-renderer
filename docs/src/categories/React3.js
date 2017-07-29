@@ -52,5 +52,5 @@ You are encouraged to use [refs](https://facebook.github.io/react/docs/more-abou
       },
     },
   },
-  sourceLink: '../blob/master/src/lib/React3.js',
+  sourceLink: '../blob/master/src/lib/React3.jsx',
 };

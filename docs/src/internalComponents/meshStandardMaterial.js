@@ -3,7 +3,7 @@ import MaterialInfo from './shared/MaterialInfo';
 
 class meshStandardMaterial extends MaterialInfo {
   getIntro() {
-    return 'Creates a [THREE.MeshStandardMaterial](https://threejs.org/docs/#Reference/Materials/MeshStandardMaterial)';
+    return 'Creates a [THREE.MeshStandardMaterial](https://threejs.org/docs/#api/materials/MeshStandardMaterial)';
   }
 
   getDescription() {

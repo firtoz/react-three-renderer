@@ -1,10 +1,13 @@
-> [Wiki](Home) » [[Internal Components]] » [[Geometries]] » **circleBufferGeometry**
+> [Wiki](Home) » [[Internal Components]] » [[Geometries]] » **edgesGeometry**
 
-# circleBufferGeometry
+# edgesGeometry
 
-Creates a [THREE.CircleBufferGeometry](https://threejs.org/docs/#api/geometries/CircleBufferGeometry)
+Creates a [THREE.EdgesGeometry](https://threejs.org/docs/#api/geometries/EdgesGeometry)
 
 ## Attributes
+
+### geometry
+``` one of types [THREE.Geometry, THREE.BufferGeometry] ``` *``` required ```*: Any geometry object.
 
 ### name
 ``` string ```: Name for this geometry.
@@ -41,19 +44,8 @@ once sent to GPU.
 
 **Default**: `false`
 
-### radius
-``` number ```: Radius of the circle
-
-### segments
-``` number ```: Number of segments (triangles), minimum = 3
-
-### thetaStart
-``` number ```: Start angle for first segment, default = 0 (three o'clock position).
-
-### thetaLength
-``` number ```: The central angle, often called theta, of the circular sector.
-
-The default is 2*Pi, which makes for a complete circle.
+### thresholdAngle
+``` number ```: An edge is only rendered if the angle (in degrees) between the face normals of the adjoining faces exceeds this value. default = 1 degree.
 
 ### resourceId
 ``` string ```: The resource id of this object, only used if it is placed into [[resources]].
@@ -66,5 +58,5 @@ This component can be added into [&lt;resources/&gt;](resources)! See [[Resource
 
 ===
 
-|**[View Source](../blob/master/src/lib/descriptors/Geometry/CircleBufferGeometryDescriptor.js)**|
+|**[View Source](../blob/master/src/lib/descriptors/Geometry/EdgesGeometryDescriptor.js)**|
  ---|

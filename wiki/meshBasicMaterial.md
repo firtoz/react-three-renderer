@@ -2,7 +2,7 @@
 
 # meshBasicMaterial
 
-Creates a [THREE.MeshBasicMaterial](http://threejs.org/docs/#Reference/Materials/MeshBasicMaterial)
+Creates a [THREE.MeshBasicMaterial](https://threejs.org/docs/#api/materials/MeshBasicMaterial)
 
 ## Attributes
 

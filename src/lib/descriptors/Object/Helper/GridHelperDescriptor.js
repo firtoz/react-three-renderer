@@ -49,8 +49,10 @@ class GridHelperDescriptor extends Object3DDescriptor {
     const {
       size,
       step,
+      colorCenterLine,
+      colorGrid,
     } = props;
-    return new THREE.GridHelper(size, step);
+    return new THREE.GridHelper(size, step, colorCenterLine, colorGrid);
   }
 
   unmount(threeObject) {

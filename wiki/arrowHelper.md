@@ -2,7 +2,7 @@
 
 # arrowHelper
 
-Creates a [THREE.ArrowHelper](http://threejs.org/docs/#Reference/Extras.Helpers/ArrowHelper)
+Creates a [THREE.ArrowHelper](https://threejs.org/docs/#api/helpers/ArrowHelper)
 
 An 3D arrow Object.
 
@@ -39,7 +39,7 @@ This creates an arrow starting in origin in the direction dir for a certain leng
 ### lookAt
 ``` THREE.Vector3 ```: The target position for the 3D object to look at.
 
-If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
+If this property is set, [`THREE.Object3D#lookAt`](https://threejs.org/docs/#api/core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
 
 ### matrix
 ``` THREE.Matrix4 ```

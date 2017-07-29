@@ -2,7 +2,7 @@ import MaterialInfo from './shared/MaterialInfo';
 
 class meshPhongMaterial extends MaterialInfo {
   getIntro() {
-    return 'Creates a [THREE.MeshPhongMaterial](http://threejs.org/docs/#Reference/Materials/MeshPhongMaterial)';
+    return 'Creates a [THREE.MeshPhongMaterial](https://threejs.org/docs/#api/materials/MeshPhongMaterial)';
   }
 
   getAttributesText() {

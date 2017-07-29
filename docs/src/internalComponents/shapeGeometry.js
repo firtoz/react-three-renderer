@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class shapeGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.ShapeGeometry](https://threejs.org/docs/#Reference/Geometries/ShapeGeometry)';
+    return 'Creates a [THREE.ShapeGeometry](https://threejs.org/docs/#api/geometries/ShapeGeometry)';
   }
 
   getAttributesText() {

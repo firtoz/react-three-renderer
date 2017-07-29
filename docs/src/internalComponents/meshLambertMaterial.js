@@ -2,7 +2,7 @@ import MaterialInfo from './shared/MaterialInfo';
 
 class meshLambertMaterial extends MaterialInfo {
   getIntro() {
-    return 'Creates a [THREE.MeshLambertMaterial](http://threejs.org/docs/#Reference/Materials/MeshLambertMaterial)';
+    return 'Creates a [THREE.MeshLambertMaterial](https://threejs.org/docs/#api/materials/MeshLambertMaterial)';
   }
 
   getAttributesText() {

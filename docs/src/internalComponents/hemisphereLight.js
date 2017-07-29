@@ -2,7 +2,7 @@ import LightInfo from './shared/LightInfo';
 
 class hemisphereLight extends LightInfo {
   getIntro() {
-    return 'Creates a [THREE.HemisphereLight](https://threejs.org/docs/#Reference/Lights/HemisphereLight)';
+    return 'Creates a [THREE.HemisphereLight](https://threejs.org/docs/#api/lights/HemisphereLight)';
   }
 
   getDescription() {

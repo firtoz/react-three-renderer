@@ -11,7 +11,7 @@ class planeGeometry extends geometry {
   }
 
   getIntro() {
-    return 'Creates a [THREE.PlaneGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PlaneGeometry)';
+    return 'Creates a [THREE.PlaneGeometry](https://threejs.org/docs/#api/geometries/PlaneGeometry)';
   }
 
   getDescription() {

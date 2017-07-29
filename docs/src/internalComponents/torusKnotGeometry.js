@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class torusKnotGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.TorusKnotGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/TorusKnotGeometry)';
+    return 'Creates a [THREE.TorusKnotGeometry](https://threejs.org/docs/#api/geometries/TorusKnotGeometry)';
   }
 
   getDescription() {
@@ -17,8 +17,8 @@ class torusKnotGeometry extends geometry {
       tube: '',
       radialSegments: '',
       tubularSegments: '',
-      p: '',
-      q: '',
+      p: 'determines, how many times the geometry winds around its axis of rotational symmetry.',
+      q: 'determines, how many times the geometry winds around a circle in the interior of the torus.',
       heightScale: '',
     };
   }

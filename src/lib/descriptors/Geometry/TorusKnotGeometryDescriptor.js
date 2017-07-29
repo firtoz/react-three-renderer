@@ -8,6 +8,16 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 
+    const defaultValues = [
+      100, // 'radius',
+      40, // 'tube',
+      64, // 'tubularSegments',
+      8, // 'radialSegments',
+      2, // 'p',
+      3, // 'q',
+      undefined, // 'heightScale',
+    ];
+
     [
       'radius',
       'tube',
@@ -16,11 +26,11 @@ class TorusKnotGeometryDescriptor extends GeometryDescriptorBase {
       'p',
       'q',
       'heightScale',
-    ].forEach((propName) => {
+    ].forEach((propName, i) => {
       this.hasProp(propName, {
         type: PropTypes.number,
         update: this.triggerRemount,
-        default: undefined,
+        default: defaultValues[i],
       });
     });
   }

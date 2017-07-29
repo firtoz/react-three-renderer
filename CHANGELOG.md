@@ -1,6 +1,16 @@
 CHANGELOG
 ===========
 
+## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.0...master))
+
+### Documentation
+- Fix (hopefully) all three.js documentation links (#177)
+- Fix PropTypes deprecation warning (#174)
+
+### Components
+- Fix `minFilter` property of `texture` (#166)
+- Add `edgesGeometry` (#159)
+
 ## 3.1.0 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.0.2...v3.1.0))
 
 This is a strange release that was slightly frustrating to implement.

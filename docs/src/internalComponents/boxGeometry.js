@@ -12,7 +12,7 @@ class boxGeometry extends geometry {
   }
 
   getIntro() {
-    return 'Creates a [THREE.BoxGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/BoxGeometry)';
+    return 'Creates a [THREE.BoxGeometry](https://threejs.org/docs/#api/geometries/BoxGeometry)';
   }
 
   getDescription() {
