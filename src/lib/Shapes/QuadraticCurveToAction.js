@@ -4,7 +4,7 @@ import ShapeAction from './ShapeAction';
 
 class QuadraticCurveToAction extends ShapeAction {
   constructor(cpX, cpY,
-    x, y) {
+              x, y) {
     super();
 
     this.cpX = cpX;
@@ -13,12 +13,12 @@ class QuadraticCurveToAction extends ShapeAction {
     this.y = y;
   }
 
-  performAction(shape:THREE.Shape) {
+  performAction(shape: THREE.Shape) {
     shape.quadraticCurveTo(
       this.cpX,
       this.cpY,
       this.x,
-      this.y
+      this.y,
     );
   }
 }

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import Uniform from '../../Uniform';
 import UniformContainer from '../../UniformContainer';

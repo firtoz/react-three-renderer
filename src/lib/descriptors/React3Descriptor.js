@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import warning from 'fbjs/lib/warning';
 import invariant from 'fbjs/lib/invariant';
@@ -208,7 +208,7 @@ class React3Descriptor extends THREEElementDescriptor {
     threeObject.initialize();
   }
 
-// gets called every time there are children to be added
+  // gets called every time there are children to be added
   // this can be called multiple times as more children are added.
   addChildren(threeObject, children) {
     threeObject.addChildren(children);

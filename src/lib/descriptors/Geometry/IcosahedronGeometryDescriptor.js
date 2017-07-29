@@ -6,7 +6,7 @@ class IcosahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
     const {
       radius,
       detail,
-      } = props;
+    } = props;
 
     return new THREE.IcosahedronGeometry(radius, detail);
   }

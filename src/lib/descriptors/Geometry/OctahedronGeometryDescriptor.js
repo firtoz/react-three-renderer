@@ -6,7 +6,7 @@ class OctahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
     const {
       radius,
       detail,
-      } = props;
+    } = props;
 
     return new THREE.OctahedronGeometry(radius, detail);
   }

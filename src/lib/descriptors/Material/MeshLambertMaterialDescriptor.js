@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import MaterialDescriptorBase from './MaterialDescriptorBase';
 
 class MeshLambertMaterialDescriptor extends MaterialDescriptorBase {
-
   constructor(react3RendererInstance) {
     super(react3RendererInstance);
 

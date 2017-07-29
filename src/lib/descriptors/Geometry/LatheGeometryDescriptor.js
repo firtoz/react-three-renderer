@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import GeometryDescriptorBase from './GeometryDescriptorBase';
 import propTypeInstanceOf from '../../utils/propTypeInstanceOf';

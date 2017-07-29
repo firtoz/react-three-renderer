@@ -1,4 +1,4 @@
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 import ReactPropTypeLocationNames from 'react/lib/ReactPropTypeLocationNames';
 import PropTypeError from './PropTypeError';
 

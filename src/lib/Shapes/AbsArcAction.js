@@ -4,11 +4,11 @@ import ShapeAction from './ShapeAction';
 
 class AbsArcAction extends ShapeAction {
   constructor(x,
-    y,
-    radius,
-    startAngle,
-    endAngle,
-    clockwise) {
+              y,
+              radius,
+              startAngle,
+              endAngle,
+              clockwise) {
     super();
 
     this.x = x;
@@ -19,12 +19,12 @@ class AbsArcAction extends ShapeAction {
     this.clockwise = clockwise;
   }
 
-  performAction(shape:THREE.Shape) {
+  performAction(shape: THREE.Shape) {
     shape.absarc(
       this.x, this.y,
       this.radius,
       this.startAngle, this.endAngle,
-      this.clockwise
+      this.clockwise,
     );
   }
 }

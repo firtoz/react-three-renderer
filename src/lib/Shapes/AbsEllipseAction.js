@@ -4,13 +4,13 @@ import ShapeAction from './ShapeAction';
 
 class AbsEllipseAction extends ShapeAction {
   constructor(x,
-    y,
-    xRadius,
-    yRadius,
-    startAngle,
-    endAngle,
-    clockwise,
-    rotation) {
+              y,
+              xRadius,
+              yRadius,
+              startAngle,
+              endAngle,
+              clockwise,
+              rotation) {
     super();
 
     this.x = x;
@@ -23,14 +23,15 @@ class AbsEllipseAction extends ShapeAction {
     this.rotation = rotation;
   }
 
-  performAction(shape:THREE.Shape) {
+  performAction(shape: THREE.Shape) {
     shape.absellipse(
       this.x, this.y,
       this.xRadius, this.yRadius,
       this.startAngle, this.endAngle,
       this.clockwise,
-      this.rotation
+      this.rotation,
     );
   }
 }
+
 module.exports = AbsEllipseAction;

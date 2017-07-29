@@ -38,16 +38,16 @@
         "SwitchCase": 1,
         "VariableDeclarator": 1,
         "outerIIFEBody": 1,
-        // MemberExpression: null,
-        // CallExpression: {
-        // parameters: null,
-        // },
+        // "MemberExpression": "off",
+        "CallExpression": {
+          // "arguments": "off"
+        },
         "FunctionDeclaration": {
           "parameters": "first",
           "body": 1
         },
         "FunctionExpression": {
-          "parameters": 1,
+          "parameters": "first",
           "body": 1
         }
       }

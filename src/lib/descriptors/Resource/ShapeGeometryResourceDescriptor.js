@@ -1,4 +1,4 @@
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 import * as THREE from 'three';
 
 import GeometryResourceDescriptor from './GeometryResourceDescriptor';

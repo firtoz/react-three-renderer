@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import CameraDescriptorBase from './CameraDescriptorBase';
 

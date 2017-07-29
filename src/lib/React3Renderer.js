@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import reactElementWrapper from 'react/lib/ReactElement';
 import ReactCurrentOwner from 'react/lib/ReactCurrentOwner';
-import ReactComponent from 'react/lib/ReactComponent';
+import { Component as ReactComponent } from 'react/lib/ReactBaseClasses';
 import KeyEscapeUtils from 'react/lib/KeyEscapeUtils';
 
 import emptyObject from 'fbjs/lib/emptyObject';
@@ -236,14 +236,14 @@ class React3Renderer {
    * @internal
    */
   updateChildren(prevChildren,
-    nextChildren,
-    mountImages,
-    removedMarkups,
-    transaction,
-    hostParent,
-    hostContainerInfo,
-    context,
-    selfDebugID // 0 in production and for roots
+                 nextChildren,
+                 mountImages,
+                 removedMarkups,
+                 transaction,
+                 hostParent,
+                 hostContainerInfo,
+                 context,
+                 selfDebugID // 0 in production and for roots
   ) {
     // We currently don't have a way to track moves here but if we use iterators
     // instead of for..in we can zip the iterators and check if an item has
@@ -507,9 +507,9 @@ class React3Renderer {
    * @internal
    */
   instantiateChildren(nestedChildNodes,
-    transaction,
-    context,
-    selfDebugID // 0 in production and for roots
+                      transaction,
+                      context,
+                      selfDebugID // 0 in production and for roots
   ) {
     if (nestedChildNodes === null) {
       return null;
@@ -566,10 +566,10 @@ class React3Renderer {
   hostTagToRootNodeID = () => 0;
 
   _mountImageIntoNode(markup,
-    container,
-    instance,
-    shouldReuseMarkup,
-    transaction) { // eslint-disable-line no-unused-vars
+                      container,
+                      instance,
+                      shouldReuseMarkup,
+                      transaction) { // eslint-disable-line no-unused-vars
     // TODO try to do server-side rendering for THREE
 
     if (!container.userData) {
@@ -927,8 +927,8 @@ class React3Renderer {
           if (
             type === undefined ||
             (typeof type === 'object' &&
-            type !== null &&
-            Object.keys(type).length === 0)
+              type !== null &&
+              Object.keys(type).length === 0)
           ) {
             info +=
               ' You likely forgot to export your component from the file ' +
@@ -1038,7 +1038,7 @@ class React3Renderer {
         'render is not allowed. If necessary, trigger nested updates in ' +
         'componentDidUpdate. Check the render method of %s.',
         (ReactCurrentOwner.current &&
-        ReactCurrentOwner.current.getName())
+          ReactCurrentOwner.current.getName())
         || 'ReactCompositeComponent');
     }
 
@@ -1090,9 +1090,9 @@ class React3Renderer {
    * @param {*} context que?
    */
   batchedMountComponentIntoNode = (componentInstance,
-    container,
-    shouldReuseMarkup,
-    context) => {
+                                   container,
+                                   shouldReuseMarkup,
+                                   context) => {
     const transaction = ReactUpdates.ReactReconcileTransaction.getPooled(
       !shouldReuseMarkup
     );
@@ -1120,10 +1120,10 @@ class React3Renderer {
    * @param {*} context
    */
   mountComponentIntoNode = (wrapperInstance,
-    container,
-    transaction,
-    shouldReuseMarkup,
-    context) => {
+                            container,
+                            transaction,
+                            shouldReuseMarkup,
+                            context) => {
     const markup = ReactReconciler.mountComponent(
       wrapperInstance,
       transaction,

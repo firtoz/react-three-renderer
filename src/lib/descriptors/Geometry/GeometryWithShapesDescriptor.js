@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 import invariant from 'fbjs/lib/invariant';
 
 import GeometryDescriptorBase from './GeometryDescriptorBase';

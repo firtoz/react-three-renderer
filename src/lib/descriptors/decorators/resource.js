@@ -1,6 +1,6 @@
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import ResourceContainer from '../../Resources/ResourceContainer';
 import THREEElementDescriptor from '../THREEElementDescriptor';

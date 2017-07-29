@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import invariant from 'fbjs/lib/invariant';
 import warning from 'fbjs/lib/warning';
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import resource from '../decorators/resource';
 import THREEElementDescriptor from '../THREEElementDescriptor';

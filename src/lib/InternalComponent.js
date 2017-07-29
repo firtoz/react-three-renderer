@@ -77,7 +77,7 @@ if (process.env.NODE_ENV !== 'production') {
   setChildrenForInstrumentation = function _(children) {
     ReactInstrumentation.debugTool.onSetChildren(
       this._debugID,
-      children ? Object.keys(children).map(key => children[key]._debugID) : []
+      children ? Object.keys(children).map(key => children[key]._debugID) : [],
     );
   };
 
@@ -277,8 +277,8 @@ class InternalComponent {
    * @private
    */
   _reconcilerInstantiateChildren(nestedChildren,
-    transaction,
-    context) {
+                                 transaction,
+                                 context) {
     if (process.env.NODE_ENV !== 'production') {
       const selfDebugID = getDebugID(this);
 
@@ -291,7 +291,7 @@ class InternalComponent {
             nestedChildren,
             transaction,
             context,
-            selfDebugID
+            selfDebugID,
           );
         } finally {
           ReactCurrentOwner.current = previousCurrent;
@@ -302,7 +302,7 @@ class InternalComponent {
       nestedChildren,
       transaction,
       context,
-      0
+      0,
     );
   }
 
@@ -321,11 +321,11 @@ class InternalComponent {
    * @private
    */
   _reconcilerUpdateChildren(prevChildren,
-    nextNestedChildrenElements,
-    mountImages,
-    removedMarkups,
-    transaction,
-    context) {
+                            nextNestedChildrenElements,
+                            mountImages,
+                            removedMarkups,
+                            transaction,
+                            context) {
     let nextChildren;
     let selfDebugID = 0;
 
@@ -351,7 +351,7 @@ class InternalComponent {
           this,
           this._hostContainerInfo,
           context,
-          selfDebugID
+          selfDebugID,
         );
 
         return nextChildren;
@@ -369,7 +369,7 @@ class InternalComponent {
       this,
       this._hostContainerInfo,
       context,
-      selfDebugID
+      selfDebugID,
     );
 
     return nextChildren;
@@ -415,7 +415,7 @@ class InternalComponent {
           this,
           this._hostContainerInfo,
           context,
-          selfDebugID
+          selfDebugID,
         );
 
         // const mountImage = ReactReconciler.mountComponent(child, rootID, transaction, context);
@@ -667,7 +667,7 @@ class InternalComponent {
       mountImages,
       removedMarkups,
       transaction,
-      context
+      context,
     );
 
     if (!nextChildren && !prevChildren) {
@@ -732,7 +732,7 @@ class InternalComponent {
               null,
               nextIndex,
               transaction,
-              context
+              context,
             );
 
             nextMountIndex++;

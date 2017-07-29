@@ -1,4 +1,4 @@
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import Viewport from '../Viewport';
 import THREEElementDescriptor from './THREEElementDescriptor';

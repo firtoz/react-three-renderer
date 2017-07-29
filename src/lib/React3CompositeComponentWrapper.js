@@ -180,9 +180,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
    * @internal
    */
   mountComponent(transaction,
-    hostParent,
-    hostContainerInfo,
-    context) {
+                 hostParent,
+                 hostContainerInfo,
+                 context) {
     this._context = context;
     this._mountOrder = this._react3RendererInstance.nextMountID++;
     this._hostParent = hostParent;
@@ -355,9 +355,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   _constructComponent(doConstruct,
-    publicProps,
-    publicContext,
-    updateQueue) {
+                      publicProps,
+                      publicContext,
+                      updateQueue) {
     if (process.env.NODE_ENV !== 'production') {
       ReactCurrentOwner.current = this;
       try {
@@ -381,9 +381,9 @@ class React3CompositeComponentWrapper extends ReactCompositeComponentMixinImpl {
   }
 
   _constructComponentWithoutOwner(doConstruct,
-    publicProps,
-    publicContext,
-    updateQueue) {
+                                  publicProps,
+                                  publicContext,
+                                  updateQueue) {
     const Component = this._currentElement.type;
 
     if (doConstruct) {

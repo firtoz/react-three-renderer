@@ -41,7 +41,7 @@ describe('Mock Console', () => {
     expect(() => {
       mockConsole.expect('one');
       console.log('two');
-    }).to.throw('AssertionError: Log error, ' +
+    }).to.throw('Log error, ' +
       'expected message:\n> one\nBut received message:\n> two\n');
 
     mockConsole.revert();
@@ -51,7 +51,7 @@ describe('Mock Console', () => {
     expect(() => {
       console.log('two');
       mockConsole.expect('one');
-    }).to.throw('AssertionError: Log error, ' +
+    }).to.throw('Log error, ' +
       'expected message:\n> one\nBut received message:\n> two\n');
 
     mockConsole.revert();
@@ -65,7 +65,7 @@ describe('Mock Console', () => {
       mockConsole.expect('one');
 
       mockConsole.revert();
-    }).to.throw('AssertionError: Messages expected but not received:\n0: [LOG]|\'one\'');
+    }).to.throw('Messages expected but not received:\n0: [LOG]|\'one\'');
   });
 
   it('should fail when a message is received but is not expected', () => {
@@ -76,7 +76,7 @@ describe('Mock Console', () => {
       console.log('one');
 
       mockConsole.revert();
-    }).to.throw('AssertionError: Messages received but not expected:\n0: [LOG]|\'one\'');
+    }).to.throw('Messages received but not expected:\n0: [LOG]|\'one\'');
   });
 
   it('should fail for console.warn', () => {
@@ -87,7 +87,7 @@ describe('Mock Console', () => {
       console.warn('one');
 
       mockConsole.revert();
-    }).to.throw('AssertionError: Messages received but not expected:\n0: [WARNING]|\'one\'');
+    }).to.throw('Messages received but not expected:\n0: [WARNING]|\'one\'');
   });
 
   it('should fail for console.error', () => {
@@ -98,7 +98,7 @@ describe('Mock Console', () => {
       console.error('one');
 
       mockConsole.revert();
-    }).to.throw('AssertionError: Messages received but not expected:\n0: [ERROR]|\'one\'');
+    }).to.throw('Messages received but not expected:\n0: [ERROR]|\'one\'');
   });
 
   it('should succeed when expected messages are received', () => {

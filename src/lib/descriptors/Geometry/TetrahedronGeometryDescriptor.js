@@ -7,7 +7,7 @@ class TetrahedronGeometryDescriptor extends PolyhedronGeometryDescriptorBase {
     const {
       radius,
       detail,
-      } = props;
+    } = props;
 
     return new THREE.TetrahedronGeometry(radius, detail);
   }

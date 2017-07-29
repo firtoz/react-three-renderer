@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 
 import Object3DDescriptor from '../Object3DDescriptor';
 import propTypeInstanceOf from '../../../utils/propTypeInstanceOf';

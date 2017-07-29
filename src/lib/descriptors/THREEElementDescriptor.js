@@ -4,7 +4,7 @@ import warning from 'fbjs/lib/warning';
 
 import events from 'events';
 
-import PropTypes from 'react/lib/ReactPropTypes';
+import PropTypes from 'prop-types';
 import checkReactTypeSpec from 'react/lib/checkReactTypeSpec';
 import React3Renderer from '../React3Instance';
 
