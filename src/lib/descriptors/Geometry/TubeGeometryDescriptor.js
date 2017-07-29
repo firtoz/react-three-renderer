@@ -40,7 +40,7 @@ class TubeGeometryDescriptor extends GeometryDescriptorBase {
   }
 
   construct(props) {
-    // props from http://threejs.org/docs/#Reference/Extras.Geometries/TubeGeometry:
+    // props from https://threejs.org/docs/#api/geometries/TubeGeometry:
     const {
       path, // THREE.Curve
       segments, // number

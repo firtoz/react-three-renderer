@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class cylinderGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.CylinderGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/CylinderGeometry)';
+    return 'Creates a [THREE.CylinderGeometry](https://threejs.org/docs/#api/geometries/CylinderGeometry)';
   }
 
   getDescription() {

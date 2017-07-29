@@ -2,7 +2,7 @@
 
 # meshLambertMaterial
 
-Creates a [THREE.MeshLambertMaterial](http://threejs.org/docs/#Reference/Materials/MeshLambertMaterial)
+Creates a [THREE.MeshLambertMaterial](https://threejs.org/docs/#api/materials/MeshLambertMaterial)
 
 ## Attributes
 

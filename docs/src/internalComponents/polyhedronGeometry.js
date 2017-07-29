@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class polyhedronGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.PolyhedronGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/PolyhedronGeometry)';
+    return 'Creates a [THREE.PolyhedronGeometry](https://threejs.org/docs/#api/geometries/PolyhedronGeometry)';
   }
 
   getDescription() {

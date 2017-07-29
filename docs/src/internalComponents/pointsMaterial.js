@@ -2,7 +2,7 @@ import MaterialInfo from './shared/MaterialInfo';
 
 class pointsMaterial extends MaterialInfo {
   getIntro() {
-    return 'Creates a [THREE.PointsMaterial](http://threejs.org/docs/#Reference/Materials/PointsMaterial)';
+    return 'Creates a [THREE.PointsMaterial](https://threejs.org/docs/#api/materials/PointsMaterial)';
   }
 
   getAttributesText() {

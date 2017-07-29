@@ -2,7 +2,7 @@
 
 # directionalLight
 
-Creates a [THREE.DirectionalLight](http://threejs.org/docs/#Reference/Lights/DirectionalLight)
+Creates a [THREE.DirectionalLight](https://threejs.org/docs/#api/lights/DirectionalLight)
 
 ## Attributes
 
@@ -175,7 +175,7 @@ Additionally, updating this property will trigger an update for the light target
 ### lookAt
 ``` THREE.Vector3 ```: The target position for the 3D object to look at.
 
-If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
+If this property is set, [`THREE.Object3D#lookAt`](https://threejs.org/docs/#api/core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
 
 Additionally, updating this property will trigger an update for the light target position.
 

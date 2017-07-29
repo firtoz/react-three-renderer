@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class bufferGeometry extends DocInfo {
   getIntro() {
-    return 'Creates a [THREE.BufferGeometry](http://threejs.org/docs/#Reference/Core/BufferGeometry)';
+    return 'Creates a [THREE.BufferGeometry](https://threejs.org/docs/#api/core/BufferGeometry)';
   }
 
   getDescription() {

@@ -2,7 +2,7 @@
 
 # scene
 
-Creates a [THREE.Scene](http://threejs.org/docs/#Reference/Scenes/Scene)
+Creates a [THREE.Scene](https://threejs.org/docs/#api/scenes/Scene)
 
 ## Attributes
 
@@ -34,7 +34,7 @@ Creates a [THREE.Scene](http://threejs.org/docs/#Reference/Scenes/Scene)
 ### lookAt
 ``` THREE.Vector3 ```: The target position for the 3D object to look at.
 
-If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Reference/Core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
+If this property is set, [`THREE.Object3D#lookAt`](https://threejs.org/docs/#api/core/Object3D.lookAt) will be called every time the value changes or the position of the object changes.
 
 ### matrix
 ``` THREE.Matrix4 ```
@@ -68,9 +68,9 @@ If this property is set, [`THREE.Object3D#lookAt`](http://threejs.org/docs/#Refe
 **Default**: `false`
 
 ### fog
-``` one of types [THREE.Fog, THREE.FogExp2] ```: The [fog](http://threejs.org/docs/#Reference/Scenes/Scene.fog) variable for the scene.
+``` one of types [THREE.Fog, THREE.FogExp2] ```: The [fog](https://threejs.org/docs/#api/scenes/Scene.fog) variable for the scene.
 
-Use a [THREE.Fog](https://threejs.org/docs/#Reference/Scenes/Fog) for linear fog, or a [THREE.FogExp2](https://threejs.org/docs/#Reference/Scenes/FogExp2) for exponential fog.
+Use a [THREE.Fog](https://threejs.org/docs/#api/scenes/Fog) for linear fog, or a [THREE.FogExp2](https://threejs.org/docs/#api/scenes/FogExp2) for exponential fog.
 
 ===
 

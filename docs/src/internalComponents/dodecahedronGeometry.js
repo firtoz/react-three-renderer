@@ -3,7 +3,7 @@ import geometry from './geometry';
 class dodecahedronGeometry extends geometry {
   getIntro() {
     return 'Creates a [THREE.DodecahedronGeometry]' +
-      '(http://threejs.org/docs/index.html#Reference/Extras.Geometries/DodecahedronGeometry)';
+      '(https://threejs.org/docs/#api/geometries/DodecahedronGeometry)';
   }
 
   getDescription() {

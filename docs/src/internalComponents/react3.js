@@ -9,17 +9,17 @@ class react3 extends DocInfo {
   }
 
   getDescription() {
-    return 'Creates a [THREE.WebGLRenderer](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer).';
+    return 'Creates a [THREE.WebGLRenderer](https://threejs.org/docs/#api/renderers/WebGLRenderer).';
   }
 
   getAttributesText() {
     return {
       gammaInput: 'Controls renderer gamma input.\n\n' +
-      'See [THREE.WebGLRenderer#gammaInput](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.gammaInput).',
+      'See [THREE.WebGLRenderer#gammaInput](https://threejs.org/docs/#api/renderers/WebGLRenderer.gammaInput).',
       gammaOutput: 'Controls renderer gamma output.\n\n' +
-      'See [THREE.WebGLRenderer#gammaOutput](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.gammaOutput).',
+      'See [THREE.WebGLRenderer#gammaOutput](https://threejs.org/docs/#api/renderers/WebGLRenderer.gammaOutput).',
       sortObjects: 'Controls renderer object sorting.\n\n' +
-      'See [THREE.WebGLRenderer#sortObjects](http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.sortObjects).',
+      'See [THREE.WebGLRenderer#sortObjects](https://threejs.org/docs/#api/renderers/WebGLRenderer.sortObjects).',
       context: 'The rendering context.\n\n' +
       'Currently only \'3d\' is supported.',
       mainCamera: 'The name of the camera to render into the canvas.\n\n' +
@@ -32,31 +32,31 @@ class react3 extends DocInfo {
       clearColor: 'The clear color of the renderer.\n\n' +
       'Is used as the first parameter for ' +
       '[THREE.WebGLRenderer#clearColor]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setClearColor).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.setClearColor).\n\n' +
       'If the [`clearAlpha`](#clearalpha) and [`alpha`](#alpha) properties are set, ' +
       '`clearAlpha` will be used as the second parameter.',
       clearAlpha: 'Used for the transparency of the canvas.\n\n' +
       'Expected range: 0 to 1, where 0 is clear and 1 is opaque.\n\n' +
       'Is used as the second parameter for [THREE.WebGLRenderer#clearColor]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.setClearColor).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.setClearColor).\n\n' +
       'If the [`clearColor`](#clearcolor) property is set, that will be passed as' +
       ' the first parameter.\n\n' +
       'Requires the [`alpha`](#alpha) property to be set.',
       shadowMapEnabled: 'Toggles shadowMap usage.\n\n' +
       'See [THREE.WebGLRenderer#shadowMapEnabled]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapEnabled).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapEnabled).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       shadowMapType: 'Controls the shadowMap type.\n\n' +
       'See [THREE.WebGLRenderer#shadowMapType]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapType).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapType).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       shadowMapCullFace: 'Controls shadowMap face culling.\n\n' +
       'See [THREE.WebGLRenderer#shadowMapCullFace]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapCullFace).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapCullFace).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       shadowMapDebug: 'Toggles shadowMap debugging.\n\n' +
       'See [THREE.WebGLRenderer#shadowMapDebug]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.shadowMapDebug).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.shadowMapDebug).\n\n' +
       '> **WARNING**: Updating this value will force all materials to refresh.',
       onRecreateCanvas: 'This callback gets called every time the canvas is recreated.\n\n' +
       'This is currently internal usage only. This helps toggling of [antialias](#antialias).',
@@ -66,19 +66,19 @@ class react3 extends DocInfo {
       height: 'The height of the canvas and the default viewport.',
       precision: 'Sets the precision of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#precision]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.precision).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.precision).\n\n' +
       `${canvasRecreationWarning}`,
       alpha: 'Toggles alpha setting of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#alpha]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.alpha).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.alpha).\n\n' +
       `${canvasRecreationWarning}`,
       premultipliedAlpha: 'Toggles the premultipliedAlpha setting of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#premultipliedAlpha]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.premultipliedAlpha).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.premultipliedAlpha).\n\n' +
       `${canvasRecreationWarning}`,
       antialias: 'Toggles anti-aliasing of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#antialias]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.antialias).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.antialias).\n\n' +
       `${canvasRecreationWarning}`,
       customRenderer: 'Allows a custom renderer to be used instead of WebGLRenderer.\n\n' +
       `The first parameter of this function will be an object containing these properties:
@@ -104,19 +104,19 @@ ${'```'}\n\n` +
       `${canvasRecreationWarning}`,
       stencil: 'Toggles the stencil property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#stencil]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.stencil).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.stencil).\n\n' +
       `${canvasRecreationWarning}`,
       preserveDrawingBuffer: 'Toggles the preserveDrawingBuffer property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#preserveDrawingBuffer]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.preserveDrawingBuffer).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.preserveDrawingBuffer).\n\n' +
       `${canvasRecreationWarning}`,
       depth: 'Toggles the depth property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#depth]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.depth).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.depth).\n\n' +
       `${canvasRecreationWarning}`,
       logarithmicDepthBuffer: 'Toggles the logarithmicDepthBuffer property of the renderer.\n\n' +
       'See [THREE.WebGLRenderer#logarithmicDepthBuffer]' +
-      '(http://threejs.org/docs/#Reference/Renderers/WebGLRenderer.logarithmicDepthBuffer).\n\n' +
+      '(https://threejs.org/docs/#api/renderers/WebGLRenderer.logarithmicDepthBuffer).\n\n' +
       `${canvasRecreationWarning}`,
       forceManualRender: 'Prevents re-rendering every frame.\n\n' +
       'You can use this to save some CPU and battery life.\n\n' +

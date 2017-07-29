@@ -2,7 +2,7 @@
 
 # lineBasicMaterial
 
-Creates a [THREE.LineBasicMaterial](http://threejs.org/docs/#Reference/Materials/LineBasicMaterial)
+Creates a [THREE.LineBasicMaterial](https://threejs.org/docs/#api/materials/LineBasicMaterial)
 
 ## Attributes
 

@@ -2,7 +2,7 @@ import DocInfo from '../DocInfo';
 
 class uniforms extends DocInfo {
   getIntro() {
-    return 'A container for [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms).';
+    return 'A container for [THREE.ShaderMaterial#uniforms](https://threejs.org/docs/#api/materials/ShaderMaterial.uniforms).';
   }
 
   getDescription() {

@@ -2,7 +2,7 @@ import geometry from './geometry';
 
 class latheGeometry extends geometry {
   getIntro() {
-    return 'Creates a [THREE.LatheGeometry](http://threejs.org/docs/#Reference/Extras.Geometries/LatheGeometry)';
+    return 'Creates a [THREE.LatheGeometry](https://threejs.org/docs/#api/geometries/LatheGeometry)';
   }
 
   getDescription() {

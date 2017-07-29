@@ -2,7 +2,7 @@
 
 # meshDepthMaterial
 
-Creates a [THREE.MeshDepthMaterial](http://threejs.org/docs/#Reference/Materials/MeshDepthMaterial)
+Creates a [THREE.MeshDepthMaterial](https://threejs.org/docs/#api/materials/MeshDepthMaterial)
 
 ## Attributes
 

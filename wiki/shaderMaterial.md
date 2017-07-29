@@ -2,7 +2,7 @@
 
 # shaderMaterial
 
-Creates a [THREE.ShaderMaterial](http://threejs.org/docs/#Reference/Materials/ShaderMaterial)
+Creates a [THREE.ShaderMaterial](https://threejs.org/docs/#api/materials/ShaderMaterial)
 
 ## Attributes
 
@@ -71,7 +71,7 @@ Defaults to `material`. Other example values:
 ### uniforms
 ``` any ```: The uniforms to be used for the shader.
 
-See [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms)
+See [THREE.ShaderMaterial#uniforms](https://threejs.org/docs/#api/materials/ShaderMaterial.uniforms)
 
 ### wireframe
 ``` bool ```
@@ -89,7 +89,7 @@ See [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials
 **Default**: `''`
 
 ## Children:
-  * [[uniforms]]: A container for [THREE.ShaderMaterial#uniforms](http://threejs.org/docs/#Reference/Materials/ShaderMaterial.uniforms).
+  * [[uniforms]]: A container for [THREE.ShaderMaterial#uniforms](https://threejs.org/docs/#api/materials/ShaderMaterial.uniforms).
 
 ## Notes:
 
