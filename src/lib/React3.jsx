@@ -1,11 +1,10 @@
 import React from 'react';
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
+import PropTypes from 'react/lib/ReactPropTypes';
 import * as THREE from 'three';
 
 import React3Renderer from './React3Renderer';
 import propTypeInstanceOf from './utils/propTypeInstanceOf';
-
-const { PropTypes } = React;
 
 class React3 extends React.Component {
 
