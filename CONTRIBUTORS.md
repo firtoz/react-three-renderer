@@ -22,3 +22,4 @@ Thanks for the help:
 * [@ValentinHolgado](https://github.com/ValentinHolgado)
 * [@lukas-linhart](https://github.com/lukas-linhart)
 * [@AndrewRayCode](https://github.com/AndrewRayCode)
+* [@thierryc](https://github.com/thierryc)
