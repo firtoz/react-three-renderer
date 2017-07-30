@@ -45,7 +45,10 @@ class GeometryDescriptorBase extends THREEElementDescriptor {
     });
 
     this.hasProp('faceVertexUvs', {
-      type: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.arrayOf(THREE.Vector2))),
+      type: PropTypes.arrayOf(
+        PropTypes.arrayOf(
+          PropTypes.arrayOf(
+            propTypeInstanceOf(THREE.Vector2)))), // [materialIndex][faceIndex][vertexIndex]
       update(threeObject, faceVertexUvs, hasProp) {
         if (hasProp) {
           if (threeObject.faceVertexUvs !== faceVertexUvs) {

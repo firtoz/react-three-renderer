@@ -16,7 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "fbjs": "0.8.14",
-    "prop-types": "15.5.10"
+    "prop-types": "15.5.10",
+    "raf": "^3.3.2"
   },
   "peerDependencies": {
     "react": "~15.6.1",

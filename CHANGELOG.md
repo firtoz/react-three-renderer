@@ -3,6 +3,12 @@ CHANGELOG
 
 ## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.0...master))
 
+### Core
+- Use `raf` for `requestAnimationFrame` shimming #163 #164
+
+### Components
+- Fix GeometryDescriptorBase faceVertexUvs property #180
+
 ## 3.2.0 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.1...3.2.0))
 
 ### Core
