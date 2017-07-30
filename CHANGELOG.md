@@ -1,7 +1,9 @@
 CHANGELOG
 ===========
 
-## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.1...master))
+## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.0...master))
+
+## 3.2.0 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.1...3.2.0))
 
 ### Core
 - Update dependencies:
