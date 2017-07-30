@@ -4,6 +4,8 @@ import warning from 'fbjs/lib/warning';
 
 import ReactUpdates from 'react-dom/lib/ReactUpdates';
 
+import raf from 'raf';
+
 import Viewport from './Viewport';
 import React3Module from './Module';
 import React3Renderer from './React3Renderer';
@@ -65,7 +67,7 @@ class React3DInstance {
       if (renderThisFrame) {
         this._render();
       } else if (this._renderRequest === null) {
-        this._renderRequest = requestAnimationFrame(this._render);
+        this._renderRequest = raf(this._render);
       }
     };
 
@@ -215,7 +217,7 @@ class React3DInstance {
 
       this._renderRequest = null;
     } else {
-      this._renderRequest = requestAnimationFrame(this._render);
+      this._renderRequest = raf(this._render);
     }
 
     if (this._manualRenderTriggerCallback) {
@@ -307,7 +309,7 @@ class React3DInstance {
     if (this._forceManualRender) {
       this._renderRequest = null;
     } else {
-      this._renderRequest = requestAnimationFrame(this._render);
+      this._renderRequest = raf(this._render);
     }
 
     this.userData.events.emit('animate');
@@ -518,12 +520,12 @@ class React3DInstance {
 
     if (forceManualRender) {
       // was just set to be forced
-      cancelAnimationFrame(this._renderRequest);
+      raf.cancel(this._renderRequest);
       this._renderRequest = null;
     } else {
       // was just restored
 
-      this._renderRequest = requestAnimationFrame(this._render);
+      this._renderRequest = raf(this._render);
     }
   }
 
@@ -795,7 +797,7 @@ class React3DInstance {
     this.userData.events.removeAllListeners();
 
     if (this._renderRequest !== null) {
-      cancelAnimationFrame(this._renderRequest);
+      raf.cancel(this._renderRequest);
       this._renderRequest = null;
     }
 
@@ -836,7 +838,7 @@ class React3DInstance {
     this._mounted = false;
 
     if (this._renderRequest !== null) {
-      cancelAnimationFrame(this._renderRequest);
+      raf.cancel(this._renderRequest);
       this._renderRequest = null;
     }
 
