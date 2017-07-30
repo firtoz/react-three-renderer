@@ -61,7 +61,7 @@ function appendToFileToWrite(files, filename, contents) {
 }
 
 function mockPropTypes() {
-  const ReactPropTypes = require('react/lib/ReactPropTypes');
+  const ReactPropTypes = require('prop-types');
 
   class PropType {
     constructor(type, isRequired = false) {
