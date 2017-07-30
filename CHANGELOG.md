@@ -3,6 +3,9 @@ CHANGELOG
 
 ## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.0...master))
 
+### Components
+- Fix GeometryDescriptorBase faceVertexUvs property #180
+
 ## 3.2.0 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.1.1...3.2.0))
 
 ### Core
