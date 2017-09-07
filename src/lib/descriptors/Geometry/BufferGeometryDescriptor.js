@@ -22,6 +22,7 @@ class BufferGeometryDescriptor extends GeometryDescriptorBase {
       'position',
       'normal',
       'color',
+      'uv'
     ].forEach((attributeName) => {
       this.hasProp(attributeName, {
         type: PropTypes.oneOfType([
@@ -47,6 +48,19 @@ class BufferGeometryDescriptor extends GeometryDescriptorBase {
       ]),
       update(threeObject, attributeValue) {
         threeObject.setIndex(attributeValue);
+      },
+      updateInitial: true,
+      default: undefined,
+    });
+
+    this.hasProp('groups', {
+      type: PropTypes.oneOfType([
+        propTypeInstanceOf(Array)
+      ]),
+      update(threeObject, groupArray) {
+        groupArray.forEach((group) => {
+          threeObject.addGroup(group.start, group.count, group.materialIndex);
+        })
       },
       updateInitial: true,
       default: undefined,
