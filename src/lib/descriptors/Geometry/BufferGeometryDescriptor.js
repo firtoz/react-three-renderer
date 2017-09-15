@@ -55,12 +55,12 @@ class BufferGeometryDescriptor extends GeometryDescriptorBase {
 
     this.hasProp('groups', {
       type: PropTypes.oneOfType([
-        propTypeInstanceOf(Array)
+        propTypeInstanceOf(Array),
       ]),
       update(threeObject, groupArray) {
         groupArray.forEach((group) => {
           threeObject.addGroup(group.start, group.count, group.materialIndex);
-        })
+        });
       },
       updateInitial: true,
       default: undefined,
