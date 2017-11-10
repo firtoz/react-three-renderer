@@ -14,7 +14,7 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
       update(threeObject, origin) {
         threeObject.position.copy(origin);
       },
-      default: undefined,
+      default: new THREE.Vector3(),
     });
 
     this.hasProp('dir', {
@@ -22,7 +22,7 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
       update(threeObject, newDir) {
         threeObject.setDirection(newDir);
       },
-      default: undefined,
+      default: new THREE.Vector3(0, 0, 1),
     });
 
     this.hasProp('color', {
@@ -123,7 +123,17 @@ class ArrowHelperDescriptor extends Object3DDescriptor {
       headWidth,
     } = props;
 
-    return new THREE.ArrowHelper(dir, origin, length, color, headLength, headWidth);
+    let useOrigin = origin;
+    if (useOrigin === undefined) {
+      useOrigin = new THREE.Vector3();
+    }
+
+    let useDir = dir;
+    if (useDir === undefined) {
+      useDir = new THREE.Vector3(0, 0, 1);
+    }
+
+    return new THREE.ArrowHelper(useDir, useOrigin, length, color, headLength, headWidth);
   }
 
   unmount(threeObject) {
