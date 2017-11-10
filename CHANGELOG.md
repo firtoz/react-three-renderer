@@ -3,6 +3,9 @@ CHANGELOG
 
 ## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.1...master))
 
+### Components
+- Add `uv` property to BufferGeometryDescriptor (PR #194)
+
 ### Documentation
 - Fix installation instructions in readme to match peer dependencies (PR #203)
 

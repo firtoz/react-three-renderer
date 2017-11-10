@@ -20,6 +20,9 @@ Creates a [THREE.BufferGeometry](https://threejs.org/docs/#api/core/BufferGeomet
 ### color
 ``` one of types [THREE.BufferAttribute, THREE.InterleavedBufferAttribute] ```
 
+### uv
+``` one of types [THREE.BufferAttribute, THREE.InterleavedBufferAttribute] ```
+
 ### index
 ``` one of types [THREE.BufferAttribute, THREE.InterleavedBufferAttribute] ```
 

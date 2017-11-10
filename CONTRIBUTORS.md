@@ -24,3 +24,4 @@ Thanks for the help:
 * [@AndrewRayCode](https://github.com/AndrewRayCode)
 * [@thierryc](https://github.com/thierryc)
 * [@danyim](https://github.com/danyim)
+* [@chiguireitor](https://github.com/chiguireitor)
