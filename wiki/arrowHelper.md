@@ -75,10 +75,14 @@ If this property is set, [`THREE.Object3D#lookAt`](https://threejs.org/docs/#api
 ### origin
 ``` THREE.Vector3 ``` *``` required ```*: The start position of the arrow.
 
+**Default**: `new THREE.Vector3()`
+
 ### dir
 ``` THREE.Vector3 ``` *``` required ```*: direction from origin.
 
 Must be a unit vector.
+
+**Default**: `new THREE.Vector3(0, 0, 1)`
 
 ### color
 ``` one of types [THREE.Color, number, string] ```: The color that will be used for the arrow materials.

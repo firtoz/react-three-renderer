@@ -1,12 +1,13 @@
 CHANGELOG
 ===========
 
-## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.2...master))
+## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.3...master))
 
-## 3.2.1 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.1...v3.2.2))
+## 3.2.2 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.1...v3.2.3))
 
 ### Components
 - Add `uv` property to BufferGeometryDescriptor (PR #194)
+- Added defaults for `arrowHelper` `origin` and `dir` properties
 
 ### Documentation
 - Fix installation instructions in readme to match peer dependencies (PR #203)
