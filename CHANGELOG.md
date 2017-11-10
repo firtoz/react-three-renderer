@@ -3,7 +3,7 @@ CHANGELOG
 
 ## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.3...master))
 
-## 3.2.2 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.1...v3.2.3))
+## 3.2.3 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.1...v3.2.3))
 
 ### Components
 - Add `uv` property to BufferGeometryDescriptor (PR #194)
