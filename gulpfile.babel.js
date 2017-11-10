@@ -9,6 +9,7 @@ import cache from 'gulp-cached';
 import { log, PluginError, colors } from 'gulp-util';
 import { Server as KarmaServer } from 'karma';
 import minimist from 'minimist';
+import fs from 'fs';
 
 /* eslint-enable import/no-extraneous-dependencies */
 
@@ -27,11 +28,59 @@ gulp.task('babel', gulp.series('clean-lib', () => gulp.src([
   .pipe(babel(require('./package.json').babel))
   .pipe(gulp.dest('lib/'))), emptyTask);
 
+
+// https://stackoverflow.com/a/26038979
+// Modified to use streams
+// Also not to create extra directory for first target
+function copyFile(source, target) {
+  let targetFile = target;
+
+  // if target is a directory a new file with the same name will be created
+  if (fs.existsSync(target)) {
+    if (fs.lstatSync(target).isDirectory()) {
+      targetFile = path.join(target, path.basename(source));
+    }
+  }
+
+  fs.createReadStream(source).pipe(fs.createWriteStream(targetFile));
+}
+
+function copyFolderRecursiveSync(source, target) {
+  // copy
+  if (fs.lstatSync(source).isDirectory()) {
+    fs.readdirSync(source).forEach((file) => {
+      const curSource = path.join(source, file);
+      if (fs.lstatSync(curSource).isDirectory()) {
+        // check if folder needs to be created or integrated
+        const targetFolder = path.join(target, path.basename(curSource));
+
+        if (!fs.existsSync(targetFolder)) {
+          fs.mkdirSync(targetFolder);
+        }
+
+        // console.log('copying recursive', curSource, targetFolder);
+        copyFolderRecursiveSync(curSource, targetFolder);
+      } else {
+        // console.log('copying file', curSource, target);
+
+        copyFile(curSource, target);
+      }
+    });
+  }
+}
+
 gulp.task('doc', (done) => {
   // require the generator here
   const docGenerator = require('./docs/src/Generator');
 
-  docGenerator(done);
+  docGenerator(() => {
+    const wikiPath = path.resolve('../react-three-renderer.wiki/');
+    if (fs.existsSync(wikiPath)) {
+      copyFolderRecursiveSync(path.resolve('./wiki/'), wikiPath);
+    }
+
+    done();
+  });
 });
 
 /* eslint-enable global-require */

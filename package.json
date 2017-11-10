@@ -69,6 +69,7 @@
     "karma-spec-reporter": "0.0.31",
     "karma-travis-fold-reporter": "1.0.1",
     "karma-webpack": "2.0.4",
+    "minimist": "^1.2.0",
     "mocha": "3.4.2",
     "mocha-loader": "1.1.1",
     "pngjs2": "2.0.0",
