@@ -3,6 +3,9 @@ CHANGELOG
 
 ## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.1...master))
 
+### Documentation
+- Fix installation instructions in readme to match peer dependencies (PR #203)
+
 ## 3.2.1 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.0...v3.2.1))
 
 ### Core
