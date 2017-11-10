@@ -1,8 +1,8 @@
 {
   "name": "react-three-renderer",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Render into a three.js canvas using React.",
-  "main": "./lib/React3.js",
+  "main": "./src/lib/React3.jsx",
   "scripts": {
     "compile": "gulp babel",
     "prepublish": "in-publish && npm test || not-in-publish",
