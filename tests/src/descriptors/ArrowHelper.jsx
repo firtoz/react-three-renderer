@@ -31,7 +31,7 @@ module.exports = (type) => {
         height={600}
       >
         <scene>
-          <arrowHelper/>
+          <arrowHelper />
         </scene>
       </React3>, testDiv);
     });
