@@ -35,6 +35,7 @@ import React from 'react';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
+import ExecutionEnvironment from 'exenv'; // Environment checking for universal apps
 
 class Simple extends React.Component {
   constructor(props, context) {
@@ -46,6 +47,7 @@ class Simple extends React.Component {
 
     this.state = {
       cubeRotation: new THREE.Euler(),
+      canUseDOM: ExecutionEnvironment.canUseDOM,
     };
 
     this._onAnimate = () => {
@@ -65,6 +67,9 @@ class Simple extends React.Component {
   }
 
   render() {
+
+    if (!this.state.canUseDOM) { return null; } // If we cannot use the DOM then don't continue
+
     const width = window.innerWidth; // canvas width
     const height = window.innerHeight; // canvas height
 
@@ -152,9 +157,9 @@ Then I wrote my own internal components, these are things like ``` <span/> ```, 
 
 This way, you don't need to import a gazillion different modules.
 
-Another benefit is that it allows me to make things super fast and not depend on composite components at all! 
+Another benefit is that it allows me to make things super fast and not depend on composite components at all!
 
-In effect, a ``` <scene/> ``` has the same effort, and similar effects as creating a  ``` <div/> ```. 
+In effect, a ``` <scene/> ``` has the same effort, and similar effects as creating a  ``` <div/> ```.
 
 TODO
 ====
