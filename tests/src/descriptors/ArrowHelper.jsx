@@ -24,16 +24,16 @@ module.exports = (type) => {
         '    in scene\n' +
         '    in react3');
 
-      expect(() => {
-        ReactDOM.render(<React3
-          width={800}
-          height={600}
-        >
-          <scene>
-            <arrowHelper />
-          </scene>
-        </React3>, testDiv);
-      }).to.throw('Cannot read property \'x\' of undefined');
+      mockConsole.expectThreeLog();
+
+      ReactDOM.render(<React3
+        width={800}
+        height={600}
+      >
+        <scene>
+          <arrowHelper/>
+        </scene>
+      </React3>, testDiv);
     });
 
     it('Should update origin correctly', () => {

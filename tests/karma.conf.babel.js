@@ -61,10 +61,6 @@ export default (config) => {
   }
 
   const configuration = {
-    browsers: [
-      'Chrome',
-    ],
-
     files: [
       ...testFiles,
       {
@@ -157,6 +153,50 @@ export default (config) => {
     configuration.browserDisconnectTolerance = 1; // default 0
     configuration.browserNoActivityTimeout = 60000; // default 10000
   } else {
+    // tell karma to use puppeteer's version of Chrome
+    process.env.CHROME_BIN = require('puppeteer').executablePath();
+
+    // list of all browsers that can run the tests,
+    // ordered from most to least preferred option
+    const browserPreferences = [
+      'FirefoxNightly',
+      'Firefox',
+      'Chrome', // will usually stop here (puppeteer)
+      'SafariTechPreview',
+      'Safari',
+      'Edge',
+    ];
+
+    configuration.detectBrowsers = {
+      enabled: true,
+      usePhantomJS: false,
+      postDetection(availableBrowsers) {
+        // check installed browsers, run tests using the most
+        // preferred one defined in browserPreferences array
+        for (let i = 0; i < browserPreferences.length; ++i) {
+          const browser = browserPreferences[i];
+
+          if (availableBrowsers.indexOf(browser) >= 0) {
+            // eslint-disable-next-line no-console
+            console.log(`Testing with ${browser}`);
+            return [browser];
+          }
+        }
+
+        return [];
+      },
+    };
+
+    configuration.frameworks.push('detectBrowsers');
+
+    configuration.plugins.push(
+      require('karma-detect-browsers'),
+      require('karma-edge-launcher'),
+      require('karma-firefox-launcher'),
+      require('karma-safari-launcher'),
+      require('karma-safaritechpreview-launcher')
+    );
+
     configuration.client = {
       mocha: {
         reporter: 'html', // debug
