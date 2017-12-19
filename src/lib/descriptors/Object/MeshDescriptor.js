@@ -10,7 +10,7 @@ class MeshDescriptor extends Object3DDescriptor {
   constructor() {
     super();
     this.hasProp('geometry', {
-      type: React.PropTypes.oneOf([
+      type: React.PropTypes.oneOfType([
         propTypeInstanceOf(THREE.Geometry),
         propTypeInstanceOf(THREE.BufferGeometry),
         propTypeInstanceOf(THREE.InstancedBufferGeometry),
