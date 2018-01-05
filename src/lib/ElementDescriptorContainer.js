@@ -33,6 +33,8 @@ import ShapeResourceDescriptor from './descriptors/Resource/ShapeResourceDescrip
 
 import GeometryDescriptor from './descriptors/Geometry/GeometryDescriptor';
 import BufferGeometryDescriptor from './descriptors/Geometry/BufferGeometryDescriptor';
+import InterleavedBufferGeometryDescriptor from './descriptors/Geometry/InterleavedBufferGeometryDescriptor';
+import InterleavedBufferAttributeDescriptor from './descriptors/Geometry/InterleavedBufferAttributeDescriptor';
 import BoxGeometryDescriptor from './descriptors/Geometry/BoxGeometryDescriptor';
 import SphereGeometryDescriptor from './descriptors/Geometry/SphereGeometryDescriptor';
 import ParametricGeometryDescriptor from './descriptors/Geometry/ParametricGeometryDescriptor';
@@ -133,6 +135,8 @@ class ElementDescriptorContainer {
 
       geometry: new GeometryDescriptor(react3RendererInstance),
       bufferGeometry: new BufferGeometryDescriptor(react3RendererInstance),
+      interleavedBufferGeometry: new InterleavedBufferGeometryDescriptor(react3RendererInstance),
+      interleavedBufferAttribute: new InterleavedBufferAttributeDescriptor(react3RendererInstance),
       boxGeometry: new BoxGeometryDescriptor(react3RendererInstance),
       sphereGeometry: new SphereGeometryDescriptor(react3RendererInstance),
       parametricGeometry: new ParametricGeometryDescriptor(react3RendererInstance),
