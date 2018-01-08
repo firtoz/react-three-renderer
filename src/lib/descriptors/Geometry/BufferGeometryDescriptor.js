@@ -50,7 +50,7 @@ class BufferGeometryDescriptor extends GeometryDescriptorBase {
         threeObject.setIndex(attributeValue);
       },
       updateInitial: true,
-      default: undefined,
+      default: null,
     });
   }
 
