@@ -7,13 +7,24 @@ Would you like to know more? [See the wiki](https://github.com/toxicFork/react-t
 
 [Live examples](http://toxicfork.github.io/react-three-renderer-example/).
 
-> This is still an experimental and work in progress project, use at your own risk!
-
-> Currently supported react version: `15.5.3` ( things break fast when you fly this close to the sun )
-
 [![Join the chat at https://gitter.im/toxicFork/react-three-renderer](https://badges.gitter.im/toxicFork/react-three-renderer.svg)](https://gitter.im/toxicFork/react-three-renderer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/toxicFork/react-three-renderer.svg)](https://travis-ci.org/toxicFork/react-three-renderer)
 
 [![npm](https://nodei.co/npm/react-three-renderer.svg?downloads=true)](https://nodei.co/npm/react-three-renderer/)
+
+Current State
+=============
+
+This is still an experimental and work in progress project, use at your own risk!
+
+Currently supported react version: `15.5.3` ( things break fast when you fly this close to the sun )
+
+This project is being maintained and developed relatively slowly.
+
+Currently we're working on restoring compatibility with React 16 - Fiber edition!
+
+See work in progress within https://github.com/toxicFork/react-three-renderer-fiber.
+
+Expected ETA: (Hopefully) Sometime within 2018.
 
 Installation
 ============
