@@ -1,7 +1,15 @@
 CHANGELOG
 ===========
 
-## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.3...master))
+## Current Master ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.4...master))
+
+## 3.2.4 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.3...v3.2.4))
+
+### Components
+- Fixed `index` property to default to `null` for `<bufferedGeometry/>` (PR #208)
+
+### Project
+- The list of contributors can be found in https://github.com/toxicFork/react-three-renderer/graphs/contributors
 
 ## 3.2.3 ([see diff](https://github.com/toxicFork/react-three-renderer/compare/v3.2.1...v3.2.3))
 
