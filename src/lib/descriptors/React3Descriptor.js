@@ -144,6 +144,10 @@ const propProxy = {
     type: PropTypes.func,
     default: undefined,
   },
+  customRender: {
+    type: PropTypes.func,
+    default: undefined,
+  },
 };
 
 class React3Descriptor extends THREEElementDescriptor {
