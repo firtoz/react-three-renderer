@@ -24,7 +24,7 @@ Currently we're working on restoring compatibility with React 16 - Fiber edition
 
 See work in progress within https://github.com/toxicFork/react-three-renderer-fiber.
 
-Expected ETA: (Hopefully) Sometime within 2018.
+Expected ETA: Unknown.
 
 Installation
 ============
