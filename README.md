@@ -1,6 +1,11 @@
 react-three-renderer
 ====================
 
+## PSA:
+This project is pretty much frozen and the react-three-renderer-fiber project has been moving at a glacial rate. If you'd like to contribute to the React + Three bridge ecosystems, please take a look at how you can help with the more active https://github.com/drcmda/react-three-fiber project instead.
+
+## Back to regular readme
+
 Render into a [three.js](http://threejs.org/) canvas using [React](https://github.com/facebook/react).
 
 Would you like to know more? [See the wiki](https://github.com/toxicFork/react-three-renderer/wiki) or go straight to the [API documentation](https://github.com/toxicFork/react-three-renderer/wiki/API-Reference).
