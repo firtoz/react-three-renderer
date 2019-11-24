@@ -172,13 +172,20 @@ class TextureDescriptor extends THREEElementDescriptor {
       },
       default: THREE.LinearMipMapLinearFilter,
     });
+
+    this.hasProp('loadingManager', {
+      type: PropTypes.objectOf(THREE.LoadingManager),
+      update() {
+          // do nothing because these props are only used for initial loading callbacks
+      },
+      default: undefined,
+    });
   }
 
   construct(props) {
     let result;
-
     if (props.hasOwnProperty('url')) {
-      const textureLoader = new THREE.TextureLoader();
+      const textureLoader = new THREE.TextureLoader(props.loadingManager);
 
       if (props.hasOwnProperty('crossOrigin')) {
         textureLoader.crossOrigin = props.crossOrigin;
