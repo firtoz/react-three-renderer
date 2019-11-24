@@ -135,6 +135,12 @@ class Object3DDescriptor extends THREEElementDescriptor {
       },
       default: false,
     });
+
+    this.hasProp('up', {
+      type: propTypeInstanceOf(THREE.Vector3),
+      simple: true,
+      default: new THREE.Vector3(0, 1, 0),
+    });
   }
 
   beginPropertyUpdates(threeObject, nextProps) {
