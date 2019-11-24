@@ -5,6 +5,8 @@ import MockConsole from './MockConsole';
 
 const { expect } = chai;
 
+let warmedUp = false;
+
 module.exports = (type) => {
   const testDiv = document.createElement('div');
 
@@ -27,6 +29,24 @@ module.exports = (type) => {
 
   const React3 = requireHelper('React3');
 
+  if (!warmedUp) {
+    console.log('warming up'); // eslint-disable-line no-console
+
+    warmedUp = true;
+
+    const div = document.createElement('div');
+
+    document.body.appendChild(div);
+
+    ReactDOM.render((<React3 width={5} height={5} />), div);
+
+    ReactDOM.unmountComponentAtNode(div);
+
+    document.body.removeChild(div);
+
+    console.log('warmup complete'); // eslint-disable-line no-console
+  }
+
   const mockConsole = new MockConsole();
 
   mockConsole.expectThreeLog = () => {
@@ -44,13 +64,6 @@ module.exports = (type) => {
 
   before(() => {
     document.body.appendChild(testDiv);
-
-    // warmup
-    ReactDOM.render((<React3
-      key="warmup"
-      width={1}
-      height={1}
-    />), testDiv);
   });
 
   beforeEach(function _() {

@@ -246,6 +246,10 @@ class React3Descriptor extends THREEElementDescriptor {
 
     return super.componentWillUnmount(threeObject);
   }
+
+  mountedIntoRoot(threeObject) {
+    threeObject.mountedIntoRoot();
+  }
 }
 
 module.exports = React3Descriptor;

@@ -255,7 +255,7 @@ class LightDescriptorBase extends Object3DDescriptor {
 
           const elementType = threeObject.userData.react3internalComponent._elementType;
 
-          warning(this._warnedAboutLightMaterialUpdate,
+          warning(false,
             LightDescriptorBase.getDynamicWarningMessage(elementType, owner));
           this._warnedAboutLightMaterialUpdate = true;
         }
