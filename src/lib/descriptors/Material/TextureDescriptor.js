@@ -172,6 +172,26 @@ class TextureDescriptor extends THREEElementDescriptor {
       },
       default: THREE.LinearMipMapLinearFilter,
     });
+
+    this.hasProp('mapping', {
+      type: PropTypes.oneOf([
+        THREE.UVMapping,
+        THREE.CubeReflectionMapping,
+        THREE.CubeRefractionMapping,
+        THREE.EquirectangularReflectionMapping,
+        THREE.EquirectangularRefractionMapping,
+        THREE.SphericalReflectionMapping,
+        THREE.CubeUVReflectionMapping,
+        THREE.CubeUVRefractionMapping,
+      ]),
+      update(texture, mapping) {
+        texture.mapping = mapping;
+        if (texture.image) {
+          texture.needsUpdate = true;
+        }
+      },
+      default: THREE.UVMapping,
+    });
   }
 
   construct(props) {
