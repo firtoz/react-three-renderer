@@ -155,7 +155,7 @@ class Object3DDescriptor extends THREEElementDescriptor {
     }
 
     if (props.matrix) {
-      threeObject.matrix.copy(props.matrix);
+      threeObject.applyMatrix(props.matrix);
     } else {
       if (props.position) {
         threeObject.position.copy(props.position);
